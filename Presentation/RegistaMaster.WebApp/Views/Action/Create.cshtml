@@ -1,0 +1,123 @@
+﻿@using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
+@model ActionDTO
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<style type="text/css">
+
+    .modal-body2 {
+        max-height: calc(100vh - 210px);
+        overflow-y: auto;
+    }
+
+    .target {
+        border: solid 1px #aaa;
+        min-height: 200px;
+        width: 90%;
+        margin-top: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 300ms all;
+        position: relative;
+    }
+
+    .contain {
+        background-size: cover;
+        position: relative;
+        z-index: 10;
+        top: 0px;
+        left: 0px;
+    }
+
+    textarea {
+        background-color: white;
+    }
+
+    .actives {
+        box-shadow: 0px 0px 10px 10px rgba(0,0,255,.4);
+    }
+</style>
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                </div>
+                <div class="card-content collapse show">
+                    <div class="heading-elements">
+                        <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
+                            <button type="button" onclick="SaveAction()" class="btn btn-success">Kaydet</button>
+                        </div>
+                    </div>
+                    <div class="card-body card-dashboard">
+                        <h3>Görevler</h3>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Aksiyon Açıklaması:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="ActionDescription" type="text" required class="form-control" name="title" />
+                                            <span asp-validation-for="ActionDescription" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Sorumlu:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <select asp-for="ResponsibleID" asp-items="@Model.ResponsiblehelperModelList" id="ResponsibleID" class="form-control select2" name="ResponsibleID">
+                                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                                            </select>
+                                            <span asp-validation-for="ResponsibleID" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Açılma Tarihi:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="OpeningDate" type="date" required class="form-control" name="PlanedStart" />
+                                            <span asp-validation-for="OpeningDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Son Tarih:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="EndDate" type="date" required class="form-control" name="PlanedStart" />
+                                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Açıklama:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <textarea asp-for="Description" type="date" required class="form-control" name="PlanedStart"></textarea>
+                                            <span asp-validation-for="Description" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Durum:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <select asp-for="ActionStatus" required asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control select2">
+                                                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+                                            </select>
+                                            <span asp-validation-for="ActionStatus" class="text-danger" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

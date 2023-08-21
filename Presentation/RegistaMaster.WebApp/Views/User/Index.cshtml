@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Kullanıcılar</h1>
+
+<style>
+
+    #range-selector {
+        height: 250px;
+        width: 750px;
+    }
+
+    .clsRed {
+        background-color: #b81616;
+        color: white;
+    }
+</style>
+<link href="/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
+<link href="/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
+
+<div class="main-content">
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <div class="heading-elements">
+                            <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
+                                <a asp-action="Create" asp-controller="User" class="btn btn-primary"><i class="ion ion-android-add"></i>Yeni Kullanıcı</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collapse show">
+                        <div class="card-body card-dashboard">
+                            <h3>Kullanıcılar</h3>
+                            <div class="demo-container">
+                                <div id="userGridContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+@section Scripts
+    {
+
+    <script src="~/js/Page/User/Index.js"></script>
+
+}
+
+

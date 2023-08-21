@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
+<link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
+
+<div class="main-content">
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3>Modüller/Süreçler</h3>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard">
+                                    <div class="demo-container">
+                                        <div id="modulesGridContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3>Versiyonlar</h3>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body card-dashboard">
+                                    <div class="demo-container">
+                                        <div id="versionGridContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts
+    {
+    <script src="~/js/Page/Defination/Index.js"></script>
+}

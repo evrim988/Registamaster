@@ -1,0 +1,210 @@
+﻿@model RegistaMaster.Domain.DTOModels.Entities.UserModel.UserDetailDto
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<style type="text/css">
+
+    .modal-body2 {
+        max-height: calc(100vh - 210px);
+        overflow-y: auto;
+    }
+
+    .target {
+        border: solid 1px #aaa;
+        height: 300px;
+        width: 100%;
+        margin-top: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 300ms all;
+        position: relative;
+    }
+
+    .contain {
+        background-size: cover;
+        position: relative;
+        z-index: 10;
+        top: 0px;
+        left: 0px;
+    }
+
+    textarea {
+        background-color: white;
+    }
+
+    .actives {
+        box-shadow: 0px 0px 10px 10px rgba(0,0,255,.4);
+    }
+
+
+    img {
+        display: block;
+        max-width: 250px;
+        max-height: 350px;
+        width: auto;
+        height: auto;
+    }
+</style>
+
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" asp-controller="User" asp-action="Create" id="userCreateForm">
+                <div class="card card-primary">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-content collapse show">
+                        <div class="heading-elements">
+                            <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
+                                <button type="submit" style=" float: right; " class="btn btn-success">Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-dashboard">
+                        <h3>Yeni Kullanıcı Oluştur</h3>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Adı:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Name" type="text" required class="form-control" name="name" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Soyadı:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Surname" type="text" required class="form-control" name="Surname" />
+                                            <span asp-validation-for="Surname" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Adı:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Username" type="text" required class="form-control" name="Username" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Parola:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Parola" type="password" required class="form-control" name="Parola" />
+                                            <span asp-validation-for="Parola" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Email:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Email" type="text" required class="form-control" name="Email" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-4 col-form-label">Kullanıcı Resmi</label>
+                                        <div class="col-md-8">
+                                            <button id="btnCusImg" data-toggle="modal" data-target="#m_modal_Image" class="btn btn-primary" type="button">Resim Yükle</button>
+                                        </div>
+                                    </div>
+
+                                    <input hidden type="text" asp-for="Image" class="form-control m-input " />
+
+                                    <div class="form- group row">
+                                        <label style="font-weight:bold;" class="col-md-4 col-form-label" for="txtProjectDescrption">Resim</label>
+                                        <div class="col-md-8">
+                                            <div class="thumbnail">
+                                                @if (Model.Image != null)
+                                                {
+                                                    <img src="@Model.Image" runat="server" style="" id="imgMainImage" class="rounded float-left" alt="...">
+                                                }
+                                                else
+                                                {
+                                                    <img src="/Modernize/Img/yok.png" runat="server" id="imgMainImage" class="rounded float-left" alt="...">
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="m_modal_Image" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kullanıcı Resmi Yükle</h5>
+
+            </div>
+            <div class="modal-body">
+                <div id="dZUploadImg" class="dropzone">
+                    <div class="dz-default dz-message">Dosyalarınızı Buraya Sürekleyip Bırakabilir Veya Buraya Tıklayarak Seçebilirsiniz</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="ModalClose()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="m_modal_ImageCopy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kullanıcı Resmi Yükle</h5>
+            </div>
+            <div class="modal-body">
+                <div style="border: 1px solid; ">
+                    <p>WINDOWS Kullanıcıları İçin, Windows + Shift + S Tuş Kombinasyonu veya PRTSC Tuşu İle Resminizi Kopyalayıp Yapıştırabilirsiniz. MAC Kullanıcıları İçin Shift + Command + 4 Tuş Kombinasyonu İle Yapabilir </p>
+                </div>
+                <div class="span4 target">
+                </div>
+            </div>
+            <textarea name="base64" hidden id="base64" cols="30" rows="10" class="data span12"></textarea>
+            <div class="modal-footer">
+                <button type="button" onclick="ModalCloseCopy()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button onclick="ImageCopy()" type="button" class="btn btn-success" data-dismiss="modal">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <script src="~/js/Page/User/Create.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            Show();
+
+        @if (Model.Image != null)
+        {
+            <text>
+                    $("#imgMainImage").attr('src', '/Modernize/Img/ProfilePhotos/' + '@Model.Image');
+            </text>
+        }
+
+                });
+
+    </script>
+}

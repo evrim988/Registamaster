@@ -1,0 +1,127 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+.mr-1 {
+    margin-right: 1px !important;
+}
+
+.select2 {
+    width: 100% !important;
+}
+
+.pace .pace-progress {
+    color: white !important;
+    background-color: white !important;
+}
+
+label {
+    padding: 10px;
+    text-align: left;
+}
+
+/*.form-group {
+    margin-bottom: 5px !important;
+}*/
+
+.kt {
+    position: absolute;
+    margin-top: -16%;
+}
+
+.dz-image {
+    margin-top: 19% !important;
+}
+
+.dz-details {
+    margin-top: 15%;
+}
+
+label {
+    text-align: left !important;
+}
+
+.buttons-copy {
+    display: none !important;
+}
+
+.buttons-print {
+    display: none !important;
+}
+
+.buttons-pdf {
+    display: none !important;
+}
+
+
+
+.buttons-csv {
+    display: none !important;
+}
+
+.dz-size {
+    margin-top: 33% !important;
+}
+
+.alert-danger {
+    margin-top: 1% !important;
+}
+
+.kgn {
+    margin-top: 10% !important;
+    margin-left: 2% !important;
+    margin-bottom: 3% !important;
+}
+/*
+tr {
+    line-height: 20px !important;
+}
+*/
+
+.dt-buttons {
+    margin-top: 10px !important;
+}
+
+#tblPartCard_filter {
+    margin-top: -2% !important;
+}
+
+/*th {
+    text-align: center !important;
+}
+
+td {
+    text-align: center !important;
+}*/
+
+#configuration {
+    margin-top: 5% !important;
+}
+
+.gantt_cal_ltext {
+    height: 40px !important;
+    margin-top: -3% !important;
+}
+
+.gantt_cal_lsection {
+    margin-top: -2% !important;
+}
+
+.gantt_section_time {
+    margin-top: -3% !important;
+}
+
+.bg-header-fix {
+    background-image: linear-gradient(to right, #ff6a00, #5743c9, #7741d1, #953dd6, #b236da);
+}
+
+/*.menu-title {
+            display: none !important;
+        }
+
+        li .menu-title {
+            display: inline-block !important;
+        }*/
+
+#data-grid-demo {
+    min-height: 530px;
+}

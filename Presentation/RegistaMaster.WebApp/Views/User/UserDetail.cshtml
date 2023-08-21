@@ -1,0 +1,83 @@
+﻿@model RegistaMaster.Domain.DTOModels.Entities.UserModel.UserDetailDto
+@{
+    ViewData["Title"] = "UserDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>UserDetail</h1>
+
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                </div>
+                <div class="card-content collapse show">
+                    <div class="heading-elements">
+                        <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
+                            <button type="submit" onclick="FormSave()" style="margin-right:5px;" id="btnSave" class="btn btn-success">Kaydet</button>
+                        </div>
+                    </div>
+                    <div class="card-body card-dashboard">
+                        <h3>Kullanıcı Detayı</h3>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Adı:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input readonly id="Name" asp-for="Name" type="text" required class="form-control" name="title" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Soyadı:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Surname" type="text" required class="form-control" name="Surname" />
+                                            <span asp-validation-for="Surname" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Adı:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Username" type="text" required class="form-control" name="UserName" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Parola:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Parola" type="text" required class="form-control" name="Parola" />
+                                            <span asp-validation-for="Parola" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Email:<span class="text-danger"></span></label>
+                                        <div class="col-md-9">
+                                            <input asp-for="Email" type="text" required class="form-control" name="Email" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+
+    <script src="~/js/Page/User/UserDetail.js"></script>
+}

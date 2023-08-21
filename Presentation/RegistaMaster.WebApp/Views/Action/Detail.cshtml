@@ -1,0 +1,81 @@
+﻿@using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
+@model ActionPageDTO
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<div class="main-content mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body card-dashboard">
+                        <h3>Talep Detayları</h3>
+                        <div class="card-body">
+                            <form asp-action="Detail">
+                                <div class="row">
+                                    <input asp-for="ID" type="hidden" />
+                                    <div class="col-6">
+                                        <div class="form-group row my-2 ">
+                                            <label style="font-weight:bold;" class="col-md-2 col-form-label">Sorumlu</label>
+                                            <div class="col-10">
+                                                <input readonly id="Name" asp-for="Reponsible" type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group row my-2">
+                                            <label style="font-weight:bold;" class="col-md-2 col-form-label">Talep No</label>
+                                            <div class="col-10">
+                                                <input readonly asp-for="RequestID" type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group row my-2">
+                                            <label style="font-weight:bold;" class="col-md-2 col-form-label">Başlangıç Tarihi</label>
+                                            <div class="col-10">
+                                                <input readonly asp-for="OpeningDate" type="date" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group row my-2">
+                                            <label style="font-weight:bold;" class="col-md-2 col-form-label">Bitiş Tarihi</label>
+                                            <div class="col-10">
+                                                <input readonly asp-for="EndDate" type="date" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group row my-2">
+                                            <label style="font-weight:bold;" class="col-md-2 col-form-label">Durum</label>
+                                            <div class="col-10">
+                                                <input readonly asp-for="ActionStatus" type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group row my-2">
+                                            <label style="font-weight:bold;" class="col-2 col-form-label">Açıklama</label>
+                                            <div class="col-10">
+                                                <textarea readonly asp-for="Description" type="text" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
+                                    <button type="submit" onclick="FormSave()" style="margin-right:5px;" id="btnSave" class="btn btn-primary">Tamamla</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/Page/Action/Detail.js"></script>

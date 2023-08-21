@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+
+<style>
+
+</style>
+<link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
+<link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body card-dashboard">
+                        <h3>Proje Notları</h3>
+
+                        <div class="demo-container">
+                            <div id="projectNoteGridContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts
+    {
+    <script src="~/js/Page/ProjectNote/Index.js"></script>
+}
+
