@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using Version = RegistaMaster.Domain.Entities.Version;
 
 namespace RegistaMaster.WebApp.Controllers;
@@ -134,4 +135,17 @@ public class DefinationController : Controller
         }
     }
 
+    public async Task<IActionResult> GetDatabaseStatus()
+    {
+        try
+        {
+            var model = _uow.Repository.GetEnumSelect<DatabaseChangeStatus>();
+            var resultjson = JsonConvert.SerializeObject(model);
+            return Content(resultjson, "application/json");
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

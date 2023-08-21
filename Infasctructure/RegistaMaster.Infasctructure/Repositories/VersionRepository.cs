@@ -22,6 +22,7 @@ public class VersionRepository : Repository, IVersionRepository
         try
         {
             await _uow.Repository.Add(model);
+            model.Date = DateTime.Now;
             await _uow.SaveChanges();
             return "";
         }

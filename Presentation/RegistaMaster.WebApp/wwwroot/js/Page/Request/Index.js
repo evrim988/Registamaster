@@ -111,6 +111,7 @@ function GetList() {
                         {
                             dataField: "notificationType",
                             caption: "Bildirim Türü",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                             lookup: {
                                 dataSource: DevExpress.data.AspNet.createStore({
                                     key: "Id",
@@ -126,10 +127,12 @@ function GetList() {
                         {
                             dataField: "requestSubject",
                             caption: "Konu",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                         },
                         {
                             dataField: "description",
                             caption: "Açıklama",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                         },
                         {
                             dataField: "pageURL",
@@ -153,11 +156,22 @@ function GetList() {
                         {
                             dataField: "version",
                             caption: "Versiyon",
-                            alignment: 'center',
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: "Id",
+                                    loadUrl: "/Request/GetVersion/",
+                                    onBeforeSend: function (method, ajaxOptions) {
+                                        ajaxOptions.xhrFields = { withCredentials: true, };
+                                    },
+                                }),
+                                valueExpr: "id",
+                                displayExpr: "name",
+                            }
                         },
                         {
                             dataField: "projectID",
                             caption: "Proje",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                             lookup: {
                                 dataSource: DevExpress.data.AspNet.createStore({
                                     key: "Id",
@@ -171,8 +185,9 @@ function GetList() {
                             }
                         },
                         {
-                            dataField: "modulesID",
+                            dataField: "moduleID",
                             caption: "Modül/Süreç",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                             lookup: {
                                 dataSource: DevExpress.data.AspNet.createStore({
                                     key: "Id",
@@ -184,7 +199,8 @@ function GetList() {
                                 valueExpr: "id",
                                 displayExpr: "text",
                             }
-                        }
+                        },
+                       
                     ],
                 }],
 
@@ -211,7 +227,7 @@ function GetList() {
                 }
             },
             {
-                dataField: "modulesID",
+                dataField: "moduleID",
                 caption: "Modül/Süreç",
                 alignment:"center",
                 lookup: {
@@ -321,6 +337,17 @@ function GetList() {
                 dataField: "version",
                 caption: "Versiyon",
                 alignment: 'center',
+                lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "Id",
+                        loadUrl: "/Request/GetVersion/",
+                        onBeforeSend: function (method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true, };
+                        },
+                    }),
+                    valueExpr: "id",
+                    displayExpr: "name",
+                }
             },
         ],
         masterDetail: {
@@ -410,6 +437,12 @@ function GetList() {
                                     valueExpr: "Id",
                                     displayExpr: "Text"
                                 }
+                            },
+                            {
+                                dataField: "lastModifiedBy",
+                                caption: "Aksiyon Açan Kişi",
+                                alignment: 'center',
+                                allowEditing: false,
                             }
                         ],
                         dataSource: DevExpress.data.AspNet.createStore({

@@ -61,9 +61,6 @@ function GetModules() {
         onInitNewRow: function (e) {
             title = "";
         },
-        export: {
-            enabled: true
-        },
         loadPanel: {
             enabled: true,
         },
@@ -190,9 +187,6 @@ function GetVersion() {
         onInitNewRow: function (e) {
             title = "";
         },
-        export: {
-            enabled: true
-        },
         loadPanel: {
             enabled: true,
         },
@@ -222,12 +216,19 @@ function GetVersion() {
                             caption: "Açıklama",
                         },
                         {
-                            dataField: "date",
-                            caption: "Tarih",
-                        },
-                        {
                             dataField: "databaseChangeStatus",
                             caption: "Veritabanı Değişiliği Var Mı?",
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: "Id",
+                                    loadUrl: "/Defination/GetDatabaseStatus",
+                                    onBeforeSend: function (method, ajaxoptions) {
+                                        ajaxoptions.xhrFields = { withCredentials: true };
+                                    },
+                                }),
+                                valueExpr: "Id",
+                                displayExpr: "Text"
+                            }
                         },
                     ],
                 }],
@@ -268,6 +269,17 @@ function GetVersion() {
             {
                 dataField: "databaseChangeStatus",
                 caption: "Veritabanı Değişiliği Var Mı?",
+                lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "Id",
+                        loadUrl: "/Defination/GetDatabaseStatus",
+                        onBeforeSend: function (method, ajaxoptions) {
+                            ajaxoptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    valueExpr: "Id",
+                    displayExpr: "Text"
+                }
             },
 
         ],

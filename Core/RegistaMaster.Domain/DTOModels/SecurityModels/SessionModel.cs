@@ -8,6 +8,8 @@ public class SessionModel
 
     public string Surname { get; set; }
 
+    public string FullName => Name + " " + Surname;
+
     public string Image { get; set; }
 
     public int CustomerID { get; set; }

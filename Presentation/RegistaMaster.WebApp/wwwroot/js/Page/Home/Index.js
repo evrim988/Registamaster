@@ -143,8 +143,12 @@ function GetList() {
                     valueExpr: "Id",
                     displayExpr: "Text"
                 }
+            },
+            {
+                dataField: "lastModifiedBy",
+                caption: "Aksiyon Açan Kişi",
+                alignment: 'center',
             }
-
         ],
 
     }).dxDataGrid("instance");

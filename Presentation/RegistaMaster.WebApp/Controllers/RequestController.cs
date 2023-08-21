@@ -167,6 +167,19 @@ public class RequestController : Controller
         }
     }
 
+    public async Task<object> GetVersion(DataSourceLoadOptions loadOptions)
+    {
+        try
+        {
+            var model = await uow.RequestRepository.GetVersionSelect();
+            return DataSourceLoader.Load(model, loadOptions);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
     public async Task<object> GetCustomer(DataSourceLoadOptions loadOptions)
     {
         try

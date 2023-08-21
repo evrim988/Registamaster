@@ -6,12 +6,12 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace RegistaMaster.Persistance.Migrations
 {
-    public partial class init2 : Migration
+    public partial class _1000 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Classes");
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Customers",
@@ -137,7 +137,7 @@ namespace RegistaMaster.Persistance.Migrations
                         column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -173,7 +173,7 @@ namespace RegistaMaster.Persistance.Migrations
                         column: x => x.ProjectID,
                         principalTable: "Projects",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -211,19 +211,19 @@ namespace RegistaMaster.Persistance.Migrations
                         column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Requests_Modules_ModuleID",
                         column: x => x.ModuleID,
                         principalTable: "Modules",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Requests_Projects_ProjectID",
                         column: x => x.ProjectID,
                         principalTable: "Projects",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -255,13 +255,13 @@ namespace RegistaMaster.Persistance.Migrations
                         column: x => x.RequestID,
                         principalTable: "Requests",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Actions_Users_ResponsibleID",
                         column: x => x.ResponsibleID,
                         principalTable: "Users",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -296,13 +296,13 @@ namespace RegistaMaster.Persistance.Migrations
                         column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Tasks_Requests_RequestID",
                         column: x => x.RequestID,
                         principalTable: "Requests",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -385,20 +385,6 @@ namespace RegistaMaster.Persistance.Migrations
 
             migrationBuilder.DropTable(
                 name: "Projects");
-
-            migrationBuilder.CreateTable(
-                name: "Classes",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Classes", x => x.ID);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
         }
     }
 }

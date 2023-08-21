@@ -12,5 +12,6 @@ public class ActionDTO
     public DateTime EndDate { get; set; }
     public ActionStatus ActionStatus { get; set; }
     public string Description { get; set; }
+    public string LastModifiedBy { get; set; }
     public List<SelectListItem> ResponsiblehelperModelList { get; set; }
 }
