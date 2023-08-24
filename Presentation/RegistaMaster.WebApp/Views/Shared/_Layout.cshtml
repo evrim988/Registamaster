@@ -7,8 +7,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Regista</title>
-    <link rel="shortcut icon" type="image/png" href="/Modernize/src/assets/images/logos/favicon.png" />
+    <title>Regista Master</title>
+    <link rel="shortcut icon" type="image/png" href="/Modernize/Img/regista.png" />
     <link rel="stylesheet" href="/Modernize/src/assets/css/styles.min.css" />
 
     <link href="~/lib/dropzone-5.7.0/dist/dropzone.css" rel="stylesheet" />
@@ -33,9 +33,10 @@
                     </div>
                 </div>
                 <!-- Sidebar navigation-->
+
+
                 <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
                     <ul id="sidebarnav">
-
                         <li class="sidebar-item">
                             <a class="sidebar-link" asp-action="Index" asp-controller="Home" aria-expanded="false">
                                 <span>
@@ -139,8 +140,10 @@
                         </li>
 
                     </ul>
-
                 </nav>
+
+
+
                 <!-- End Sidebar navigation -->
             </div>
             <!-- End Sidebar scroll-->
@@ -169,8 +172,22 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                                    aria-expanded="false">
-                                    <span class="mr-1">Merhaba,<span class="user-name text-bold-700">@user.Name @user.Surname</span></span><span class="avatar avatar-online"><img style="height:37px; width:37px;" src='@((user.Image!=null)?"/Modernize/Img/ProfilePhotos/"+user.Image:"/Modernize/src/assets/images/profile/user-1.jpg")' alt="avatar"><i></i></span>
+                                    <span class="mr-1">
+                                        Merhaba,<span class="user-name text-bold-700" style="padding: 10px">@user.Name @user.Surname</span>
+                                    </span>
+
+                                    <span class="avatar avatar-online">
+                                        <img style="height:37px; border-radius:50%; width:37px;" src='@((user.Image!=null)?"/Modernize/Img/ProfilePhotos/"+user.Image:"/Modernize/src/assets/images/profile/user-1.jpg")' alt="avatar">
+                                        <i></i>
+                                    </span>
+
+
                                 </a>
+
+                                @*     <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="mr-1">Merhaba,<span class="user-name text-bold-700">@user.Name @user.Surname</span></span>  <span class="avatar avatar-online"><img style="height:37px;  border-radius:50%; width:37px;" src='@((user.Image!=null)?"/Modernize/Img/ProfilePhotos/"+user.Image:"/Modernize/src/assets/images/profile/user-1.jpg")' alt="avatar"><i></i></span>
+                                </a>*@
 
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                                     <div class="message-body">
@@ -189,6 +206,9 @@
                         </ul>
                     </div>
                 </nav>
+
+
+
             </header>
             <!--  Header End -->
             @RenderBody()
@@ -227,7 +247,7 @@
     <script src="/Modernize/sweetalert2.min.js"></script>
 
     <script src="/Modernize/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/Modernize/src/assets/js/sidebarmenu.js"></script> .
+    <script src="/Modernize/src/assets/js/sidebarmenu.js"></script>
     <script src="/Modernize/src/assets/js/app.min.js"></script>
     <script src="/Modernize/src/assets/libs/simplebar/dist/simplebar.js"></script>
     <script src="/Modernize/src/assets/js/dashboard.js"></script>
