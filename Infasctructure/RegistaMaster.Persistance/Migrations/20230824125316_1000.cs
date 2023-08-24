@@ -49,7 +49,7 @@ namespace RegistaMaster.Persistance.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ProjectName = table.Column<string>(type: "longtext", nullable: false),
-                    ProjectDescription = table.Column<string>(type: "longtext", nullable: false),
+                    ProjectDescription = table.Column<string>(type: "longtext", nullable: true),
                     ProjectGuid = table.Column<Guid>(type: "char(36)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -116,7 +116,7 @@ namespace RegistaMaster.Persistance.Migrations
                         column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 

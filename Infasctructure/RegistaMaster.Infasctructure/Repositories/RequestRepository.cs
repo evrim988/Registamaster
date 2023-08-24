@@ -135,7 +135,7 @@ public class RequestRepository : Repository, IRequestRepository
                 ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
                 {
                     ID = item.ID,
-                    Name = item.Name,
+                    Name = item.Name + "/" + item.Description,
                 };
                 ModulersHelpers.Add(helper);
             }

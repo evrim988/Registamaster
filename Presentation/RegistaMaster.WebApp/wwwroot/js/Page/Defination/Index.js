@@ -9,8 +9,8 @@ function GetModules() {
             key: "id",
             loadUrl: "/Defination/GetModules",
             insertUrl: "/Defination/AddModules",
-            updateUrl: "/Defination/ModulesUpdate",
-            deleteUrl: "/Defination/DeleteModules",
+            updateUrl: "/Defination/ModuleUpdate",
+            deleteUrl: "/Defination/DeleteModule",
             onBeforeSend: function (method, ajaxOptions) {
                 ajaxOptions.xhrFields = { withCredentials: true };
             }
@@ -317,6 +317,8 @@ function GetVersion() {
             {
                 dataField: "date",
                 caption: "Tarih",
+                dataType: 'date',
+                format: 'dd/MM/yyyy',
             },
             {
                 dataField: "databaseChangeStatus",
