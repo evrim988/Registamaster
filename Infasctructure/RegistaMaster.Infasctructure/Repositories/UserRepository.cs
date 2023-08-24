@@ -1,4 +1,5 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.UserModel;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
@@ -77,5 +78,17 @@ public class UserRepository : Repository, IUserRepository
         }
     }
 
+    public async Task<UserDetailDto> UserDetails(int ID)
+    {
+       return GetNonDeletedAndActive<User>(t => t.ID == ID).Select(s=>new UserDetailDto
+       {
+           Name=s.Name,
+           Surname=s.Surname,
+           Username=s.Username,
+           Email=s.Email,
+           Password=s.Password,
+           AuthorizationStatus=s.AuthorizationStatus
 
+       }).FirstOrDefault();
+    }
 }

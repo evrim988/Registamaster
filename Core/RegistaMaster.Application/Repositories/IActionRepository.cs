@@ -14,8 +14,10 @@ public interface IActionRepository : IRepository
 
     public string Delete(int ID);
 
+    Task<ActionPageDTO> GetAction(int ID);
+
     public Task<List<SelectListItem>> ResponsiblehelperModelList();
 
     Task<List<ResponsibleDevextremeSelectListHelper>> GetRequest();
-    Task<ActionPageDTO> GetAction(int ID);
+  
 }

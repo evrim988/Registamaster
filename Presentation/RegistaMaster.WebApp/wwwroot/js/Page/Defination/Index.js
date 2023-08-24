@@ -21,7 +21,7 @@ function GetModules() {
             }
         },
         onRowPrepared: function (e) {
-            if (e.rowType == "header") { e.rowElement.css("background-color", "#dff0f7"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+            if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
         },
         rowAlternationEnabled: true,
         grouping: {
@@ -89,6 +89,22 @@ function GetModules() {
                             dataField: "description",
                             caption: "Açıklama",
                         },
+
+                        {
+                            dataField: "projectID",
+                            caption: "Proje",
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: "Id",
+                                    loadUrl: "/Defination/GetProject/",
+                                    onBeforeSend: function (method, ajaxOptions) {
+                                        ajaxOptions.xhrFields = { withCredentials: true, };
+                                    },
+                                }),
+                                valueExpr: "id",
+                                displayExpr: "name",
+                            }
+                        },
                     ],
                 }],
 
@@ -108,6 +124,16 @@ function GetModules() {
                 e.element
                     .find('.dx-toolbar-after')
                     .prepend($filterButton);
+            var $refreshButton = $('<div id="refreshButton">').dxButton({
+                icon: 'refresh',
+                onClick: function () {
+                    grid.refresh();
+                }
+            });
+            if (e.element.find('#refreshButton').length == 0)
+                e.element
+                    .find('.dx-toolbar-after')
+                    .prepend($refreshButton);
         },
 
         columns: [
@@ -121,7 +147,22 @@ function GetModules() {
                 caption: "Açıklama",
                 alignment: 'center',
             },
-
+            {
+                dataField: "projectID",
+                caption: "Proje",
+                alignment: 'center',
+                lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "Id",
+                        loadUrl: "/Defination/GetProject/",
+                        onBeforeSend: function (method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true, };
+                        },
+                    }),
+                    valueExpr: "id",
+                    displayExpr: "name",
+                }
+            },
         ],
 
     }).dxDataGrid("instance");
@@ -147,7 +188,7 @@ function GetVersion() {
             }
         },
         onRowPrepared: function (e) {
-            if (e.rowType == "header") { e.rowElement.css("background-color", "#dff0f7"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+            if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
         },
         rowAlternationEnabled: true,
         grouping: {
@@ -249,6 +290,17 @@ function GetVersion() {
                 e.element
                     .find('.dx-toolbar-after')
                     .prepend($filterButton);
+
+            var $refreshButton = $('<div id="refreshButton">').dxButton({
+                icon: 'refresh',
+                onClick: function () {
+                    grid.refresh();
+                }
+            });
+            if (e.element.find('#refreshButton').length == 0)
+                e.element
+                    .find('.dx-toolbar-after')
+                    .prepend($refreshButton);
         },
 
         columns: [

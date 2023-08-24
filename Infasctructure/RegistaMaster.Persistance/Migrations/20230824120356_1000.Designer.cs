@@ -11,8 +11,8 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    [Migration("20230821090544_1001")]
-    partial class _1001
+    [Migration("20230824120356_1000")]
+    partial class _1000
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -155,7 +155,6 @@ namespace RegistaMaster.Persistance.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Key")
@@ -175,10 +174,15 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ObjectStatus")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProjectID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ProjectID");
 
                     b.ToTable("Modules");
                 });
@@ -308,7 +312,7 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("ModuleID")
+                    b.Property<int?>("ModuleID")
                         .HasColumnType("int");
 
                     b.Property<string>("NotificationType")
@@ -426,6 +430,9 @@ namespace RegistaMaster.Persistance.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorizationStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("CreatedBy")
@@ -546,6 +553,17 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Navigation("Responsible");
                 });
 
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.Module", b =>
+                {
+                    b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("RegistaMaster.Domain.Entities.ProjectNote", b =>
                 {
                     b.HasOne("RegistaMaster.Domain.Entities.Customer", null)
@@ -571,9 +589,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasOne("RegistaMaster.Domain.Entities.Module", "Module")
                         .WithMany()
-                        .HasForeignKey("ModuleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModuleID");
 
                     b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
                         .WithMany("Requests")

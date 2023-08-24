@@ -23,6 +23,8 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
         try
         {
             await uow.Repository.Add(model);
+            model.AddUserNote = session.FullName;
+            model.Date = DateTime.Now;
             await uow.SaveChanges();
             return "";
         }

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.UserModel;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -75,14 +76,14 @@ public class UserController : Controller
         {
             var model = await uow.UserRepository.GetById<User>(uow.GetSession().ID);
 
-            var userdetail = new UserDetailDto()
+            var userdetail = new UserDTO()
             {
-                ID = model.ID.ToString(),
-                Username = model.Username,
+                UserName = model.Username,
                 Name = model.Name,
                 Surname = model.Surname,
-                Parola = model.Password,
+                Password = model.Password,
                 Email = model.Email,
+                AuthorizationStatus=model.AuthorizationStatus,
             };
 
             return View(userdetail);
@@ -94,18 +95,17 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UserDetail(UserDetailDto userDetail)
+    public async Task<IActionResult> UserDetail(UserDTO userDetail)
     {
         try
         {
             var model = await uow.UserRepository.GetById<User>(uow.GetSession().ID);
 
-            model.Username = userDetail.Username;
+            model.Username = userDetail.UserName;
             model.Name = userDetail.Name;
-            model.Password = userDetail.Parola;
+            model.Password = userDetail.Password;
             model.Email = userDetail.Email;
-
-
+            model.AuthorizationStatus = userDetail.AuthorizationStatus;
             uow.UserRepository.Update<User>(model);
             await uow.SaveChanges();
 
@@ -117,6 +117,34 @@ public class UserController : Controller
             throw ex;
         }
     }
+    
+    public async Task<IActionResult> UserDetails(int ID)
+    {
+        try
+        {
+            var model = await uow.UserRepository.UserDetails(ID);
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UserDetails(UserDetailDto userDetail)
+    {
+        try
+        {
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -132,8 +160,9 @@ public class UserController : Controller
             Surname = userDetailDto.Surname,
             Username = userDetailDto.Username,
             Email = userDetailDto.Email,
-            Password = userDetailDto.Parola,
-            Image = userDetailDto.Image
+            Password = userDetailDto.Password,
+            Image = userDetailDto.Image,
+            AuthorizationStatus=userDetailDto.AuthorizationStatus,
         };
 
         await uow.UserRepository.AddUser(user);
@@ -167,5 +196,17 @@ public class UserController : Controller
             throw ex;
         }
     }
-
+    public async Task<IActionResult> GetAuthStatus()
+    {
+        try
+        {
+            var models = uow.Repository.GetEnumSelect<AuthorizationStatus>();
+            var resultJson = JsonConvert.SerializeObject(models);
+            return Content(resultJson, "application/json");
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

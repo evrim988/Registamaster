@@ -1,4 +1,5 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Persistance.RegistaMasterContextes;
@@ -43,6 +44,31 @@ namespace RegistaMaster.Infasctructure.Repositories
             var model = GetNonDeletedAndActive<Module>(t => true);
             return model;
         }
+
+        public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
+        {
+            try
+            {
+                List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
+                var model = context.Projects
+                    .Where(t => true);
+                foreach (var item in model)
+                {
+                    ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
+                    {
+                        ID = item.ID,
+                        Name = item.ProjectName,
+                    };
+                    ResponsibleHelpers.Add(helper);
+                }
+                return ResponsibleHelpers;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public async Task<string> UpdateModule(Module model)
         {
             try

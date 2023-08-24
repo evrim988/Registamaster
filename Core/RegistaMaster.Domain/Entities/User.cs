@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using RegistaMaster.Domain.Enums;
 
 namespace RegistaMaster.Domain.Entities
 {
@@ -28,6 +29,7 @@ namespace RegistaMaster.Domain.Entities
         [EmailAddress(ErrorMessage = "Geçerli Mail Adresi giriniz")]
         public string Email { get; set; }
         public string Password { get; set; }
+        public AuthorizationStatus AuthorizationStatus { get; set; }
         public virtual Customer Customer { get; set; }
         public int CustomerID { get; set; }
 

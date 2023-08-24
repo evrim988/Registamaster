@@ -125,20 +125,6 @@ function GetList() {
                             }
                         },
                         {
-                            dataField: "requestSubject",
-                            caption: "Konu",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                        },
-                        {
-                            dataField: "description",
-                            caption: "Açıklama",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                        },
-                        {
-                            dataField: "pageURL",
-                            caption: "Sayfa Linki",
-                        },
-                        {
                             dataField: "category",
                             caption: "Kategori",
                             lookup: {
@@ -151,21 +137,6 @@ function GetList() {
                                 }),
                                 valueExpr: "value",
                                 displayExpr: "text",
-                            }
-                        },
-                        {
-                            dataField: "version",
-                            caption: "Versiyon",
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Request/GetVersion/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "id",
-                                displayExpr: "name",
                             }
                         },
                         {
@@ -187,7 +158,6 @@ function GetList() {
                         {
                             dataField: "moduleID",
                             caption: "Modül/Süreç",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                             lookup: {
                                 dataSource: DevExpress.data.AspNet.createStore({
                                     key: "Id",
@@ -200,7 +170,36 @@ function GetList() {
                                 displayExpr: "text",
                             }
                         },
-                       
+
+                        {
+                            dataField: "version",
+                            caption: "Versiyon",
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: "Id",
+                                    loadUrl: "/Request/GetVersion/",
+                                    onBeforeSend: function (method, ajaxOptions) {
+                                        ajaxOptions.xhrFields = { withCredentials: true, };
+                                    },
+                                }),
+                                valueExpr: "id",
+                                displayExpr: "name",
+                            }
+                        },
+                        {
+                            dataField: "requestSubject",
+                            caption: "Konu",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+                        },
+                        {
+                            dataField: "description",
+                            caption: "Açıklama",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+                        },
+                        {
+                            dataField: "pageURL",
+                            caption: "Sayfa Linki",
+                        },
                     ],
                 }],
 
@@ -388,6 +387,11 @@ function GetList() {
                             },
                             {
                                 dataField: "actionDescription",
+                                caption: "Aksiyon Konusu",
+                                alignment: 'center',
+                            },
+                            {
+                                dataField: "description",
                                 caption: "Aksiyon Açıklaması",
                                 alignment: 'center',
                             },
@@ -417,11 +421,7 @@ function GetList() {
                                 dataType: 'date',
                                 format: 'dd/MM/yyyy',
                             },
-                            {
-                                dataField: "description",
-                                caption: "Açıklama",
-                                alignment: 'center',
-                            },
+                            
                             {
                                 dataField: "actionStatus",
                                 caption: "Durum",

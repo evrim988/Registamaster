@@ -148,4 +148,10 @@ public class DefinationController : Controller
             throw ex;
         }
     }
+
+    public async Task<object> GetProject(DataSourceLoadOptions options)
+    {
+        var model = await _uow.ModuleRepository.GetProject();
+        return DataSourceLoader.Load(model, options);
+    }
 }
