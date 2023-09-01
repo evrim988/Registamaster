@@ -409,6 +409,8 @@ function GetList() {
                                 alignment: 'center',
                                 dataType: 'date',
                                 format: 'dd/MM/yyyy',
+                                allowEditing: false,
+                               
                             },
                             {
                                 dataField: "endDate",
