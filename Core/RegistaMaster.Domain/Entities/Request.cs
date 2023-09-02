@@ -26,7 +26,7 @@ public class Request : BaseEntitiy
     public RequestStatus RequestStatus { get; set; }
     [DisplayName("Versiyon")]
     public string? Version { get; set; }
-    public int ModuleID { get; set; }
+    public int? ModuleID { get; set; }
     public Module Module { get; set; }
     public int CustomerID { get; set; }
     public Customer Customer { get; set; }

@@ -1,6 +1,6 @@
-﻿@model RegistaMaster.Domain.DTOModels.Entities.UserModel.UserDTO
+﻿@model RegistaMaster.Domain.DTOModels.Entities.UserModel.UserDetailDto
 @{
-    ViewData["Title"] = "UserDetail";
+    ViewData["Title"] = "UserDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -41,12 +41,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <h1></h1>
                                 <div class="col-md-6">
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Adı:<span class="text-danger"></span></label>
                                         <div class="col-md-9">
-                                            <input asp-for="UserName" type="text" required class="form-control" name="UserName" />
-                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                            <input asp-for="Username" type="text" required class="form-control" name="UserName" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -54,11 +55,12 @@
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Parola:<span class="text-danger"></span></label>
                                         <div class="col-md-9">
-                                            <input asp-for="Password" type="text" required class="form-control" name="Password" />
+                                            <input asp-for="Password" type="text" required class="form-control" name="Parola" />
                                             <span asp-validation-for="Password" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
+                                <h1></h1>
                                 <div class="col-md-6">
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Email:<span class="text-danger"></span></label>

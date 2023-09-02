@@ -81,23 +81,12 @@ function GetList() {
                     colSpan: 2,
                     items: [
                         {
-                            dataField: "date",
-                            caption: "Tarih",
-                            type: 'date',
-                            dataType: 'date',
-                            format: 'dd/MM/yyyy',
-                        },
-                        {
                             dataField: "noteType",
-                            caption: "Not Türü",
+                            caption: "Not Konusu",
                         },
                         {
                             dataField: "description",
                             caption: "Not Açıklaması",
-                        },
-                        {
-                            dataField: "addUserNote",
-                            caption: "Not Ekleyen Kullanıcı",
                         },
                         {
                             dataField: "projectID",
@@ -157,7 +146,7 @@ function GetList() {
             },
             {
                 dataField: "noteType",
-                caption: "Not Türü",
+                caption: "Not Konusu",
                 alignment: 'center',
             },
             {

@@ -183,7 +183,12 @@ function GetList() {
             },
             {
                 dataField: "actionDescription",
-                caption: "Aksiyon Açıklaması",
+                caption: "Aksiyon Konusu",
+                alignment: 'left',
+            },
+            {
+                dataField: "description",
+                caption: "Açıklama",
                 alignment: 'left',
             },
             {
@@ -212,11 +217,7 @@ function GetList() {
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
             },
-            {
-                dataField: "description",
-                caption: "Açıklama",
-                alignment: 'left',
-            },
+            
             {
                 dataField: "actionStatus",
                 caption: "Durum",

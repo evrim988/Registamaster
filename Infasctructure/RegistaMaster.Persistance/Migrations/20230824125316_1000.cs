@@ -32,7 +32,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -43,40 +43,18 @@ namespace RegistaMaster.Persistance.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Modules",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false),
-                    Key = table.Column<string>(type: "longtext", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
-                    ObjectStatus = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Modules", x => x.ID);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ProjectName = table.Column<string>(type: "longtext", nullable: false),
-                    ProjectDescription = table.Column<string>(type: "longtext", nullable: false),
+                    ProjectDescription = table.Column<string>(type: "longtext", nullable: true),
                     ProjectGuid = table.Column<Guid>(type: "char(36)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -99,7 +77,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -121,11 +99,12 @@ namespace RegistaMaster.Persistance.Migrations
                     Image = table.Column<string>(type: "longtext", nullable: true),
                     Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false),
                     Password = table.Column<string>(type: "longtext", nullable: false),
+                    AuthorizationStatus = table.Column<int>(type: "int", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -136,6 +115,35 @@ namespace RegistaMaster.Persistance.Migrations
                         name: "FK_Users_Customers_CustomerID",
                         column: x => x.CustomerID,
                         principalTable: "Customers",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Modules",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    Description = table.Column<string>(type: "longtext", nullable: true),
+                    Key = table.Column<string>(type: "longtext", nullable: true),
+                    ProjectID = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
+                    ObjectStatus = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modules", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Modules_Projects_ProjectID",
+                        column: x => x.ProjectID,
+                        principalTable: "Projects",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 })
@@ -156,7 +164,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -193,13 +201,13 @@ namespace RegistaMaster.Persistance.Migrations
                     PlanedEndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     RequestStatus = table.Column<int>(type: "int", nullable: false),
                     Version = table.Column<string>(type: "longtext", nullable: true),
-                    ModuleID = table.Column<int>(type: "int", nullable: false),
+                    ModuleID = table.Column<int>(type: "int", nullable: true),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
                     ProjectID = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -216,8 +224,7 @@ namespace RegistaMaster.Persistance.Migrations
                         name: "FK_Requests_Modules_ModuleID",
                         column: x => x.ModuleID,
                         principalTable: "Modules",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Requests_Projects_ProjectID",
                         column: x => x.ProjectID,
@@ -243,7 +250,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -284,7 +291,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    LastModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: false),
                     ObjectStatus = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -315,6 +322,11 @@ namespace RegistaMaster.Persistance.Migrations
                 name: "IX_Actions_ResponsibleID",
                 table: "Actions",
                 column: "ResponsibleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Modules_ProjectID",
+                table: "Modules",
+                column: "ProjectID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectNotes_CustomerID",

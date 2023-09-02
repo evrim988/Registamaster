@@ -94,6 +94,11 @@ function GetList() {
             },
             {
                 dataField: "actionDescription",
+                caption: "Aksiyon Konusu",
+                alignment: 'left',
+            },
+            {
+                dataField: "description",
                 caption: "Aksiyon Açıklaması",
                 alignment: 'left',
             },
@@ -123,11 +128,7 @@ function GetList() {
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
             },
-            {
-                dataField: "description",
-                caption: "Açıklama",
-                alignment: 'left',
-            },
+           
             {
                 dataField: "actionStatus",
                 caption: "Durum",
@@ -142,6 +143,13 @@ function GetList() {
                     }),
                     valueExpr: "Id",
                     displayExpr: "Text"
+                },
+                cellTemplate: function (container, info) {
+                    if (info.data.actionStatus == 0) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-secondary" }).append("Başlamadı"))
+                            .appendTo(container);
+                    }
                 }
             },
             {
