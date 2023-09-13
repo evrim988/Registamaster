@@ -20,100 +20,101 @@
                         <h3>Yeni Talep Oluştur</h3>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Bildirim Türü:<span class="text-danger">*</span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="NotificationTypeID" class="form-control select2" name="NotificationTypeID">
                                                 <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
                                             </select>
+                                            <h1></h1>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Kategori:<span class="text-danger">*</span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryID" class="form-control select2" name="CategoryID">
                                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                                             </select>
                                             <h1></h1>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Proje:<span class="text-danger">*</span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <select asp-for="ProjectID" onchange="GetModuleList()" asp-items="@Model.Project" id="ProjectID" class="form-control select2" name="ProjectID">
                                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                                             </select>
                                             <h1></h1>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Modül:<span class="text-danger">*</span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <select asp-for="ModuleID" asp-items="@Model.Module" id="ModuleID" class="form-control select2" name="ModuleID">
                                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                                             </select>
                                             <h1></h1>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Versiyon:</label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <select asp-for="VersionID" asp-items="@Model.Version" id="VersionID" class="form-control select2" name="VersionID">
                                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                                             </select>
                                             <h1></h1>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Konu:<span class="text-danger">*</span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <input asp-for="RequestSubject" type="text" required class="form-control" name="Category" />
                                             <h1></h1>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Açıklama:<span class="text-danger">*</span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <input asp-for="Description" type="text" required class="form-control" name="Description" />
                                             <h1></h1>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Sayfa Linki:</label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <input asp-for="PageUrl" type="text" required class="form-control" name="PageUrl" />
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>

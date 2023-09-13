@@ -62,6 +62,11 @@ function GetList() {
         loadPanel: {
             enabled: true,
         },
+        editing: {
+            mode: 'popup',
+            allowUpdating: true,
+            allowDeleting: true,
+        },
         //editing: {
         //    mode: 'popup',
         //    allowUpdating: true,
@@ -173,14 +178,9 @@ function GetList() {
                 alignment: 'center',
                 lookup: {
                     dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
                         loadUrl: "/Action/GetRequest/",
-                        onBeforeSend: function (method, ajaxoptions) {
-                            console.log(ajaxoptions.data.ID);
-                            ajaxoptions.xhrFields = { withCredentials: true };
-                        }
                     }),
-                    valueExpr: "Id",
+                    valueExpr: "ID",
                     displayExpr: "name"
                 }
             },

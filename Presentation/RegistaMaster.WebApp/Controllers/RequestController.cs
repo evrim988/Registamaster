@@ -126,6 +126,8 @@ public class RequestController : Controller
     {
         var model = JsonConvert.DeserializeObject<Action>(values);
         model.RequestID = ID;
+        model.OpeningDate = DateTime.Now;
+        model.EndDate = DateTime.Now.AddDays(7);
         await uow.ActionRepository.AddActions(model);
         return Ok(model);
     }

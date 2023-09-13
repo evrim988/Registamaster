@@ -69,91 +69,96 @@
                         <h3>Yeni Kullanıcı Oluştur</h3>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Adı:<span class="text-danger"></span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <input asp-for="Name" type="text" required class="form-control" name="name" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
+                                            <h1></h1>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
+                                </form>
+                            </div>
+                            <div class="row">
+                                <form>
                                     <div class="form-group row">
                                         <label style="font-weight:bold;" class="col-md-2 col-form-label">Soyadı:<span class="text-danger"></span></label>
-                                        <div class="col-md-9">
+                                        <div class="col-md-5">
                                             <input asp-for="Surname" type="text" required class="form-control" name="Surname" />
                                             <span asp-validation-for="Surname" class="text-danger"></span>
+                                            <h1></h1>
                                         </div>
                                     </div>
-                                </div>
-                                <h2></h2>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Adı:<span class="text-danger"></span></label>
-                                        <div class="col-md-9">
-                                            <input asp-for="Username" type="text" required class="form-control" name="Username" />
-                                            <span asp-validation-for="Username" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Parola:<span class="text-danger"></span></label>
-                                        <div class="col-md-9">
-                                            <input asp-for="Password" type="password" required class="form-control" name="Password" />
-                                            <span asp-validation-for="Password" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h1></h1>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Email:<span class="text-danger"></span></label>
-                                        <div class="col-md-9">
-                                            <input asp-for="Email" type="text" required class="form-control" name="Email" />
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                               @*  <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Türü:<span class="text-danger"></span></label>
-                                        <div class="col-md-9">
-                                            <select asp-for="AuthorizationStatus" required asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.AuthorizationStatus>()" class="form-control select2">
-                                                <option selected="selected" value="-1">Lütfen Seçiniz</option>
-                                            </select>
-                                            <span asp-validation-for="AuthorizationStatus" class="text-danger" />
-                                        </div>
-                                    </div>
-                                </div> *@
-                               @*  <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label style="font-weight:bold;" class="col-md-4 col-form-label">Kullanıcı Resmi</label>
-                                        <div class="col-md-8">
-                                            <button id="btnCusImg" data-toggle="modal" data-target="#m_modal_Image" class="btn btn-primary" type="button">Resim Yükle</button>
-                                        </div>
-                                    </div>
-
-                                    <input hidden type="text" asp-for="Image" class="form-control m-input " />
-
-                                    <div class="form- group row">
-                                        <label style="font-weight:bold;" class="col-md-4 col-form-label" for="txtProjectDescrption">Resim</label>
-                                        <div class="col-md-8">
-                                            <div class="thumbnail">
-                                                @if (Model.Image != null)
-                                                {
-                                                    <img src="@Model.Image" runat="server" style="" id="imgMainImage" class="rounded float-left" alt="...">
-                                                }
-                                                else
-                                                {
-                                                    <img src="/Modernize/Img/yok.png" runat="server" id="imgMainImage" class="rounded float-left" alt="...">
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> *@
+                                </form>
                             </div>
+                            <form>
+                                <div class="form-group row">
+                                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Adı:<span class="text-danger"></span></label>
+                                    <div class="col-md-5">
+                                        <input asp-for="Username" type="text" required class="form-control" name="Username" />
+                                        <span asp-validation-for="Username" class="text-danger"></span>
+                                        <h1></h1>
+                                    </div>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="form-group row">
+                                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Parola:<span class="text-danger"></span></label>
+                                    <div class="col-md-5">
+                                        <input asp-for="Password" type="password" required class="form-control" name="Password" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                        <h1></h1>
+                                    </div>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="form-group row">
+                                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Email:<span class="text-danger"></span></label>
+                                    <div class="col-md-5">
+                                        <input asp-for="Email" type="text" required class="form-control" name="Email" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                        <h1></h1>
+                                    </div>
+                                </div>
+                            </form>
+                            @*  <div class="col-md-6">
+                            <div class="form-group row">
+                            <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Türü:<span class="text-danger"></span></label>
+                            <div class="col-md-9">
+                            <select asp-for="AuthorizationStatus" required asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.AuthorizationStatus>()" class="form-control select2">
+                            <option selected="selected" value="-1">Lütfen Seçiniz</option>
+                            </select>
+                            <span asp-validation-for="AuthorizationStatus" class="text-danger" />
+                            </div>
+                            </div>
+                            </div> *@
+                            @*  <div class="col-md-6">
+                            <div class="form-group row">
+                            <label style="font-weight:bold;" class="col-md-4 col-form-label">Kullanıcı Resmi</label>
+                            <div class="col-md-8">
+                            <button id="btnCusImg" data-toggle="modal" data-target="#m_modal_Image" class="btn btn-primary" type="button">Resim Yükle</button>
+                            </div>
+                            </div>
+
+                            <input hidden type="text" asp-for="Image" class="form-control m-input " />
+
+                            <div class="form- group row">
+                            <label style="font-weight:bold;" class="col-md-4 col-form-label" for="txtProjectDescrption">Resim</label>
+                            <div class="col-md-8">
+                            <div class="thumbnail">
+                            @if (Model.Image != null)
+                            {
+                            <img src="@Model.Image" runat="server" style="" id="imgMainImage" class="rounded float-left" alt="...">
+                            }
+                            else
+                            {
+                            <img src="/Modernize/Img/yok.png" runat="server" id="imgMainImage" class="rounded float-left" alt="...">
+                            }
+                            </div>
+                            </div>
+                            </div>
+                            </div> *@
                         </div>
                     </div>
                 </div>
@@ -217,7 +222,7 @@
             </text>
         }
 
-                });
+                                        });
 
     </script>
 }
