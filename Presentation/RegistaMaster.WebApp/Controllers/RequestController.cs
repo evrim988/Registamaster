@@ -121,14 +121,15 @@ public class RequestController : Controller
             throw ex;
         }
     }
+
     public async Task<IActionResult> AddActionItem(string values, int ID)
     {
         var model = JsonConvert.DeserializeObject<Action>(values);
         model.RequestID = ID;
-        model.ActionStatus = ActionStatus.notStarted;
         await uow.ActionRepository.AddActions(model);
         return Ok(model);
     }
+
     [HttpPut]
     public async Task<IActionResult> EditActionItem(int key, string values, int ID)
     {
