@@ -88,7 +88,7 @@ function GetList() {
                             caption: "Müşteri Adı",
                         },
                         {
-                            dataField: "adress",
+                            dataField: "address",
                             caption: "Adres",
                         },
                         {
@@ -136,7 +136,7 @@ function GetList() {
                 alignment: 'center',
             },
             {
-                dataField: "adress",
+                dataField: "address",
                 caption: "Adres",
                 alignment: 'center',
             },

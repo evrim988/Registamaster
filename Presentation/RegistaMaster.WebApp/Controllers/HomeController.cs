@@ -2,6 +2,7 @@
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.Enums;
 using RegistaMaster.WebApp.Filter;
 using RegistaMaster.WebApp.Models;
 using System.Diagnostics;
@@ -41,4 +42,6 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+   
+    
 }

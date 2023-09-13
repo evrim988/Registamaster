@@ -2,8 +2,12 @@
     DevExpress.localization.locale('tr');
     GetList();
 });
+function gridRefresh() {
+    $("#requestGridContainer").dxDataGrid("instance").refresh();
+}
 function GetList() {
     var grid = $(requestGridContainer).dxDataGrid({
+
         dataSource: DevExpress.data.AspNet.createStore({
             key: "id",
             loadUrl: "/Request/GetList",
@@ -91,121 +95,128 @@ function GetList() {
 
 
         },
-        editing: {
-            mode: 'popup',
-            allowUpdating: true,
-            allowDeleting: true,
-            allowAdding: true,
-            popup: {
-                title: 'Yeni Talep Ekle',
-                showTitle: true,
-                width: 900,
-                height: 525,
-            },
-            form: {
-                items: [{
-                    itemType: 'group',
-                    colCount: 1,
-                    colSpan: 2,
-                    items: [
-                        {
-                            dataField: "notificationType",
-                            caption: "Bildirim Türü",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Request/GetNotificationType/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "value",
-                                displayExpr: "text",
-                            }
-                        },
-                        {
-                            dataField: "category",
-                            caption: "Kategori",
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Request/GetCategorySelect/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "value",
-                                displayExpr: "text",
-                            }
-                        },
-                        {
-                            dataField: "projectID",
-                            caption: "Proje",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Request/GetProject/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "id",
-                                displayExpr: "name",
-                            }
-                        },
-                        {
-                            dataField: "moduleID",
-                            caption: "Modül/Süreç",
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Request/GetModules/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "id",
-                                displayExpr: "text",
-                            }
-                        },
+        //editing: {
 
-                        {
-                            dataField: "version",
-                            caption: "Versiyon",
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Request/GetVersion/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "id",
-                                displayExpr: "name",
-                            }
-                        },
-                        {
-                            dataField: "requestSubject",
-                            caption: "Konu",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                        },
-                        {
-                            dataField: "description",
-                            caption: "Açıklama",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                        },
-                        {
-                            dataField: "pageURL",
-                            caption: "Sayfa Linki",
-                        },
-                    ],
-                }],
+        //    mode: 'popup',
+        //    allowUpdating: true,
+        //    allowDeleting: true,
+        //    allowAdding: true,
 
-            },
+        //    popup: {
+        //        title: 'Yeni Talep Ekle',
+        //        showTitle: true,
+        //        width: 900,
+        //        height: 525,
+        //    },
+        //    form: {
+        //        items: [{
+        //            itemType: 'group',
+        //            colCount: 1,
+        //            colSpan: 2,
+        //            items: [
+        //                {
+        //                    dataField: "notificationType",
+        //                    caption: "Bildirim Türü",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                    lookup: {
+        //                        dataSource: DevExpress.data.AspNet.createStore({
+        //                            key: "Id",
+        //                            loadUrl: "/Request/GetNotificationType/",
+        //                            onBeforeSend: function (method, ajaxOptions) {
+        //                                ajaxOptions.xhrFields = { withCredentials: true, };
+        //                            },
+        //                        }),
+        //                        valueExpr: "value",
+        //                        displayExpr: "text",
+        //                    }
+        //                },
+        //                {
+        //                    dataField: "category",
+        //                    caption: "Kategori",
+        //                    lookup: {
+        //                        dataSource: DevExpress.data.AspNet.createStore({
+        //                            key: "Id",
+        //                            loadUrl: "/Request/GetCategorySelect/",
+        //                            onBeforeSend: function (method, ajaxOptions) {
+        //                                ajaxOptions.xhrFields = { withCredentials: true, };
+        //                            },
+        //                        }),
+        //                        valueExpr: "value",
+        //                        displayExpr: "text",
+        //                    }
+        //                },
+        //                {
+        //                    dataField: "projectID",
+        //                    caption: "Proje",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                    lookup: {
+        //                        dataSource: DevExpress.data.AspNet.createStore({
+        //                            key: "Id",
+        //                            loadUrl: "/Request/GetProject/",
+        //                            onBeforeSend: function (method, ajaxOptions) {
+        //                                ajaxOptions.xhrFields = { withCredentials: true, };
+        //                            },
+        //                        }),
+        //                        valueExpr: "id",
+        //                        displayExpr: "name",
+        //                    },
 
-        },
+        //                },
+        //                {
+
+        //                    dataField: "moduleID",
+        //                    caption: "Modül/Süreç",
+
+        //                    lookup: {
+        //                        dataSource: DevExpress.data.AspNet.createStore({
+        //                            key: "ID",
+        //                            loadUrl: "/Request/GetModules/",
+
+        //                            onBeforeSend: function (method, ajaxOptions) {
+        //                                console.log(ajaxOptions);
+        //                                ajaxOptions.xhrFields = { withCredentials: true, };
+
+        //                            },
+        //                        }),
+        //                        valueExpr: "id",
+        //                        displayExpr: "name",
+        //                    },
+        //                },
+        //                {
+        //                    dataField: "version",
+        //                    caption: "Versiyon",
+        //                    lookup: {
+        //                        dataSource: DevExpress.data.AspNet.createStore({
+        //                            key: "Id",
+        //                            loadUrl: "/Request/GetVersion/",
+        //                            onBeforeSend: function (method, ajaxOptions) {
+        //                                ajaxOptions.xhrFields = { withCredentials: true, };
+        //                            },
+        //                        }),
+        //                        valueExpr: "id",
+        //                        displayExpr: "name",
+        //                    }
+        //                },
+        //                {
+        //                    dataField: "requestSubject",
+        //                    caption: "Konu",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                },
+        //                {
+        //                    dataField: "description",
+        //                    caption: "Açıklama",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                },
+        //                {
+        //                    dataField: "pageURL",
+        //                    caption: "Sayfa Linki",
+        //                },
+        //            ],
+        //        }],
+
+        //    },
+
+        //},
 
         columns: [
 
@@ -223,23 +234,27 @@ function GetList() {
                     }),
                     valueExpr: "id",
                     displayExpr: "name",
-                }
+                },
+
             },
             {
                 dataField: "moduleID",
                 caption: "Modül/Süreç",
-                alignment:"center",
+                alignment: "center",
                 lookup: {
                     dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
+                        key: "ID",
                         loadUrl: "/Request/GetModules/",
                         onBeforeSend: function (method, ajaxOptions) {
+                            console.log(ajaxOptions);
                             ajaxOptions.xhrFields = { withCredentials: true, };
                         },
                     }),
                     valueExpr: "id",
                     displayExpr: "name",
-                }
+
+                },
+
             },
             {
                 dataField: "customerID",
@@ -258,7 +273,7 @@ function GetList() {
                 }
             },
             {
-                dataField: "notificationType",
+                dataField: "notificationTypeID",
                 caption: "Bildirim Türü",
                 alignment: 'center',
                 lookup: {
@@ -289,7 +304,7 @@ function GetList() {
                 alignment: 'center',
             },
             {
-                dataField: "category",
+                dataField: "categoryID",
                 caption: "Kategori",
                 alignment: 'center',
                 lookup: {
@@ -330,10 +345,37 @@ function GetList() {
                     }),
                     valueExpr: "Id",
                     displayExpr: "Text"
+                },
+                cellTemplate: function (container, info) {
+                    if (info.data.requestStatus == 0) {
+                        $('<div id="NotStarted">')
+                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.requestStatus == 1) {
+                        $('<div id="Start">')
+                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.requestStatus == 2) {
+                        $('<div id="Contiuned">')
+                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.requestStatus == 3) {
+                        $('<div id="Completed">')
+                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.requestStatus == 4) {
+                        $('<div id="Cancel">')
+                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
+                            .appendTo(container);
+                    }
                 }
             },
             {
-                dataField: "version",
+                dataField: "versionID",
                 caption: "Versiyon",
                 alignment: 'center',
                 lookup: {
@@ -421,11 +463,12 @@ function GetList() {
                                 dataType: 'date',
                                 format: 'dd/MM/yyyy',
                             },
-                            
+
                             {
                                 dataField: "actionStatus",
                                 caption: "Durum",
                                 alignment: 'center',
+                                allowEditing: false,
                                 lookup: {
                                     dataSource: DevExpress.data.AspNet.createStore({
                                         key: "Id",
@@ -436,6 +479,33 @@ function GetList() {
                                     }),
                                     valueExpr: "Id",
                                     displayExpr: "Text"
+                                },
+                                cellTemplate: function (container, info) {
+                                    if (info.data.actionStatus == 0) {
+                                        $('<div id="NotStarted" onclick="openModal(' + info.data.id + ')">')
+                                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+                                            .appendTo(container);
+                                    }
+                                    else if (info.data.actionStatus == 1) {
+                                        $('<div id="Start" onclick="openModal(' + info.data.id + ')">')
+                                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
+                                            .appendTo(container);
+                                    }
+                                    else if (info.data.actionStatus == 2) {
+                                        $('<div id="Contiuned" onclick="openModal(' + info.data.id + ')">')
+                                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                                            .appendTo(container);
+                                    }
+                                    else if (info.data.actionStatus == 3) {
+                                        $('<div id="Completed" onclick="openModal(' + info.data.id + ')">')
+                                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
+                                            .appendTo(container);
+                                    }
+                                    else if (info.data.actionStatus == 4) {
+                                        $('<div id="Cancel"onclick="openModal(' + info.data.id + ')">')
+                                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
+                                            .appendTo(container);
+                                    }
                                 }
                             },
                             {
@@ -464,6 +534,41 @@ function GetList() {
     }).dxDataGrid("instance");
 
 }
+
+function openModal(id) {
+    console.log(id);
+    $('#actionID').val(id);
+    $('#changeActionStatus').modal('toggle');
+}
+function closeModal() {
+    $('#changeActionStatus').modal('hide');
+}
+
+function saveModal() {
+    var actionStatus = $('#actionSelect').val();
+    var ID = $('#actionID').val();
+    var requestStatus = $('#requestSelect').val();
+    var formData = new FormData();
+    formData.append('actionStatus', actionStatus);
+    formData.append('ID', ID);
+    formData.append('requestStatus', requestStatus);
+    console.log(ID);
+    $.ajax({
+        type: "POST",
+        url: '/Request/ActionStatusChangeUpdate/',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function () {
+            closeModal();
+            gridRefresh();
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    });
+}
+
 
 function deleteRequestAsk(id) {
     DeleteDialog("RequestDelete", id, "Talep Silinecektir!");

@@ -8,6 +8,7 @@ using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 using Action = RegistaMaster.Domain.Entities.Action;
+using Version = RegistaMaster.Domain.Entities.Version;
 
 namespace RegistaMaster.Infasctructure.Repositories;
 
@@ -18,9 +19,9 @@ public class RequestRepository : Repository, IRequestRepository
     private readonly SessionModel session;
     public RequestRepository(RegistaMasterContext _context, SessionModel _session, UnitOfWork _uow) : base(_context, _session)
     {
-        this.context = _context;
-        this.uow = _uow;
-        this.session = _session;
+        context = _context;
+        uow = _uow;
+        session = _session;
     }
 
     public async Task<string> RequestAdd(Request model)
@@ -127,7 +128,7 @@ public class RequestRepository : Repository, IRequestRepository
     {
         try
         {
-            List<ResponsibleDevextremeSelectListHelper> ModulersHelpers = new List<ResponsibleDevextremeSelectListHelper>();
+            List<ResponsibleDevextremeSelectListHelper> ModulesHelpers = new List<ResponsibleDevextremeSelectListHelper>();
             var model = context.Modules
                 .Where(t => true);
             foreach (var item in model)
@@ -135,11 +136,11 @@ public class RequestRepository : Repository, IRequestRepository
                 ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
                 {
                     ID = item.ID,
-                    Name = item.Name + "/" + item.Description,
+                    Name = item.Name,
                 };
-                ModulersHelpers.Add(helper);
+                ModulesHelpers.Add(helper);
             }
-            return ModulersHelpers;
+            return ModulesHelpers;
         }
         catch (Exception)
         {
@@ -195,5 +196,69 @@ public class RequestRepository : Repository, IRequestRepository
 
             throw;
         }
+    }
+
+    public async Task<string> ActionStatusChangeUpdate(int ID, ActionStatus actionStatus)
+    {
+        try
+        {
+            var model = await uow.Repository.GetById<Action>(ID);
+            model.ActionStatus = actionStatus;
+            Update(model);
+            await uow.SaveChanges();
+            return "1";
+        }  
+        catch (Exception e)
+        {
+            throw e;
+        }
+        
+
+    }
+
+    public async Task<List<SelectListItem>> GetProjectSelect()
+    {
+        try
+        {
+            return GetNonDeletedAndActive<Project>(t => true)
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.ProjectName }).ToList();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<List<SelectListItem>> GetModule()
+    {
+        try
+        {
+            return GetNonDeletedAndActive<Module>(t => true)
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<List<SelectListItem>> GetVersion()
+    {
+        try
+        {
+            return GetNonDeletedAndActive<Version>(t=>true)
+                .Select(s=>new SelectListItem { Value=s.ID.ToString(), Text=s.Name }).ToList();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+  
+
+    public async Task<List<SelectListItem>> GetModuleList(int ID)
+    {
+        return GetNonDeletedAndActive<Module>(t => t.ProjectID == ID)
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
     }
 }

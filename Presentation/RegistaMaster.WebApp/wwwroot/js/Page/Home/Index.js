@@ -110,7 +110,7 @@ function GetList() {
                     dataSource: DevExpress.data.AspNet.createStore({
                         loadUrl: "/Action/GetResponsible/",
                     }),
-                    valueExpr: "id", // "id" contains the same values as "authorId"
+                    valueExpr: "id", 
                     displayExpr: "name"
                 }
             },
@@ -146,8 +146,28 @@ function GetList() {
                 },
                 cellTemplate: function (container, info) {
                     if (info.data.actionStatus == 0) {
-                        $('<div>')
-                            .append($('<a>', { class: "btn btn-secondary" }).append("Başlamadı"))
+                        $('<div id="NotStarted">')
+                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 1) {
+                        $('<div id="Start">')
+                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 2) {
+                        $('<div id="Contiuned">')
+                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 3) {
+                        $('<div id="Completed" >')
+                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 4) {
+                        $('<div id="Cancel">')
+                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
                             .appendTo(container);
                     }
                 }

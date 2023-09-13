@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 
@@ -10,9 +11,10 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    partial class RegistaMasterContextModelSnapshot : ModelSnapshot
+    [Migration("20230911135834_1001")]
+    partial class _1001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -291,9 +293,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("CategoryID")
-                        .HasColumnType("int");
-
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
@@ -319,9 +318,6 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<string>("NotificationType")
                         .HasColumnType("longtext");
-
-                    b.Property<int?>("NotificationTypeID")
-                        .HasColumnType("int");
 
                     b.Property<int>("ObjectStatus")
                         .HasColumnType("int");
@@ -351,8 +347,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VersionID")
-                        .HasColumnType("int");
+                    b.Property<string>("Version")
+                        .HasColumnType("longtext");
 
                     b.HasKey("ID");
 
@@ -361,8 +357,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.HasIndex("ModuleID");
 
                     b.HasIndex("ProjectID");
-
-                    b.HasIndex("VersionID");
 
                     b.ToTable("Requests");
                 });
@@ -604,17 +598,11 @@ namespace RegistaMaster.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RegistaMaster.Domain.Entities.Version", "Version")
-                        .WithMany()
-                        .HasForeignKey("VersionID");
-
                     b.Navigation("Customer");
 
                     b.Navigation("Module");
 
                     b.Navigation("Project");
-
-                    b.Navigation("Version");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Task", b =>

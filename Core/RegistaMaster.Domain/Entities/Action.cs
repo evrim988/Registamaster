@@ -22,6 +22,7 @@ public class Action : BaseEntitiy
 
     [DisplayName("Durum")]
     public ActionStatus ActionStatus { get; set; }
+    public RequestStatus RequestStatus { get; set; }
     public int RequestID { get; set; }
     public Request Request { get; set; }
 }

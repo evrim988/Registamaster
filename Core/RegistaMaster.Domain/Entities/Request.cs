@@ -12,8 +12,10 @@ public class Request : BaseEntitiy
     public string Description { get; set; }
     [DisplayName("Kategori")]
     public string? Category { get; set; }
+    public int? CategoryID { get; set; }
     [DisplayName("Bildirim Türü")]
     public string? NotificationType { get; set; }
+    public int? NotificationTypeID { get; set; }
     [DisplayName("Sayfa Linki")]
     public string? PageURL { get; set; }
     [DisplayName("Görüntü")]
@@ -25,7 +27,8 @@ public class Request : BaseEntitiy
     [DisplayName("Durum")]
     public RequestStatus RequestStatus { get; set; }
     [DisplayName("Versiyon")]
-    public string? Version { get; set; }
+    public int? VersionID {  get; set; }
+    public Version Version { get; set; }
     public int? ModuleID { get; set; }
     public Module Module { get; set; }
     public int CustomerID { get; set; }

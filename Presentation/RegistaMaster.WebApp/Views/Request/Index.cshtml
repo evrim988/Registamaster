@@ -1,4 +1,6 @@
-﻿@{
+﻿@model RegistaMaster.Domain.DTOModels.Entities.ActionModels.ActionDTO
+
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,15 +12,15 @@
 
 <div class="main-content">
     <div class="row">
-        <div class="col-12">
+        <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
             <div class="card card-primary">
                 <div class="card-header">
                 </div>
                 <div class="card-content collapse show">
                     <div class="heading-elements">
-                        @* <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
-                        <a asp-action="Create" asp-controller="Task" class="btn btn-primary"><i class="ion ion-android-add"></i>Talebi Göreve Ekle</a>
-                        </div>*@
+                        <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
+                        <a asp-action="Create" asp-controller="Request" class="btn btn-primary"><i class="ion ion-android-add"></i>Yeni Talep Oluştur</a>
+                        </div>
                     </div>
                     <div class="card-body card-dashboard">
                         <h3>Talepler</h3>
@@ -31,7 +33,26 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
+            </div>
+            <div class="modal-body">
+                <input hidden id="actionID" />
+                <input hidden id="requestSelect" />
+                <select asp-for="ActionStatus" required id="actionSelect" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control select2">
+                    <option selected="selected" value="-1">Lütfen Seçiniz</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" onclick="saveModal()" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts
     {
 

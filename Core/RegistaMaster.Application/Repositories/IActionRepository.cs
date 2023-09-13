@@ -19,5 +19,5 @@ public interface IActionRepository : IRepository
     public Task<List<SelectListItem>> ResponsiblehelperModelList();
 
     Task<List<ResponsibleDevextremeSelectListHelper>> GetRequest();
-  
+    
 }

@@ -2,6 +2,9 @@
     DevExpress.localization.locale('tr');
     GetList();
 });
+function gridRefresh() {
+    $("#actionGridContainer").dxDataGrid("instance").refresh();
+}
 function GetList() {
     var grid = $(actionGridContainer).dxDataGrid({
         dataSource: DevExpress.data.AspNet.createStore({
@@ -157,7 +160,7 @@ function GetList() {
 
 
         },
-        
+
         columns: [
             {
                 dataField: "id",
@@ -217,7 +220,7 @@ function GetList() {
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
             },
-            
+
             {
                 dataField: "actionStatus",
                 caption: "Durum",
@@ -232,9 +235,37 @@ function GetList() {
                     }),
                     valueExpr: "Id",
                     displayExpr: "Text"
+                },
+                cellTemplate: function (container, info) {
+                    if (info.data.actionStatus == 0) {
+                        $('<div id="NotStarted">')
+                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 1) {
+                        $('<div id="Start" >')
+                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 2) {
+                        $('<div id="Contiuned" >')
+                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 3) {
+                        $('<div id="Completed"">')
+                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionStatus == 4) {
+                        $('<div id="Cancel">')
+                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
+                            .appendTo(container);
+                    }
                 }
             }
         ]
 
-    })
+    }).dxDataGrid("instance");
 }
+

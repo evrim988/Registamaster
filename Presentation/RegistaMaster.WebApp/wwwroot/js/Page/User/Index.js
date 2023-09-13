@@ -179,22 +179,22 @@ function GetList() {
                 caption: "EMail",
                 alignment: 'center',
             },
-            {
-                dataField: "authorizationStatus",
-                caption: "Kullanıcı Türü",
-                alignment: 'center',
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
-                        loadUrl: "/User/GetAuthStatus",
-                        onBeforeSend: function (method, ajaxoptions) {
-                            ajaxoptions.xhrFields = { withCredentials: true };
-                        },
-                    }),
-                    valueExpr: "Id",
-                    displayExpr: "Text"
-                }
-            },
+            //{
+            //    dataField: "authorizationStatus",
+            //    caption: "Kullanıcı Türü",
+            //    alignment: 'center',
+            //    lookup: {
+            //        dataSource: DevExpress.data.AspNet.createStore({
+            //            key: "Id",
+            //            loadUrl: "/User/GetAuthStatus",
+            //            onBeforeSend: function (method, ajaxoptions) {
+            //                ajaxoptions.xhrFields = { withCredentials: true };
+            //            },
+            //        }),
+            //        valueExpr: "Id",
+            //        displayExpr: "Text"
+            //    }
+            //},
             {
                 type: "buttons",
                 buttons: [

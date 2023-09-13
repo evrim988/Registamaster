@@ -8,6 +8,8 @@ using RegistaMaster.Domain.Enums;
 using Request = RegistaMaster.Domain.Entities.Request;
 using Action = RegistaMaster.Domain.Entities.Action;
 using DevExtreme.AspNet.Mvc;
+using NuGet.Protocol.Plugins;
+using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -24,7 +26,43 @@ public class RequestController : Controller
     {
         return View();
     }
-
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        var model = new RequestDTO();
+        model.NotificationType = await uow.RequestRepository.NotificationTypeSelectList();
+        model.Category = await uow.RequestRepository.CategorySelectList();
+        model.Project = await uow.RequestRepository.GetProjectSelect();
+        model.Module = await uow.RequestRepository.GetModule();
+        model.Version = await uow.RequestRepository.GetVersion();
+        return View(model);
+    }
+    [HttpPost]
+    public async Task<string> Create(RequestDTO model)
+    {
+        try
+        {
+            var request = new Request()
+            {
+                NotificationTypeID = model.NotificationTypeID,
+                CategoryID = model.CategoryID,
+                ProjectID = model.ProjectID,
+                ModuleID = model.ModuleID,
+                VersionID = model.VersionID,
+                RequestSubject = model.RequestSubject,
+                Description = model.Description,
+                PageURL = model.PageUrl
+            };
+            await uow.RequestRepository.RequestAdd(request);
+            await uow.SaveChanges();
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+       
+    }
     public async Task<object> GetList(DataSourceLoadOptions options)
 
     {
@@ -87,6 +125,7 @@ public class RequestController : Controller
     {
         var model = JsonConvert.DeserializeObject<Action>(values);
         model.RequestID = ID;
+        model.ActionStatus = ActionStatus.notStarted;
         await uow.ActionRepository.AddActions(model);
         return Ok(model);
     }
@@ -154,7 +193,7 @@ public class RequestController : Controller
         }
     }
 
-    public async Task<object> GetModules(DataSourceLoadOptions options)
+    public async Task<object> GetModules(DataSourceLoadOptions options,int projectID)
     {
         try
         {
@@ -199,5 +238,32 @@ public class RequestController : Controller
     public async Task<List<SelectListItem>> GetCategorySelect()
     {
         return await uow.RequestRepository.CategorySelectList();
+    }
+    [HttpPost]
+    public async Task<string> ActionStatusChangeUpdate(int ID, ActionStatus actionStatus)
+    {
+        try
+        {
+            var model = await uow.RequestRepository.ActionStatusChangeUpdate(ID, actionStatus);
+            return model;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+    public async Task<string> GetModuleList(int ID)
+    {
+        try
+        {
+            var model = await uow.RequestRepository.GetModuleList(ID);
+            if (model.Count == 0)
+                return "1";
+            return JsonConvert.SerializeObject(model);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 }

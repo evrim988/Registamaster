@@ -13,6 +13,9 @@ public enum RequestStatus
     [Display(Name = "Devam Ediyor")]
     Continued = 2,
 
+    [Display(Name = "Tamamlandı")]
+    Completed = 3,
+
     [Display(Name = "İptal/Reddedildi")]
     Cancel = 3,
 }

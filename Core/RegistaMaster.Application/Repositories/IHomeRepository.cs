@@ -1,4 +1,6 @@
-﻿namespace RegistaMaster.Application.Repositories;
+﻿using RegistaMaster.Domain.Enums;
+
+namespace RegistaMaster.Application.Repositories;
 
 public interface IHomeRepository : IRepository
 {
