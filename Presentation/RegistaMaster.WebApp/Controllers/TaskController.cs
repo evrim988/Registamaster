@@ -72,7 +72,6 @@ public class TaskController : Controller
         {
             throw;
         }
-        return "1";
     }
     public async Task<string> GetBase64(string base64)
     {
