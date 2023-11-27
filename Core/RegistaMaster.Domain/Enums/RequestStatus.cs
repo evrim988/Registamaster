@@ -17,5 +17,5 @@ public enum RequestStatus
     Completed = 3,
 
     [Display(Name = "İptal/Reddedildi")]
-    Cancel = 3,
+    Cancel = 4,
 }

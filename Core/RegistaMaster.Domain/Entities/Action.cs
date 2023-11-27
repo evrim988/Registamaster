@@ -18,7 +18,7 @@ public class Action : BaseEntitiy
     [DisplayName("Son Tarih")]
     public DateTime EndDate { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [DisplayName("Durum")]
     public ActionStatus ActionStatus { get; set; }

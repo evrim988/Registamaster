@@ -133,7 +133,7 @@ public class RequestController : Controller
     }
 
     [HttpPut]
-    public async Task<IActionResult> EditActionItem(int key, string values, int ID)
+    public async Task<IActionResult> EditActionItem(int key, string values)
     {
         var model = await uow.Repository.GetById<Action>(key);
         JsonConvert.PopulateObject(values, model);
@@ -196,7 +196,7 @@ public class RequestController : Controller
         }
     }
 
-    public async Task<object> GetModules(DataSourceLoadOptions options,int projectID)
+    public async Task<object> GetModules(DataSourceLoadOptions options)
     {
         try
         {
@@ -269,4 +269,6 @@ public class RequestController : Controller
             throw ex;
         }
     }
+
+
 }
