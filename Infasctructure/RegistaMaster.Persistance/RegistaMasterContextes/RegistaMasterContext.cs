@@ -23,5 +23,8 @@ namespace RegistaMaster.Persistance.RegistaMasterContextes
         public DbSet<Request> Requests { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<Version> Versions { get; set; }
+        public DbSet<UserLog> UserLogs { get; set; }
+        public DbSet<ErrorLog> ErrorLogs { get; set; }
+        public DbSet<HealthCheck> HealthChecks { get; set; }
     }
 }

@@ -15,6 +15,9 @@ public interface IUnitOfWork
     IHomeRepository HomeRepository { get; }
     IModuleRepository ModuleRepository { get; }
     IVersionRepository VersionRepository { get; }
+    IUserLogRepository UserLogRepository { get; }
+    IErrorLogRepository errorLogRepository { get; }
+    IHealthCheckRepository healthCheckRepository { get; }
     Task<int> SaveChanges();
     SessionModel GetSession();
 }

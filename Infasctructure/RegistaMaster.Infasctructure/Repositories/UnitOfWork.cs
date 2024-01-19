@@ -75,6 +75,23 @@ public class UnitOfWork : IUnitOfWork
         get => _versionRepository ?? (_versionRepository = new VersionRepository(context, session, this));
 
     }
+    private IUserLogRepository _userLogRepository;
+    public IUserLogRepository UserLogRepository
+    {
+        get => _userLogRepository ?? (_userLogRepository = new UserLogRepository(context,this, session));
+    }
+    
+    private IErrorLogRepository _errorLogRepository;
+    public IErrorLogRepository errorLogRepository
+    {
+        get => _errorLogRepository ?? (_errorLogRepository = new ErrorLogRepository(context,this, session));
+    }
+    private IHealthCheckRepository _healthCheckRepository;
+    public IHealthCheckRepository healthCheckRepository
+    {
+        get => _healthCheckRepository ?? (_healthCheckRepository = new HealthCheckRepository(context,this, session));
+    }
+
     public async Task<int> SaveChanges()
     {
         try
