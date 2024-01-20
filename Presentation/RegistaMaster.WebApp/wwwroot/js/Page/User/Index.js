@@ -207,12 +207,3 @@ function GetList() {
 
 }
 
-//{
-//    hint: "Düzenle",
-//        icon: "edit",
-//            onClick: function (e) {
-//                console.log(e.row.data);
-//                location.href = '/User/UserDetails/' + e.row.data.id;
-
-//            }
-//},

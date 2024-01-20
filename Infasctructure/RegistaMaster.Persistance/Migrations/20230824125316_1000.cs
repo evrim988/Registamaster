@@ -26,7 +26,7 @@ namespace RegistaMaster.Persistance.Migrations
                     EmailPort = table.Column<string>(type: "longtext", nullable: true),
                     EnableSsl = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     EmailPassword = table.Column<string>(type: "longtext", nullable: true),
-                    Email = table.Column<string>(type: "longtext", nullable: false),
+                    Email = table.Column<string>(type: "longtext", nullable: true),
                     ApiKey = table.Column<string>(type: "longtext", nullable: true),
                     CustomerDescriptionID = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),

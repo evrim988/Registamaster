@@ -31,7 +31,7 @@ public class RequestRepository : Repository, IRequestRepository
             model.CustomerID = session.CustomerID;
             model.StartDate = DateTime.Now;
             model.PlanedEndDate = model.StartDate.AddDays(7);
-            model.RequestStatus = RequestStatus.NotStart;
+            model.RequestStatus = RequestStatus.Open;
             await uow.Repository.Add(model);
             await uow.SaveChanges();
             return "";

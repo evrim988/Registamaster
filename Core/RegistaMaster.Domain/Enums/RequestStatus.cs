@@ -4,18 +4,17 @@ namespace RegistaMaster.Domain.Enums;
 
 public enum RequestStatus
 {
-    [Display(Name = "Başlamadı")]
-    NotStart = 0,
+    [Display(Name = "Açık")]
+    Open = 0,
 
     [Display(Name = "Başladı")]
     Start = 1,
 
-    [Display(Name = "Devam Ediyor")]
-    Continued = 2,
-
-    [Display(Name = "Tamamlandı")]
-    Completed = 3,
-
     [Display(Name = "İptal/Reddedildi")]
-    Cancel = 4,
+    Cancel = 2,
+
+    [Display(Name = "Kapandı")]
+    Closed = 3,
+
+    
 }

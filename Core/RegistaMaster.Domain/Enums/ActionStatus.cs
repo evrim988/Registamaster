@@ -8,9 +8,6 @@ public enum ActionStatus
     [Display(Name = "Başlamadı")]
     notStarted = 0,
 
-    [Display(Name = "Başladı")]
-    start = 1,
-
     [Display(Name = "Devam Ediyor")]
     Contiuned = 2,
 

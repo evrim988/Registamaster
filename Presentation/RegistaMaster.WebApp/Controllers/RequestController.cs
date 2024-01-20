@@ -122,14 +122,40 @@ public class RequestController : Controller
         }
     }
 
-    public async Task<IActionResult> AddActionItem(string values, int ID)
+    
+    //public async Task<IActionResult> AddActionItem([FromBody] Action model, int ID)
+    //{
+    //    try
+    //    {
+    //        model.RequestID = ID;
+    //        model.OpeningDate = DateTime.Now;
+    //        model.EndDate = DateTime.Now.AddDays(7);
+    //        await uow.ActionRepository.AddActions(model);
+    //        return Ok(model);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        // Hata işleme
+    //        return BadRequest(ex.Message);
+    //    }
+    //}
+    [HttpPost]
+    public async Task<IActionResult> AddActionItem(string formData, int ID)
     {
-        var model = JsonConvert.DeserializeObject<Action>(values);
-        model.RequestID = ID;
-        model.OpeningDate = DateTime.Now;
-        model.EndDate = DateTime.Now.AddDays(7);
-        await uow.ActionRepository.AddActions(model);
-        return Ok(model);
+        try
+        {
+            var model = JsonConvert.DeserializeObject<Action>(formData);
+            model.RequestID = ID;
+            model.OpeningDate = DateTime.Now;
+            model.EndDate = DateTime.Now.AddDays(7);
+            await uow.ActionRepository.AddActions(model);
+            return Ok(model);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
     }
 
     [HttpPut]

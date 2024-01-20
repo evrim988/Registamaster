@@ -12,17 +12,17 @@ function GetList() {
             key: "id",
             loadUrl: "/Request/GetList",
             insertUrl: "/Request/RequestAdd",
-            updateUrl: "/Request/RequestEdit",
-            deleteUrl: "/Request/RequestDelete/",
+            //updateUrl: "/Request/RequestEdit",
+            //deleteUrl: "/Request/RequestDelete/",
             onBeforeSend: function (method, ajaxOptions) {
                 ajaxOptions.xhrFields = { withCredentials: true };
             }
         }),
-        editing: {
-            mode: 'row',
-            allowUpdating: true,
-            allowDeleting: true,
-        },
+        //editing: {
+        //    mode: 'row',
+        //    allowUpdating: true,
+        //    allowDeleting: true,
+        //},
         onCellPrepared(e) {
             if (e.rowType == "header") {
                 e.cellElement.css("text-align", "center");
@@ -348,28 +348,23 @@ function GetList() {
                 },
                 cellTemplate: function (container, info) {
                     if (info.data.requestStatus == 0) {
-                        $('<div id="NotStarted">')
-                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+                        $('<div id="Open">')
+                            .append($('<a>', { class: "btn btn-sm btn-info", }).append("Açık"))
                             .appendTo(container);
                     }
                     else if (info.data.requestStatus == 1) {
                         $('<div id="Start">')
-                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
+                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Başladı"))
                             .appendTo(container);
                     }
                     else if (info.data.requestStatus == 2) {
-                        $('<div id="Contiuned">')
-                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                        $('<div id="Cancel">')
+                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("İptal/Reddedildi"))
                             .appendTo(container);
                     }
                     else if (info.data.requestStatus == 3) {
-                        $('<div id="Completed">')
-                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.requestStatus == 4) {
-                        $('<div id="Cancel">')
-                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
+                        $('<div id="Closed">')
+                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Kapandı"))
                             .appendTo(container);
                     }
                 }
@@ -390,6 +385,25 @@ function GetList() {
                     displayExpr: "name",
                 }
             },
+            {
+                caption: "İşlemler",
+                fixed: true, // Sabitle
+                fixedPosition: "right", // Sağa sabitle
+                cellTemplate: function (container, options) {
+                    $("<div>")
+                        .dxButton({
+                            icon: "preferences", // ayarlar icon 
+                            hint: "İşlemler",
+                            stylingMode: "outlined",
+                            onClick: function (e) {
+                                showContextMenu(options, e);
+                            }
+                        })
+                        .appendTo(container);
+
+                }
+
+            }
         ],
         masterDetail: {
             enabled: true,
@@ -415,7 +429,7 @@ function GetList() {
                             actionGridContainer = e.component;
                         },
                         editing: {
-                            mode: 'row',
+                            mode: 'popup',
                             allowAdding: true,
                             allowUpdating: true,
                             allowDeleting: true,
@@ -471,7 +485,6 @@ function GetList() {
                                 dataField: "actionStatus",
                                 caption: "Durum",
                                 alignment: 'center',
-                                allowEditing: false,
                                 lookup: {
                                     dataSource: DevExpress.data.AspNet.createStore({
                                         key: "Id",
@@ -538,40 +551,155 @@ function GetList() {
 
 }
 
-function openModal(id) {
-    console.log(id);
-    $('#actionID').val(id);
-    $('#changeActionStatus').modal('toggle');
-}
-function closeModal() {
-    $('#changeActionStatus').modal('hide');
+function showContextMenu(options, e) {
+    var contextMenu = $("<div>")
+        .dxContextMenu({
+            dataSource: [
+                { text: "Düzenle", icon: "edit" },
+                { text: "Sil", icon: "remove" },
+                { text: "Aksiyon Ekle", icon: "plus" }
+            ],
+            onItemClick: function (item) {
+                handleItemClick(item, options);
+                
+
+            }
+        })
+        .appendTo("body")
+        .dxContextMenu("instance");
+
+    contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
+    contextMenu.show();
 }
 
-function saveModal() {
-    var actionStatus = $('#actionSelect').val();
-    var ID = $('#actionID').val();
-    var requestStatus = $('#requestSelect').val();
-    var formData = new FormData();
-    formData.append('actionStatus', actionStatus);
-    formData.append('ID', ID);
-    formData.append('requestStatus', requestStatus);
-    console.log(ID);
-    $.ajax({
-        type: "POST",
-        url: '/Request/ActionStatusChangeUpdate/',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function () {
-            closeModal();
-            gridRefresh();
+function handleItemClick(item, options) {
+    var items = item.itemData.text;
+    var ID = options.data.id;
+
+    switch (items) {
+        case "Düzenle":
+            location.href = '../Users/Edit/' + ID;
+            break;
+        case "Sil":
+            DeleteConfirme('/Request/RequestDelete/' + ID);
+            break;
+        case "Aksiyon Ekle":
+            openPopup(ID);
+            break;
+        default:
+            break;
+    }
+}
+
+function openPopup(ID) {
+
+    var formItems = [
+        {
+            dataField: "actionDescription",
+            caption: "Aksiyon Konusu",
+            name: "actionSubject"
         },
-        error: function (e) {
-            console.log(e)
+        {
+            dataField: "description"
+        },
+        {
+            dataField: "responsibleID",
+            editorType: "dxSelectBox",
+            editorOptions: {
+                dataSource: DevExpress.data.AspNet.createStore({
+                    loadUrl: "/Action/GetResponsible/",
+                }),
+                valueExpr: "id",
+                displayExpr: "name"
+            }
+        },
+        {
+            dataField: "actionStatus",
+            editorType: "dxSelectBox",
+            editorOptions: {
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: "Id",
+                    loadUrl: "/Action/GetActionStatus",
+                    onBeforeSend: function (method, ajaxoptions) {
+                        ajaxoptions.xhrFields = { withCredentials: true };
+                    },
+                }),
+                valueExpr: "Id",
+                displayExpr: "Text"
+            }
+        }
+    ];
+   
+
+   
+  
+    var form = $("<div>")
+        .dxForm({
+            colCount: 2,
+            items: formItems,
+            labelLocation: "top",
+        })
+        .appendTo("body")
+        .dxForm("instance");
+
+    $("<hr>").appendTo(form.element());
+
+    var buttonContainer = $("<div>")
+        .addClass("dx-form-field")
+        .css("text-align", "right")
+        .appendTo(form.element());
+
+   
+    var saveButton = $("<div>")
+        .dxButton({
+            text: "Kaydet",
+            onClick: function () {
+                saveData(form, popup, ID);
+            }
+        })
+        .appendTo(buttonContainer);
+
+    var popup = $("<div>")
+        .dxPopup({
+            title: "Aksiyon Ekle",
+            width: 600,
+            height: 300,
+            contentTemplate: function (contentContainer) {
+                
+                contentContainer.append(form.element());
+            },
+            
+        })
+        .appendTo("body")
+        .dxPopup("instance");
+
+    
+    popup.show();
+}
+
+
+function saveData(form, popup, ID) {
+    var formData = form.option("formData");
+
+    console.log(formData);
+    
+    $.ajax({
+        url: "/Request/AddActionItem/" + ID,
+        type: "POST",
+        contentType: "application/json",  // JSON verisi gönderileceğini belirt
+        data: JSON.stringify(formData),
+
+        success: function (result) {
+            console.log("Veri başarıyla kaydedildi:", result);
+            popup.hide();
+        },
+        error: function (error) {
+            // Kaydetme sırasında bir hata oluştuğunda yapılacak işlemler
+            console.error("Kaydetme sırasında hata:", error);
+            // Hata mesajını kullanıcıya göstermek için uygun bir yöntem ekleyebilirsiniz.
         }
     });
 }
-
 
 function deleteRequestAsk(id) {
     DeleteDialog("RequestDelete", id, "Talep Silinecektir!");

@@ -86,6 +86,7 @@ function GetList() {
                         {
                             dataField: "name",
                             caption: "Müşteri Adı",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                         },
                         {
                             dataField: "address",
@@ -134,6 +135,7 @@ function GetList() {
                 dataField: "name",
                 caption: "Firma Adı",
                 alignment: 'center',
+
             },
             {
                 dataField: "address",
@@ -145,11 +147,11 @@ function GetList() {
                 caption: "Email",
                 alignment: 'center',
             },
-            {
-                dataField: "customerDescriptionID",  
-                caption: "Firma Tanım No",
-                alignment: 'center',
-            },
+            //{
+            //    dataField: "customerDescriptionID",  
+            //    caption: "Firma Tanım No",
+            //    alignment: 'center',
+            //},
             {
                 type: "buttons",
                 buttons: ["edit", "delete",]

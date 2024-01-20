@@ -29,7 +29,7 @@ public class ActionRepository : Repository, IActionRepository
         {
             Update(model);
             await _uow.SaveChanges();
-            return "";
+            return "1";
         }
         catch (Exception e)
         {
@@ -44,7 +44,7 @@ public class ActionRepository : Repository, IActionRepository
             var actions = await GetById<Domain.Entities.Action>(model.RequestID);
             await _uow.Repository.Add(model);
             await _uow.SaveChanges();
-            return "";
+            return "1";
         }
         catch (Exception e)
         {
@@ -57,7 +57,7 @@ public class ActionRepository : Repository, IActionRepository
         var action = GetNonDeletedAndActive((Domain.Entities.Action t) => t.ID == ID);
         DeleteRange(action.ToList());
         Delete<Domain.Entities.Action>(ID);
-        return "";
+        return "1";
     }
 
     public async Task<ActionPageDTO> GetAction(int ID)
