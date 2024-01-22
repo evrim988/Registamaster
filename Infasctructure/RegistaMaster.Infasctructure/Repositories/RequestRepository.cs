@@ -58,7 +58,7 @@ public class RequestRepository : Repository, IRequestRepository
     }
     public async Task<IQueryable<Request>> GetList()
     {
-        var model = GetNonDeletedAndActive<Request>(t => true);
+        var model = GetNonDeletedAndActive<Request>(t => t.ObjectStatus == ObjectStatus.NonDeleted);
         return model;
     }
     public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
@@ -67,7 +67,7 @@ public class RequestRepository : Repository, IRequestRepository
         {
             List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
             var model = context.Projects
-                .Where(t => true);
+                .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
             foreach (var item in model)
             {
                 ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
@@ -130,7 +130,7 @@ public class RequestRepository : Repository, IRequestRepository
         {
             List<ResponsibleDevextremeSelectListHelper> ModulesHelpers = new List<ResponsibleDevextremeSelectListHelper>();
             var model = context.Modules
-                .Where(t => true);
+                .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
             foreach (var item in model)
             {
                 ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
@@ -258,7 +258,7 @@ public class RequestRepository : Repository, IRequestRepository
 
     public async Task<List<SelectListItem>> GetModuleList(int ID)
     {
-        return GetNonDeletedAndActive<Module>(t => t.ProjectID == ID)
+        return GetNonDeletedAndActive<Module>(t => t.ProjectID == ID && t.ObjectStatus == ObjectStatus.NonDeleted)
                 .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
     }
 

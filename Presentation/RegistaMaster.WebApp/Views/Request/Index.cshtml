@@ -10,6 +10,41 @@
 <link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
 <link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
 
+<style type="text/css">
+
+    .modal-body2 {
+        max-height: calc(100vh - 210px);
+        overflow-y: auto;
+    }
+
+    .target {
+        border: solid 1px #aaa;
+        min-height: 200px;
+        width: 90%;
+        margin-top: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 300ms all;
+        position: relative;
+    }
+
+    .contain {
+        background-size: cover;
+        position: relative;
+        z-index: 10;
+        top: 0px;
+        left: 0px;
+    }
+
+    textarea {
+        background-color: white;
+    }
+
+    .actives {
+        box-shadow: 0px 0px 10px 10px rgba(0,0,255,.4);
+    }
+</style>
+
 <div class="main-content">
     <div class="row">
         <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
@@ -18,9 +53,9 @@
                 </div>
                 <div class="card-content collapse show">
                     <div class="heading-elements">
-                        <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
+                        @* <div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
                         <a asp-action="Create" asp-controller="Request" class="btn btn-primary"><i class="ion ion-android-add"></i>Yeni Talep Oluştur</a>
-                        </div>
+                        </div> *@
                     </div>
                     <div class="card-body card-dashboard">
                         <h3>Talepler</h3>
@@ -33,7 +68,35 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="m_modal_Image_Paste" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Resim Yapıştır</h5>
+                
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label class="col-md-4 label-control">Görüntü<br /> <span class="text-black-50">(WINDOWS Kullanıcıları İçin, Windows + Shift + S Tuş Kombinasyonu veya PRTSC Tuşu İle Resminizi Kopyalayıp (CTRL+C / CTRL+V) Yapıştırabilirsiniz. MAC Kullanıcıları İçin Shift + Command + 4 Tuş Kombinasyonu İle Yapabilir)</span></label>
+                    <div class="col-md-8">
+                        <div class="span4 target"></div>
+
+                    </div>
+                    <textarea name="base64" hidden id="base64" cols="30" rows="10" class="data span12"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" onclick="closeImageModal()" data-dismiss="modal">Kapat</button>
+                <button type="button" onclick="SuccessImage()" class="btn btn-success">Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@* <div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -52,7 +115,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> *@
+
+
 @section Scripts
     {
 

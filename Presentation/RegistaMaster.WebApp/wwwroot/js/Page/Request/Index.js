@@ -95,18 +95,17 @@ function GetList() {
 
 
         },
+        //modal yapılacak
         //editing: {
 
         //    mode: 'popup',
-        //    allowUpdating: true,
-        //    allowDeleting: true,
         //    allowAdding: true,
 
         //    popup: {
         //        title: 'Yeni Talep Ekle',
         //        showTitle: true,
-        //        width: 900,
-        //        height: 525,
+        //        width: 655,
+        //        height: 620,
         //    },
         //    form: {
         //        items: [{
@@ -115,9 +114,9 @@ function GetList() {
         //            colSpan: 2,
         //            items: [
         //                {
-        //                    dataField: "notificationType",
+        //                    dataField: "notificationTypeID",
         //                    caption: "Bildirim Türü",
-        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                    alignment: 'center',
         //                    lookup: {
         //                        dataSource: DevExpress.data.AspNet.createStore({
         //                            key: "Id",
@@ -131,8 +130,9 @@ function GetList() {
         //                    }
         //                },
         //                {
-        //                    dataField: "category",
+        //                    dataField: "categoryID",
         //                    caption: "Kategori",
+        //                    alignment: 'center',
         //                    lookup: {
         //                        dataSource: DevExpress.data.AspNet.createStore({
         //                            key: "Id",
@@ -166,11 +166,11 @@ function GetList() {
 
         //                    dataField: "moduleID",
         //                    caption: "Modül/Süreç",
-
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
         //                    lookup: {
         //                        dataSource: DevExpress.data.AspNet.createStore({
         //                            key: "ID",
-        //                            loadUrl: "/Request/GetModules/",
+        //                            loadUrl: "/Request/GetModuleList/",
 
         //                            onBeforeSend: function (method, ajaxOptions) {
         //                                console.log(ajaxOptions);
@@ -183,8 +183,9 @@ function GetList() {
         //                    },
         //                },
         //                {
-        //                    dataField: "version",
+        //                    dataField: "versionID",
         //                    caption: "Versiyon",
+        //                    alignment: 'center',
         //                    lookup: {
         //                        dataSource: DevExpress.data.AspNet.createStore({
         //                            key: "Id",
@@ -206,11 +207,28 @@ function GetList() {
         //                    dataField: "description",
         //                    caption: "Açıklama",
         //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                    editorType: "dxTextArea",
+        //                    editorOptions: {
+        //                        height: 80,
+        //                        width: 765
+        //                    }
         //                },
         //                {
         //                    dataField: "pageURL",
         //                    caption: "Sayfa Linki",
         //                },
+        //                {
+        //                    itemType: 'button',
+        //                    horizontalAlignment: 'right',
+        //                    buttonOptions: {
+        //                        text: 'Resim Yapıştır',
+        //                        onClick: function (e) {
+        //                            openModal(e);
+
+        //                        }
+        //                    },
+        //                }
+
         //            ],
         //        }],
 
@@ -430,7 +448,6 @@ function GetList() {
                         },
                         editing: {
                             mode: 'popup',
-                            allowAdding: true,
                             allowUpdating: true,
                             allowDeleting: true,
                         },
@@ -470,7 +487,7 @@ function GetList() {
                                 dataType: 'date',
                                 format: 'dd/MM/yyyy',
                                 allowEditing: false,
-                               
+
                             },
                             {
                                 dataField: "endDate",
@@ -550,6 +567,29 @@ function GetList() {
     }).dxDataGrid("instance");
 
 }
+var popupInstance;
+function openModal(e) {
+    if (e === 'imagePasteButton') {
+        // Eğer resim yapıştır butonuna basıldıysa
+        // Popup'ı gizle
+        if (popupInstance) {
+            popupInstance.hide();
+        }
+        $('#m_modal_Image_Paste').modal('toggle');
+    } 
+    
+  
+}
+
+function SuccessImage() {
+    $('#m_modal_Image_Paste').modal('hide');
+
+}
+
+function closeImageModal() {
+    $('#m_modal_Image_Paste').modal('hide');
+
+}
 
 function showContextMenu(options, e) {
     var contextMenu = $("<div>")
@@ -558,11 +598,11 @@ function showContextMenu(options, e) {
                 { text: "Aksiyon Ekle", icon: "plus" },
                 { text: "Düzenle", icon: "edit" },
                 { text: "Sil", icon: "remove" }
-              
+
             ],
             onItemClick: function (item) {
                 handleItemClick(item, options);
-                
+
 
             }
         })
@@ -598,13 +638,16 @@ function openPopup(ID) {
         {
             dataField: "ActionDescription",
             label: {
-                text: "Aksiyon Konusu" 
+                text: "Aksiyon Konusu"
             },
+            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+
         },
-       
+
         {
             dataField: "responsibleID",
             editorType: "dxSelectBox",
+            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
             editorOptions: {
                 dataSource: DevExpress.data.AspNet.createStore({
                     loadUrl: "/Action/GetResponsible/",
@@ -618,21 +661,22 @@ function openPopup(ID) {
         },
         {
             dataField: "description",
+            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
             label: {
                 text: "Aksiyon Açıklaması"
             },
             editorType: "dxTextArea",
             editorOptions: {
                 height: 70,
-                width: 500
+                width: 860
             }
         },
-        
-    ];
-   
 
-   
-  
+    ];
+
+
+
+
     var form = $("<div>")
         .dxForm({
             colCount: 2,
@@ -649,7 +693,7 @@ function openPopup(ID) {
         .css("text-align", "right")
         .appendTo(form.element());
 
-   
+
     var saveButton = $("<div>")
         .dxButton({
             text: "Kaydet",
@@ -662,18 +706,18 @@ function openPopup(ID) {
     var popup = $("<div>")
         .dxPopup({
             title: "Aksiyon Ekle",
-            width: 600,
-            height: 300,
+            width: 900,
+            height: 350,
             contentTemplate: function (contentContainer) {
-                
+
                 contentContainer.append(form.element());
             },
-            
+
         })
         .appendTo("body")
         .dxPopup("instance");
 
-    
+
     popup.show();
 }
 
@@ -681,7 +725,7 @@ function openPopup(ID) {
 function saveData(form, popup, ID) {
     var formData = form.option("formData");
     console.log(formData);
-    
+
     $.ajax({
         url: "/Request/AddActionItem/" + ID,
         type: "POST",
