@@ -555,9 +555,10 @@ function showContextMenu(options, e) {
     var contextMenu = $("<div>")
         .dxContextMenu({
             dataSource: [
+                { text: "Aksiyon Ekle", icon: "plus" },
                 { text: "Düzenle", icon: "edit" },
-                { text: "Sil", icon: "remove" },
-                { text: "Aksiyon Ekle", icon: "plus" }
+                { text: "Sil", icon: "remove" }
+              
             ],
             onItemClick: function (item) {
                 handleItemClick(item, options);
@@ -577,14 +578,14 @@ function handleItemClick(item, options) {
     var ID = options.data.id;
 
     switch (items) {
+        case "Aksiyon Ekle":
+            openPopup(ID);
+            break;
         case "Düzenle":
             location.href = '../Users/Edit/' + ID;
             break;
         case "Sil":
             DeleteConfirme('/Request/RequestDelete/' + ID);
-            break;
-        case "Aksiyon Ekle":
-            openPopup(ID);
             break;
         default:
             break;
@@ -595,13 +596,12 @@ function openPopup(ID) {
 
     var formItems = [
         {
-            dataField: "actionDescription",
-            caption: "Aksiyon Konusu",
-            name: "actionSubject"
+            dataField: "ActionDescription",
+            label: {
+                text: "Aksiyon Konusu" 
+            },
         },
-        {
-            dataField: "description"
-        },
+       
         {
             dataField: "responsibleID",
             editorType: "dxSelectBox",
@@ -611,23 +611,23 @@ function openPopup(ID) {
                 }),
                 valueExpr: "id",
                 displayExpr: "name"
-            }
+            },
+            label: {
+                text: "Aksiyon Sorumlusu"
+            },
         },
         {
-            dataField: "actionStatus",
-            editorType: "dxSelectBox",
+            dataField: "description",
+            label: {
+                text: "Aksiyon Açıklaması"
+            },
+            editorType: "dxTextArea",
             editorOptions: {
-                dataSource: DevExpress.data.AspNet.createStore({
-                    key: "Id",
-                    loadUrl: "/Action/GetActionStatus",
-                    onBeforeSend: function (method, ajaxoptions) {
-                        ajaxoptions.xhrFields = { withCredentials: true };
-                    },
-                }),
-                valueExpr: "Id",
-                displayExpr: "Text"
+                height: 70,
+                width: 500
             }
-        }
+        },
+        
     ];
    
 
@@ -680,13 +680,12 @@ function openPopup(ID) {
 
 function saveData(form, popup, ID) {
     var formData = form.option("formData");
-
     console.log(formData);
     
     $.ajax({
         url: "/Request/AddActionItem/" + ID,
         type: "POST",
-        contentType: "application/json",  // JSON verisi gönderileceğini belirt
+        contentType: "application/json", // contentType'ı ayarla
         data: JSON.stringify(formData),
 
         success: function (result) {
@@ -694,9 +693,7 @@ function saveData(form, popup, ID) {
             popup.hide();
         },
         error: function (error) {
-            // Kaydetme sırasında bir hata oluştuğunda yapılacak işlemler
-            console.error("Kaydetme sırasında hata:", error);
-            // Hata mesajını kullanıcıya göstermek için uygun bir yöntem ekleyebilirsiniz.
+            console.error("AJAX isteği sırasında bir hata oluştu:", error);
         }
     });
 }
