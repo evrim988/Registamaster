@@ -11,8 +11,8 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    [Migration("20240119151021_10112")]
-    partial class _10112
+    [Migration("20240123074606_1015")]
+    partial class _1015
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -30,6 +30,8 @@ function GetList() {
         columnAutoWidth: true,
         remoteOperations: true,
         allowColumnReordering: true,
+        allowColumnResizing: true,
+        columnResizingMode: 'widget',
         showBorders: true,
         searchPanel: {
             visible: true,

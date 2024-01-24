@@ -34,6 +34,8 @@ function GetModules() {
         remoteOperations: true,
         allowColumnReordering: true,
         showBorders: true,
+        allowColumnResizing: true,
+        columnResizingMode: 'widget',
         filterRow: {
             visible: true,
         },
@@ -201,6 +203,8 @@ function GetVersion() {
         remoteOperations: true,
         allowColumnReordering: true,
         showBorders: true,
+        allowColumnResizing: true,
+        columnResizingMode: 'widget',
         filterRow: {
             visible: true,
         },

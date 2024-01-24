@@ -26,5 +26,8 @@ namespace RegistaMaster.Persistance.RegistaMasterContextes
         public DbSet<UserLog> UserLogs { get; set; }
         public DbSet<ErrorLog> ErrorLogs { get; set; }
         public DbSet<HealthCheck> HealthChecks { get; set; }
+
+
+        
     }
 }

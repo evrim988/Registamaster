@@ -120,6 +120,7 @@ public class RequestRepository : Repository, IRequestRepository
             ActionStatus = s.ActionStatus,
             ActionDescription = s.ActionDescription,
             LastModifiedBy = s.LastModifiedBy,
+            RequestID = RequestId
         }).ToListAsync();
 
     }

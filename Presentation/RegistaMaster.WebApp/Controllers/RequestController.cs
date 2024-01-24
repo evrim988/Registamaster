@@ -10,26 +10,33 @@ using Action = RegistaMaster.Domain.Entities.Action;
 using DevExtreme.AspNet.Mvc;
 using NuGet.Protocol.Plugins;
 using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
+using RegistaMaster.Persistance.RegistaMasterContextes;
 
 namespace RegistaMaster.WebApp.Controllers;
 
 public class RequestController : Controller
 {
     private readonly IUnitOfWork uow;
-
-    public RequestController(IUnitOfWork _uow)
+    private IWebHostEnvironment env;
+    private readonly RegistaMasterContext context;
+    public RequestController(IUnitOfWork _uow,IWebHostEnvironment _env,RegistaMasterContext _context)
     {
-        this.uow = _uow;
+        uow = _uow;
+        env = _env;
+        context = _context;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
-    [HttpGet]
-    public async Task<IActionResult> Create()
-    {
+        var request =  uow.Repository.GetNonDeletedAndActive<Request>(t => t.ObjectStatus == ObjectStatus.NonDeleted);
+        
         var model = new RequestDTO();
+        foreach (var item in request)
+        {
+            model.PictureURL = item.PictureURL;
+            model.ID = item.ID;
+            model.LastModifiedBy = item.LastModifiedBy;
+        }
         model.NotificationType = await uow.RequestRepository.NotificationTypeSelectList();
         model.Category = await uow.RequestRepository.CategorySelectList();
         model.Project = await uow.RequestRepository.GetProjectSelect();
@@ -37,24 +44,71 @@ public class RequestController : Controller
         model.Version = await uow.RequestRepository.GetVersion();
         return View(model);
     }
+    //[HttpPost]
+    //public async Task<IActionResult> Create()
+    //{
+    //    var model = new RequestDTO();
+    //    model.NotificationType = await uow.RequestRepository.NotificationTypeSelectList();
+    //    model.Category = await uow.RequestRepository.CategorySelectList();
+    //    model.Project = await uow.RequestRepository.GetProjectSelect();
+    //    model.Module = await uow.RequestRepository.GetModule();
+    //    model.Version = await uow.RequestRepository.GetVersion();
+    //    return View(model);
+    //}
     [HttpPost]
-    public async Task<string> Create(RequestDTO model)
+    public async Task<string> Create(RequestDTO model,string base64)
     {
         try
         {
-            var request = new Request()
+            if (base64 != null)
             {
-                NotificationTypeID = model.NotificationTypeID,
-                CategoryID = model.CategoryID,
-                ProjectID = model.ProjectID,
-                ModuleID = model.ModuleID,
-                VersionID = model.VersionID,
-                RequestSubject = model.RequestSubject,
-                Description = model.Description,
-                PageURL = model.PageUrl
-            };
-            await uow.RequestRepository.RequestAdd(request);
-            await uow.SaveChanges();
+                string webRootPath = env.WebRootPath;
+                var ımageString = base64.Split(',');
+                Guid guidFile = Guid.NewGuid();
+                string fileName = "RequestImage" + guidFile + ".jpg";
+                var path = Path.Combine(webRootPath + "\\Modernize\\Img\\RequestFiles\\", fileName);
+                var bytes = Convert.FromBase64String(ımageString[1]);
+                using (var imageFile = new FileStream(path, FileMode.Create))
+                {
+                    imageFile.Write(bytes, 0, bytes.Length);
+                    imageFile.Flush();
+                }
+
+                var Extantion = Path.GetExtension(fileName);
+                var request = new Request()
+                {
+                    PictureURL = fileName,
+                    NotificationTypeID = model.NotificationTypeID,
+                    CategoryID = model.CategoryID,
+                    ProjectID = model.ProjectID,
+                    ModuleID = model.ModuleID,
+                    VersionID = model.VersionID,
+                    RequestSubject = model.RequestSubject,
+                    Description = model.Description,
+                    PageURL = model.PageUrl
+
+                };
+                await uow.RequestRepository.RequestAdd(request);
+                await uow.SaveChanges();
+                return "";
+            }
+            else
+            {
+                var request = new Request()
+                {
+                    NotificationTypeID = model.NotificationTypeID,
+                    CategoryID = model.CategoryID,
+                    ProjectID = model.ProjectID,
+                    ModuleID = model.ModuleID,
+                    VersionID = model.VersionID,
+                    RequestSubject = model.RequestSubject,
+                    Description = model.Description,
+                    PageURL = model.PageUrl
+
+                };
+                await uow.RequestRepository.RequestAdd(request);
+                await uow.SaveChanges();
+            }
             return "1";
         }
         catch (Exception ex)
@@ -62,6 +116,42 @@ public class RequestController : Controller
             throw ex;
         }
        
+    }
+    [HttpPost]
+    public async Task<string> RequestUpdate(RequestDTO model)
+    {
+        try
+        {
+            var request = new Request()
+            {
+                ID = model.ID,
+                NotificationTypeID = model.NotificationTypeID,
+                CategoryID = model.CategoryID,
+                ProjectID = model.ProjectID,
+                ModuleID = model.ModuleID,
+                VersionID = model.VersionID,
+                RequestSubject = model.RequestSubject,
+                Description = model.Description,
+                PageURL = model.PageUrl,
+                PictureURL=model.PictureURL,
+                LastModifiedBy = model.LastModifiedBy,
+                CustomerID = model.CustomerID,
+                LastModifiedOn = DateTime.Now,
+                CreatedOn = model.CreatedOn,
+                ObjectStatus=ObjectStatus.NonDeleted,
+                Status=Status.Active,
+                StartDate= DateTime.Now,
+                PlanedEndDate = DateTime.Now.AddDays(7),
+            };
+            context.Update(request);
+            await context.SaveChangesAsync();
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        
     }
     public async Task<object> GetList(DataSourceLoadOptions options)
 
@@ -106,16 +196,20 @@ public class RequestController : Controller
             throw ex;
         }
     }
-    [HttpDelete]
-    public async Task<IActionResult> RequestDelete(int Key)
+    [HttpPost]
+    public async Task<string> RequestDelete(int ID)
     {
         try
         {
-            await uow.Repository.Delete<Request>(Key);
+            var model =  uow.Repository.GetNonDeletedAndActive<Action>(t => t.RequestID == ID).ToList();
+            if (model.Count > 0)
+                return "-1";
+            await uow.Repository.Delete<Request>(ID);
             await uow.SaveChanges();
-            return Ok();
+            return "1";
 
         }
+
         catch (Exception ex)
         {
             throw ex;

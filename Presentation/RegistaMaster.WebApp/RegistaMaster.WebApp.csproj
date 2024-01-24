@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\Infasctructure\RegistaMaster.Infasctructure\RegistaMaster.Infasctructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Modernize\Img\RequestFiles\" />
+  </ItemGroup>
+
 </Project>

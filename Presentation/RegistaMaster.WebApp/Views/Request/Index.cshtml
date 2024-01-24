@@ -1,4 +1,4 @@
-﻿@model RegistaMaster.Domain.DTOModels.Entities.ActionModels.ActionDTO
+﻿@model RegistaMaster.Domain.DTOModels.Entities.RequestModel.RequestDTO
 
 @{
     ViewData["Title"] = "Index";
@@ -9,6 +9,8 @@
 
 <link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
 <link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
+<link href="~/Modernize/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet" />
+<link href="~/lib/fancybox/jquery.fancybox.min.css" rel="stylesheet" />
 
 <style type="text/css">
 
@@ -68,13 +70,13 @@
         </div>
     </div>
 </div>
-
+@* Resim Yapıştırma Modalı *@
 <div class="modal fade" id="m_modal_Image_Paste" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Resim Yapıştır</h5>
-                
+
             </div>
             <div class="modal-body">
                 <div class="form-group row">
@@ -88,11 +90,169 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" onclick="closeImageModal()" data-dismiss="modal">Kapat</button>
-                <button type="button" onclick="SuccessImage()" class="btn btn-success">Tamam</button>
+                <button type="button" onclick="SuccessRequestImage()" class="btn btn-success">Tamam</button>
             </div>
         </div>
     </div>
 </div>
+
+@* Yeni Talep Ekleme Modalı *@
+<div class="modal fade" id="RequestCreateModal" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="büyükModalLabel">Yeni Talep Ekle</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Bildirim Türü:</label>
+                            <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="NotificationTypeID" class="form-control select2" name="NotificationTypeID">
+                                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Kategori:</label>
+                            <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryID" class="form-control select2" name="CategoryID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Proje:<span class="text-danger">*</span></label>
+                            <select asp-for="ProjectID" onchange="GetModuleList()" asp-items="@Model.Project" id="ProjectID" class="form-control select2" name="ProjectID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Modül:<span class="text-danger">*</span></label>
+                            <select asp-for="ModuleID" asp-items="@Model.Module" id="ModuleID" class="form-control select2" name="ModuleID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Versiyon:<span class="text-danger">*</span></label>
+                            <select asp-for="VersionID" asp-items="@Model.Version" id="VersionID" class="form-control select2" name="VersionID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Konu:<span class="text-danger">*</span></label>
+                            <input asp-for="RequestSubject" type="text" required class="form-control" name="Category" />
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Sayfa Linki:</label>
+                            <input asp-for="PageUrl" type="text" required class="form-control" name="PageUrl" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Açıklama:<span class="text-danger">*</span></label>
+                            <textarea asp-for="Description" type="text" required class="form-control" name="Description"></textarea>
+                            <h1></h1>
+                            <button type="button" onclick="OpenImageModal()" style="position:absolute;right:190px;margin-top: 32px;" class="btn btn-secondary">Resim Ekle</button>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeRequestModal()" class="btn btn-dark">Kapat</button>
+                <button type="button" onclick="SaveRequestModal()" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Talep Düzenleme Modalı *@
+<div class="modal fade" id="RequestEditModal" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="büyükModalLabel">Yeni Talep Ekle</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Bildirim Türü:</label>
+                            <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="NotificationEditTypeID" class="form-control select2" name="NotificationTypeID">
+                                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Kategori:</label>
+                            <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryEditID" class="form-control select2" name="CategoryID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Proje:</label>
+                            <select asp-for="ProjectID" onchange="GetModuleList()" asp-items="@Model.Project" id="ProjectEditID" class="form-control select2" name="ProjectID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Modül:</label>
+                            <select asp-for="ModuleID" asp-items="@Model.Module" id="ModuleEditID" class="form-control select2" name="ModuleID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Versiyon:</label>
+                            <select asp-for="VersionID" asp-items="@Model.Version" id="VersionEditID" class="form-control select2" name="VersionID">
+                                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                            </select>
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Konu:</label>
+                            <input asp-for="RequestSubject" type="text" id="RequestEditSubject" required class="form-control" name="Category" />
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Sayfa Linki:</label>
+                            <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control" name="PageUrl" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Açıklama:</label>
+                            <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control" name="Description"></textarea>
+                            <h1></h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="font-weight:bold;">Görüntü:</label>
+                            <div class="card-img-container">
+                                <img id="RequestImage" class="image-popup"  style="height:250px; width:250px;" src="@Model.PictureURL">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ID" hidden ></div>
+                    <div id="LastModifiedBy" hidden></div>
+                    <div id="CustomerID" hidden></div>
+                    <div id="CreatedOn" hidden></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeEditRequestModal()" class="btn btn-dark">Kapat</button>
+                <button type="button" onclick="SaveRequestEditModal()" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -119,7 +279,9 @@
 
 
 @section Scripts
-    {
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
     <script src="~/js/Page/Request/Index.js"></script>
 

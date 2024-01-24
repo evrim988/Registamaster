@@ -399,7 +399,6 @@ namespace RegistaMaster.Persistance.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("LastModifiedBy")
@@ -685,7 +684,7 @@ namespace RegistaMaster.Persistance.Migrations
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Action", b =>
                 {
                     b.HasOne("RegistaMaster.Domain.Entities.Request", "Request")
-                        .WithMany()
+                        .WithMany("Actions")
                         .HasForeignKey("RequestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -802,6 +801,8 @@ namespace RegistaMaster.Persistance.Migrations
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Request", b =>
                 {
+                    b.Navigation("Actions");
+
                     b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618

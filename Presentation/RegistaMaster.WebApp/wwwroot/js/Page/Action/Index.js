@@ -30,6 +30,8 @@ function GetList() {
         remoteOperations: true,
         allowColumnReordering: true,
         showBorders: true,
+        allowColumnResizing: true,
+        columnResizingMode: 'widget',
         grouping: {
             contextMenuEnabled: true
         },

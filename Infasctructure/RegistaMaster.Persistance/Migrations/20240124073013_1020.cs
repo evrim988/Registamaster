@@ -4,7 +4,7 @@
 
 namespace RegistaMaster.Persistance.Migrations
 {
-    public partial class _10112 : Migration
+    public partial class _1020 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

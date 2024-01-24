@@ -34,7 +34,8 @@ function GetList() {
         remoteOperations: true,
         allowColumnReordering: true,
         showBorders: true,
-
+        allowColumnResizing: true,
+        columnResizingMode: 'widget',
         searchPanel: {
             visible: true,
             width: 240,
