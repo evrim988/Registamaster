@@ -86,6 +86,7 @@ function GetModules() {
                         {
                             dataField: "name",
                             caption: "Adı",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }]
                         },
                         {
                             dataField: "description",
@@ -95,6 +96,7 @@ function GetModules() {
                         {
                             dataField: "projectID",
                             caption: "Proje",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                             lookup: {
                                 dataSource: DevExpress.data.AspNet.createStore({
                                     key: "Id",
@@ -255,6 +257,7 @@ function GetVersion() {
                         {
                             dataField: "name",
                             caption: "Adı",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }]
                         },
                         {
                             dataField: "description",
