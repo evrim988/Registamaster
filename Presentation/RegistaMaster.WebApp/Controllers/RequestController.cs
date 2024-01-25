@@ -36,6 +36,7 @@ public class RequestController : Controller
             model.PictureURL = item.PictureURL;
             model.ID = item.ID;
             model.LastModifiedBy = item.LastModifiedBy;
+            model.RequestStatus = item.RequestStatus;
         }
         model.NotificationType = await uow.RequestRepository.NotificationTypeSelectList();
         model.Category = await uow.RequestRepository.CategorySelectList();
@@ -376,5 +377,21 @@ public class RequestController : Controller
         }
     }
 
-
+    [HttpPost]
+    public async Task<string> RequestChangeStatusUpdate(int requestStatus, int ID)
+    {
+        try
+        {
+            var model = await uow.Repository.GetById<Request>(ID);
+            model.RequestStatus = (RequestStatus)requestStatus;
+            model.PlanedEndDate = DateTime.Now;
+            context.Update(model);
+            await uow.SaveChanges();
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

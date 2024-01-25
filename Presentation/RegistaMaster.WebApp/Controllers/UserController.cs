@@ -181,7 +181,7 @@ public class UserController : Controller
             {
                 string extension = Path.GetExtension(FileUrl.FileName);
                 Guid guidFile = Guid.NewGuid();
-                fileName = "customer" + guidFile + extension;
+                fileName = "user" + guidFile + extension;
                 var path = Path.Combine("wwwroot/Modernize/Img/ProfilePhotos/", fileName);
 
                 using (var stream = new FileStream(path, FileMode.Create))
@@ -209,4 +209,5 @@ public class UserController : Controller
             throw ex;
         }
     }
+    
 }

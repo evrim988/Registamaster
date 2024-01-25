@@ -235,11 +235,11 @@
                         <div class="form-group col-md-6">
                             <label style="font-weight:bold;">Görüntü:</label>
                             <div class="card-img-container">
-                                <img id="RequestImage" class="image-popup"  style="height:250px; width:250px;" src="@Model.PictureURL">
+                                <img id="RequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
                             </div>
                         </div>
                     </div>
-                    <div id="ID" hidden ></div>
+                    <div id="ID" hidden></div>
                     <div id="LastModifiedBy" hidden></div>
                     <div id="CustomerID" hidden></div>
                     <div id="CreatedOn" hidden></div>
@@ -253,7 +253,32 @@
     </div>
 </div>
 
+@* Talebin Durumunu Değiştir *@
+<div class="modal fade" id="RequestChangeStatus" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="büyükModalLabel">Büyük Modal Başlığı</h5>
 
+            </div>
+            <div class="modal-body">
+                    <div class="form-group row">
+                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Türü:<span class="text-danger"></span></label>
+                        <div class="col-md-9">
+                        <select asp-for="RequestStatus" id="RequestStatus" required asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.RequestStatus>()" class="form-control select2">
+                                <option selected="selected" value="-1">Lütfen Seçiniz</option>
+                            </select>
+                            <span asp-validation-for="RequestStatus" class="text-danger" />
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeRequestStatus()" class="btn btn-secondary">Kapat</button>
+                    <button type="button" onclick="saveRequestStatus()" class="btn btn-primary">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @* <div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

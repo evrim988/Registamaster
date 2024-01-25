@@ -84,9 +84,7 @@ function GetList() {
         onEditingStart: function (e) {
             title = e.data.Date;
         },
-        onInitNewRow: function (e) {
-            title = "";
-        },
+        
         onToolbarPreparing: function (e) {
             let toolbarItems = e.toolbarOptions.items;
             toolbarItems.push({
@@ -131,19 +129,7 @@ function GetList() {
 
 
         },
-        onRowRemoving: function (e) {
-            var detailGrid = actionGridContainer; // actionGridContainer'ın detay grid örneği olduğunu varsayalım
-
-            var detailRows = detailGrid.getVisibleRows();
-            var hasRelatedRecords = detailRows.some(function (row) {
-                return row.data.requestID === e.data.id; // Detay grid'de requestID adında bir alan olduğunu varsayalım
-            });
-
-            if (hasRelatedRecords) {
-                e.cancel = true; // Silme işlemini iptal et
-                alert("Silemezsiniz. Detay grid'de ilişkili kayıtlar bulunmaktadır.");
-            }
-        },
+        
        
 
 
@@ -289,7 +275,13 @@ function GetList() {
         //},
 
         columns: [
-
+            {
+                dataField: "id",
+                caption: "Talep No",
+                alignment: 'center',
+                sortOrder: "desc",
+                visible: false
+            },
             {
                 dataField: "projectID",
                 caption: "Proje",
@@ -342,6 +334,7 @@ function GetList() {
                     displayExpr: "name",
                 }
             },
+            
             {
                 dataField: "notificationTypeID",
                 caption: "Bildirim Türü",
@@ -388,6 +381,13 @@ function GetList() {
                     valueExpr: "value",
                     displayExpr: "text",
                 }
+            },
+            {
+                dataField: "createdOn",
+                caption: "Talep Açılma Tarihi",
+                alignment: 'center',
+                dataType: 'date',
+                format: 'dd/MM/yyyy',
             },
             {
                 dataField: "planedEndDate",
@@ -453,7 +453,7 @@ function GetList() {
                     }
                     else if (info.data.requestStatus == 3) {
                         $('<div id="Closed">')
-                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Kapandı"))
+                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Kapandı"))
                             .appendTo(container);
                     }
                 }
@@ -750,6 +750,7 @@ function showContextMenu(options, e) {
         .dxContextMenu({
             dataSource: [
                 { text: "Aksiyon Ekle", icon: "plus" },
+                { text: "Talebin Durumunu Değiştir", icon: "overflow" },
                 { text: "Düzenle", icon: "edit" },
                 { text: "Sil", icon: "remove" }
 
@@ -782,10 +783,57 @@ function handleItemClick(item, options) {
         case "Sil":
             DeleteDialog(ID);
             break;
+        case "Talebin Durumunu Değiştir":
+            openRequestStatus(ID);
         default:
             break;
     }
 }
+
+function openRequestStatus(ID) {
+    $('#RequestChangeStatus').modal('toggle');
+    console.log(ID);
+    $("#ID").val(ID);
+
+    //$("#ID").val(ID);
+    //$("#RequestStatus").val(data.requestStatus);
+
+    //console.log(data.requestStatus);
+
+}
+function closeRequestStatus() {
+    $('#RequestChangeStatus').modal('hide');
+}
+
+function saveRequestStatus(ID) {
+    var data = new FormData();
+    
+    data.append("requestStatus", $("#RequestStatus").val());
+    data.append("ID", $("#ID").val());
+   
+
+    console.log(data);
+
+    $.ajax({
+        url: "/Request/RequestChangeStatusUpdate",
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+
+            console.log(data);
+            location.reload();
+
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+
+}
+
 function openEditModals(data, ID) {
     console.log(data);
     console.log(ID);

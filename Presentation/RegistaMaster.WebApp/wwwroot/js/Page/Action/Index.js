@@ -182,7 +182,7 @@ function GetList() {
                     dataSource: DevExpress.data.AspNet.createStore({
                         loadUrl: "/Action/GetRequest/",
                     }),
-                    valueExpr: "ID",
+                    valueExpr: "id",
                     displayExpr: "name"
                 }
             },

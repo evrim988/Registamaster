@@ -58,7 +58,7 @@ public class RequestRepository : Repository, IRequestRepository
     }
     public async Task<IQueryable<Request>> GetList()
     {
-        var model = GetNonDeletedAndActive<Request>(t => t.ObjectStatus == ObjectStatus.NonDeleted);
+        var model = GetNonDeletedAndActive<Request>(t => t.ObjectStatus == ObjectStatus.NonDeleted).OrderByDescending(s=>s.ID);
         return model;
     }
     public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()

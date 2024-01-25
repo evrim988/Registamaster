@@ -70,49 +70,59 @@ function GetList() {
             allowDeleting: true,
         },
 
-        //editing: {
-        //    mode: 'popup',
-        //    allowUpdating: true,
-        //    allowDeleting: true,
-        //    allowAdding: true,
-        //    popup: {
-        //        title: 'Yeni Kullanıcı Ekle',
-        //        showTitle: true,
-        //        width: 500,
-        //        height: 325,
-        //    },
-        //    form: {
-        //        items: [{
-        //            itemType: 'group',
-        //            colCount: 2,
-        //            colSpan: 2,
-        //            items: [
-        //                {
-        //                    dataField: "name",
-        //                    caption: "Ad",
-        //                },
-        //                {
-        //                    dataField: "surName",
-        //                    caption: "Soyad",
-        //                },
-        //                {
-        //                    dataField: "userName",
-        //                    caption: "Kullanıcı Adı",
-        //                },
-        //                {
-        //                    dataField: "password",
-        //                    caption: "Şifre",
-        //                },
-        //                {
-        //                    dataField: "eMail",
-        //                    caption: "Email",
-        //                },
-        //            ],
-        //        }],
+        editing: {
+            mode: 'popup',
+            allowUpdating: true,
+            allowDeleting: true,
+            allowAdding: true,
+            popup: {
+                title: 'Yeni Kullanıcı Ekle',
+                showTitle: true,
+                width: 500,
+                height: 325,
+            },
+            form: {
+                items: [{
+                    itemType: 'group',
+                    colCount: 2,
+                    colSpan: 2,
+                    items: [
+                        {
+                            dataField: "name",
+                            caption: "Ad",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
 
-        //    },
+                        },
+                        {
+                            dataField: "surname",
+                            caption: "Soyad",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
 
-        //},
+                        },
+                        {
+                            dataField: "username",
+                            caption: "Kullanıcı Adı",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+
+                        },
+                        {
+                            dataField: "password",
+                            caption: "Şifre",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+
+                        },
+                        {
+                            dataField: "email",
+                            caption: "Email",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+
+                        },
+                    ],
+                }],
+
+            },
+
+        },
         onContentReady: function (e) {
 
             var $refreshButton = $('<div id="refreshButton">').dxButton({
@@ -179,6 +189,11 @@ function GetList() {
                 dataField: "email",
                 caption: "EMail",
                 alignment: 'center',
+            },
+            {
+                dataField: "password",
+                caption: "Şifre",
+                visible: false
             },
             //{
             //    dataField: "authorizationStatus",

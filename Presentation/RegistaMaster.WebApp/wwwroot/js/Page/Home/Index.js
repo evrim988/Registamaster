@@ -97,6 +97,8 @@ function GetList() {
                 dataField: "actionDescription",
                 caption: "Aksiyon Konusu",
                 alignment: 'left',
+                alignment: 'center',
+
             },
             {
                 dataField: "description",

@@ -5,6 +5,7 @@ using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 using Action = RegistaMaster.Domain.Entities.Action;
 
@@ -94,7 +95,9 @@ public class ActionRepository : Repository, IActionRepository
                 OpeningDate = s.OpeningDate,
                 ResponsibleID = s.ResponsibleID,
                 ActionStatus = s.ActionStatus,
-                ActionDescription = s.ActionDescription
+                ActionDescription = s.ActionDescription,
+                RequestID = s.RequestID
+                
             });
         }
         catch (Exception e)
@@ -110,7 +113,7 @@ public class ActionRepository : Repository, IActionRepository
         {
             List<ResponsibleDevextremeSelectListHelper> RequestHelpers = new List<ResponsibleDevextremeSelectListHelper>();
             var model = context.Requests
-                .Where(t => true);
+                .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
             foreach (var item in model)
             {
                 ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
