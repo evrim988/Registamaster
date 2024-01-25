@@ -258,12 +258,12 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="büyükModalLabel">Büyük Modal Başlığı</h5>
+                <h5 class="modal-title" id="büyükModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
 
             </div>
             <div class="modal-body">
                     <div class="form-group row">
-                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Türü:<span class="text-danger"></span></label>
+                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Talep Durumu:<span class="text-danger"></span></label>
                         <div class="col-md-9">
                         <select asp-for="RequestStatus" id="RequestStatus" required asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.RequestStatus>()" class="form-control select2">
                                 <option selected="selected" value="-1">Lütfen Seçiniz</option>

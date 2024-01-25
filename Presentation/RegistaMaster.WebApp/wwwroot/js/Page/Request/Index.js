@@ -318,22 +318,22 @@ function GetList() {
                 },
 
             },
-            {
-                dataField: "customerID",
-                caption: "Müşteri",
-                alignment: 'center',
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
-                        loadUrl: "/Request/GetCustomer/",
-                        onBeforeSend: function (method, ajaxOptions) {
-                            ajaxOptions.xhrFields = { withCredentials: true, };
-                        },
-                    }),
-                    valueExpr: "id",
-                    displayExpr: "name",
-                }
-            },
+            //{
+            //    dataField: "customerID",
+            //    caption: "Müşteri",
+            //    alignment: 'center',
+            //    lookup: {
+            //        dataSource: DevExpress.data.AspNet.createStore({
+            //            key: "Id",
+            //            loadUrl: "/Request/GetCustomer/",
+            //            onBeforeSend: function (method, ajaxOptions) {
+            //                ajaxOptions.xhrFields = { withCredentials: true, };
+            //            },
+            //        }),
+            //        valueExpr: "id",
+            //        displayExpr: "name",
+            //    }
+            //},
             
             {
                 dataField: "notificationTypeID",
