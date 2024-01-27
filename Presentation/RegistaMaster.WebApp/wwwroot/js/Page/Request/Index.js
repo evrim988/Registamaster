@@ -437,23 +437,23 @@ function GetList() {
                 },
                 cellTemplate: function (container, info) {
                     if (info.data.requestStatus == 0) {
-                        $('<div id="Open">')
+                        $('<div>')
                             .append($('<a>', { class: "btn btn-sm btn-info", }).append("Açık"))
                             .appendTo(container);
                     }
                     else if (info.data.requestStatus == 1) {
-                        $('<div id="Start">')
+                        $('<div>')
                             .append($('<a>', { class: "btn btn-sm btn-success" }).append("Başladı"))
                             .appendTo(container);
                     }
                     else if (info.data.requestStatus == 2) {
-                        $('<div id="Cancel">')
-                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("İptal/Reddedildi"))
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Kapandı"))
                             .appendTo(container);
                     }
                     else if (info.data.requestStatus == 3) {
                         $('<div id="Closed">')
-                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Kapandı"))
+                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("İptal/Reddedildi"))
                             .appendTo(container);
                     }
                 }
@@ -509,12 +509,20 @@ function GetList() {
                         showBorders: true,
                         showColumnLines: true,
                         showRowLines: true,
-                        rowAlternationEnabled: true,
+                        
+                        
                         allowColumnReordering: true,
                         allowColumnResizing: true,
                         columnResizingMode: 'widget',
                         onRowPrepared: function (e) {
                             if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+
+                            if (e.data != undefined) {
+                                if (e.data.Color === "clsRed") {
+                                    e.rowElement.css('background-color', "#fb6969");
+                                }
+                            }
+
                         },
                         onEditingStart(e) {
                             title = e.data.ElementDescription;
@@ -532,23 +540,30 @@ function GetList() {
                         },
                         columns: [
                             {
-                                dataField: "id",
+                                dataField: "ID",
                                 caption: "Aksiyon No",
                                 alignment: 'center',
                                 allowEditing: false,
                             },
                             {
-                                dataField: "actionDescription",
+                                dataField: "CreatedOn",
+                                caption: "Aksiyon Açılma Tarihi",
+                                alignment: 'center',
+                                dataType: 'date',
+                                format: 'dd/MM/yyyy',
+                            },
+                            {
+                                dataField: "ActionDescription",
                                 caption: "Aksiyon Konusu",
                                 alignment: 'center',
                             },
                             {
-                                dataField: "description",
+                                dataField: "Description",
                                 caption: "Aksiyon Açıklaması",
                                 alignment: 'center',
                             },
                             {
-                                dataField: "responsibleID",
+                                dataField: "ResponsibleID",
                                 caption: "Sorumlu",
                                 alignment: 'center',
                                 lookup: {
@@ -560,8 +575,8 @@ function GetList() {
                                 }
                             },
                             {
-                                dataField: "openingDate",
-                                caption: "Açılma Tarihi",
+                                dataField: "OpeningDate",
+                                caption: "Başlangıç Tarihi",
                                 alignment: 'center',
                                 dataType: 'date',
                                 format: 'dd/MM/yyyy',
@@ -569,21 +584,21 @@ function GetList() {
 
                             },
                             {
-                                dataField: "endDate",
+                                dataField: "EndDate",
                                 caption: "Son Tarih",
                                 alignment: 'center',
                                 dataType: 'date',
                                 format: 'dd/MM/yyyy',
                                 allowEditing: false,
                             },
-
+                            
                             {
-                                dataField: "actionStatus",
+                                dataField: "ActionStatus",
                                 caption: "Durum",
                                 alignment: 'center',
                                 lookup: {
                                     dataSource: DevExpress.data.AspNet.createStore({
-                                        key:"Id",
+                                        key:"ID",
                                         loadUrl: "/Action/GetActionStatus",
                                         
                                     }),
@@ -591,42 +606,73 @@ function GetList() {
                                     displayExpr: "Text"
                                 },
                                 cellTemplate: function (container, info) {
-                                    if (info.data.actionStatus == 0) {
-                                        $('<div id="NotStarted" onclick="openModal(' + info.data.id + ')">')
+                                    if (info.data.ActionStatus == 0) {
+                                        $('<div>')
                                             .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
                                             .appendTo(container);
                                     }
-                                    else if (info.data.actionStatus == 1) {
-                                        $('<div id="Start" onclick="openModal(' + info.data.id + ')">')
-                                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
-                                            .appendTo(container);
-                                    }
-                                    else if (info.data.actionStatus == 2) {
-                                        $('<div id="Contiuned" onclick="openModal(' + info.data.id + ')">')
+                                    else if (info.data.ActionStatus == 1) {
+                                        $('<div>')
                                             .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
                                             .appendTo(container);
                                     }
-                                    else if (info.data.actionStatus == 3) {
-                                        $('<div id="Completed" onclick="openModal(' + info.data.id + ')">')
+                                    else if (info.data.ActionStatus == 2) {
+                                        $('<div>')
                                             .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
                                             .appendTo(container);
                                     }
-                                    else if (info.data.actionStatus == 4) {
-                                        $('<div id="Cancel"onclick="openModal(' + info.data.id + ')">')
-                                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
+                                    else if (info.data.ActionStatus == 3) {
+                                        $('<div>')
+                                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("İptal/Reddedildi"))
                                             .appendTo(container);
                                     }
                                 }
                             },
                             {
-                                dataField: "lastModifiedBy",
+                                dataField: "ActionPriorityStatus",
+                                caption: "Öncelik",
+                                alignment: 'center',
+                                lookup: {
+                                    dataSource: DevExpress.data.AspNet.createStore({
+                                        key: "ID",
+                                        loadUrl: "/Action/GetPriortyActionStatus",
+
+                                    }),
+                                    valueExpr: "Id",
+                                    displayExpr: "Text"
+                                },
+                                cellTemplate: function (container, info) {
+                                    if (info.data.ActionPriorityStatus == 0) {
+                                        $('<div>')
+                                            .append($('<a>', { class: "btn btn-sm btn-primary", }).append("Öncelik Belirtilmedi"))
+                                            .appendTo(container);
+                                    }
+                                    else if (info.data.ActionPriorityStatus == 1) {
+                                        $('<div>')
+                                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("1"))
+                                            .appendTo(container);
+                                    }
+                                    else if (info.data.ActionPriorityStatus == 2) {
+                                        $('<div>')
+                                            .append($('<a>', { class: "btn btn-sm btn-secondary", }).append("2"))
+                                            .appendTo(container);
+                                    }
+                                    else if (info.data.ActionPriorityStatus == 3) {
+                                        $('<div>')
+                                            .append($('<a>', { class: "btn btn-sm btn-warning", }).append("3"))
+                                            .appendTo(container);
+                                    }
+                                }
+                            },
+                            {
+                                dataField: "LastModifiedBy",
                                 caption: "Aksiyon Açan Kişi",
                                 alignment: 'center',
                                 allowEditing: false,
                             }
                         ],
                         dataSource: DevExpress.data.AspNet.createStore({
-                            key: "id",
+                            key: "ID",
                             loadUrl: "/Request/GetRequestDetail/",
                             loadParams: { ID: options.data.id },
                             updateUrl: "/Request/EditActionItem/",
@@ -750,7 +796,7 @@ function showContextMenu(options, e) {
         .dxContextMenu({
             dataSource: [
                 { text: "Aksiyon Ekle", icon: "plus" },
-                { text: "Talebin Durumunu Değiştir", icon: "overflow" },
+                //{ text: "Talebin Durumunu Değiştir", icon: "overflow" },
                 { text: "Düzenle", icon: "edit" },
                 { text: "Sil", icon: "remove" }
 
@@ -783,8 +829,8 @@ function handleItemClick(item, options) {
         case "Sil":
             DeleteDialog(ID);
             break;
-        case "Talebin Durumunu Değiştir":
-            openRequestStatus(ID);
+        //case "Talebin Durumunu Değiştir":
+        //    openRequestStatus(ID);
         default:
             break;
     }
@@ -792,7 +838,7 @@ function handleItemClick(item, options) {
 
 function openRequestStatus(ID) {
     $('#RequestChangeStatus').modal('toggle');
-    console.log(ID);
+
     $("#ID").val(ID);
 
     //$("#ID").val(ID);
@@ -898,9 +944,9 @@ function SaveRequestEditModal() {
 
 }
 
-
 function openPopup(ID) {
 
+    var today = new Date();
     var formItems = [
         {
             dataField: "ActionDescription",
@@ -927,6 +973,56 @@ function openPopup(ID) {
             },
         },
         {
+            dataField: "openingDate",
+            caption: "Başlangıç Tarihi",
+            alignment: 'center',
+            dataType: 'date',
+            editorType: "dxDateBox",
+            editorOptions: {
+                format: 'dd/MM/yyyy',
+                value: today
+            },
+            label: {
+                text: "Aksiyon Başlangıç Tarihi"
+            },
+
+        },
+        {
+            dataField: "endDate",
+            caption: "Son Tarih",
+            alignment: 'center',
+            dataType: 'date',
+            editorType: "dxDateBox",
+            editorOptions: {
+                format: 'dd/MM/yyyy',
+                value: today
+
+            }, 
+            label: {
+                text: "Aksiyon Hedef Tarihi"
+            },
+        },
+
+        {
+            dataField: "actionPriorityStatus",
+            editorType: "dxSelectBox",
+            label: {
+                text: "Aksiyon Öncelik Durumu"
+            },
+            editorOptions: {
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: "Id",
+                    loadUrl: "/Action/GetPriortyActionStatus",
+                    onBeforeSend: function (method, ajaxoptions) {
+                        ajaxoptions.xhrFields = { withCredentials: true };
+                    },
+                }),
+                valueExpr: "Id",
+                displayExpr: "Text",
+                value: 0 
+            }
+        },
+        {
             dataField: "description",
             validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
             label: {
@@ -935,7 +1031,7 @@ function openPopup(ID) {
             editorType: "dxTextArea",
             editorOptions: {
                 height: 70,
-                width: 860
+                width: 415
             }
         },
 
@@ -966,6 +1062,9 @@ function openPopup(ID) {
             text: "Kaydet",
             onClick: function () {
                 saveData(form, popup, ID);
+            },
+            elementAttr: {
+                style: "background-color: #4CAF50; color: white;" 
             }
         })
         .appendTo(buttonContainer);
@@ -974,7 +1073,7 @@ function openPopup(ID) {
         .dxPopup({
             title: "Aksiyon Ekle",
             width: 900,
-            height: 350,
+            height: 380,
             contentTemplate: function (contentContainer) {
 
                 contentContainer.append(form.element());

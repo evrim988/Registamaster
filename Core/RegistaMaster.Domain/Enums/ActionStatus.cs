@@ -9,11 +9,11 @@ public enum ActionStatus
     notStarted = 0,
 
     [Display(Name = "Devam Ediyor")]
-    Contiuned = 2,
+    Contiuned = 1,
 
     [Display(Name = "Tamamlandı")]
-    Completed = 3,
+    Completed = 2,
 
     [Display(Name = "İptal/Reddedildi")]
-    Cancel = 4
+    Cancel = 3
 }

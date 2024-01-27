@@ -11,8 +11,8 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    [Migration("20230912120058_1003")]
-    partial class _1003
+    [Migration("20240127091429_init_1")]
+    partial class init_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("ActionPriorityStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("ActionStatus")
                         .HasColumnType("int");
 
@@ -41,7 +44,6 @@ namespace RegistaMaster.Persistance.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("EndDate")
@@ -142,6 +144,102 @@ namespace RegistaMaster.Persistance.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.ErrorLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ErrorDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ErrorDesc")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameSurname")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ObjectStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProjectKey")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ErrorLogs");
+                });
+
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.HealthCheck", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ObjectStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProjectKey")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("RequestDesc")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RequestStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HealthChecks");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Module", b =>
@@ -269,7 +367,7 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ObjectStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectID")
+                    b.Property<int?>("ProjectID")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -293,6 +391,9 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("CategoryID")
+                        .HasColumnType("int");
+
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
@@ -303,7 +404,6 @@ namespace RegistaMaster.Persistance.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("LastModifiedBy")
@@ -318,6 +418,9 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<string>("NotificationType")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("NotificationTypeID")
+                        .HasColumnType("int");
 
                     b.Property<int>("ObjectStatus")
                         .HasColumnType("int");
@@ -493,6 +596,53 @@ namespace RegistaMaster.Persistance.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.UserLog", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("LoginDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameSurname")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ObjectStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProjectKey")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UserLogs");
+                });
+
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Version", b =>
                 {
                     b.Property<int>("ID")
@@ -505,14 +655,13 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("DatabaseChangeStatus")
+                    b.Property<int?>("DatabaseChangeStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("LastModifiedBy")
@@ -540,7 +689,7 @@ namespace RegistaMaster.Persistance.Migrations
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Action", b =>
                 {
                     b.HasOne("RegistaMaster.Domain.Entities.Request", "Request")
-                        .WithMany()
+                        .WithMany("Actions")
                         .HasForeignKey("RequestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -575,9 +724,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
                         .WithMany("ProjectNotes")
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectID");
 
                     b.Navigation("Project");
                 });
@@ -659,6 +806,8 @@ namespace RegistaMaster.Persistance.Migrations
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Request", b =>
                 {
+                    b.Navigation("Actions");
+
                     b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618

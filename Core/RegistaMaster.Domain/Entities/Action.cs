@@ -5,7 +5,7 @@ namespace RegistaMaster.Domain.Entities;
 
 public class Action : BaseEntitiy
 {
-    [DisplayName("Aksiyon Açıklaması")]
+    [DisplayName("Aksiyon Konusu")]
     public string ActionDescription { get; set; }
 
     [DisplayName("Sorumlu")]
@@ -23,6 +23,7 @@ public class Action : BaseEntitiy
     [DisplayName("Durum")]
     public ActionStatus ActionStatus { get; set; }
     public RequestStatus RequestStatus { get; set; }
+    public ActionPriorityStatus ActionPriorityStatus { get; set; }
     public int RequestID { get; set; }
     public Request Request { get; set; }
 }

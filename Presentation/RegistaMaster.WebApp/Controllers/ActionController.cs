@@ -106,6 +106,20 @@ public class ActionController : Controller
         }
     }
 
+    public async Task<IActionResult> GetPriortyActionStatus()
+    {
+        try
+        {
+            var models = _uow.Repository.GetEnumSelect<ActionPriorityStatus>();
+            var resultJson = JsonConvert.SerializeObject(models);
+            return Content(resultJson, "application/json");
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
     public async Task<object> GetResponsible(DataSourceLoadOptions loadOptions)
     {
         try

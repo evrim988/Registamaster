@@ -3,6 +3,7 @@ using RegistaMaster.Domain.DTOModels.Entities.UserModel;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 
 namespace RegistaMaster.Infasctructure.Repositories;
@@ -60,7 +61,7 @@ public class UserRepository : Repository, IUserRepository
         {
             List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
             var model = context.Users
-                .Where(t => true);
+                .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
             foreach (var item in model)
             {
                 ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()

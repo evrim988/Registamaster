@@ -11,6 +11,7 @@ using DevExtreme.AspNet.Mvc;
 using NuGet.Protocol.Plugins;
 using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 using RegistaMaster.Persistance.RegistaMasterContextes;
+using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -37,6 +38,7 @@ public class RequestController : Controller
             model.ID = item.ID;
             model.LastModifiedBy = item.LastModifiedBy;
             model.RequestStatus = item.RequestStatus;
+
         }
         model.NotificationType = await uow.RequestRepository.NotificationTypeSelectList();
         model.Category = await uow.RequestRepository.CategorySelectList();
@@ -161,10 +163,38 @@ public class RequestController : Controller
         return DataSourceLoader.Load(models, options);
     }
 
-    public async Task<IActionResult> GetRequestDetail(int ID)
+    public async Task<string> GetRequestDetail(int ID)
     {
-        var models = await uow.RequestRepository.GetActionDetail(ID);
-        return Ok(models);
+        var model = uow.Repository.GetNonDeletedAndActive<Action>(t => t.RequestID == ID);
+
+        List<ActionDTO> actionList = new List<ActionDTO>();
+
+        foreach (var item in model)
+        {
+            ActionDTO actions = new ActionDTO()
+            {
+                ID = item.ID,
+                Description = item.Description,
+                EndDate = item.EndDate,
+                OpeningDate = item.OpeningDate,
+                ResponsibleID = item.ResponsibleID,
+                ActionStatus = item.ActionStatus,
+                ActionPriorityStatus = item.ActionPriorityStatus,
+                ActionDescription = item.ActionDescription,
+                LastModifiedBy = item.LastModifiedBy,
+                RequestID = ID,
+                CreatedOn = item.CreatedOn
+            };
+            if (item.ActionStatus == ActionStatus.Contiuned)
+            {
+                if (item.EndDate <= DateTime.Now)
+                {
+                    actions.Color = "clsRed";
+                }
+            }
+            actionList.Add(actions);
+        }
+        return JsonConvert.SerializeObject(actionList);
     }
 
     public async Task<IActionResult> RequestAdd(string values)
@@ -226,8 +256,6 @@ public class RequestController : Controller
         {
            
             model.RequestID = ID;
-            model.OpeningDate = DateTime.Now;
-            model.EndDate = DateTime.Now.AddDays(7);
             model.ActionStatus = ActionStatus.Contiuned;
             await uow.ActionRepository.AddActions(model);
             return Ok(model);

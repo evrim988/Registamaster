@@ -245,23 +245,18 @@ function GetList() {
                             .appendTo(container);
                     }
                     else if (info.data.actionStatus == 1) {
-                        $('<div id="Start" >')
-                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionStatus == 2) {
-                        $('<div id="Contiuned" >')
+                        $('<div id="Start">')
                             .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
                             .appendTo(container);
                     }
-                    else if (info.data.actionStatus == 3) {
-                        $('<div id="Completed"">')
+                    else if (info.data.actionStatus == 2) {
+                        $('<div id="Contiuned">')
                             .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
                             .appendTo(container);
                     }
-                    else if (info.data.actionStatus == 4) {
-                        $('<div id="Cancel">')
-                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
+                    else if (info.data.actionStatus == 3) {
+                        $('<div id="Completed" >')
+                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Iptal/Reddedildi"))
                             .appendTo(container);
                     }
                 }

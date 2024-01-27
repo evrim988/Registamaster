@@ -1,4 +1,6 @@
-﻿@{
+﻿@model RegistaMaster.Domain.DTOModels.Entities.ActionModels.ActionDTO
+
+@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -33,6 +35,49 @@
     </div>
 </div>
 
+
+
+@* Aksiyon Detayını Gösteren Modal *@
+<div class="modal fade" id="ActionDetail" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="büyükModalLabel">Aksiyon Detayı</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="form-group col-md-6">
+                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Açılma Tarihi:</label>
+                        <input asp-for="OpeningDate" type="date" required class="form-control" name="OpeningDate" />
+                        <h1></h1>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Hedef Tarih:</label>
+                        <input asp-for="EndDate" type="date" required class="form-control" name="EndDate" />
+                        <h1></h1>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label style="font-weight:bold;" class="col-form-label">Aksiyonu Açan Kişi:</label>
+                            <input asp-for="LastModifiedBy" type="text" required class="form-control" name="LastModifiedBy" />
+                            <h1></h1>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label style="font-weight:bold;padding-top: 9px;padding-bottom: 9px;">Konu:</label>
+                        <input asp-for="ActionDescription" type="text" required class="form-control" name="ActionDescription" />
+                        <h1></h1>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label style="font-weight:bold;">Açıklama:</label>
+                        <textarea asp-for="Description" type="text" required class="form-control" name="Description"></textarea>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="/js/Page/Home/Index.js"></script>

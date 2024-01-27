@@ -11,9 +11,13 @@ public class ActionDTO
     public int RequestID { get; set; }
     public DateTime OpeningDate { get; set; }
     public DateTime EndDate { get; set; }
+    public DateTime? CreatedOn { get; set; }
     public ActionStatus ActionStatus { get; set; }
     public RequestStatus RequestStatus { get; set; }
+    public ActionPriorityStatus ActionPriorityStatus { get; set; }
     public string Description { get; set; }
     public string LastModifiedBy { get; set; }
+    public string Color { get; set; }
+
     public List<SelectListItem> ResponsiblehelperModelList { get; set; }
 }

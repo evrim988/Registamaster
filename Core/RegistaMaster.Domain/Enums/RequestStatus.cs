@@ -10,11 +10,9 @@ public enum RequestStatus
     [Display(Name = "Başladı")]
     Start = 1,
 
-    [Display(Name = "İptal/Reddedildi")]
-    Cancel = 2,
-
     [Display(Name = "Kapandı")]
-    Closed = 3,
+    Closed = 2,
 
-    
+    [Display(Name = "İptal/Reddedildi")]
+    Cancel = 3,
 }

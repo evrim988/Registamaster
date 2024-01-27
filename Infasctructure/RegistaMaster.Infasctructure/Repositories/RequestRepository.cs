@@ -110,7 +110,7 @@ public class RequestRepository : Repository, IRequestRepository
     }
     public async Task<List<ActionDTO>> GetActionDetail(int RequestId)
     {
-        return await GetNonDeletedAndActive<Action>(t => t.RequestID == RequestId).Select(s => new ActionDTO()
+        var model =  await GetNonDeletedAndActive<Action>(t => t.RequestID == RequestId).Select(s => new ActionDTO()
         {
             ID = s.ID,
             Description = s.Description,
@@ -120,9 +120,12 @@ public class RequestRepository : Repository, IRequestRepository
             ActionStatus = s.ActionStatus,
             ActionDescription = s.ActionDescription,
             LastModifiedBy = s.LastModifiedBy,
-            RequestID = RequestId
+            RequestID = RequestId,
+            CreatedOn = s.CreatedOn,
         }).ToListAsync();
 
+        
+        return model; 
     }
 
     public async Task<List<ResponsibleDevextremeSelectListHelper>> GetModuleSelect()

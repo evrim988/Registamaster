@@ -17,6 +17,7 @@ function GetList() {
                 e.cellElement.css("text-align", "center");
             }
         },
+
         onRowPrepared: function (e) {
             if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
         },
@@ -61,6 +62,8 @@ function GetList() {
         loadPanel: {
             enabled: true,
         },
+
+        
         onContentReady: function (e) {
 
             var $refreshButton = $('<div id="refreshButton">').dxButton({
@@ -155,22 +158,17 @@ function GetList() {
                     }
                     else if (info.data.actionStatus == 1) {
                         $('<div id="Start">')
-                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Başladı"))
+                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
                             .appendTo(container);
                     }
                     else if (info.data.actionStatus == 2) {
                         $('<div id="Contiuned">')
-                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
                             .appendTo(container);
                     }
                     else if (info.data.actionStatus == 3) {
                         $('<div id="Completed" >')
-                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionStatus == 4) {
-                        $('<div id="Cancel">')
-                            .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Iptal/Reddedildi"))
+                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Iptal/Reddedildi"))
                             .appendTo(container);
                     }
                 }
@@ -179,10 +177,39 @@ function GetList() {
                 dataField: "lastModifiedBy",
                 caption: "Aksiyon Açan Kişi",
                 alignment: 'center',
+            },
+            {
+                caption: "İşlemler",
+                type: "buttons",
+                fixed: true,
+                fixedPosition: "right",
+                buttons: [
+                    {
+                        hint: "Detay",
+                        icon: "edit",
+                        onClick: function (e) {
+                            openEditModal(e.row.data);
+                        }
+                    }
+
+                ]
+
+
             }
-        ],
+        ]
 
     }).dxDataGrid("instance");
 
 }
 
+function openEditModal(data) {
+    console.log(data);
+
+    
+    $("#LastModifiedBy").val(data.lastModifiedBy);
+    $("#ActionDescription").val(data.actionDescription);
+    $("#Description").val(data.description);
+     
+
+    $("#ActionDetail").modal("toggle");
+}

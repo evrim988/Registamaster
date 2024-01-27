@@ -29,6 +29,9 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("ActionPriorityStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("ActionStatus")
                         .HasColumnType("int");
 
