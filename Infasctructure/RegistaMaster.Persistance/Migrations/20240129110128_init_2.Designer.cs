@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 
@@ -10,9 +11,10 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    partial class RegistaMasterContextModelSnapshot : ModelSnapshot
+    [Migration("20240129110128_init_2")]
+    partial class init_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -398,7 +400,7 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("CustomerID")
+                    b.Property<int>("CustomerID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -732,9 +734,11 @@ namespace RegistaMaster.Persistance.Migrations
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Request", b =>
                 {
-                    b.HasOne("RegistaMaster.Domain.Entities.Customer", null)
+                    b.HasOne("RegistaMaster.Domain.Entities.Customer", "Customer")
                         .WithMany("Requests")
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RegistaMaster.Domain.Entities.Module", "Module")
                         .WithMany()
@@ -749,6 +753,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.HasOne("RegistaMaster.Domain.Entities.Version", "Version")
                         .WithMany()
                         .HasForeignKey("VersionID");
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Module");
 

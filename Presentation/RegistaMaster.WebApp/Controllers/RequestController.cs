@@ -138,7 +138,6 @@ public class RequestController : Controller
                 PageURL = model.PageUrl,
                 PictureURL=model.PictureURL,
                 LastModifiedBy = model.LastModifiedBy,
-                CustomerID = model.CustomerID,
                 LastModifiedOn = DateTime.Now,
                 CreatedOn = model.CreatedOn,
                 ObjectStatus=ObjectStatus.NonDeleted,

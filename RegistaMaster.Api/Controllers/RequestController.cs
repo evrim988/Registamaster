@@ -21,18 +21,20 @@ public class RequestController : ControllerBase
         projectSession = sessionService.GetProject();
     }
     [HttpPost("AddRequest")]
-    [Auth]
-    public async Task<IActionResult> AddRequest(RequestDTO model)
+    public async Task<IActionResult> AddRequest(RegistaTicketCreateDto model)
     {
         try
         {
+
             var request = new Request()
             {
-                RequestSubject = model.RequestName,
-                Description = model.Description,
-                CustomerID = model.CustomerID,
-                ProjectID = projectSession.ID,
-                Category = "Sınıflandırılmamış"
+                NotificationType = model.TicketType,
+                RequestSubject = model.TicketTitle,
+                Description = model.TicketContent,
+                PictureURL = model.Image,
+                PageURL = model.PageUrl,
+                Category = "Sınıflandırılmamış",
+                ProjectID = 2,
             };
 
             await _uow.RequestRepository.RequestAdd(request);

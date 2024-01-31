@@ -26,13 +26,14 @@ public class Request : BaseEntitiy
     public DateTime PlanedEndDate { get; set; }
     [DisplayName("Durum")]
     public RequestStatus RequestStatus { get; set; }
+    [DisplayName("Bildirim ID")]
+    public int NotificationID {  get; set; }
     [DisplayName("Versiyon")]
     public int? VersionID {  get; set; }
     public Version Version { get; set; }
     public int? ModuleID { get; set; }
     public Module Module { get; set; }
-    public int CustomerID { get; set; }
-    public Customer Customer { get; set; }
+  
     public int ProjectID { get; set; }
     public Project Project { get; set; }
     public ICollection<Task> Tasks { get; set; }

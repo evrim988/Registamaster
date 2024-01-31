@@ -28,7 +28,6 @@ public class RequestRepository : Repository, IRequestRepository
     {
         try
         {
-            model.CustomerID = session.CustomerID;
             model.StartDate = DateTime.Now;
             model.PlanedEndDate = model.StartDate.AddDays(7);
             model.RequestStatus = RequestStatus.Open;
