@@ -1,9 +1,9 @@
 using RegistaMaster.Infasctructure.Registiration;
 using RegistaMaster.Infasctructure.Repositories;
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.IdleTimeout = TimeSpan.FromMinutes(150);
 });
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();

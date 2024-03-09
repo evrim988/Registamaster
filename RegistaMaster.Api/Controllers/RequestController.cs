@@ -21,6 +21,7 @@ public class RequestController : ControllerBase
         projectSession = sessionService.GetProject();
     }
     [HttpPost("AddRequest")]
+    [Auth]
     public async Task<IActionResult> AddRequest(RegistaTicketCreateDto model)
     {
         try
