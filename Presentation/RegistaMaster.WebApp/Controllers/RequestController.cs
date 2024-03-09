@@ -69,7 +69,7 @@ public class RequestController : Controller
                 var ımageString = base64.Split(',');
                 Guid guidFile = Guid.NewGuid();
                 string fileName = "RequestImage" + guidFile + ".jpg";
-                var path = Path.Combine(webRootPath + "\\Modernize\\Img\\RequestFiles\\", fileName);
+                var path = Path.Combine(webRootPath + "\\Modernize\\Img\\RequestFile\\", fileName);
                 var bytes = Convert.FromBase64String(ımageString[1]);
                 using (var imageFile = new FileStream(path, FileMode.Create))
                 {

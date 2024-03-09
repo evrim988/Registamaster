@@ -411,8 +411,8 @@ function GetList() {
 
                         $('<div>')
                             .append($('<img>', {
-                                src: '/Modernize/Img/RequestFiles/' + options.value, class: "rounded-circle", width: "35", height: "35", click: function () {
-                                    OpenPartImage('/Modernize/Img/RequestFiles/' + options.value);
+                                src: '/Modernize/Img/RequestFile/' + options.value, class: "rounded-circle", width: "35", height: "35", click: function () {
+                                    OpenPartImage('/Modernize/Img/RequestFile/' + options.value);
                                 }
                             }))
                             .appendTo(container);
