@@ -1,4 +1,5 @@
 ﻿using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,10 +11,11 @@ namespace RegistaMaster.Domain.DTOModels.Entities.RequestModel
 {
     public class RegistaTicketCreateDto
     {
-        public int ID { get; set; }
 
         [DisplayName("Bildirim Türü")]
-        public string TicketType { get; set; }
+        public NotificationTypeCNC TicketType { get; set; }
+        public NotificationTypeCNC NotificationTypeCNC { get; set; }
+
 
         [DisplayName("Bildirim Başlığı")]
         public string TicketTitle { get; set; }
@@ -27,7 +29,6 @@ namespace RegistaMaster.Domain.DTOModels.Entities.RequestModel
 
         [DisplayName("Sayfa Yolu")]
         public string PageUrl { get; set; }
-
 
     }
 }

@@ -16,6 +16,7 @@ public class Request : BaseEntitiy
     [DisplayName("Bildirim Türü")]
     public string? NotificationType { get; set; }
     public int? NotificationTypeID { get; set; }
+    public NotificationTypeCNC NotificationTypeCNC { get; set; }
     [DisplayName("Sayfa Linki")]
     public string? PageURL { get; set; }
     [DisplayName("Görüntü")]

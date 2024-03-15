@@ -8,7 +8,7 @@ using Request = RegistaMaster.Domain.Entities.Request;
 
 namespace RegistaMaster.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class RequestController : ControllerBase
 {
@@ -21,7 +21,6 @@ public class RequestController : ControllerBase
         projectSession = sessionService.GetProject();
     }
     [HttpPost("AddRequest")]
-    [Auth]
     public async Task<IActionResult> AddRequest(RegistaTicketCreateDto model)
     {
         try
@@ -29,17 +28,18 @@ public class RequestController : ControllerBase
 
             var request = new Request()
             {
-                NotificationType = model.TicketType,
+                NotificationTypeCNC = model.TicketType,
                 RequestSubject = model.TicketTitle,
                 Description = model.TicketContent,
                 PictureURL = model.Image,
                 PageURL = model.PageUrl,
                 Category = "Sınıflandırılmamış",
                 ProjectID = 2,
+                
             };
 
             await _uow.RequestRepository.RequestAdd(request);
-            return Ok();
+            return Ok(request);
 
         }
         catch (Exception ex)

@@ -44,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseSession();
-app.UseLog();
+//app.UseLog();
 app.UseHttpsRedirection();
 app.UseAuthentication(); // Önce
 app.UseAuthorization();
