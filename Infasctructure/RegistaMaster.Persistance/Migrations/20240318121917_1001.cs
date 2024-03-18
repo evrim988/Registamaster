@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace RegistaMaster.Persistance.Migrations
 {
-    public partial class _1000 : Migration
+    public partial class _1001 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
