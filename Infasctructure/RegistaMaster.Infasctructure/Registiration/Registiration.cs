@@ -15,7 +15,8 @@ namespace RegistaMaster.Infasctructure.Registiration
         {
             services.AddDbContext<RegistaMasterContext>(options =>
             {
-                options.UseMySQL(connectionString);
+                //options.UseMySQL(connectionString);
+                options.UseNpgsql(connectionString);
             });
         }
     }

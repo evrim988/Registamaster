@@ -1,12 +1,13 @@
-﻿@model RegistaMaster.Domain.DTOModels.Entities.ActionModels.ActionDTO
+﻿@using RegistaMaster.Domain.Enums
+@model RegistaMaster.Domain.DTOModels.Entities.ActionModels.ActionDTO
 
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Index</h1>
-
+@{
+    var user = session.GetUser();
+}
 
 
 <link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
@@ -35,7 +36,39 @@
     </div>
 </div>
 
+@* Aksiyon Durumu Güncelleme *@
+<div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
+            </div>
+            <div class="modal-body">
+                <input hidden id="actionID" />
+                <select asp-for="ActionStatus" id="actionSelect" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control select2"></select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal()" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" onclick="ChanceActionStatus()" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="container">
+    @switch (user.Authorization)
+    {
+        case AuthorizationStatus.Admin:
+            <partial name="ChartPartials/AdminChartPartial" />
+            break;
+        case AuthorizationStatus.TeamsLeader:
+            <partial name="ChartPartials/TeamLeaderChartPartial" />
+            break;
+        case AuthorizationStatus.Developer:
+            <partial name="ChartPartials/DeveloperChartPartial" />
+            break;
+    }
+</div>
 
 @* Aksiyon Detayını Gösteren Modal *@
 <div class="modal fade" id="ActionDetail" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">

@@ -96,8 +96,9 @@ public class ActionRepository : Repository, IActionRepository
                 ResponsibleID = s.ResponsibleID,
                 ActionStatus = s.ActionStatus,
                 ActionDescription = s.ActionDescription,
-                RequestID = s.RequestID
-                
+                RequestID = s.RequestID,
+                ActionPriorityStatus = s.ActionPriorityStatus,
+
             });
         }
         catch (Exception e)
@@ -144,4 +145,21 @@ public class ActionRepository : Repository, IActionRepository
         }
     }
 
+    public async Task<List<SelectListItem>> ActionProrityStatusList()
+    {
+        try
+        {
+            var list = GetEnumSelect<ActionPriorityStatus>().Select(aps => new SelectListItem
+            {
+                Value = aps.Id.ToString(),
+                Text = aps.Text,
+            });
+            return list.ToList();
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
+        }
+    }
 }

@@ -7,6 +7,7 @@ builder.Services.AddSession(options =>
 });
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 string connString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDatabase(connString);
 builder.Services.MyRepository();

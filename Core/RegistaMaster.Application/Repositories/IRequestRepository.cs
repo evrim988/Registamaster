@@ -23,4 +23,6 @@ public interface IRequestRepository : IRepository
     public Task<List<SelectListItem>> GetModule();
     public Task<List<SelectListItem>> GetModuleList(int ID);
     public Task<List<SelectListItem>> GetVersion();
+    public Task<List<SelectListItem>> ResponsibleSelectList();
+    public Task<List<SelectListItem>> GetVersionList(int ID);
 }

@@ -24,8 +24,15 @@ function GetList() {
         },
         onRowPrepared: function (e) {
             if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+
+            if (e.data != undefined) {
+                if (e.data.color === "clsRed") {
+                    //console.log("red");
+                    e.rowElement.css('background-color', "#fb6969");
+                }
+            };
         },
-        rowAlternationEnabled: true,
+        //rowAlternationEnabled: true,
         columnAutoWidth: true,
         remoteOperations: true,
         allowColumnReordering: true,
@@ -173,6 +180,7 @@ function GetList() {
                 dataField: "id",
                 caption: "Aksiyon No",
                 alignment: 'center',
+                visible: false
             },
             {
                 dataField: "requestID",
@@ -222,7 +230,42 @@ function GetList() {
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
             },
+            {
+                dataField: "actionPriorityStatus",
+                caption: "Öncelik",
+                alignment: 'center',
+                lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "Id",
+                        loadUrl: "/Action/GetPriortyActionStatus",
 
+                    }),
+                    valueExpr: "Id",
+                    displayExpr: "Text"
+                },
+                cellTemplate: function (container, info) {
+                    if (info.data.actionPriorityStatus == 0) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-primary", }).append("Öncelik Belirtilmedi"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionPriorityStatus == 1) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("1"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionPriorityStatus == 2) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-secondary", }).append("2"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionPriorityStatus == 3) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-warning", }).append("3"))
+                            .appendTo(container);
+                    }
+                }
+            },
             {
                 dataField: "actionStatus",
                 caption: "Durum",
@@ -260,9 +303,348 @@ function GetList() {
                             .appendTo(container);
                     }
                 }
-            }
+            },
+            {
+                caption: "İşlemler",
+                type: "buttons",
+                fixed: true,
+                fixedPosition: "right",
+                buttons: [
+                    {
+                        hint: "Düzenle",
+                        icon: "edit",
+
+                        onClick: function (e) {
+                            data = e.row.data;
+                            EditActionCheckAuth(data);
+                        }
+                    },
+                    {
+                        hint: "Sil",
+                        icon: "trash",
+                        onClick: function (e) {
+                            data = e.row.data;
+                            DeleteActionCheckAuth(data);
+                        }
+                    },
+                    {
+                        hint: "Durum Değiştir",
+                        icon: "clock",
+                        onClick: function (e) {
+                            data = e.row.data;
+                            ActionChangeStatusCheckAuth(data);
+                        }
+                    },
+                ]
+            },
         ]
 
     }).dxDataGrid("instance");
 }
 
+function EditActionCheckAuth(data) {
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    console.log(data);
+
+    if (data.actionStatus == "0") {
+        var id = new FormData();
+
+        id.append('id', data.id);
+
+        $.ajax({
+            url: "/Action/CheckAuthForEditAction",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Bu Kaydı Düzenleme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    OpenActionEditModals(data);
+                }
+            }
+        });
+    }
+    else {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Tamamlanmış, Devam Etmekte Olan veya İptal Edilmiş Aksiyon Düzenlenemez!',
+            'info'
+        );
+    }
+
+}
+
+function OpenActionEditModals(data) {
+    console.log(data);
+
+    $("#editActionID").val(data.id);
+    $("#editActionActionDescription").val(data.actionDescription);
+    $("#actionEditDescription").val(data.description);
+    $("#actionEditActionPriority").val(data.actionPriorityStatus);
+    $("#actionEditResponsible").val(data.responsibleID);
+
+    if (new Date(data.openingDate) < new Date()) {
+        let minDate = new Date();
+        var day = ("0" + minDate.getDate()).slice(-2);
+        var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
+        var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
+        $("#actionEditOpeningDate").val(fullDate);
+        $("#actionEditOpeningDate").attr('min', fullDate);
+    }
+    else {
+        let openingDate = new Date(data.openingDate);
+        var opDay = ("0" + openingDate.getDate()).slice(-2);
+        var opMonth = ("0" + (openingDate.getMonth() + 1)).slice(-2);
+        var opFullDate = openingDate.getFullYear() + "-" + (opMonth) + "-" + (opDay);
+        $("#actionEditOpeningDate").val(opFullDate);
+        $("#actionEditOpeningDate").attr('min', opFullDate);
+    }
+
+    if (new Date(data.endDate) < new Date()) {
+        let minDate = new Date();
+        var day = ("0" + minDate.getDate()).slice(-2);
+        var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
+        var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
+        $("#actionEditEndDate").val(fullDate);
+        $("#actionEditEndDate").attr('min', fullDate);
+    }
+    else {
+        let endDate = new Date(data.endDate);
+        var endDay = ("0" + endDate.getDate()).slice(-2);
+        var endMonth = ("0" + (endDate.getMonth() + 1)).slice(-2);
+        var endFullDate = endDate.getFullYear() + "-" + (endMonth) + "-" + (endDay);
+        $("#actionEditEndDate").val(endFullDate);
+        $("#actionEditEndDate").attr('min', endFullDate);
+    }
+
+    $("#EditAction").modal("toggle");
+}
+
+function SaveActionUpdate() {
+    var formData = new FormData();
+
+    formData.append("ID", $("#editActionID").val());
+    formData.append("actionDescription", $("#editActionActionDescription").val());
+    formData.append("description", $("#actionEditDescription").val());
+    formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
+    formData.append("openingDate", $("#actionEditOpeningDate").val());
+    formData.append("endDate", $("#actionEditEndDate").val());
+    formData.append("responsibleID", $("#actionEditResponsible").val());
+
+    //console.log(formData);
+
+    $.ajax({
+        url: "/Action/ActionUpdate",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+        },
+        error: function (e) {
+            console.log(e);
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
+}
+
+function DeleteActionCheckAuth(data) {
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+
+    console.log(data);
+
+    if (data.actionStatus != "1") {
+        var id = new FormData();
+
+        id.append('id', data.id);
+
+        $.ajax({
+            url: "/Action/CheckAuthForDeleteAction",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Kaydı Silme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    DeleteActionDialog(data.id);
+                }
+            }
+        });
+    }
+    else {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Devam Etmekte Olan Aksiyon Silinemez!',
+            'info'
+        );
+    }
+}
+
+function DeleteActionDialog(ID) {
+    console.log(ID);
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false,
+    })
+
+    swalWithBootstrapButtons({
+        title: "Uyarı",
+        text: "Silme İşlemini Onaylıyor Musunuz?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Evet',
+        cancelButtonText: 'Hayır',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.value) {
+            var data = new FormData();
+
+            data.append('id', ID);
+
+            $.ajax({
+                url: "/Action/ActionDelete/",
+                type: 'POST',
+                async: false,
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    //console.log(response);
+                    if (data == "1") {
+                        swalWithBootstrapButtons(
+                            'Bilgi',
+                            'Silme İşlemi Başarılı',
+                            'success'
+                        )
+                    }
+                },
+                error: function (textStatus) {
+                    console.log('ERRORS:23 ');
+                },
+                complete: function () {
+                    location.reload();
+                }
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+            swalWithBootstrapButtons(
+                'Bilgi',
+                'Silme İşlemi İptal Edildi',
+                'info'
+            )
+        }
+    })
+}
+
+function ActionChangeStatusCheckAuth(data) {
+    //console.log(data);
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    if (data.actionStatus == "2" || data.actionStatus == "3") {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Tamamlanmış Veya İptal/Reddedilmiş Aksiyonların Durumları Değiştirilemez!',
+            'info'
+        );
+    }
+    else {
+        var id = new FormData();
+
+        id.append('id', data.responsibleID);
+
+        $.ajax({
+            url: "/Action/ChanceActionStatusCheckAuth",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Bu Kaydı Değiştirme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    ChangeActionStatusModal(data);
+                }
+            }
+        });
+    }
+}
+
+function ChangeActionStatusModal(data) {
+
+    $("#actionID").val(data.id);
+    $("#actionSelect").val(data.actionStatus);
+
+    $("#changeActionStatus").modal("toggle");
+}
+
+function ChanceActionStatus() {
+    var formData = new FormData();
+
+    formData.append("id", $("#actionID").val());
+    formData.append("actionStatus", $("#actionSelect").val());
+
+    console.log(formData);
+
+    $.ajax({
+        url: "/Action/ChangeActionStatus",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            $("#changeActionStatus").modal("hide");
+        },
+        error: function (e) {
+            console.log(e);
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
+}

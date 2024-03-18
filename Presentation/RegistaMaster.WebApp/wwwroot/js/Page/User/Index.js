@@ -8,9 +8,9 @@ function GetList() {
         dataSource: DevExpress.data.AspNet.createStore({
             key: "id",
             loadUrl: "/User/GetList",
-            insertUrl: "/User/AddUser",
-            updateUrl: "/User/UserEdit",
-            deleteUrl: "/User/DeleteUser",
+            //insertUrl: "/User/AddUser",
+            //updateUrl: "/User/UserEdit",
+            //deleteUrl: "/User/DeleteUser",
             onBeforeSend: function (method, ajaxOptions) {
                 ajaxOptions.xhrFields = { withCredentials: true };
             }
@@ -22,6 +22,19 @@ function GetList() {
         },
         onRowPrepared: function (e) {
             if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+        },
+        onToolbarPreparing: function (e) {
+            let toolbarItems = e.toolbarOptions.items;
+            toolbarItems.push({
+                widget: "dxButton",
+                options: {
+                    icon: "plus", text: "Yeni Kullanıcı Ekle", onClick: function (e) {
+                        AddUserCheckAuth();
+                    }
+                },
+                location: "after",
+
+            });
         },
         rowAlternationEnabled: true,
         grouping: {
@@ -64,65 +77,65 @@ function GetList() {
         loadPanel: {
             enabled: true,
         },
-        editing: {
-            mode: 'row',
-            allowUpdating: true,
-            allowDeleting: true,
-        },
+        //editing: {
+        //    mode: 'row',
+        //    allowUpdating: true,
+        //    allowDeleting: true,
+        //},
 
-        editing: {
-            mode: 'popup',
-            allowUpdating: true,
-            allowDeleting: true,
-            allowAdding: true,
-            popup: {
-                title: 'Yeni Kullanıcı Ekle',
-                showTitle: true,
-                width: 500,
-                height: 325,
-            },
-            form: {
-                items: [{
-                    itemType: 'group',
-                    colCount: 2,
-                    colSpan: 2,
-                    items: [
-                        {
-                            dataField: "name",
-                            caption: "Ad",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //editing: {
+        //    mode: 'popup',
+        //    allowUpdating: true,
+        //    allowDeleting: true,
+        //    allowAdding: true,
+        //    popup: {
+        //        title: 'Yeni Kullanıcı Ekle',
+        //        showTitle: true,
+        //        width: 500,
+        //        height: 325,
+        //    },
+        //    form: {
+        //        items: [{
+        //            itemType: 'group',
+        //            colCount: 2,
+        //            colSpan: 2,
+        //            items: [
+        //                {
+        //                    dataField: "name",
+        //                    caption: "Ad",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
 
-                        },
-                        {
-                            dataField: "surname",
-                            caption: "Soyad",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                },
+        //                {
+        //                    dataField: "surname",
+        //                    caption: "Soyad",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
 
-                        },
-                        {
-                            dataField: "username",
-                            caption: "Kullanıcı Adı",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                },
+        //                {
+        //                    dataField: "username",
+        //                    caption: "Kullanıcı Adı",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
 
-                        },
-                        {
-                            dataField: "password",
-                            caption: "Şifre",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                },
+        //                {
+        //                    dataField: "password",
+        //                    caption: "Şifre",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
 
-                        },
-                        {
-                            dataField: "email",
-                            caption: "Email",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+        //                },
+        //                {
+        //                    dataField: "email",
+        //                    caption: "Email",
+        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
 
-                        },
-                    ],
-                }],
+        //                },
+        //            ],
+        //        }],
 
-            },
+        //    },
 
-        },
+        //},
         onContentReady: function (e) {
 
             var $refreshButton = $('<div id="refreshButton">').dxButton({
@@ -195,27 +208,55 @@ function GetList() {
                 caption: "Şifre",
                 visible: false
             },
-            //{
-            //    dataField: "authorizationStatus",
-            //    caption: "Kullanıcı Türü",
-            //    alignment: 'center',
-            //    lookup: {
-            //        dataSource: DevExpress.data.AspNet.createStore({
-            //            key: "Id",
-            //            loadUrl: "/User/GetAuthStatus",
-            //            onBeforeSend: function (method, ajaxoptions) {
-            //                ajaxoptions.xhrFields = { withCredentials: true };
-            //            },
-            //        }),
-            //        valueExpr: "Id",
-            //        displayExpr: "Text"
-            //    }
-            //},
             {
+                dataField: "authorizationStatus",
+                caption: "Kullanıcı Türü",
+                alignment: 'center',
+                lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "Id",
+                        loadUrl: "/User/GetAuthStatus",
+                        onBeforeSend: function (method, ajaxoptions) {
+                            ajaxoptions.xhrFields = { withCredentials: true };
+                        },
+                    }),
+                    valueExpr: "Id",
+                    displayExpr: "Text"
+                }
+            },
+            {
+                caption: "İşlemler",
                 type: "buttons",
-                buttons: ["edit","delete"],
+                fixed: true,
+                fixedPosition: "right",
+                buttons: [
 
-               
+                    {
+                        hint: "Düzenle",
+                        icon: "edit",
+
+                        onClick: function (e) {
+                            data = e.row.data;
+                            EditUserCheckAuth(data);
+                        }
+                    },
+                    {
+                        hint: "Sil",
+                        icon: "trash",
+                        onClick: function (e) {
+                            ID = e.row.data.id;
+                            DeleteUserCheckAuth(ID);
+                        }
+                    },
+                    {
+                        hint: "Yetki Değiştir",
+                        icon: "key",
+                        onClick: function (e) {
+                            data = e.row.data;
+                            ChangeAuthCheckAuth(data);
+                        }
+                    },
+                ]
             },
         ],
 
@@ -223,3 +264,290 @@ function GetList() {
 
 }
 
+function AddUserCheckAuth() {
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    $.ajax({
+        url: '/User/CheckAdminAuth',
+        async: false,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (response) {
+            //console.log(response);
+            if (response != "1") {
+
+                swalWithBootstrapButtons(
+                    'Uyarı',
+                    'Kullanıcı Ekleme Yetkiniz Bulunmamaktadır!',
+                    'info'
+                );
+            }
+            else {
+                $('#addUser').modal('toggle');
+            }
+        },
+    });
+}
+
+function AddUser() {
+    var formData = new FormData();
+
+    formData.append("name", $("#addName").val());
+    formData.append("surname", $("#addSurname").val());
+    formData.append("username", $("#addUsername").val());
+    formData.append("email", $("#addEmail").val());
+    formData.append("password", $("#addPassword").val());
+    formData.append("authorizationStatus", $("#addAuthStatus").val());
+
+    //console.log(formData);
+
+    $.ajax({
+        url: "/User/AddUser",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            $('#addUser').modal('toggle');
+        },
+        error: function (e) {
+            console.log(e);
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
+}
+
+function EditUserCheckAuth(data) {
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+
+    //console.log(data);
+
+    var ID = new FormData();
+
+    ID.append('id', data.id);
+
+    $.ajax({
+        url: "/User/CheckAuthForEditUser",
+        type: 'POST',
+        async: false,
+        data: ID,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            if (response != "1") {
+
+                swalWithBootstrapButtons(
+                    'Uyarı',
+                    'Bu Kaydı Düzenleme Yetkiniz Bulunmamaktadır!',
+                    'info'
+                );
+            }
+            else {
+                OpenEditModals(data);
+            }
+        }
+    });
+}
+
+function OpenEditModals(data) {
+
+    $("#editID").val(data.id);
+    $("#editName").val(data.name);
+    $("#editSurname").val(data.surname);
+    $("#editUsername").val(data.username);
+    $("#editEmail").val(data.email);
+    $("#editPassword").val(data.password);
+
+    $('#editUser').modal('toggle');
+}
+
+function UpdateUser() {
+    var formData = new FormData();
+
+    formData.append("id", $("#editID").val());
+    formData.append("name", $("#editName").val());
+    formData.append("surname", $("#editSurname").val());
+    formData.append("username", $("#editUsername").val());
+    formData.append("email", $("#editEmail").val());
+    formData.append("password", $("#editPassword").val());
+
+    console.log(formData);
+
+    $.ajax({
+        url: "/User/UpdateUser",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+            $('#editUser').modal('toggle');
+        },
+        error: function (e) {
+            console.log(e);
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
+}
+
+function ChangeAuthCheckAuth(data) {
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    $.ajax({
+        url: '/User/CheckAdminAuth',
+        async: false,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (response) {
+            //console.log(response);
+            if (response != "1") {
+
+                swalWithBootstrapButtons(
+                    'Uyarı',
+                    'Bu İşlemi Yapma Yetkiniz Bulunmamaktadır!',
+                    'info'
+                );
+            }
+            else {
+                OpenAuthModal(data);
+            }
+        },
+    });
+}
+
+function OpenAuthModal(data) {
+
+    $("#chanceAuthID").val(data.id);
+    $("#changeAuthStatus").val(data.authorizationStatus);
+
+    $('#changeAuthorization').modal('toggle');
+}
+
+function ChangeAuthorization() {
+    var formData = new FormData();
+
+    formData.append("id", $("#chanceAuthID").val());
+    formData.append("authorizationStatus", $("#changeAuthStatus").val());
+
+    console.log(formData);
+
+    $.ajax({
+        url: "/User/ChangeAuthorization",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+            $('#changeAuthorization').modal('toggle');
+        },
+        error: function (e) {
+            console.log(e);
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
+}
+
+function DeleteUserCheckAuth(ID) {
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    $.ajax({
+        url: '/User/CheckAdminAuth',
+        async: false,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (response) {
+            //console.log(response);
+            if (response != "1") {
+
+                swalWithBootstrapButtons(
+                    'Uyarı',
+                    'Kullanıcı Silme Yetkiniz Bulunmamaktadır!',
+                    'info'
+                );
+            }
+            else {
+                DeleteUser(ID);
+            }
+        },
+    });
+}
+
+function DeleteUser(ID) {
+    //console.log(ID);
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false,
+    })
+
+    swalWithBootstrapButtons({
+        title: "Uyarı",
+        text: "Kullanıcı Silinecek Onaylıyor Musunuz?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Evet',
+        cancelButtonText: 'Hayır',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.value) {
+            var data = new FormData();
+
+            data.append('id', ID);
+
+            $.ajax({
+                url: "/User/DeleteUser/",
+                type: 'POST',
+                async: false,
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data);
+                    swalWithBootstrapButtons(
+                        'Bilgi',
+                        'Silme İşlemi Başarılı',
+                        'success'
+                    );
+                },
+                error: function (textStatus) {
+                    console.log('ERRORS:23 ');
+                },
+                complete: function () {
+                    location.reload();
+                }
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+            swalWithBootstrapButtons(
+                'Bilgi',
+                'Silme İşlemi İptal Edildi',
+                'info'
+            )
+        }
+    })
+}

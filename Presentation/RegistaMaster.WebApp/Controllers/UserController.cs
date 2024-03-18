@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.UserModel;
+using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 
@@ -12,9 +13,11 @@ namespace RegistaMaster.WebApp.Controllers;
 public class UserController : Controller
 {
     private readonly IUnitOfWork uow;
+    private readonly SessionModel session;
     public UserController(IUnitOfWork _uow)
     {
         uow = _uow;
+        session = _uow.GetSession();
     }
     public async Task<object> GetList(DataSourceLoadOptions options)
 
@@ -55,20 +58,7 @@ public class UserController : Controller
             throw ex;
         }
     }
-    public async Task<string> DeleteUser(int Key)
-    {
-        try
-        {
-            await uow.Repository.Delete<User>(Key);
-            await uow.SaveChanges();
-            return "1";
-
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
+    
     [HttpGet]
     public async Task<IActionResult> UserDetail()
     {
@@ -209,5 +199,70 @@ public class UserController : Controller
             throw ex;
         }
     }
-    
+
+    public string CheckAdminAuth()
+    {
+        if (session.Authorization == AuthorizationStatus.Admin)
+            return "1";
+        return "";
+    }
+
+    [HttpPost]
+    public async Task<string> AddUser(User model)
+    {
+        try
+        {
+            await uow.UserRepository.AddUser(model);
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public string CheckAuthForEditUser(int ID)
+    {
+        if (session.ID == ID || session.Authorization == AuthorizationStatus.Admin)
+            return "1";
+
+        return "";
+    }
+
+    public async Task<string> UpdateUser(UserDetailDto model)
+    {
+        try
+        {
+            return await uow.UserRepository.UpdateUser(model);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<string> ChangeAuthorization(UserDetailDto model)
+    {
+        try
+        {
+            return await uow.UserRepository.ChangeAuthorization(model);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<string> DeleteUser(int ID)
+    {
+        try
+        {
+            await uow.UserRepository.DeleteUser(ID);
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }

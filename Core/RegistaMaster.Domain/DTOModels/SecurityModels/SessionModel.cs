@@ -1,4 +1,6 @@
-﻿namespace RegistaMaster.Domain.DTOModels.SecurityModels;
+﻿using RegistaMaster.Domain.Enums;
+
+namespace RegistaMaster.Domain.DTOModels.SecurityModels;
 
 public class SessionModel
 {
@@ -13,4 +15,5 @@ public class SessionModel
     public string Image { get; set; }
 
     public int CustomerID { get; set; }
+    public AuthorizationStatus Authorization { get; set; }
 }

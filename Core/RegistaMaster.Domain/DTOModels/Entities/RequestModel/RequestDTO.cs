@@ -31,8 +31,11 @@ public class RequestDTO
 
     public CategoryStatus CategoryStatus { get; set; }
     public List<SelectListItem> Project { get; set; }
-    public List<SelectListItem> Module { get; set; }
-    public List<SelectListItem> Version { get; set; }
+
+    //public List<SelectListItem> Module { get; set; }
+    //public List<SelectListItem> Version { get; set; }
+    public List<SelectListItem> Responsible { get; set; }
+    public List<SelectListItem> ActionPriorityStatus { get; set; }
     public List<SelectListItem> NotificationType { get; set; }
     public List<SelectListItem> Category { get; set; }
 }

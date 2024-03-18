@@ -36,18 +36,40 @@ public class UserRepository : Repository, IUserRepository
             throw e;
         }
     }
-    public async Task<string> Update(User model)
+    public async Task<string> UpdateUser(UserDetailDto model)
     {
-        Update(model);
-        await uow.SaveChanges();
-        return "";
+        try
+        {
+            var user = await GetById<User>(model.ID);
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.Email = model.Email;
+            user.Password = model.Password;
+            user.Username = model.Username;
+            Update(user);
+            await uow.SaveChanges();
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
-    public void Delete(int id)
+    public async Task<string> DeleteUser(int ID)
     {
-        var user = GetNonDeletedAndActive<User>(t => t.ID == id);
-        DeleteRange(user.ToList());
-
-        Delete<User>(id);
+        try
+        {
+            var user = await GetById<User>(ID);
+            user.ObjectStatus = ObjectStatus.Deleted;
+            user.Status = Status.Passive;
+            Update(user);
+            await uow.SaveChanges();
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
     public async Task<IQueryable<User>> GetList()
     {
@@ -92,4 +114,22 @@ public class UserRepository : Repository, IUserRepository
 
        }).FirstOrDefault();
     }
+
+    public async Task<string> ChangeAuthorization(UserDetailDto model)
+    {
+        try
+        {
+            var user = await GetById<User>(model.ID);
+            user.AuthorizationStatus = model.AuthorizationStatus;
+            Update(user);
+            await uow.SaveChanges();
+            return "1";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+   
 }

@@ -264,6 +264,22 @@ function GetVersion() {
                             caption: "Açıklama",
                         },
                         {
+                            dataField: "projectID",
+                            caption: "Proje",
+                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+                            lookup: {
+                                dataSource: DevExpress.data.AspNet.createStore({
+                                    key: "Id",
+                                    loadUrl: "/Defination/GetProject/",
+                                    onBeforeSend: function (method, ajaxOptions) {
+                                        ajaxOptions.xhrFields = { withCredentials: true, };
+                                    },
+                                }),
+                                valueExpr: "id",
+                                displayExpr: "name",
+                            }
+                        },
+                        {
                             dataField: "databaseChangeStatus",
                             caption: "Veritabanı Değişiliği Var Mı?",
                             lookup: {
@@ -326,6 +342,22 @@ function GetVersion() {
                 caption: "Tarih",
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
+            },
+            {
+                dataField: "projectID",
+                caption: "Proje",
+                validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+                lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "Id",
+                        loadUrl: "/Defination/GetProject/",
+                        onBeforeSend: function (method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true, };
+                        },
+                    }),
+                    valueExpr: "id",
+                    displayExpr: "name",
+                }
             },
             {
                 dataField: "databaseChangeStatus",

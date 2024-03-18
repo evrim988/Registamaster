@@ -265,5 +265,20 @@ public class RequestRepository : Repository, IRequestRepository
                 .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
     }
 
+    public async Task<List<SelectListItem>> ResponsibleSelectList()
+    {
+        var list = GetNonDeletedAndActive<User>(t => t.AuthorizationStatus != AuthorizationStatus.Admin).Select(user => new SelectListItem
+        {
+            Value = user.ID.ToString(),
+            Text = user.Fullname,
+        }).ToList();
 
+        return list;
+    }
+
+    public async Task<List<SelectListItem>> GetVersionList(int ID)
+    {
+        return GetNonDeletedAndActive<Version>(t => t.ProjectID == ID && t.ObjectStatus == ObjectStatus.NonDeleted)
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
+    }
 }

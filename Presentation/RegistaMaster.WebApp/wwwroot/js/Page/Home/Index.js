@@ -20,8 +20,15 @@ function GetList() {
 
         onRowPrepared: function (e) {
             if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+
+            if (e.data != undefined) {
+                if (e.data.color === "clsRed") {
+                    console.log("red");
+                    e.rowElement.css('background-color', "#fb6969");
+                }
+            };
         },
-        rowAlternationEnabled: true,
+        //rowAlternationEnabled: true,
         grouping: {
             contextMenuEnabled: true
         },
@@ -95,6 +102,7 @@ function GetList() {
                 dataField: "id",
                 caption: "Aksiyon No",
                 alignment: 'center',
+                visible: false
             },
             {
                 dataField: "actionDescription",
@@ -106,7 +114,8 @@ function GetList() {
             {
                 dataField: "description",
                 caption: "Aksiyon Açıklaması",
-                alignment: 'left',
+                alignment: 'center',
+
             },
             {
                 dataField: "responsibleID",
@@ -130,11 +139,46 @@ function GetList() {
             {
                 dataField: "endDate",
                 caption: "Son Tarih",
-                alignment: 'left',
+                alignment: 'center',
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
             },
-           
+            {
+                dataField: "actionPriorityStatus",
+                caption: "Öncelik",
+                alignment: 'center',
+                lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "Id",
+                        loadUrl: "/Action/GetPriortyActionStatus",
+
+                    }),
+                    valueExpr: "Id",
+                    displayExpr: "Text"
+                },
+                cellTemplate: function (container, info) {
+                    if (info.data.actionPriorityStatus == 0) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-primary", }).append("Öncelik Belirtilmedi"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionPriorityStatus == 1) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("1"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionPriorityStatus == 2) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-secondary", }).append("2"))
+                            .appendTo(container);
+                    }
+                    else if (info.data.actionPriorityStatus == 3) {
+                        $('<div>')
+                            .append($('<a>', { class: "btn btn-sm btn-warning", }).append("3"))
+                            .appendTo(container);
+                    }
+                }
+            },
             {
                 dataField: "actionStatus",
                 caption: "Durum",
@@ -185,10 +229,11 @@ function GetList() {
                 fixedPosition: "right",
                 buttons: [
                     {
-                        hint: "Detay",
-                        icon: "edit",
+                        hint: "Durum Değiştir",
+                        icon: "clock",
                         onClick: function (e) {
-                            openEditModal(e.row.data);
+                            data = e.row.data;
+                            ActionChangeStatusCheckAuth(data);
                         }
                     }
 
@@ -212,4 +257,84 @@ function openEditModal(data) {
      
 
     $("#ActionDetail").modal("toggle");
+}
+
+function ActionChangeStatusCheckAuth(data) {
+    console.log(data);
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    if (data.actionStatus == "2" || data.actionStatus == "3") {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Tamamlanmış Veya İptal/Reddedilmiş Aksiyonların Durumları Değiştirilemez!',
+            'info'
+        );
+    }
+    else {
+        var id = new FormData();
+
+        id.append('id', data.responsibleID);
+
+        $.ajax({
+            url: "/Home/ChanceActionStatusCheckAuth",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Bu Kaydı Değiştirme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    ChangeActionStatusModal(data);
+                }
+            }
+        });
+    }
+}
+
+function ChangeActionStatusModal(data) {
+
+    $("#actionID").val(data.id);
+    $("#actionSelect").val(data.actionStatus);
+
+    $("#changeActionStatus").modal("toggle");
+}
+
+function ChanceActionStatus() {
+    var formData = new FormData();
+
+    formData.append("id", $("#actionID").val());
+    formData.append("actionStatus", $("#actionSelect").val());
+
+    console.log(formData);
+
+    $.ajax({
+        url: "/Home/ChangeActionStatus",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            $("#changeActionStatus").modal("hide");
+        },
+        error: function (e) {
+            console.log(e);
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
 }

@@ -92,8 +92,7 @@ function GetList() {
                 options: {
                     icon: "plus", text: "Yeni Talep Ekle", onClick: function (e) {
                         //$("#RequestCreateModal").dxPopup("instance").show();
-                        $('#RequestCreateModal').modal('toggle');
-
+                        AddRequestCheckAuth();
                     }
                 },
                 location: "after",
@@ -131,149 +130,6 @@ function GetList() {
         },
         
        
-
-
-        //modal yapılacak
-        //editing: {
-
-        //    mode: 'popup',
-        //    allowAdding: true,
-
-        //    popup: {
-        //        title: 'Yeni Talep Ekle',
-        //        showTitle: true,
-        //        width: 655,
-        //        height: 620,
-        //    },
-        //    form: {
-        //        items: [{
-        //            itemType: 'group',
-        //            colCount: 1,
-        //            colSpan: 2,
-        //            items: [
-        //                {
-        //                    dataField: "notificationTypeID",
-        //                    caption: "Bildirim Türü",
-        //                    alignment: 'center',
-        //                    lookup: {
-        //                        dataSource: DevExpress.data.AspNet.createStore({
-        //                            key: "Id",
-        //                            loadUrl: "/Request/GetNotificationType/",
-        //                            onBeforeSend: function (method, ajaxOptions) {
-        //                                ajaxOptions.xhrFields = { withCredentials: true, };
-        //                            },
-        //                        }),
-        //                        valueExpr: "value",
-        //                        displayExpr: "text",
-        //                    }
-        //                },
-        //                {
-        //                    dataField: "categoryID",
-        //                    caption: "Kategori",
-        //                    alignment: 'center',
-        //                    lookup: {
-        //                        dataSource: DevExpress.data.AspNet.createStore({
-        //                            key: "Id",
-        //                            loadUrl: "/Request/GetCategorySelect/",
-        //                            onBeforeSend: function (method, ajaxOptions) {
-        //                                ajaxOptions.xhrFields = { withCredentials: true, };
-        //                            },
-        //                        }),
-        //                        valueExpr: "value",
-        //                        displayExpr: "text",
-        //                    }
-        //                },
-        //                {
-        //                    dataField: "projectID",
-        //                    caption: "Proje",
-        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-        //                    lookup: {
-        //                        dataSource: DevExpress.data.AspNet.createStore({
-        //                            key: "Id",
-        //                            loadUrl: "/Request/GetProject/",
-        //                            onBeforeSend: function (method, ajaxOptions) {
-        //                                ajaxOptions.xhrFields = { withCredentials: true, };
-        //                            },
-        //                        }),
-        //                        valueExpr: "id",
-        //                        displayExpr: "name",
-        //                    },
-
-        //                },
-        //                {
-
-        //                    dataField: "moduleID",
-        //                    caption: "Modül/Süreç",
-        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-        //                    lookup: {
-        //                        dataSource: DevExpress.data.AspNet.createStore({
-        //                            key: "ID",
-        //                            loadUrl: "/Request/GetModuleList/",
-
-        //                            onBeforeSend: function (method, ajaxOptions) {
-        //                                console.log(ajaxOptions);
-        //                                ajaxOptions.xhrFields = { withCredentials: true, };
-
-        //                            },
-        //                        }),
-        //                        valueExpr: "id",
-        //                        displayExpr: "name",
-        //                    },
-        //                },
-        //                {
-        //                    dataField: "versionID",
-        //                    caption: "Versiyon",
-        //                    alignment: 'center',
-        //                    lookup: {
-        //                        dataSource: DevExpress.data.AspNet.createStore({
-        //                            key: "Id",
-        //                            loadUrl: "/Request/GetVersion/",
-        //                            onBeforeSend: function (method, ajaxOptions) {
-        //                                ajaxOptions.xhrFields = { withCredentials: true, };
-        //                            },
-        //                        }),
-        //                        valueExpr: "id",
-        //                        displayExpr: "name",
-        //                    }
-        //                },
-        //                {
-        //                    dataField: "requestSubject",
-        //                    caption: "Konu",
-        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-        //                },
-        //                {
-        //                    dataField: "description",
-        //                    caption: "Açıklama",
-        //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-        //                    editorType: "dxTextArea",
-        //                    editorOptions: {
-        //                        height: 80,
-        //                        width: 765
-        //                    }
-        //                },
-        //                {
-        //                    dataField: "pageURL",
-        //                    caption: "Sayfa Linki",
-        //                },
-        //                {
-        //                    itemType: 'button',
-        //                    horizontalAlignment: 'right',
-        //                    buttonOptions: {
-        //                        text: 'Resim Yapıştır',
-        //                        onClick: function (e) {
-        //                            openModal(e);
-
-        //                        }
-        //                    },
-        //                }
-
-        //            ],
-        //        }],
-
-        //    },
-
-        //},
-
         columns: [
             {
                 dataField: "id",
@@ -318,22 +174,7 @@ function GetList() {
                 },
 
             },
-            //{
-            //    dataField: "customerID",
-            //    caption: "Müşteri",
-            //    alignment: 'center',
-            //    lookup: {
-            //        dataSource: DevExpress.data.AspNet.createStore({
-            //            key: "Id",
-            //            loadUrl: "/Request/GetCustomer/",
-            //            onBeforeSend: function (method, ajaxOptions) {
-            //                ajaxOptions.xhrFields = { withCredentials: true, };
-            //            },
-            //        }),
-            //        valueExpr: "id",
-            //        displayExpr: "name",
-            //    }
-            //},
+         
             
             {
                 dataField: "notificationTypeID",
@@ -448,7 +289,7 @@ function GetList() {
                     }
                     else if (info.data.requestStatus == 2) {
                         $('<div>')
-                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Kapandı"))
+                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Kapandı"))
                             .appendTo(container);
                     }
                     else if (info.data.requestStatus == 3) {
@@ -533,11 +374,7 @@ function GetList() {
                         onInitialized: function (e) {
                             actionGridContainer = e.component;
                         },
-                        editing: {
-                            mode: 'row',
-                            allowUpdating: true,
-                            allowDeleting: true
-                        },
+                       
                         columns: [
                             {
                                 dataField: "ID",
@@ -669,15 +506,46 @@ function GetList() {
                                 caption: "Aksiyon Açan Kişi",
                                 alignment: 'center',
                                 allowEditing: false,
-                            }
+                            },
+                            {
+                                caption: "İşlemler",
+                                type: "buttons",
+                                fixed: true,
+                                fixedPosition: "right",
+                                buttons: [
+                                    {
+                                        hint: "Düzenle",
+                                        icon: "edit",
+
+                                        onClick: function (e) {
+                                            data = e.row.data;
+                                            EditActionCheckAuth(data);
+                                        }
+                                    },
+                                    {
+                                        hint: "Sil",
+                                        icon: "trash",
+                                        onClick: function (e) {
+                                            data = e.row.data;
+                                            DeleteActionCheckAuth(data);
+                                        }
+                                    },
+                                    {
+                                        hint: "Durum Değiştir",
+                                        icon: "clock",
+                                        onClick: function (e) {
+                                            data = e.row.data;
+                                            ActionChangeStatusCheckAuth(data);
+                                        }
+                                    },
+                                ]
+                            },
                         ],
                         dataSource: DevExpress.data.AspNet.createStore({
                             key: "ID",
                             loadUrl: "/Request/GetRequestDetail/",
                             loadParams: { ID: options.data.id },
-                            updateUrl: "/Request/EditActionItem/",
-                            insertUrl: "/Request/AddActionItem/",
-                            deleteUrl: "/Request/DeleteActionItem/",
+                          
                             onBeforeSend: function (method, ajaxoptions) {
                                 ajaxoptions.data.id = options.data.id;
                                 ajaxoptions.xhrFields = { withCredentials: true };
@@ -693,6 +561,14 @@ function GetList() {
 
 function closeRequestModal() {
     $('#RequestCreateModal').modal('hide');
+
+    $('#ProjectID').val(0);
+    $('#CategoryID').val(0);
+    $('#NotificationTypeID').val(-1);
+    $('#ModuleID').empty();
+    $('#VersionID').empty();
+    $('#clearModal input').val("");
+    $('#clearModal textarea').val("");
 }
 function SuccessRequestImage() {
     $('#m_modal_Image_Paste').modal('hide');
@@ -762,10 +638,11 @@ function SaveRequestModal() {
 
 
 
-function GetModuleList() {
+function GetSelectList() {
     var data = new FormData();
     data.append('ID', $('#ProjectID').val());
 
+    //module select list
     $.ajax({
         url: "/Request/GetModuleList",
         type: 'POST',
@@ -775,30 +652,65 @@ function GetModuleList() {
         contentType: false,
         success: function (data) {
             console.log(data);
+            $("#ModuleID").empty();
             if (!data || data === "1") {
                 return;
             }
-            $("#ModuleID").empty();
+            
             var object = JSON.parse(data);
-            var s = '<option value="-1">Lütfen Seçiniz</option>';
-            for (var i = 0; i < object.length; i++) {
-                s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+            if (object.length != 0) {
+                var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';
+                for (var i = 0; i < object.length; i++) {
+                    s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+                }
+
+                $("#ModuleID").html(s);
             }
 
-            $("#ModuleID").html(s);
+        }
+    });
+
+    //versiyon select list
+    $.ajax({
+        url: "/Request/GetVersionList",
+        type: 'POST',
+        async: false,
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            $("#VersionID").empty();
+
+            if (!data || data === "1") {
+                return;
+            }
+            var object = JSON.parse(data);
+            if (object.length != 0) {
+                var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';
+                for (var i = 0; i < object.length; i++) {
+                    s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+                }
+
+                $("#VersionID").html(s);
+            }
+
         }
     });
 }
-
 
 function showContextMenu(options, e) {
     var contextMenu = $("<div>")
         .dxContextMenu({
             dataSource: [
                 { text: "Aksiyon Ekle", icon: "plus" },
-                //{ text: "Talebin Durumunu Değiştir", icon: "overflow" },
+               
                 { text: "Düzenle", icon: "edit" },
-                { text: "Sil", icon: "remove" }
+                { text: "Sil", icon: "trash" },
+                {
+                    text: "Talebi Reddet",
+                    icon: "remove"
+                }
 
             ],
             onItemClick: function (item) {
@@ -821,64 +733,23 @@ function handleItemClick(item, options) {
 
     switch (items) {
         case "Aksiyon Ekle":
-            openPopup(ID);
+            AddActionCheckAuth(data);
+            break;
+        case "Talebi Reddet":
+
+            CancelRequestCheckAuth(data);
             break;
         case "Düzenle":
-            openEditModals(data, ID);
+            EditRequestCheckAuth(data, ID);
             break;
         case "Sil":
-            DeleteDialog(ID);
-            break;
-        //case "Talebin Durumunu Değiştir":
-        //    openRequestStatus(ID);
+            DeleteRequestCheckAuth(ID);
         default:
             break;
     }
 }
 
-function openRequestStatus(ID) {
-    $('#RequestChangeStatus').modal('toggle');
 
-    $("#ID").val(ID);
-
-    //$("#ID").val(ID);
-    //$("#RequestStatus").val(data.requestStatus);
-
-    //console.log(data.requestStatus);
-
-}
-function closeRequestStatus() {
-    $('#RequestChangeStatus').modal('hide');
-}
-
-function saveRequestStatus(ID) {
-    var data = new FormData();
-    
-    data.append("requestStatus", $("#RequestStatus").val());
-    data.append("ID", $("#ID").val());
-   
-
-    console.log(data);
-
-    $.ajax({
-        url: "/Request/RequestChangeStatusUpdate",
-        type: 'POST',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-
-            console.log(data);
-            location.reload();
-
-        },
-        error: function (e) {
-            console.log(e);
-        }
-    });
-
-}
 
 function openEditModals(data, ID) {
     console.log(data);
@@ -887,8 +758,7 @@ function openEditModals(data, ID) {
     $("#NotificationEditTypeID").val(data.notificationTypeID);
     $("#CategoryEditID").val(data.categoryID);
     $("#ProjectEditID").val(data.projectID);
-    $("#ModuleEditID").val(data.moduleID);
-    $("#VersionEditID").val(data.versionID);
+   
     $("#RequestEditSubject").val(data.requestSubject);
     $("#DescriptionEdit").val(data.description);
     $("#PageEditUrl").val(data.pageUrl);
@@ -902,7 +772,136 @@ function openEditModals(data, ID) {
     var imagePath = data.pictureURL ? "/Modernize/Img/RequestFiles/" + data.pictureURL : "/Modernize/Img/yok.png";
     $("#RequestImage").attr("src", imagePath);
 
+    var projectID = new FormData();
+
+    projectID.append('id', data.projectID);
+
+    //module select list
+    $.ajax({
+        url: "/Request/GetModuleList",
+        type: 'POST',
+        async: false,
+        data: projectID,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            if (!data || data === "1") {
+                return;
+            }
+            $("#ModuleEditID").empty();
+            var object = JSON.parse(data);
+            if (object.length != 0) {
+                /*            var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';*/
+                var s;
+                for (var i = 0; i < object.length; i++) {
+                    s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+                }
+
+                $("#ModuleEditID").html(s);
+            }
+
+        },
+        complete: function () {
+            $("#ModuleEditID").val(data.moduleID);
+        }
+    });
+
+    //versiyon select list
+    $.ajax({
+        url: "/Request/GetVersionList",
+        type: 'POST',
+        async: false,
+        data: projectID,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            if (!data || data === "1") {
+                return;
+            }
+            $("#VersionEditID").empty();
+            var object = JSON.parse(data);
+            if (object.length != 0) {
+                ///var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option > ';
+                var s;
+                for (var i = 0; i < object.length; i++) {
+                    s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+                }
+
+                $("#VersionEditID").html(s);
+            }
+
+        },
+        complete: function () {
+            $("#VersionEditID").val(data.versionID);
+        }
+    });
+
     $("#RequestEditModal").modal("toggle");
+
+}
+
+
+function GetSelectListEdit() {
+    var data = new FormData();
+    data.append('ID', $('#ProjectEditID').val());
+
+    //module select list
+    $.ajax({
+        url: "/Request/GetModuleList",
+        type: 'POST',
+        async: false,
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            $("#ModuleEditID").empty();
+            if (!data || data === "1") {
+                return;
+            }
+            var object = JSON.parse(data);
+            if (object.length != 0) {
+                var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';
+                for (var i = 0; i < object.length; i++) {
+                    s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+                }
+
+                $("#ModuleEditID").html(s);
+            }
+
+        }
+    });
+
+    //versiyon select list
+    $.ajax({
+        url: "/Request/GetVersionList",
+        type: 'POST',
+        async: false,
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            $("#VersionEditID").empty();
+            if (!data || data === "1") {
+                return;
+            }
+            var object = JSON.parse(data);
+            if (object.length != 0) {
+                var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';
+                for (var i = 0; i < object.length; i++) {
+                    s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+                }
+
+                $("#VersionEditID").html(s);
+            }
+
+        }
+    });
 }
 
 function SaveRequestEditModal() {
@@ -980,7 +979,8 @@ function openPopup(ID) {
             editorType: "dxDateBox",
             editorOptions: {
                 format: 'dd/MM/yyyy',
-                value: today
+                value: today,
+                min: new Date(),
             },
             label: {
                 text: "Aksiyon Başlangıç Tarihi"
@@ -995,7 +995,8 @@ function openPopup(ID) {
             editorType: "dxDateBox",
             editorOptions: {
                 format: 'dd/MM/yyyy',
-                value: today
+                value: today,
+                min: new Date(),
 
             }, 
             label: {
@@ -1320,4 +1321,626 @@ function copy(text) {
     } catch (err) {
         alert("Unable to copy text");
     }
+}
+
+function AddRequestCheckAuth() {
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    $.ajax({
+        url: '/Request/CheckAuthForAdd',
+        async: false,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (response) {
+
+            if (response != "1") {
+
+                swalWithBootstrapButtons(
+                    'Uyarı',
+                    'Talep Ekleme Yetkiniz Bulunmamaktadır!',
+                    'info'
+                );
+            }
+            else {
+                $('#RequestCreateModal').modal('toggle');
+            }
+        },
+    });
+}
+
+function EditRequestCheckAuth(data, ID) {
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+
+    //console.log(data);
+    if (data.requestStatus == 0) {
+        var id = new FormData();
+
+        id.append('id', ID);
+
+        $.ajax({
+            url: "/Request/CheckAuthForEditRequest",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Bu Kaydı Düzenleme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    openEditModals(data, ID);
+                }
+            }
+        });
+    }
+    else {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Yalnızca Açık Durumundaki Talepler Düzenlenebilir!',
+            'info'
+        );
+    }
+
+}
+
+function DeleteRequestCheckAuth(ID) {
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+
+    var id = new FormData();
+
+    id.append('id', ID);
+
+    $.ajax({
+        url: "/Request/CheckAuthForDeleteRequest",
+        type: 'POST',
+        async: false,
+        data: id,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            switch (response) {
+                case "1":
+                    DeleteDialog(ID);
+                    break;
+                case "2":
+                    DeleteRequestWithActions(ID);
+                    break;
+                case "3":
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Talebe Bağlı Devam Etmekte Olan Aksiyonlar Bulunmaktadır, Kayıt Silinemez!',
+                        'info'
+                    );
+                    break;
+                default:
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Bu Kaydı Silme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                    break;
+            }
+        }
+    });
+}
+
+function DeleteRequestWithActions(ID) {
+    //console.log(ID);
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false,
+    })
+
+    swalWithBootstrapButtons({
+        title: "Uyarı",
+        text: "Talebe Bağlı Aksiyonlar Bulunmaktadır, Tüm Bağlı Kayıtları Silme İşlemini Onaylıyor Musunuz?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Evet',
+        cancelButtonText: 'Hayır',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.value) {
+            var data = new FormData();
+
+            data.append('id', ID);
+
+            $.ajax({
+                url: "/Request/RequestDeleteWithActions/",
+                type: 'POST',
+                async: false,
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data);
+                    swalWithBootstrapButtons(
+                        'Bilgi',
+                        'Silme İşlemi Başarılı',
+                        'success'
+                    );
+                },
+                error: function (textStatus) {
+                    console.log('ERRORS:23 ');
+                },
+                complete: function () {
+                    location.reload();
+                }
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+            swalWithBootstrapButtons(
+                'Bilgi',
+                'Silme İşlemi İptal Edildi',
+                'info'
+            )
+        }
+    })
+}
+
+function CancelRequestCheckAuth(data) {
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    console.log(data.requestStatus);
+    if (data.requestStatus == "0") {
+        var id = new FormData();
+
+        id.append('id', data.id);
+
+        $.ajax({
+            url: "/Request/CancelRequestCheckAuth",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Talep Reddetme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    CancelRequest(data.id);
+                }
+            }
+        });
+    }
+    else {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Yalnızca Açık Durumundaki Talepler Reddedilebilir!',
+            'info'
+        );
+    }
+}
+
+function CancelRequest(ID) {
+    //console.log(ID);
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false,
+    })
+
+    swalWithBootstrapButtons({
+        title: "Uyarı",
+        text: "Talep Reddedilecek, İşlemi Onaylıyor Musunuz?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Evet',
+        cancelButtonText: 'Hayır',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.value) {
+            var data = new FormData();
+
+            data.append('id', ID);
+
+            $.ajax({
+                url: "/Request/CancelRequest/",
+                type: 'POST',
+                async: false,
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    if (data == "1") {
+                        swalWithBootstrapButtons(
+                            'Bilgi',
+                            'İşlem Başarılı',
+                            'success'
+                        )
+                    }
+                },
+                error: function (textStatus) {
+                    console.log('ERRORS:23 ');
+                },
+                complete: function () {
+                    location.reload();
+                }
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+            swalWithBootstrapButtons(
+                'Bilgi',
+                'İşlem İptal Edildi',
+                'info'
+            )
+        }
+    })
+}
+
+//ACTION
+
+function AddActionCheckAuth(data) {
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    if (data.requestStatus == "0" || data.requestStatus == "1") {
+        $.ajax({
+            url: '/Request/CheckAuthForAdd',
+            async: false,
+            processData: false,
+            contentType: false,
+            type: "POST",
+            success: function (response) {
+
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Aksiyon Ekleme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    openPopup(data.id);
+                }
+            },
+        });
+    }
+    else {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Tamamlanmış Veya Reddedilmiş Taleplere Aksiyon Açılamaz!',
+            'info'
+        );
+    }
+}
+
+function EditActionCheckAuth(data) {
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+
+    //console.log(data);
+
+    if (data.ActionStatus == "0") {
+        var id = new FormData();
+
+        id.append('id', data.ID);
+
+        $.ajax({
+            url: "/Request/CheckAuthForEditAction",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Bu Kaydı Düzenleme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    OpenActionEditModals(data);
+                }
+            }
+        });
+    }
+    else {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Tamamlanmış, Devam Etmekte Olan veya İptal Edilmiş Aksiyon Düzenlenemez!',
+            'info'
+        );
+    }
+
+
+}
+
+function OpenActionEditModals(data) {
+    //console.log(data);
+
+    $("#editActionID").val(data.ID);
+    $("#editActionActionDescription").val(data.ActionDescription);
+    $("#actionEditDescription").val(data.Description);
+    $("#actionEditActionPriority").val(data.ActionPriorityStatus);
+    $("#actionEditResponsible").val(data.ResponsibleID);
+
+    if (new Date(data.OpeningDate) < new Date()) {
+        let minDate = new Date();
+        var day = ("0" + minDate.getDate()).slice(-2);
+        var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
+        var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
+        $("#actionEditOpeningDate").val(fullDate);
+        $("#actionEditOpeningDate").attr('min', fullDate);
+    }
+    else {
+        let openingDate = new Date(data.OpeningDate);
+        var opDay = ("0" + openingDate.getDate()).slice(-2);
+        var opMonth = ("0" + (openingDate.getMonth() + 1)).slice(-2);
+        var opFullDate = openingDate.getFullYear() + "-" + (opMonth) + "-" + (opDay);
+        $("#actionEditOpeningDate").val(opFullDate);
+        $("#actionEditOpeningDate").attr('min', opFullDate);
+    }
+
+    if (new Date(data.EndDate) < new Date()) {
+        let minDate = new Date();
+        var day = ("0" + minDate.getDate()).slice(-2);
+        var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
+        var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
+        $("#actionEditEndDate").val(fullDate);
+        $("#actionEditEndDate").attr('min', fullDate);
+    }
+    else {
+        let endDate = new Date(data.EndDate);
+        var endDay = ("0" + endDate.getDate()).slice(-2);
+        var endMonth = ("0" + (endDate.getMonth() + 1)).slice(-2);
+        var endFullDate = endDate.getFullYear() + "-" + (endMonth) + "-" + (endDay);
+        $("#actionEditEndDate").val(endFullDate);
+        $("#actionEditEndDate").attr('min', endFullDate);
+    }
+
+
+    $("#EditAction").modal("toggle");
+}
+
+function SaveActionUpdate() {
+    var formData = new FormData();
+
+    formData.append("ID", $("#editActionID").val());
+    formData.append("actionDescription", $("#editActionActionDescription").val());
+    formData.append("description", $("#actionEditDescription").val());
+    formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
+    formData.append("openingDate", $("#actionEditOpeningDate").val());
+    formData.append("endDate", $("#actionEditEndDate").val());
+    formData.append("responsibleID", $("#actionEditResponsible").val());
+
+    console.log(formData);
+
+    $.ajax({
+        url: "/Request/ActionUpdate",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+
+            //console.log(data);
+            location.reload();
+
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+}
+
+function DeleteActionCheckAuth(data) {
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+
+    if (data.ActionStatus == "1") {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Devam Etmekte Olan Aksiyon Silinemez!',
+            'info'
+        );
+    }
+    else {
+        var id = new FormData();
+
+        id.append('id', data.ID);
+
+        $.ajax({
+            url: "/Request/CheckAuthForDeleteAction",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Kaydı Silme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    DeleteActionDialog(data.ID);
+                }
+            }
+        });
+    }
+}
+
+function DeleteActionDialog(ID) {
+    console.log(ID);
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false,
+    })
+
+    swalWithBootstrapButtons({
+        title: "Uyarı",
+        text: "Silme İşlemini Onaylıyor Musunuz?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Evet',
+        cancelButtonText: 'Hayır',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.value) {
+            var data = new FormData();
+
+            data.append('id', ID);
+
+            $.ajax({
+                url: "/Request/ActionDelete/",
+                type: 'POST',
+                async: false,
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    if (data == "1") {
+                        swalWithBootstrapButtons(
+                            'Bilgi',
+                            'Silme İşlemi Başarılı',
+                            'success'
+                        )
+                    }
+                },
+                error: function (textStatus) {
+                    console.log('ERRORS:23 ');
+                },
+                complete: function () {
+                    location.reload();
+                }
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+            swalWithBootstrapButtons(
+                'Bilgi',
+                'Silme İşlemi İptal Edildi',
+                'info'
+            )
+        }
+    })
+}
+
+function ActionChangeStatusCheckAuth(data) {
+    //console.log(data);
+
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false,
+    });
+    if (data.ActionStatus == "2" || data.ActionStatus == "3") {
+        swalWithBootstrapButtons(
+            'Uyarı',
+            'Tamamlanmış Veya İptal/Reddedilmiş Aksiyonların Durumları Değiştirilemez!',
+            'info'
+        );
+    }
+    else {
+        var id = new FormData();
+
+        id.append('id', data.ResponsibleID);
+
+        $.ajax({
+            url: "/Request/ChanceActionStatusCheckAuth",
+            type: 'POST',
+            async: false,
+            data: id,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+                if (response != "1") {
+
+                    swalWithBootstrapButtons(
+                        'Uyarı',
+                        'Bu Kaydı Değiştirme Yetkiniz Bulunmamaktadır!',
+                        'info'
+                    );
+                }
+                else {
+                    ChangeActionStatusModal(data);
+                }
+            }
+        });
+    }
+}
+
+function ChangeActionStatusModal(data) {
+
+    $("#actionID").val(data.ID);
+    $("#actionSelect").val(data.ActionStatus);
+
+    $("#changeActionStatus").modal("toggle");
+}
+
+function ChanceActionStatus() {
+    var formData = new FormData();
+
+    formData.append("id", $("#actionID").val());
+    formData.append("actionStatus", $("#actionSelect").val());
+
+    console.log(formData);
+
+    $.ajax({
+        url: "/Request/ChangeActionStatus",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+
+            console.log(data);
+            location.reload();
+
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
 }

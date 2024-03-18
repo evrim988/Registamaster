@@ -7,9 +7,12 @@ namespace RegistaMaster.Application.Repositories;
 
 public interface IUserRepository : IRepository
 {
-    public Task<string> AddUser(User user);
-    public void Delete(int id);
-    public Task<IQueryable<User>> GetList();
+    Task<string> AddUser(User user);
+    Task<IQueryable<User>> GetList();
     Task<List<ResponsibleDevextremeSelectListHelper>> GetResponsible();
     Task<UserDetailDto> UserDetails(int ID);
+    Task<string> UpdateUser(UserDetailDto user);
+    Task<string> DeleteUser(int ID);
+
+    Task<string> ChangeAuthorization(UserDetailDto user);
 }

@@ -123,7 +123,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label style="font-weight:bold;">Proje:<span class="text-danger">*</span></label>
-                            <select asp-for="ProjectID" onchange="GetModuleList()" asp-items="@Model.Project" id="ProjectID" class="form-control select2" name="ProjectID">
+                            <select asp-for="ProjectID" onchange="GetSelectList()" asp-items="@Model.Project" id="ProjectID" class="form-control select2" name="ProjectID">
                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                             </select>
                             <h1></h1>
@@ -131,14 +131,14 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label style="font-weight:bold;">Modül:<span class="text-danger">*</span></label>
-                            <select asp-for="ModuleID" asp-items="@Model.Module" id="ModuleID" class="form-control select2" name="ModuleID">
+                            <select asp-for="ModuleID"  id="ModuleID" class="form-control select2" name="ModuleID">
                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                             </select>
                             <h1></h1>
                         </div>
                         <div class="form-group col-md-6">
                             <label style="font-weight:bold;">Versiyon:<span class="text-danger">*</span></label>
-                            <select asp-for="VersionID" asp-items="@Model.Version" id="VersionID" class="form-control select2" name="VersionID">
+                            <select asp-for="VersionID"  id="VersionID" class="form-control select2" name="VersionID">
                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                             </select>
                             <h1></h1>
@@ -198,7 +198,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label style="font-weight:bold;">Proje:</label>
-                            <select asp-for="ProjectID" onchange="GetModuleList()" asp-items="@Model.Project" id="ProjectEditID" class="form-control select2" name="ProjectID">
+                            <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="ProjectEditID" class="form-control select2" name="ProjectID">
                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                             </select>
                             <h1></h1>
@@ -206,14 +206,14 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label style="font-weight:bold;">Modül:</label>
-                            <select asp-for="ModuleID" asp-items="@Model.Module" id="ModuleEditID" class="form-control select2" name="ModuleID">
+                            <select asp-for="ModuleID"  id="ModuleEditID" class="form-control select2" name="ModuleID">
                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                             </select>
                             <h1></h1>
                         </div>
                         <div class="form-group col-md-6">
                             <label style="font-weight:bold;">Versiyon:</label>
-                            <select asp-for="VersionID" asp-items="@Model.Version" id="VersionEditID" class="form-control select2" name="VersionID">
+                            <select asp-for="VersionID"  id="VersionEditID" class="form-control select2" name="VersionID">
                                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                             </select>
                             <h1></h1>
@@ -253,35 +253,56 @@
     </div>
 </div>
 
-@* Talebin Durumunu Değiştir *@
-<div class="modal fade" id="RequestChangeStatus" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="büyükModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
 
+<!--Edit Action Modal-->
+<div class="modal fade" id="EditAction" aria-labelledby="EditActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" id="clear">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="EditActionLabel">Aksiyon Düzenle</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <div class="form-group row">
-                        <label style="font-weight:bold;" class="col-md-2 col-form-label">Talep Durumu:<span class="text-danger"></span></label>
-                        <div class="col-md-9">
-                        <select asp-for="RequestStatus" id="RequestStatus" required asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.RequestStatus>()" class="form-control select2">
-                                <option selected="selected" value="-1">Lütfen Seçiniz</option>
-                            </select>
-                            <span asp-validation-for="RequestStatus" class="text-danger" />
+                <form>
+                    <div class="row">
+                        <input class="form-control" type="hidden" id="editActionID" />
+                        <div class="col-12">
+                            <label style="font-weight:bold;">Aksiyon Konusu</label>
+                            <input class="form-control" id="editActionActionDescription" />
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label style="font-weight:bold;">Aksiyon Açıklama</label>
+                            <textarea class="form-control" id="actionEditDescription" rows="2"></textarea>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label style="font-weight:bold;">Aksiyon Başlangıç Tarihi</label>
+                            <input class="form-control" type="date" id="actionEditOpeningDate" />
+                        </div>
+                        <div class="col-6 mt-2">
+                            <label style="font-weight:bold;">Aksiyon Bitiş Tarihi</label>
+                            <input class="form-control" type="date" id="actionEditEndDate" />
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label style="font-weight:bold;">Aksiyon Öncelik Durumu</label>
+                            <select class="form-select" asp-items="@Model.ActionPriorityStatus" id="actionEditActionPriority"></select>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label style="font-weight:bold;">Sorumlu Kişi</label>
+                            <select class="form-select" asp-items="@Model.Responsible" id="actionEditResponsible"></select>
                         </div>
                     </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="closeRequestStatus()" class="btn btn-secondary">Kapat</button>
-                    <button type="button" onclick="saveRequestStatus()" class="btn btn-primary">Kaydet</button>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+                <button type="button" onclick="SaveActionUpdate()" class="btn btn-primary">Kaydet</button>
             </div>
         </div>
     </div>
 </div>
 
-
-@* <div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--Change Action Status Modal-->
+<div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -289,19 +310,15 @@
             </div>
             <div class="modal-body">
                 <input hidden id="actionID" />
-                <input hidden id="requestSelect" />
-                <select asp-for="ActionStatus" required id="actionSelect" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control select2">
-                    <option selected="selected" value="-1">Lütfen Seçiniz</option>
-                </select>
+                <select id="actionSelect" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control select2"></select>
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="closeModal()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" onclick="saveModal()" class="btn btn-primary">Kaydet</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" onclick="ChanceActionStatus()" class="btn btn-primary">Kaydet</button>
             </div>
         </div>
     </div>
-</div> *@
-
+</div>
 
 @section Scripts
 {

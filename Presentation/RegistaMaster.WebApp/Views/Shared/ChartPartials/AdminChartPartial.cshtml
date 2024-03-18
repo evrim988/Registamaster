@@ -1,0 +1,283 @@
+﻿@using RegistaMaster.Domain.DTOModels.ChartModels;
+
+<div class="row" style="padding-top: 80px; padding-right: 40px; padding-left: 40px;">
+   <div class="col-12 mb-5">
+      <div class="row">
+         <div class="col-6">
+            <label>TÜM TALEPLER</label>
+            <div id="chartdiv2" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
+         </div>
+         <div class="col-6">
+            <label>TÜM AKSİYONLAR</label>
+            <div id="chartdiv3" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
+         </div>
+      </div>
+   </div>
+   <div class="col-12 mt-5 mb-5">
+      <label>KULLANICI AKSİYONLARI</label>
+      <div id="chartdiv" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
+   </div>
+</div>
+
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script>
+   am5.ready(function () {
+
+      var root1 = am5.Root.new("chartdiv");
+
+      var myTheme = am5.Theme.new(root1);
+
+      myTheme.rule("Grid", ["base"]).setAll({
+         strokeOpacity: 0.1
+      });
+
+      root1.setThemes([
+         am5themes_Animated.new(root1),
+         myTheme
+      ]);
+
+      var chart1 = root1.container.children.push(am5xy.XYChart.new(root1, {
+         panX: false,
+         panY: false,
+         wheelX: "panY",
+         wheelY: "zoomY",
+         paddingLeft: 0,
+         layout: root1.verticalLayout
+      }));
+
+      var data1;
+
+      $.ajax({
+         url: "/Home/GetDashboard/",
+         type: 'POST',
+         async: false,
+         cache: false,
+         processData: false,
+         contentType: false,
+         success: function (response) {
+            data1 = JSON.parse(response);
+         },
+         error: function (textStatus) {
+            console.log('ERRORS:23 ');
+         },
+      });
+
+      var yRenderer = am5xy.AxisRendererY.new(root1, {});
+      var yAxis = chart1.yAxes.push(am5xy.CategoryAxis.new(root1, {
+         categoryField: "UserFullName",
+         renderer: yRenderer,
+         tooltip: am5.Tooltip.new(root1, {})
+      }));
+
+      yRenderer.grid.template.setAll({
+         location: 1
+      })
+
+      yAxis.data.setAll(data1);
+
+      var xAxis = chart1.xAxes.push(am5xy.ValueAxis.new(root1, {
+         min: 0,
+         maxPrecision: 0,
+         renderer: am5xy.AxisRendererX.new(root1, {
+            minGridDistance: 40,
+            strokeOpacity: 0.1
+         })
+      }));
+
+      var legend = chart1.children.push(am5.Legend.new(root1, {
+         centerX: am5.p50,
+         x: am5.p50
+      }));
+
+      // function makeSeries(name, fieldName) {
+      //    var series = chart1.series.push(am5xy.ColumnSeries.new(root1, {
+      //       name: name,
+      //       stacked: true,
+      //       xAxis: xAxis,
+      //       yAxis: yAxis,
+      //       baseAxis: yAxis,
+      //       valueXField: fieldName,
+      //       categoryYField: "UserFullName"
+      //    }));
+
+      //    series.columns.template.setAll({
+      //       tooltipText: "{name}: {valueX}",
+      //       tooltipY: am5.percent(90)
+      //    });
+      //    series.data.setAll(data1);
+
+      //    series.appear();
+
+      //    series.bullets.push(function () {
+      //       return am5.Bullet.new(root1, {
+      //          sprite: am5.Label.new(root1, {
+      //             text: "{valueX}",
+      //             fill: root1.interfaceColors.get("alternativeText"),
+      //             centerY: am5.p50,
+      //             centerX: am5.p50,
+      //             populateText: true
+      //          })
+      //       });
+      //    });
+
+      //    legend.data.push(series);
+      // }
+ 
+
+      // makeSeries("Başlamadı", "NotStarted");
+      // makeSeries("Devam Eden", "Continued");
+      // makeSeries("Tamamlandı", "Completed");
+      // makeSeries("İptal/Reddedildi", "Cancel");
+
+      function makeSeries(name, fieldName, color) {
+         var series = chart1.series.push(am5xy.ColumnSeries.new(root1, {
+            name: name,
+            stacked: true,
+            xAxis: xAxis,
+            yAxis: yAxis,
+            baseAxis: yAxis,
+            valueXField: fieldName,
+            categoryYField: "UserFullName",
+            fill: color // Serinin rengini burada belirleyin
+         }));
+
+         series.columns.template.setAll({
+            tooltipText: "{name}: {valueX}",
+            tooltipY: am5.percent(90)
+         });
+         series.data.setAll(data1);
+
+         series.appear();
+
+         series.bullets.push(function () {
+            return am5.Bullet.new(root1, {
+               sprite: am5.Label.new(root1, {
+                  text: "{valueX}",
+                  fill: root1.interfaceColors.get(0x000000),
+                  centerY: am5.p50,
+                  centerX: am5.p50,
+                  populateText: true
+               })
+            });
+         });
+
+         legend.data.push(series);
+      }
+
+      // Seri renklerini belirleme
+      makeSeries("Başlamadı", "NotStarted", am5.color(0xffdfba));
+      makeSeries("Devam Eden", "Continued", am5.color(0xbae1ff));
+      makeSeries("Tamamlandı", "Completed", am5.color(0xbaffc9));
+      makeSeries("İptal/Reddedildi", "Cancel", am5.color(0xffb3ba));
+
+
+
+      chart1.appear(1000, 100);
+
+
+      //Talep Chart
+
+      var root2 = am5.Root.new("chartdiv2");
+
+      root2.setThemes([
+         am5themes_Animated.new(root2)
+      ]);
+
+      var chart2 = root2.container.children.push(
+         am5percent.PieChart.new(root2, {
+            layout: root2.verticalLayout
+         })
+      );
+
+      var data2 = ([{
+         reqstatus: "Açık",
+         value: @ViewBag.Chart.RequestOpen
+      }, {
+         reqstatus: "Başlandı",
+         value: @ViewBag.Chart.RequestStart
+      }, {
+         reqstatus: "Kapandı",
+         value: @ViewBag.Chart.RequestClosed
+      }, {
+         reqstatus: "İptal/Reddedildi",
+         value: @ViewBag.Chart.RequestCancel
+      }]);
+
+
+      var series2 = chart2.series.push(
+         am5percent.PieSeries.new(root2, {
+            name: "Series",
+            valueField: "value",
+            categoryField: "reqstatus",
+            legendLabelText: "{category}",
+            legendValueText: "{value}"
+         })
+      );
+      series2.slices.template.set('tooltipText', '{category}: {value}');
+      series2.labels.template.set('text', '{category}: {value}');
+      series2.get("colors").set("colors", [
+         am5.color(0xffdfba),
+         am5.color(0xbae1ff),
+         am5.color(0xbaffc9),
+         am5.color(0xffb3ba)
+      ]);
+      series2.data.setAll(data2);
+
+
+      //aksiyon chart
+
+      var root3 = am5.Root.new("chartdiv3");
+
+      root3.setThemes([
+         am5themes_Animated.new(root3)
+      ]);
+
+      var chart3 = root3.container.children.push(
+         am5percent.PieChart.new(root3, {
+            layout: root3.verticalLayout
+         })
+      );
+
+
+      var data3 = ([{
+         actionstatus: "Başlamadı",
+         value: @ViewBag.Chart.ActionNotStarted
+      }, {
+         actionstatus: "Devam Ediyor",
+         value: @ViewBag.Chart.ActionContinued
+      }, {
+         actionstatus: "Tamamlandı",
+         value: @ViewBag.Chart.ActionCompleted
+      }, {
+         actionstatus: "İptal/Reddedildi",
+         value: @ViewBag.Chart.ActionCancel
+      }]);
+
+
+      var series3 = chart3.series.push(
+         am5percent.PieSeries.new(root3, {
+            name: "Series",
+            valueField: "value",
+            categoryField: "actionstatus",
+            legendLabelText: "{category}",
+            legendValueText: "{value}"
+         })
+      );
+      series3.slices.template.set('tooltipText', '{category}: {value}');
+      series3.labels.template.set('text', '{category}: {value}');
+      series3.get("colors").set("colors", [
+         am5.color(0xffdfba),
+         am5.color(0xbae1ff),
+         am5.color(0xbaffc9),
+         am5.color(0xffb3ba)
+      ]);
+      series3.data.setAll(data3);
+
+   });
+</script>
+
+
+

@@ -107,7 +107,8 @@ public class SessionService : ISessionService
                 CustomerID = user.CustomerID,
                 ID = user.ID,
                 Name = user.Name,
-                Surname = user.Surname
+                Surname = user.Surname,
+                Authorization = user.AuthorizationStatus
             };
             SetSession("login", sesionmodel);
         }
