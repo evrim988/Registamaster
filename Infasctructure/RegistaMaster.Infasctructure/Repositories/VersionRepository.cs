@@ -1,7 +1,9 @@
 ﻿using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
+using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
+using Version = RegistaMaster.Domain.Entities.Version;
 
 namespace RegistaMaster.Infasctructure.Repositories;
 
@@ -24,7 +26,7 @@ public class VersionRepository : Repository, IVersionRepository
             await _uow.Repository.Add(model);
             model.Date = DateTime.Now;
             await _uow.SaveChanges();
-            return "";
+            return "1";
         }
         catch (Exception ex)
         {
@@ -32,29 +34,25 @@ public class VersionRepository : Repository, IVersionRepository
         }
     }
 
-    public Task<string> AddVersion(Version model)
-    {
-        throw new NotImplementedException();
-    }
 
     public string DeleteVersion(int ID)
     {
-        var version = GetNonDeletedAndActive<Domain.Entities.Version>(t => t.ID == ID);
+        var version = GetNonDeletedAndActive<Version>(t => t.ID == ID);
         DeleteRange(version.ToList());
-        Delete<Domain.Entities.Version>(ID);
-        return "";
+        Delete<Version>(ID);
+        return "1";
     }
 
-    public async Task<IQueryable<Domain.Entities.Version>> GetList()
+    public async Task<IQueryable<Version>> GetList()
     {
-        var model = GetNonDeletedAndActive<Domain.Entities.Version>(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active);
+        var model = GetNonDeletedAndActive<Version>(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active);
         return model;
     }
 
-    public async Task<string> UpdateVersion(Domain.Entities.Version model)
+    public async Task<string> UpdateVersion(Version model)
     {
         Update(model);
         await _uow.SaveChanges();
-        return "";
+        return "1";
     }
 }

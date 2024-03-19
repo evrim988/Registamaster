@@ -1,7 +1,9 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.ModuleModel;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 
 namespace RegistaMaster.Infasctructure.Repositories
@@ -24,7 +26,7 @@ namespace RegistaMaster.Infasctructure.Repositories
             {
                 await _unitOfWork.Repository.Add(model);
                 await _unitOfWork.SaveChanges();
-                return "";
+                return "1";
             }
             catch (Exception ex)
             {
@@ -36,13 +38,26 @@ namespace RegistaMaster.Infasctructure.Repositories
             var module = GetNonDeletedAndActive<Module>(t => t.ID == ID);
             DeleteRange(module.ToList());
             Delete<Module>(ID);
-            return "";
+            return "1";
         }
 
-        public async Task<IQueryable<Module>> GetModule()
+        public async Task<IQueryable<ModuleDTO>> GetModule()
         {
-            var model = GetNonDeletedAndActive<Module>(t => true);
-            return model;
+            try
+            {
+                return GetNonDeletedAndActive<Module>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ModuleDTO()
+                {
+                    Key = s.Key,
+                    Name = s.Name,
+                    Description = s.Description
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+          
+          
         }
 
         public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
@@ -75,7 +90,7 @@ namespace RegistaMaster.Infasctructure.Repositories
             {
                 Update(model);
                 await _unitOfWork.SaveChanges();
-                return "";
+                return "1";
             }
             catch (Exception ex)
             {

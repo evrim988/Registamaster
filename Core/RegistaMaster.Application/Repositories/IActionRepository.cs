@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
+using Action = RegistaMaster.Domain.Entities.Action;
 
 namespace RegistaMaster.Application.Repositories;
 
@@ -8,9 +9,9 @@ public interface IActionRepository : IRepository
 {
     IQueryable<ActionDTO> GetList();
 
-    public Task<string> AddActions(Domain.Entities.Action model);
+    public Task<string> AddActions(Action model);
 
-    public Task<string> ActionsUpdate(Domain.Entities.Action model);
+    public Task<string> ActionsUpdate(Action model);
 
     public string Delete(int ID);
 

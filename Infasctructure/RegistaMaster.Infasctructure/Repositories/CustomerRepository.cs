@@ -1,6 +1,8 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.CustomerModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 
 namespace RegistaMaster.Infasctructure.Repositories;
@@ -24,7 +26,7 @@ public class CustomerRepository : Repository, ICustomerRepository
         {
             await uow.Repository.Add(model);
             await uow.SaveChanges();
-            return "";
+            return "1";
         }
         catch (Exception e)
         {
@@ -42,16 +44,24 @@ public class CustomerRepository : Repository, ICustomerRepository
         Delete<Customer>(id);
     }
 
-    //public Task<IQueryable<Customer>> GetById(int id)
-    //{
-    //    var model = GetNonDeletedAndActive<Customer>(t => t.IsDeleted == false);
-    //    return model;
-    //}
+  
 
-    public async Task<IQueryable<Customer>> GetList()
+    public async Task<IQueryable<CustomerDTO>> GetList()
     {
-        var model = GetNonDeletedAndActive<Customer>(t => true);
-        return model;
+        try
+        {
+            return GetNonDeletedAndActive<Customer>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new CustomerDTO()
+            {
+                Adress = s.Address,
+                Email = s.Email,
+                Name = s.Name,
+            });
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        
     }
 
     public async Task<string> Update(Customer model)
@@ -59,6 +69,6 @@ public class CustomerRepository : Repository, ICustomerRepository
         Update(model);
 
         await uow.SaveChanges();
-        return "";
+        return "1";
     }
 }

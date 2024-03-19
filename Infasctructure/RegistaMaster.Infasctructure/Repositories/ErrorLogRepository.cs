@@ -32,12 +32,13 @@ namespace RegistaMaster.Infasctructure.Repositories
                 model.ErrorDate = DateTime.Now;
                 await _uow.Repository.Add(model);
                 await _uow.SaveChanges();
+                return "1";
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return "";
+           
         }
 
         public IQueryable<ErrorLogDTO> GetList()

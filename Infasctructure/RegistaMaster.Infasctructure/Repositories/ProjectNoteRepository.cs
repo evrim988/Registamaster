@@ -1,7 +1,9 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 
 namespace RegistaMaster.Infasctructure.Repositories;
@@ -26,7 +28,7 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
             model.AddUserNote = session.FullName;
             model.Date = DateTime.Now;
             await uow.SaveChanges();
-            return "";
+            return "1";
         }
         catch (Exception e)
         {
@@ -42,16 +44,29 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
         Delete<ProjectNote>(id);
     }
 
-    public async Task<IQueryable<ProjectNote>> GetList()
+    public async Task<IQueryable<ProjectNoteDTO>> GetList()
     {
-        var model = GetNonDeletedAndActive<ProjectNote>(t => true);
-        return model;
+        try
+        {
+            return GetNonDeletedAndActive<ProjectNote>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ProjectNoteDTO()
+            {
+                Date = s.Date,
+                Description = s.Description,
+                NoteType = s.NoteType,
+                AddUserNote = s.AddUserNote
+            });
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        
     }
     public async Task<string> Update(Project model)
     {
         Update(model);
         await uow.SaveChanges();
-        return "";
+        return "1";
     }
     public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
     {

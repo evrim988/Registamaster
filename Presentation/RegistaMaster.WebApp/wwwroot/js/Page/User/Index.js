@@ -6,11 +6,9 @@
 function GetList() {
     var grid = $(userGridContainer).dxDataGrid({
         dataSource: DevExpress.data.AspNet.createStore({
-            key: "id",
+            keyExpr: "id",
             loadUrl: "/User/GetList",
-            //insertUrl: "/User/AddUser",
-            //updateUrl: "/User/UserEdit",
-            //deleteUrl: "/User/DeleteUser",
+            
             onBeforeSend: function (method, ajaxOptions) {
                 ajaxOptions.xhrFields = { withCredentials: true };
             }

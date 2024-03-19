@@ -32,17 +32,12 @@ function GetList() {
             key: "id",
             loadUrl: "/Request/GetList",
             insertUrl: "/Request/RequestAdd",
-            //updateUrl: "/Request/RequestEdit",
-            //deleteUrl: "/Request/RequestDelete/",
+          
             onBeforeSend: function (method, ajaxOptions) {
                 ajaxOptions.xhrFields = { withCredentials: true };
             }
         }),
-        //editing: {
-        //    mode: 'row',
-        //    allowUpdating: true,
-        //    allowDeleting: true,
-        //},
+        
         onCellPrepared(e) {
             if (e.rowType == "header") {
                 e.cellElement.css("text-align", "center");
@@ -91,7 +86,6 @@ function GetList() {
                 widget: "dxButton",
                 options: {
                     icon: "plus", text: "Yeni Talep Ekle", onClick: function (e) {
-                        //$("#RequestCreateModal").dxPopup("instance").show();
                         AddRequestCheckAuth();
                     }
                 },

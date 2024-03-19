@@ -121,6 +121,7 @@ public class Repository : IRepository
     public T Update<T>(T _object) where T : BaseEntitiy
     {
         _object.LastModifiedOn = DateTime.Now;
+        _object.LastModifiedBy = session.FullName;
         GetTable<T>().Update(_object);
         return _object;
     }
