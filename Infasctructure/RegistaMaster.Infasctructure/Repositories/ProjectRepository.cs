@@ -1,6 +1,8 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.ProjectModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 
 namespace RegistaMaster.Infasctructure.Repositories;
@@ -22,7 +24,7 @@ public class ProjectRepository : Repository, IProjectRepository
         {
             await uow.Repository.Add(model);
             await uow.SaveChanges();
-            return "";
+            return "1";
         }
         catch (Exception e)
         {
@@ -39,10 +41,21 @@ public class ProjectRepository : Repository, IProjectRepository
         Delete<Project>(id);
     }
 
-    public async Task<IQueryable<Project>> GetList()
+    public async Task<IQueryable<ProjectDTO>> GetList()
     {
-        var model = GetNonDeletedAndActive<Project>(t => true);
-        return model;
+        try
+        {
+            return GetNonDeletedAndActive<Project>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ProjectDTO()
+            {
+                ProjectName = s.ProjectName,
+                ProjectDescription = s.ProjectDescription
+            });
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
     }
 
     public ProjectSessionModel GetProjectKey(string key)
@@ -67,7 +80,7 @@ public class ProjectRepository : Repository, IProjectRepository
     {
         Update(model);
         await uow.SaveChanges();
-        return "";
+        return "1";
     }
 }
 

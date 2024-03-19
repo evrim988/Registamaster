@@ -32,17 +32,12 @@ function GetList() {
             key: "id",
             loadUrl: "/Request/GetList",
             insertUrl: "/Request/RequestAdd",
-            //updateUrl: "/Request/RequestEdit",
-            //deleteUrl: "/Request/RequestDelete/",
+          
             onBeforeSend: function (method, ajaxOptions) {
                 ajaxOptions.xhrFields = { withCredentials: true };
             }
         }),
-        //editing: {
-        //    mode: 'row',
-        //    allowUpdating: true,
-        //    allowDeleting: true,
-        //},
+        
         onCellPrepared(e) {
             if (e.rowType == "header") {
                 e.cellElement.css("text-align", "center");
@@ -92,9 +87,9 @@ function GetList() {
              toolbarItems.push({
                 widget: "dxButton",
                 options: {
-                   icon: "plus", text: "Yeni Talep Ekle", onClick: function (e) {
-                      $('#RequestCreateModal').modal('toggle');
-                   }
+                    icon: "plus", text: "Yeni Talep Ekle", onClick: function (e) {
+                        AddRequestCheckAuth();
+                    }
                 },
                 location: "after",
 
@@ -166,7 +161,6 @@ function GetList() {
                         key: "ID",
                         loadUrl: "/Request/GetModules/",
                         onBeforeSend: function (method, ajaxOptions) {
-                            //console.log(ajaxOptions);
                             ajaxOptions.xhrFields = { withCredentials: true, };
                         },
                     }),
@@ -244,7 +238,6 @@ function GetList() {
                 caption: "Görüntü",
                 alignment: 'center',
                 cellTemplate(container, options) {
-                    //console.log(options.data);
                     if (options.data.pictureURL === null) {
                         $('<div>')
                             .append($('<img>', { src: '/Modernize/Img/yok.png', class: "rounded-circle", width: "35", height: "35" }))

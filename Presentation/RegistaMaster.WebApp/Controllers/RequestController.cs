@@ -189,36 +189,6 @@ public class RequestController : Controller
         return JsonConvert.SerializeObject(actionList);
     }
 
-    public async Task<IActionResult> RequestAdd(string values)//
-    {
-        try
-        {
-            var model = JsonConvert.DeserializeObject<Request>(values);
-            await uow.RequestRepository.RequestAdd(model);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-
-            throw e;
-        }
-    }
-    public async Task<string> RequestEdit(int Key, string values)//
-    {
-        try
-        {
-            var size = await uow.Repository.GetById<Request>(Key);
-            JsonConvert.PopulateObject(values, size);
-            uow.RequestRepository.Update(size);
-            await uow.SaveChanges();
-
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
     [HttpPost]
     public async Task<string> RequestDelete(int ID)
     {
@@ -259,14 +229,7 @@ public class RequestController : Controller
 
     }
 
-    [HttpPut]
-    public async Task<IActionResult> EditActionItem(int key, string values)//
-    {
-        var model = await uow.Repository.GetById<Action>(key);
-        JsonConvert.PopulateObject(values, model);
-        await uow.ActionRepository.ActionsUpdate(model);
-        return Ok();
-    }
+  
 
     public async Task<string> DeleteActionItem(int key)
     {
@@ -282,19 +245,7 @@ public class RequestController : Controller
         }
     }
 
-    public async Task<IActionResult> GetCategoryStatus()//
-    {
-        try
-        {
-            var models = uow.Repository.GetEnumSelect<CategoryStatus>();
-            var resultJson = JsonConvert.SerializeObject(models);
-            return Content(resultJson, "application/json");
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
+  
 
     public async Task<IActionResult> GetRequestStatus()
     {
@@ -358,19 +309,7 @@ public class RequestController : Controller
     {
         return await uow.RequestRepository.CategorySelectList();
     }
-    [HttpPost]
-    public async Task<string> ActionStatusChangeUpdate(int ID, ActionStatus actionStatus)//
-    {
-        try
-        {
-            var model = await uow.RequestRepository.ActionStatusChangeUpdate(ID, actionStatus);
-            return model;
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
-    }
+   
     public async Task<string> GetModuleList(int ID)
     {
         try
@@ -401,24 +340,7 @@ public class RequestController : Controller
         }
     }
 
-    [HttpPost]
-    public async Task<string> RequestChangeStatusUpdate(int requestStatus, int ID)//
-    {
-        try
-        {
-            var model = await uow.Repository.GetById<Request>(ID);
-            model.RequestStatus = (RequestStatus)requestStatus;
-            model.PlanedEndDate = DateTime.Now;
-            context.Update(model);
-            await uow.SaveChanges();
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-
+   
     public async Task<string> CheckActionsForDeleteRequest(int ID)
     {
       //Talebe bağlı aksiyon kontrolü

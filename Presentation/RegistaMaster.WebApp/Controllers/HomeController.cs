@@ -41,16 +41,7 @@ public class HomeController : Controller
                 ViewBag.Chart = await _uow.HomeRepository.DeveloperChart(_session.ID);
                 break;
         }
-        //var action = _uow.Repository.GetNonDeletedAndActive<Action>(t => t.ObjectStatus == ObjectStatus.NonDeleted);
-        //var model = new ActionDTO();
-        //foreach (var item in action)
-        //{
-        //    model.ActionDescription = item.ActionDescription;
-        //    model.Description = item.Description;
-        //    model.OpeningDate = item.OpeningDate;
-        //    model.EndDate = item.EndDate;
-        //    model.LastModifiedBy = item.LastModifiedBy;
-        //}
+       
         return View();
     }
     public async Task<string> GetDashboard()
@@ -66,16 +57,9 @@ public class HomeController : Controller
         }
     }
 
-    [Auth]
-    public async Task<object> GetTaskHome(DataSourceLoadOptions options)
-    {
-        var models = await _uow.HomeRepository.GetTaskHome();
-        return DataSourceLoader.Load(models, options);
-    }
 
     public async Task<object> GetActionHome(DataSourceLoadOptions options)
     {
-        //var models = await _uow.HomeRepository.GetActionHome();
         var models = await _uow.HomeRepository.GetActionDtoHome();
         foreach (var item in models)
         {

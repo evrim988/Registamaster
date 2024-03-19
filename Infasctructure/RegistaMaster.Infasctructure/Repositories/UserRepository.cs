@@ -71,10 +71,24 @@ public class UserRepository : Repository, IUserRepository
             throw ex;
         }
     }
-    public async Task<IQueryable<User>> GetList()
+    public async Task<IQueryable<UserDTO>> GetList()
     {
-        var model = GetNonDeletedAndActive<User>(t => true);
-        return model;
+        try
+        {
+            return GetNonDeletedAndActive<User>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new UserDTO()
+            {
+                AuthorizationStatus = s.AuthorizationStatus,
+                Name = s.Name,
+                Surname = s.Surname,
+                Email = s.Email,
+                Password = s.Password,
+            });
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+       
     }
 
     public async Task<List<ResponsibleDevextremeSelectListHelper>> GetResponsible()

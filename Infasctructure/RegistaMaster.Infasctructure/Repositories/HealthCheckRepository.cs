@@ -47,7 +47,7 @@ namespace RegistaMaster.Infasctructure.Repositories
                 model.RequestDate = DateTime.Now;
                 await _uow.Repository.Add(model);
                 await _uow.SaveChanges();
-                return "";
+                return "1";
             }
             catch (Exception ex)
             {

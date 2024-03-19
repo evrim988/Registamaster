@@ -8,6 +8,7 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Reflection;
+using Task = System.Threading.Tasks.Task;
 
 namespace RegistaMaster.Infasctructure.Repositories;
 
@@ -36,7 +37,7 @@ public class Repository : IRepository
             throw e;
         }
     }
-    public async System.Threading.Tasks.Task UpdateRange<T>(ICollection<T> _objectList) where T : BaseEntitiy
+    public async Task UpdateRange<T>(ICollection<T> _objectList) where T : BaseEntitiy
     {
         try
         {
@@ -121,6 +122,7 @@ public class Repository : IRepository
     public T Update<T>(T _object) where T : BaseEntitiy
     {
         _object.LastModifiedOn = DateTime.Now;
+        _object.LastModifiedBy = session.FullName;
         GetTable<T>().Update(_object);
         return _object;
     }

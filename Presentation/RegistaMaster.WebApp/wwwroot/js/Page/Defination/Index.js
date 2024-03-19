@@ -6,7 +6,7 @@
 function GetModules() {
     var grid = $(modulesGridContainer).dxDataGrid({
         dataSource: DevExpress.data.AspNet.createStore({
-            key: "id",
+            keyExpr: "id",
             loadUrl: "/Defination/GetModules",
             insertUrl: "/Defination/AddModules",
             updateUrl: "/Defination/ModuleUpdate",
