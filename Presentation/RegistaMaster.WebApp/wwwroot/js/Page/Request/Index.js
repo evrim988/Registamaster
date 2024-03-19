@@ -657,6 +657,11 @@ function GetList() {
 
     }).dxDataGrid("instance");
 
+    //kullanıcı developer ise talepler işlemler kolonunu kapat
+   var auth = $("#auth").val();
+   if (auth == 2) {
+      grid.columnOption("İşlemler", "visible", false);
+   }
 }
 
 function closeRequestModal() {

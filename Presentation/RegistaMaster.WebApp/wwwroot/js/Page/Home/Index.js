@@ -256,6 +256,11 @@ function GetList() {
 
    }).dxDataGrid("instance");
 
+   var auth = $("#auth").val();
+   if (auth == 0) {
+      grid.columnOption("İşlemler", "visible", false);
+      grid.columnOption("createdBy", "visible", false);
+   }
 }
 
 function openEditModal(data) {
