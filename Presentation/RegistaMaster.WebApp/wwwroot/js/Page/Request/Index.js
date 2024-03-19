@@ -161,7 +161,6 @@ function GetList() {
                         key: "ID",
                         loadUrl: "/Request/GetModules/",
                         onBeforeSend: function (method, ajaxOptions) {
-                            //console.log(ajaxOptions);
                             ajaxOptions.xhrFields = { withCredentials: true, };
                         },
                     }),
@@ -239,7 +238,6 @@ function GetList() {
                 caption: "Görüntü",
                 alignment: 'center',
                 cellTemplate(container, options) {
-                    //console.log(options.data);
                     if (options.data.pictureURL === null) {
                         $('<div>')
                             .append($('<img>', { src: '/Modernize/Img/yok.png', class: "rounded-circle", width: "35", height: "35" }))

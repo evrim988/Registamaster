@@ -57,54 +57,7 @@ public class ActionController : Controller
         }
     }
    
-    public async Task<IActionResult> AddAction(string values)//
-    {
-        try
-        {
-            var model = JsonConvert.DeserializeObject<Action>(values);
-            await _uow.ActionRepository.AddActions(model);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
-    }
    
-    public async Task<string> ActionUpdate(int key, string values)//
-    {
-        try
-        {
-            var model = await _uow.Repository.GetById<Action>(key);
-            JsonConvert.PopulateObject(values, model);
-            await _uow.ActionRepository.ActionsUpdate(model);
-            await _uow.SaveChanges();
-            return "";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-   
-    public async Task<object> DeleteAction(int key)//
-    {
-        try
-        {
-            await _uow.Repository.Delete<Action>(key);
-            await _uow.SaveChanges();
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-    public async Task<IActionResult> Detail(int ID)//
-    {
-        var actionDetail = await _uow.ActionRepository.GetAction(ID);
-        return View(actionDetail);
-    }
     public async Task<IActionResult> GetActionStatus()
     {
         try

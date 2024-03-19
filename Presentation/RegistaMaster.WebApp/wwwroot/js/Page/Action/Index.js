@@ -10,9 +10,7 @@ function GetList() {
       dataSource: DevExpress.data.AspNet.createStore({
          key: "id",
          loadUrl: "/Action/GetList",
-         insertUrl: "/Action/AddAction",
-         updateUrl: "/Action/ActionUpdate",
-         deleteUrl: "/Action/DeleteAction",
+        
          onBeforeSend: function (method, ajaxOptions) {
             ajaxOptions.xhrFields = { withCredentials: true };
          }
@@ -76,78 +74,7 @@ function GetList() {
          allowUpdating: true,
          allowDeleting: true,
       },
-      //editing: {
-      //    mode: 'popup',
-      //    allowUpdating: true,
-      //    allowDeleting: true,
-      //    allowAdding: true,
-      //    popup: {
-      //        title: 'Yeni Aksiyon Ekle',
-      //        text: "Yeni Aksiyon Ekle",
-      //        showTitle: true,
-      //        width: 500,
-      //        height: 325,
-      //    },
-      //    form: {
-      //        items: [{
-      //            itemType: 'group',
-      //            colCount: 2,
-      //            colSpan: 2,
-      //            items: [
-      //                {
-      //                    dataField: "actionDescription",
-      //                    caption: "Aksiyon Açıklaması",
-      //                },
-      //                {
-      //                    dataField: "ResponsibleID",
-      //                    caption: "Sorumlu",
-      //                    lookup: {
-      //                        dataSource: DevExpress.data.AspNet.createStore({
-      //                            key: "ID",
-      //                            loadUrl: "/Action/GetResponsible/",
-      //                            onBeforeSend: function (method, ajaxOptions) {
-      //                                ajaxOptions.xhrFields = { withCredentials: true };
-      //                            }
-      //                        }),
-      //                        valueExpr: "Id",
-      //                        displayExpr: "name"
-      //                    }
-      //                },
-      //                {
-      //                    dataField: "openingDate",
-      //                    caption: "Açılma Tarihi",
-      //                    dataType: 'date',
-      //                    format: 'dd/MM/yyyy',
-      //                },
-      //                {
-      //                    dataField: "endDate",
-      //                    caption: "Açılma Tarihi",
-      //                    dataType: 'date',
-      //                    format: 'dd/MM/yyyy',
-      //                },
-      //                {
-      //                    dataField: "description",
-      //                    caption: "Açıklama",
-      //                },
-      //                {
-      //                    dataField: "actionStatus",
-      //                    caption: "Durum",
-      //                    lookup: {
-      //                        dataSource: DevExpress.data.AspNet.createStore({
-      //                            key: "Id",
-      //                            loadUrl: "/Action/GetActionStatus",
-      //                            onBeforeSend: function (method, ajaxoptions) {
-      //                                ajaxoptions.xhrFields = { withCredentials: true };
-      //                            },
-      //                        }),
-      //                        valueExpr: "Id",
-      //                        displayExpr: "Text"
-      //                    }
-      //                }
-      //            ]
-      //        }],
-      //    }
-      //},
+      
       onContentReady: function (e) {
 
          var $refreshButton = $('<div id="refreshButton">').dxButton({

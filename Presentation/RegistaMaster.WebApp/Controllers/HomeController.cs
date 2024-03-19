@@ -60,7 +60,6 @@ public class HomeController : Controller
 
     public async Task<object> GetActionHome(DataSourceLoadOptions options)
     {
-        //var models = await _uow.HomeRepository.GetActionHome();
         var models = await _uow.HomeRepository.GetActionDtoHome();
         foreach (var item in models)
         {

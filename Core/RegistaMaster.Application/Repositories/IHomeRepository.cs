@@ -8,7 +8,6 @@ namespace RegistaMaster.Application.Repositories;
 
 public interface IHomeRepository : IRepository
 {
-    public Task<IQueryable<Action>> GetActionHome();
     public Task<List<ActionDTO>> GetActionDtoHome();
     public Task<ChartDTO> AdminChart();
     public Task<List<UserChartDTO>> AdminChartUserActions();

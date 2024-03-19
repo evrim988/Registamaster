@@ -6,11 +6,9 @@
 function GetList() {
    var grid = $(userGridContainer).dxDataGrid({
       dataSource: DevExpress.data.AspNet.createStore({
-         key: "id",
+         keyExpr: "id",
          loadUrl: "/User/GetList",
-         //insertUrl: "/User/AddUser",
-         //updateUrl: "/User/UserEdit",
-         //deleteUrl: "/User/DeleteUser",
+         
          onBeforeSend: function (method, ajaxOptions) {
             ajaxOptions.xhrFields = { withCredentials: true };
          }
@@ -25,7 +23,7 @@ function GetList() {
       },
       onToolbarPreparing: function (e) {
             var auth = $("#auth").val();
-            //console.log(auth);
+            
          if (auth == 0) {
             let toolbarItems = e.toolbarOptions.items;
             toolbarItems.push({
@@ -81,65 +79,7 @@ function GetList() {
       loadPanel: {
          enabled: true,
       },
-      //editing: {
-      //    mode: 'row',
-      //    allowUpdating: true,
-      //    allowDeleting: true,
-      //},
-
-      //editing: {
-      //    mode: 'popup',
-      //    allowUpdating: true,
-      //    allowDeleting: true,
-      //    allowAdding: true,
-      //    popup: {
-      //        title: 'Yeni Kullanıcı Ekle',
-      //        showTitle: true,
-      //        width: 500,
-      //        height: 325,
-      //    },
-      //    form: {
-      //        items: [{
-      //            itemType: 'group',
-      //            colCount: 2,
-      //            colSpan: 2,
-      //            items: [
-      //                {
-      //                    dataField: "name",
-      //                    caption: "Ad",
-      //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-
-      //                },
-      //                {
-      //                    dataField: "surname",
-      //                    caption: "Soyad",
-      //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-
-      //                },
-      //                {
-      //                    dataField: "username",
-      //                    caption: "Kullanıcı Adı",
-      //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-
-      //                },
-      //                {
-      //                    dataField: "password",
-      //                    caption: "Şifre",
-      //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-
-      //                },
-      //                {
-      //                    dataField: "email",
-      //                    caption: "Email",
-      //                    validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-
-      //                },
-      //            ],
-      //        }],
-
-      //    },
-
-      //},
+    
       onContentReady: function (e) {
 
          var $refreshButton = $('<div id="refreshButton">').dxButton({
@@ -165,28 +105,7 @@ function GetList() {
                .prepend($filterButton);
       },
       columns: [
-         //{
-         //    dataField: 'Image',
-         //    caption: "Fotoğraf",
-         //    allowExporting: false,
-         //    width: 100,
-         //    allowFiltering: false,
-         //    allowEditing: false,
-         //    allowSorting: false,
-         //    cellTemplate(container, options) {
-         //        if (options.data.UserImageURL === null) {
-         //            $('<div>')
-         //                .append($('<img>', { src: '/Modernize/Img/yok.png', class: "rounded-circle", width: "35", height: "35" }))
-         //                .appendTo(container);
-         //        }
-         //        else {
-         //            $('<div>')
-         //                .append($('<img>', { src: '/Modernize/Img/ProfilePhotos/' + options.value, class: "rounded-circle", width: "35", height: "35" }))
-         //                .appendTo(container);
-         //        }
-         //    },
-
-         //},
+       
          {
             dataField: "name",
             caption: "Adı",

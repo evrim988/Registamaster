@@ -22,20 +22,6 @@ public class HomeRepository : Repository, IHomeRepository
     }
 
 
-    public async Task<IQueryable<Action>> GetActionHome()
-    {
-        try
-        {
-            var model = GetNonDeletedAndActive((Action t) => t.ResponsibleID == session.ID || t.LastModifiedBy == session.Name);
-
-            return model;
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-
     public async Task<List<ActionDTO>> GetActionDtoHome()
     {
         try
