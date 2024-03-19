@@ -83,7 +83,7 @@ public class UserRepository : Repository, IUserRepository
         {
             List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
             var model = context.Users
-                .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
+                .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.AuthorizationStatus != AuthorizationStatus.Admin);
             foreach (var item in model)
             {
                 ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
@@ -101,7 +101,27 @@ public class UserRepository : Repository, IUserRepository
         }
     }
 
-    public async Task<UserDetailDto> UserDetails(int ID)
+   public async Task<List<UserCreatedByDTO>> GetCreatedBy()
+   {
+      try
+      {
+         var users = GetNonDeletedAndActive<User>(t => true).Select(u => new UserCreatedByDTO()
+         {
+            ID = u.ID,
+            Name = u.Name,
+            Surname = u.Surname
+         }).ToList();
+
+         return users;
+      }
+      catch (Exception e)
+      {
+         throw e;
+      }
+   }
+
+
+   public async Task<UserDetailDto> UserDetails(int ID)
     {
        return GetNonDeletedAndActive<User>(t => t.ID == ID).Select(s=>new UserDetailDto
        {

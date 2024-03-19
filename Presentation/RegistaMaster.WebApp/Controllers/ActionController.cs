@@ -14,11 +14,9 @@ namespace RegistaMaster.WebApp.Controllers;
 public class ActionController : Controller
 {
     private readonly IUnitOfWork _uow;
-    private readonly SessionModel session;
     public ActionController(IUnitOfWork uow)
     {
         _uow = uow;
-        session = uow.GetSession();
     }
 
     public async Task<IActionResult> Index()
@@ -58,8 +56,8 @@ public class ActionController : Controller
             throw e;
         }
     }
-
-    public async Task<IActionResult> AddAction(string values)
+   
+    public async Task<IActionResult> AddAction(string values)//
     {
         try
         {
@@ -72,8 +70,8 @@ public class ActionController : Controller
             throw e;
         }
     }
-
-    public async Task<string> ActionUpdate(int key, string values)
+   
+    public async Task<string> ActionUpdate(int key, string values)//
     {
         try
         {
@@ -88,8 +86,8 @@ public class ActionController : Controller
             throw ex;
         }
     }
-
-    public async Task<object> DeleteAction(int key)
+   
+    public async Task<object> DeleteAction(int key)//
     {
         try
         {
@@ -102,7 +100,7 @@ public class ActionController : Controller
             throw ex;
         }
     }
-    public async Task<IActionResult> Detail(int ID)
+    public async Task<IActionResult> Detail(int ID)//
     {
         var actionDetail = await _uow.ActionRepository.GetAction(ID);
         return View(actionDetail);
@@ -147,8 +145,19 @@ public class ActionController : Controller
             throw ex;
         }
     }
-
-    public async Task<object> GetRequest(DataSourceLoadOptions loadOptions)
+   public async Task<object> GetCreatedBy(DataSourceLoadOptions loadOptions)
+   {
+      try
+      {
+         var model = await _uow.UserRepository.GetCreatedBy();
+         return DataSourceLoader.Load(model, loadOptions);
+      }
+      catch (Exception ex)
+      {
+         throw ex;
+      }
+   }
+   public async Task<object> GetRequest(DataSourceLoadOptions loadOptions)
     {
         try
         {
@@ -161,16 +170,6 @@ public class ActionController : Controller
         }
     }
 
-    [HttpPost]
-    public async Task<string> CheckAuthForEditAction(int ID)
-    {
-        var action = await _uow.Repository.GetById<Action>(ID);
-
-        if (session.ID == action.CreatedBy || session.Authorization == AuthorizationStatus.Admin)
-            return "1";
-
-        return "";
-    }
 
     [HttpPost]
     public async Task<string> ActionUpdate(ActionDTO model)
@@ -195,16 +194,7 @@ public class ActionController : Controller
 
     }
 
-    [HttpPost]
-    public async Task<string> CheckAuthForDeleteAction(int ID)
-    {
-        var action = await _uow.Repository.GetById<Action>(ID);
-        if (session.ID == action.CreatedBy || session.Authorization == AuthorizationStatus.Admin)
-            return "1";
-
-        return "";
-    }
-
+  
     [HttpPost]
     public async Task<string> ActionDelete(int ID)
     {
@@ -221,14 +211,6 @@ public class ActionController : Controller
         }
     }
 
-    [HttpPost]
-    public string ChanceActionStatusCheckAuth(int ID)
-    {
-        if (session.ID == ID)
-            return "1";
-
-        return "";
-    }
 
     [HttpPost]
     public async Task<string> ChangeActionStatus(ActionPageDTO model)

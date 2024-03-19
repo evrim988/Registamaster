@@ -1,650 +1,546 @@
 ﻿$(document).ready(function () {
-    DevExpress.localization.locale('tr');
-    GetList();
+   DevExpress.localization.locale('tr');
+   GetList();
 });
 function gridRefresh() {
-    $("#actionGridContainer").dxDataGrid("instance").refresh();
+   $("#actionGridContainer").dxDataGrid("instance").refresh();
 }
 function GetList() {
-    var grid = $(actionGridContainer).dxDataGrid({
-        dataSource: DevExpress.data.AspNet.createStore({
-            key: "id",
-            loadUrl: "/Action/GetList",
-            insertUrl: "/Action/AddAction",
-            updateUrl: "/Action/ActionUpdate",
-            deleteUrl: "/Action/DeleteAction",
-            onBeforeSend: function (method, ajaxOptions) {
-                ajaxOptions.xhrFields = { withCredentials: true };
+   var grid = $(actionGridContainer).dxDataGrid({
+      dataSource: DevExpress.data.AspNet.createStore({
+         key: "id",
+         loadUrl: "/Action/GetList",
+         insertUrl: "/Action/AddAction",
+         updateUrl: "/Action/ActionUpdate",
+         deleteUrl: "/Action/DeleteAction",
+         onBeforeSend: function (method, ajaxOptions) {
+            ajaxOptions.xhrFields = { withCredentials: true };
+         }
+      }),
+      onCellPrepared(e) {
+         if (e.rowType == "header") {
+            e.cellElement.css("text-align", "center");
+         }
+      },
+      onRowPrepared: function (e) {
+         if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+
+         if (e.data != undefined) {
+            if (e.data.color === "clsRed") {
+               //console.log("red");
+               e.rowElement.css('background-color', "#fb6969");
             }
-        }),
-        onCellPrepared(e) {
-            if (e.rowType == "header") {
-                e.cellElement.css("text-align", "center");
+         };
+      },
+      //rowAlternationEnabled: true,
+      columnAutoWidth: true,
+      remoteOperations: true,
+      allowColumnReordering: true,
+      showBorders: true,
+      allowColumnResizing: true,
+      columnResizingMode: 'widget',
+      grouping: {
+         contextMenuEnabled: true
+      },
+      groupPanel: {
+         visible: true   // or "auto"
+      },
+      headerFilter: {
+         visible: true,
+      },
+      paging: { enabled: true },
+      height: "100%",
+      pager: {
+         visible: true,
+         allowedPageSizes: [10, 20, 50],
+         showPageSizeSelector: true,
+         showInfo: true,
+         showNavigationButtons: true,
+      },
+      searchPanel: {
+         visible: true,
+         width: 240,
+         placeholder: 'Ara...',
+      },
+      onEditingStart: function (e) {
+         title = e.data.Date;
+      },
+      onInitNewRow: function (e) {
+         title = "";
+      },
+      loadPanel: {
+         enabled: true,
+      },
+      editing: {
+         mode: 'popup',
+         allowUpdating: true,
+         allowDeleting: true,
+      },
+      //editing: {
+      //    mode: 'popup',
+      //    allowUpdating: true,
+      //    allowDeleting: true,
+      //    allowAdding: true,
+      //    popup: {
+      //        title: 'Yeni Aksiyon Ekle',
+      //        text: "Yeni Aksiyon Ekle",
+      //        showTitle: true,
+      //        width: 500,
+      //        height: 325,
+      //    },
+      //    form: {
+      //        items: [{
+      //            itemType: 'group',
+      //            colCount: 2,
+      //            colSpan: 2,
+      //            items: [
+      //                {
+      //                    dataField: "actionDescription",
+      //                    caption: "Aksiyon Açıklaması",
+      //                },
+      //                {
+      //                    dataField: "ResponsibleID",
+      //                    caption: "Sorumlu",
+      //                    lookup: {
+      //                        dataSource: DevExpress.data.AspNet.createStore({
+      //                            key: "ID",
+      //                            loadUrl: "/Action/GetResponsible/",
+      //                            onBeforeSend: function (method, ajaxOptions) {
+      //                                ajaxOptions.xhrFields = { withCredentials: true };
+      //                            }
+      //                        }),
+      //                        valueExpr: "Id",
+      //                        displayExpr: "name"
+      //                    }
+      //                },
+      //                {
+      //                    dataField: "openingDate",
+      //                    caption: "Açılma Tarihi",
+      //                    dataType: 'date',
+      //                    format: 'dd/MM/yyyy',
+      //                },
+      //                {
+      //                    dataField: "endDate",
+      //                    caption: "Açılma Tarihi",
+      //                    dataType: 'date',
+      //                    format: 'dd/MM/yyyy',
+      //                },
+      //                {
+      //                    dataField: "description",
+      //                    caption: "Açıklama",
+      //                },
+      //                {
+      //                    dataField: "actionStatus",
+      //                    caption: "Durum",
+      //                    lookup: {
+      //                        dataSource: DevExpress.data.AspNet.createStore({
+      //                            key: "Id",
+      //                            loadUrl: "/Action/GetActionStatus",
+      //                            onBeforeSend: function (method, ajaxoptions) {
+      //                                ajaxoptions.xhrFields = { withCredentials: true };
+      //                            },
+      //                        }),
+      //                        valueExpr: "Id",
+      //                        displayExpr: "Text"
+      //                    }
+      //                }
+      //            ]
+      //        }],
+      //    }
+      //},
+      onContentReady: function (e) {
+
+         var $refreshButton = $('<div id="refreshButton">').dxButton({
+            icon: 'refresh',
+            onClick: function () {
+               grid.refresh();
             }
-        },
-        onRowPrepared: function (e) {
-            if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+         });
+         if (e.element.find('#refreshButton').length == 0)
+            e.element
+               .find('.dx-toolbar-after')
+               .prepend($refreshButton);
 
-            if (e.data != undefined) {
-                if (e.data.color === "clsRed") {
-                    //console.log("red");
-                    e.rowElement.css('background-color', "#fb6969");
-                }
-            };
-        },
-        //rowAlternationEnabled: true,
-        columnAutoWidth: true,
-        remoteOperations: true,
-        allowColumnReordering: true,
-        showBorders: true,
-        allowColumnResizing: true,
-        columnResizingMode: 'widget',
-        grouping: {
-            contextMenuEnabled: true
-        },
-        groupPanel: {
-            visible: true   // or "auto"
-        },
-        headerFilter: {
-            visible: true,
-        },
-        paging: { enabled: true },
-        height: "100%",
-        pager: {
-            visible: true,
-            allowedPageSizes: [10, 20, 50],
-            showPageSizeSelector: true,
-            showInfo: true,
-            showNavigationButtons: true,
-        },
-        searchPanel: {
-            visible: true,
-            width: 240,
-            placeholder: 'Ara...',
-        },
-        onEditingStart: function (e) {
-            title = e.data.Date;
-        },
-        onInitNewRow: function (e) {
-            title = "";
-        },
-        loadPanel: {
-            enabled: true,
-        },
-        editing: {
-            mode: 'popup',
-            allowUpdating: true,
-            allowDeleting: true,
-        },
-        //editing: {
-        //    mode: 'popup',
-        //    allowUpdating: true,
-        //    allowDeleting: true,
-        //    allowAdding: true,
-        //    popup: {
-        //        title: 'Yeni Aksiyon Ekle',
-        //        text: "Yeni Aksiyon Ekle",
-        //        showTitle: true,
-        //        width: 500,
-        //        height: 325,
-        //    },
-        //    form: {
-        //        items: [{
-        //            itemType: 'group',
-        //            colCount: 2,
-        //            colSpan: 2,
-        //            items: [
-        //                {
-        //                    dataField: "actionDescription",
-        //                    caption: "Aksiyon Açıklaması",
-        //                },
-        //                {
-        //                    dataField: "ResponsibleID",
-        //                    caption: "Sorumlu",
-        //                    lookup: {
-        //                        dataSource: DevExpress.data.AspNet.createStore({
-        //                            key: "ID",
-        //                            loadUrl: "/Action/GetResponsible/",
-        //                            onBeforeSend: function (method, ajaxOptions) {
-        //                                ajaxOptions.xhrFields = { withCredentials: true };
-        //                            }
-        //                        }),
-        //                        valueExpr: "Id",
-        //                        displayExpr: "name"
-        //                    }
-        //                },
-        //                {
-        //                    dataField: "openingDate",
-        //                    caption: "Açılma Tarihi",
-        //                    dataType: 'date',
-        //                    format: 'dd/MM/yyyy',
-        //                },
-        //                {
-        //                    dataField: "endDate",
-        //                    caption: "Açılma Tarihi",
-        //                    dataType: 'date',
-        //                    format: 'dd/MM/yyyy',
-        //                },
-        //                {
-        //                    dataField: "description",
-        //                    caption: "Açıklama",
-        //                },
-        //                {
-        //                    dataField: "actionStatus",
-        //                    caption: "Durum",
-        //                    lookup: {
-        //                        dataSource: DevExpress.data.AspNet.createStore({
-        //                            key: "Id",
-        //                            loadUrl: "/Action/GetActionStatus",
-        //                            onBeforeSend: function (method, ajaxoptions) {
-        //                                ajaxoptions.xhrFields = { withCredentials: true };
-        //                            },
-        //                        }),
-        //                        valueExpr: "Id",
-        //                        displayExpr: "Text"
-        //                    }
-        //                }
-        //            ]
-        //        }],
-        //    }
-        //},
-        onContentReady: function (e) {
-
-            var $refreshButton = $('<div id="refreshButton">').dxButton({
-                icon: 'refresh',
-                onClick: function () {
-                    grid.refresh();
-                }
-            });
-            if (e.element.find('#refreshButton').length == 0)
-                e.element
-                    .find('.dx-toolbar-after')
-                    .prepend($refreshButton);
-
-            var $filterButton = $('<div id="filterButton">').dxButton({
-                icon: 'clearformat',
-                onClick: function () {
-                    grid.clearFilter();
-                }
-            });
-            if (e.element.find('#filterButton').length == 0)
-                e.element
-                    .find('.dx-toolbar-after')
-                    .prepend($filterButton);
+         var $filterButton = $('<div id="filterButton">').dxButton({
+            icon: 'clearformat',
+            onClick: function () {
+               grid.clearFilter();
+            }
+         });
+         if (e.element.find('#filterButton').length == 0)
+            e.element
+               .find('.dx-toolbar-after')
+               .prepend($filterButton);
 
 
-        },
+      },
 
-        columns: [
-            {
-                dataField: "id",
-                caption: "Aksiyon No",
-                alignment: 'center',
-                visible: false
-            },
-            {
-                dataField: "requestID",
-                caption: "Talep",
-                alignment: 'center',
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        loadUrl: "/Action/GetRequest/",
-                    }),
-                    valueExpr: "id",
-                    displayExpr: "name"
-                }
-            },
-            {
-                dataField: "actionDescription",
-                caption: "Aksiyon Konusu",
-                alignment: 'left',
-            },
-            {
-                dataField: "description",
-                caption: "Açıklama",
-                alignment: 'left',
-            },
-            {
-                dataField: "responsibleID",
-                caption: "Sorumlu",
-                alignment: 'center',
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        loadUrl: "/Action/GetResponsible/",
-                    }),
-                    valueExpr: "id",
-                    displayExpr: "name"
-                }
-            },
-            {
-                dataField: "openingDate",
-                caption: "Açılma Tarihi",
-                alignment: 'center',
-                dataType: 'date',
-                format: 'dd/MM/yyyy',
-            },
-            {
-                dataField: "endDate",
-                caption: "Son Tarih",
-                alignment: 'left',
-                dataType: 'date',
-                format: 'dd/MM/yyyy',
-            },
-            {
-                dataField: "actionPriorityStatus",
-                caption: "Öncelik",
-                alignment: 'center',
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
-                        loadUrl: "/Action/GetPriortyActionStatus",
+      columns: [
+         {
+            dataField: "id",
+            caption: "Aksiyon No",
+            alignment: 'center',
+            visible: false
+         },
+         {
+            dataField: "requestID",
+            caption: "Talep",
+            alignment: 'center',
+            lookup: {
+               dataSource: DevExpress.data.AspNet.createStore({
+                  loadUrl: "/Action/GetRequest/",
+               }),
+               valueExpr: "id",
+               displayExpr: "name"
+            }
+         },
+         {
+            dataField: "actionDescription",
+            caption: "Aksiyon Konusu",
+            alignment: 'left',
+         },
+         {
+            dataField: "description",
+            caption: "Açıklama",
+            alignment: 'left',
+         },
+         {
+            dataField: "createdBy",
+            caption: "Aksiyon Açan Kişi",
+            alignment: 'center',
+            lookup: {
+               dataSource: DevExpress.data.AspNet.createStore({
+                  loadUrl: "/Action/GetCreatedBy/",
+               }),
+               valueExpr: "id",
+               displayExpr: "fullname"
+            }
+         },
+         {
+            dataField: "responsibleID",
+            caption: "Sorumlu",
+            alignment: 'center',
+            lookup: {
+               dataSource: DevExpress.data.AspNet.createStore({
+                  loadUrl: "/Action/GetResponsible/",
+               }),
+               valueExpr: "id",
+               displayExpr: "name"
+            }
+         },
+         {
+            dataField: "openingDate",
+            caption: "Açılma Tarihi",
+            alignment: 'center',
+            dataType: 'date',
+            format: 'dd/MM/yyyy',
+         },
+         {
+            dataField: "endDate",
+            caption: "Son Tarih",
+            alignment: 'left',
+            dataType: 'date',
+            format: 'dd/MM/yyyy',
+         },
+         {
+            dataField: "actionPriorityStatus",
+            caption: "Öncelik",
+            alignment: 'center',
+            lookup: {
+               dataSource: DevExpress.data.AspNet.createStore({
+                  key: "Id",
+                  loadUrl: "/Action/GetPriortyActionStatus",
 
-                    }),
-                    valueExpr: "Id",
-                    displayExpr: "Text"
-                },
-                cellTemplate: function (container, info) {
-                    if (info.data.actionPriorityStatus == 0) {
-                        $('<div>')
-                            .append($('<a>', { class: "btn btn-sm btn-primary", }).append("Öncelik Belirtilmedi"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionPriorityStatus == 1) {
-                        $('<div>')
-                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("1"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionPriorityStatus == 2) {
-                        $('<div>')
-                            .append($('<a>', { class: "btn btn-sm btn-secondary", }).append("2"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionPriorityStatus == 3) {
-                        $('<div>')
-                            .append($('<a>', { class: "btn btn-sm btn-warning", }).append("3"))
-                            .appendTo(container);
-                    }
-                }
+               }),
+               valueExpr: "Id",
+               displayExpr: "Text"
             },
-            {
-                dataField: "actionStatus",
-                caption: "Durum",
-                alignment: 'center',
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
-                        loadUrl: "/Action/GetActionStatus",
-                        onBeforeSend: function (method, ajaxoptions) {
-                            ajaxoptions.xhrFields = { withCredentials: true };
-                        },
-                    }),
-                    valueExpr: "Id",
-                    displayExpr: "Text"
-                },
-                cellTemplate: function (container, info) {
-                    if (info.data.actionStatus == 0) {
-                        $('<div id="NotStarted">')
-                            .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionStatus == 1) {
-                        $('<div id="Start">')
-                            .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionStatus == 2) {
-                        $('<div id="Contiuned">')
-                            .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
-                            .appendTo(container);
-                    }
-                    else if (info.data.actionStatus == 3) {
-                        $('<div id="Completed" >')
-                            .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Iptal/Reddedildi"))
-                            .appendTo(container);
-                    }
-                }
+            cellTemplate: function (container, info) {
+               if (info.data.actionPriorityStatus == 0) {
+                  $('<div>')
+                     .append($('<a>', { class: "btn btn-sm btn-primary", }).append("Öncelik Belirtilmedi"))
+                     .appendTo(container);
+               }
+               else if (info.data.actionPriorityStatus == 1) {
+                  $('<div>')
+                     .append($('<a>', { class: "btn btn-sm btn-dark", }).append("1"))
+                     .appendTo(container);
+               }
+               else if (info.data.actionPriorityStatus == 2) {
+                  $('<div>')
+                     .append($('<a>', { class: "btn btn-sm btn-secondary", }).append("2"))
+                     .appendTo(container);
+               }
+               else if (info.data.actionPriorityStatus == 3) {
+                  $('<div>')
+                     .append($('<a>', { class: "btn btn-sm btn-warning", }).append("3"))
+                     .appendTo(container);
+               }
+            }
+         },
+         {
+            dataField: "actionStatus",
+            caption: "Durum",
+            alignment: 'center',
+            lookup: {
+               dataSource: DevExpress.data.AspNet.createStore({
+                  key: "Id",
+                  loadUrl: "/Action/GetActionStatus",
+                  onBeforeSend: function (method, ajaxoptions) {
+                     ajaxoptions.xhrFields = { withCredentials: true };
+                  },
+               }),
+               valueExpr: "Id",
+               displayExpr: "Text"
             },
-            {
-                caption: "İşlemler",
-                type: "buttons",
-                fixed: true,
-                fixedPosition: "right",
-                buttons: [
-                    {
-                        hint: "Düzenle",
-                        icon: "edit",
+            cellTemplate: function (container, info) {
+               if (info.data.actionStatus == 0) {
+                  $('<div id="NotStarted">')
+                     .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+                     .appendTo(container);
+               }
+               else if (info.data.actionStatus == 1) {
+                  $('<div id="Start">')
+                     .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                     .appendTo(container);
+               }
+               else if (info.data.actionStatus == 2) {
+                  $('<div id="Contiuned">')
+                     .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
+                     .appendTo(container);
+               }
+               else if (info.data.actionStatus == 3) {
+                  $('<div id="Completed" >')
+                     .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Iptal/Reddedildi"))
+                     .appendTo(container);
+               }
+            }
+         },
+         {
+            caption: "İşlemler",
+            type: "buttons",
+            fixed: true,
+            fixedPosition: "right",
+            buttons: [
+               {
+                  hint: "Düzenle",
+                  icon: "edit",
+                  visible: function (e) {
+                     var userID = $("#userID").val();
+                     var auth = $("#auth").val();
+                     if (e.row.data.actionStatus == 0 && (e.row.data.createdBy == userID || auth == 0)) //yalnızca başlanmamış aksiyonları aksiyonu açan veya admin düzenleyebilir
+                        return true;
+                  },
+                  onClick: function (e) {
+                     data = e.row.data;
+                     OpenActionEditModals(data);
+                  }
+               },
+               {
+                  hint: "Sil",
+                  icon: "trash",
+                  visible: function (e) {
+                     var userID = $("#userID").val();
+                     var auth = $("#auth").val();
+                     if (e.row.data.actionStatus != 1 && (e.row.data.createdBy == userID || auth == 0)) { //devam etmeyen aksiyonları aksiyonu açan kişi veya admin silebilir
+                        return true;
+                     }
+                  },
+                  onClick: function (e) {
+                     DeleteActionDialog(e.row.data.id);
+                  }
+               },
+               {
+                  hint: "Durum Değiştir",
+                  icon: "clock",
+                  visible: function (e) {
+                     var userID = $("#userID").val();
+                     if ((e.row.data.actionStatus == 0 || e.row.data.actionStatus == 1) && e.row.data.responsibleID == userID)   //aksiyon durumu aksiyon başlanmamış veya devam ediyorsa sorumlu kişi tarafından değiştirilebilir
+                        return true;
+                  },
+                  onClick: function (e) {
+                     data = e.row.data;
+                     ChangeActionStatusModal(data);
+                  }
+               },
+            ]
+         },
+      ]
 
-                        onClick: function (e) {
-                            data = e.row.data;
-                            EditActionCheckAuth(data);
-                        }
-                    },
-                    {
-                        hint: "Sil",
-                        icon: "trash",
-                        onClick: function (e) {
-                            data = e.row.data;
-                            DeleteActionCheckAuth(data);
-                        }
-                    },
-                    {
-                        hint: "Durum Değiştir",
-                        icon: "clock",
-                        onClick: function (e) {
-                            data = e.row.data;
-                            ActionChangeStatusCheckAuth(data);
-                        }
-                    },
-                ]
-            },
-        ]
-
-    }).dxDataGrid("instance");
+   }).dxDataGrid("instance");
 }
 
-function EditActionCheckAuth(data) {
-
-    const swalWithBootstrapButtons = swal.mixin({
-        confirmButtonClass: 'btn btn-success',
-        buttonsStyling: false,
-    });
-    console.log(data);
-
-    if (data.actionStatus == "0") {
-        var id = new FormData();
-
-        id.append('id', data.id);
-
-        $.ajax({
-            url: "/Action/CheckAuthForEditAction",
-            type: 'POST',
-            async: false,
-            data: id,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response != "1") {
-
-                    swalWithBootstrapButtons(
-                        'Uyarı',
-                        'Bu Kaydı Düzenleme Yetkiniz Bulunmamaktadır!',
-                        'info'
-                    );
-                }
-                else {
-                    OpenActionEditModals(data);
-                }
-            }
-        });
-    }
-    else {
-        swalWithBootstrapButtons(
-            'Uyarı',
-            'Tamamlanmış, Devam Etmekte Olan veya İptal Edilmiş Aksiyon Düzenlenemez!',
-            'info'
-        );
-    }
-
-}
-
+//aksiyon güncelle modal
 function OpenActionEditModals(data) {
-    console.log(data);
+   console.log(data);
 
-    $("#editActionID").val(data.id);
-    $("#editActionActionDescription").val(data.actionDescription);
-    $("#actionEditDescription").val(data.description);
-    $("#actionEditActionPriority").val(data.actionPriorityStatus);
-    $("#actionEditResponsible").val(data.responsibleID);
+   $("#editActionID").val(data.id);
+   $("#editActionActionDescription").val(data.actionDescription);
+   $("#actionEditDescription").val(data.description);
+   $("#actionEditActionPriority").val(data.actionPriorityStatus);
+   $("#actionEditResponsible").val(data.responsibleID);
 
-    if (new Date(data.openingDate) < new Date()) {
-        let minDate = new Date();
-        var day = ("0" + minDate.getDate()).slice(-2);
-        var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
-        var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
-        $("#actionEditOpeningDate").val(fullDate);
-        $("#actionEditOpeningDate").attr('min', fullDate);
-    }
-    else {
-        let openingDate = new Date(data.openingDate);
-        var opDay = ("0" + openingDate.getDate()).slice(-2);
-        var opMonth = ("0" + (openingDate.getMonth() + 1)).slice(-2);
-        var opFullDate = openingDate.getFullYear() + "-" + (opMonth) + "-" + (opDay);
-        $("#actionEditOpeningDate").val(opFullDate);
-        $("#actionEditOpeningDate").attr('min', opFullDate);
-    }
+   if (new Date(data.openingDate) < new Date()) {
+      let minDate = new Date();
+      var day = ("0" + minDate.getDate()).slice(-2);
+      var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
+      var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
+      $("#actionEditOpeningDate").val(fullDate);
+      $("#actionEditOpeningDate").attr('min', fullDate);
+   }
+   else {
+      let openingDate = new Date(data.openingDate);
+      var opDay = ("0" + openingDate.getDate()).slice(-2);
+      var opMonth = ("0" + (openingDate.getMonth() + 1)).slice(-2);
+      var opFullDate = openingDate.getFullYear() + "-" + (opMonth) + "-" + (opDay);
+      $("#actionEditOpeningDate").val(opFullDate);
+      $("#actionEditOpeningDate").attr('min', opFullDate);
+   }
 
-    if (new Date(data.endDate) < new Date()) {
-        let minDate = new Date();
-        var day = ("0" + minDate.getDate()).slice(-2);
-        var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
-        var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
-        $("#actionEditEndDate").val(fullDate);
-        $("#actionEditEndDate").attr('min', fullDate);
-    }
-    else {
-        let endDate = new Date(data.endDate);
-        var endDay = ("0" + endDate.getDate()).slice(-2);
-        var endMonth = ("0" + (endDate.getMonth() + 1)).slice(-2);
-        var endFullDate = endDate.getFullYear() + "-" + (endMonth) + "-" + (endDay);
-        $("#actionEditEndDate").val(endFullDate);
-        $("#actionEditEndDate").attr('min', endFullDate);
-    }
+   if (new Date(data.endDate) < new Date()) {
+      let minDate = new Date();
+      var day = ("0" + minDate.getDate()).slice(-2);
+      var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
+      var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
+      $("#actionEditEndDate").val(fullDate);
+      $("#actionEditEndDate").attr('min', fullDate);
+   }
+   else {
+      let endDate = new Date(data.endDate);
+      var endDay = ("0" + endDate.getDate()).slice(-2);
+      var endMonth = ("0" + (endDate.getMonth() + 1)).slice(-2);
+      var endFullDate = endDate.getFullYear() + "-" + (endMonth) + "-" + (endDay);
+      $("#actionEditEndDate").val(endFullDate);
+      $("#actionEditEndDate").attr('min', endFullDate);
+   }
 
-    $("#EditAction").modal("toggle");
+   $("#EditAction").modal("toggle");
 }
 
+//aksiyon güncelle
 function SaveActionUpdate() {
-    var formData = new FormData();
+   var formData = new FormData();
 
-    formData.append("ID", $("#editActionID").val());
-    formData.append("actionDescription", $("#editActionActionDescription").val());
-    formData.append("description", $("#actionEditDescription").val());
-    formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
-    formData.append("openingDate", $("#actionEditOpeningDate").val());
-    formData.append("endDate", $("#actionEditEndDate").val());
-    formData.append("responsibleID", $("#actionEditResponsible").val());
+   formData.append("ID", $("#editActionID").val());
+   formData.append("actionDescription", $("#editActionActionDescription").val());
+   formData.append("description", $("#actionEditDescription").val());
+   formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
+   formData.append("openingDate", $("#actionEditOpeningDate").val());
+   formData.append("endDate", $("#actionEditEndDate").val());
+   formData.append("responsibleID", $("#actionEditResponsible").val());
 
-    //console.log(formData);
+   //console.log(formData);
 
-    $.ajax({
-        url: "/Action/ActionUpdate",
-        type: 'POST',
-        data: formData,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            //console.log(data);
-        },
-        error: function (e) {
-            console.log(e);
-        },
-        complete: function () {
-            location.reload();
-        }
-    });
+   $.ajax({
+      url: "/Action/ActionUpdate",
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+         //console.log(data);
+      },
+      error: function (e) {
+         console.log(e);
+      },
+      complete: function () {
+         location.reload();
+      }
+   });
 }
 
-function DeleteActionCheckAuth(data) {
-
-    const swalWithBootstrapButtons = swal.mixin({
-        confirmButtonClass: 'btn btn-success',
-        buttonsStyling: false,
-    });
-
-    console.log(data);
-
-    if (data.actionStatus != "1") {
-        var id = new FormData();
-
-        id.append('id', data.id);
-
-        $.ajax({
-            url: "/Action/CheckAuthForDeleteAction",
-            type: 'POST',
-            async: false,
-            data: id,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response != "1") {
-
-                    swalWithBootstrapButtons(
-                        'Uyarı',
-                        'Kaydı Silme Yetkiniz Bulunmamaktadır!',
-                        'info'
-                    );
-                }
-                else {
-                    DeleteActionDialog(data.id);
-                }
-            }
-        });
-    }
-    else {
-        swalWithBootstrapButtons(
-            'Uyarı',
-            'Devam Etmekte Olan Aksiyon Silinemez!',
-            'info'
-        );
-    }
-}
-
+//aksiyon sil
 function DeleteActionDialog(ID) {
-    console.log(ID);
-    const swalWithBootstrapButtons = swal.mixin({
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger',
-        buttonsStyling: false,
-    })
+   console.log(ID);
+   const swalWithBootstrapButtons = swal.mixin({
+      confirmButtonClass: 'btn btn-success',
+      cancelButtonClass: 'btn btn-danger',
+      buttonsStyling: false,
+   })
 
-    swalWithBootstrapButtons({
-        title: "Uyarı",
-        text: "Silme İşlemini Onaylıyor Musunuz?",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Evet',
-        cancelButtonText: 'Hayır',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.value) {
-            var data = new FormData();
+   swalWithBootstrapButtons({
+      title: "Uyarı",
+      text: "Silme İşlemini Onaylıyor Musunuz?",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Evet',
+      cancelButtonText: 'Hayır',
+      reverseButtons: true
+   }).then((result) => {
+      if (result.value) {
+         var data = new FormData();
 
-            data.append('id', ID);
+         data.append('id', ID);
 
-            $.ajax({
-                url: "/Action/ActionDelete/",
-                type: 'POST',
-                async: false,
-                data: data,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    //console.log(response);
-                    if (data == "1") {
-                        swalWithBootstrapButtons(
-                            'Bilgi',
-                            'Silme İşlemi Başarılı',
-                            'success'
-                        )
-                    }
-                },
-                error: function (textStatus) {
-                    console.log('ERRORS:23 ');
-                },
-                complete: function () {
-                    location.reload();
-                }
-            });
-        } else if (result.dismiss === swal.DismissReason.cancel) {
-            swalWithBootstrapButtons(
-                'Bilgi',
-                'Silme İşlemi İptal Edildi',
-                'info'
-            )
-        }
-    })
-}
-
-function ActionChangeStatusCheckAuth(data) {
-    //console.log(data);
-
-    const swalWithBootstrapButtons = swal.mixin({
-        confirmButtonClass: 'btn btn-success',
-        buttonsStyling: false,
-    });
-    if (data.actionStatus == "2" || data.actionStatus == "3") {
-        swalWithBootstrapButtons(
-            'Uyarı',
-            'Tamamlanmış Veya İptal/Reddedilmiş Aksiyonların Durumları Değiştirilemez!',
-            'info'
-        );
-    }
-    else {
-        var id = new FormData();
-
-        id.append('id', data.responsibleID);
-
-        $.ajax({
-            url: "/Action/ChanceActionStatusCheckAuth",
+         $.ajax({
+            url: "/Action/ActionDelete/",
             type: 'POST',
             async: false,
-            data: id,
+            data: data,
             cache: false,
             processData: false,
             contentType: false,
             success: function (response) {
-
-                if (response != "1") {
-
-                    swalWithBootstrapButtons(
-                        'Uyarı',
-                        'Bu Kaydı Değiştirme Yetkiniz Bulunmamaktadır!',
-                        'info'
-                    );
-                }
-                else {
-                    ChangeActionStatusModal(data);
-                }
+               //console.log(response);
+               if (data == "1") {
+                  swalWithBootstrapButtons(
+                     'Bilgi',
+                     'Silme İşlemi Başarılı',
+                     'success'
+                  )
+               }
+            },
+            error: function (textStatus) {
+               console.log('ERRORS:23 ');
+            },
+            complete: function () {
+               location.reload();
             }
-        });
-    }
+         });
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+         swalWithBootstrapButtons(
+            'Bilgi',
+            'Silme İşlemi İptal Edildi',
+            'info'
+         )
+      }
+   })
 }
 
+//aksiyon durumu değiştir modal
 function ChangeActionStatusModal(data) {
 
-    $("#actionID").val(data.id);
-    $("#actionSelect").val(data.actionStatus);
+   $("#actionID").val(data.id);
+   $("#actionSelect").val(data.actionStatus);
 
-    $("#changeActionStatus").modal("toggle");
+   $("#changeActionStatus").modal("toggle");
 }
 
+//aksiyon durumu değiştir
 function ChanceActionStatus() {
-    var formData = new FormData();
+   var formData = new FormData();
 
-    formData.append("id", $("#actionID").val());
-    formData.append("actionStatus", $("#actionSelect").val());
+   formData.append("id", $("#actionID").val());
+   formData.append("actionStatus", $("#actionSelect").val());
 
-    console.log(formData);
+   console.log(formData);
 
-    $.ajax({
-        url: "/Action/ChangeActionStatus",
-        type: 'POST',
-        data: formData,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            $("#changeActionStatus").modal("hide");
-        },
-        error: function (e) {
-            console.log(e);
-        },
-        complete: function () {
-            location.reload();
-        }
-    });
+   $.ajax({
+      url: "/Action/ChangeActionStatus",
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+         $("#changeActionStatus").modal("hide");
+      },
+      error: function (e) {
+         console.log(e);
+      },
+      complete: function () {
+         location.reload();
+      }
+   });
 }

@@ -29,38 +29,38 @@ public class UserController : Controller
     {
         return View();
     }
-    public async Task<IActionResult> AddUser(string values)
-    {
-        try
-        {
-            var model = JsonConvert.DeserializeObject<User>(values);
-            await uow.UserRepository.AddUser(model);
-            return Ok();
-        }
-        catch (Exception e)
-        {
+   //public async Task<IActionResult> AddUser(string values)
+   //{
+   //    try
+   //    {
+   //        var model = JsonConvert.DeserializeObject<User>(values);
+   //        await uow.UserRepository.AddUser(model);
+   //        return Ok();
+   //    }
+   //    catch (Exception e)
+   //    {
 
-            throw e;
-        }
-    }
-    public async Task<string> UserEdit(int Key, string values)
-    {
-        try
-        {
-            var size = await uow.Repository.GetById<User>(Key);
-            JsonConvert.PopulateObject(values, size);
-            uow.UserRepository.Update(size);
-            await uow.SaveChanges();
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-    
-    [HttpGet]
-    public async Task<IActionResult> UserDetail()
+   //        throw e;
+   //    }
+   //}
+   public async Task<string> UserEdit(int Key, string values)//
+   {
+      try
+      {
+         var size = await uow.Repository.GetById<User>(Key);
+         JsonConvert.PopulateObject(values, size);
+         uow.UserRepository.Update(size);
+         await uow.SaveChanges();
+         return "1";
+      }
+      catch (Exception ex)
+      {
+         throw ex;
+      }
+   }
+
+   [HttpGet]
+    public async Task<IActionResult> UserDetail()//
     {
         try
         {
@@ -108,7 +108,7 @@ public class UserController : Controller
         }
     }
     
-    public async Task<IActionResult> UserDetails(int ID)
+    public async Task<IActionResult> UserDetails(int ID)//
     {
         try
         {
@@ -122,7 +122,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UserDetails(UserDetailDto userDetail)
+    public async Task<IActionResult> UserDetails(UserDetailDto userDetail)//
     {
         try
         {
@@ -136,13 +136,13 @@ public class UserController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create()//
     {
         var model = new UserDetailDto();
         return View(model);
     }
     [HttpPost]
-    public async Task<IActionResult> Create(UserDetailDto userDetailDto)
+    public async Task<IActionResult> Create(UserDetailDto userDetailDto)//
     {
         var user = new User()
         {
@@ -200,36 +200,21 @@ public class UserController : Controller
         }
     }
 
-    public string CheckAdminAuth()
-    {
-        if (session.Authorization == AuthorizationStatus.Admin)
-            return "1";
-        return "";
-    }
+   [HttpPost]
+   public async Task<string> AddUser(User model)
+   {
+      try
+      {
+         await uow.UserRepository.AddUser(model);
+         return "1";
+      }
+      catch (Exception ex)
+      {
+         throw ex;
+      }
+   }
 
-    [HttpPost]
-    public async Task<string> AddUser(User model)
-    {
-        try
-        {
-            await uow.UserRepository.AddUser(model);
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-
-    public string CheckAuthForEditUser(int ID)
-    {
-        if (session.ID == ID || session.Authorization == AuthorizationStatus.Admin)
-            return "1";
-
-        return "";
-    }
-
-    public async Task<string> UpdateUser(UserDetailDto model)
+   public async Task<string> UpdateUser(UserDetailDto model)
     {
         try
         {

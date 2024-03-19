@@ -3,6 +3,11 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+   var user = session.GetUser();
+}
+<input type="hidden" id="userID" value="@user.ID"/>
+<input type="hidden" id="auth" value="@Convert.ToInt32(user.Authorization)" />
 <h1>Kullanıcılar</h1>
 
 <style>
@@ -158,9 +163,7 @@
 
 @section Scripts
     {
-
-    <script src="~/js/Page/User/Index.js"></script>
-
+   <script src="~/js/Page/User/Index.js"></script>
 }
 
 

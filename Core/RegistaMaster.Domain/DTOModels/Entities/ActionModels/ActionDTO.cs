@@ -18,6 +18,6 @@ public class ActionDTO
     public string Description { get; set; }
     public string LastModifiedBy { get; set; }
     public string Color { get; set; }
-
+   public int CreatedBy { get; set; }
     public List<SelectListItem> ResponsiblehelperModelList { get; set; }
 }
