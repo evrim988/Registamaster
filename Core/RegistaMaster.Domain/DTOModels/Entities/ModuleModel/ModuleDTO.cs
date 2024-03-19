@@ -4,6 +4,7 @@ namespace RegistaMaster.Domain.DTOModels.Entities.ModuleModel;
 
 public class ModuleDTO
 {
+    public int ID { get; set; }
     [DisplayName("Modül Adı")]
     public string Name { get; set; }
 

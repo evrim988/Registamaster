@@ -6,7 +6,7 @@
 function GetList() {
     var grid = $(projectNoteGridContainer).dxDataGrid({
         dataSource: DevExpress.data.AspNet.createStore({
-            keyExpr: "id",
+            key: "id",
             loadUrl: "/ProjectNote/GetList",
             insertUrl: "/ProjectNote/ProjectNoteAdd",
             updateUrl: "/ProjectNote/ProjectEdit",

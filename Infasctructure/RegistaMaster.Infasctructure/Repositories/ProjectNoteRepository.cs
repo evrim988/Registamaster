@@ -50,6 +50,7 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
         {
             return GetNonDeletedAndActive<ProjectNote>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ProjectNoteDTO()
             {
+                ID = s.ID,
                 Date = s.Date,
                 Description = s.Description,
                 NoteType = s.NoteType,

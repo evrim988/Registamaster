@@ -47,6 +47,7 @@ public class ProjectRepository : Repository, IProjectRepository
         {
             return GetNonDeletedAndActive<Project>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ProjectDTO()
             {
+                ID = s.ID,
                 ProjectName = s.ProjectName,
                 ProjectDescription = s.ProjectDescription
             });

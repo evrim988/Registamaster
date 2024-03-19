@@ -52,6 +52,7 @@ public class CustomerRepository : Repository, ICustomerRepository
         {
             return GetNonDeletedAndActive<Customer>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new CustomerDTO()
             {
+                ID = s.ID,
                 Adress = s.Address,
                 Email = s.Email,
                 Name = s.Name,

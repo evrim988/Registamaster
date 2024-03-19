@@ -47,6 +47,7 @@ namespace RegistaMaster.Infasctructure.Repositories
             {
                 return GetNonDeletedAndActive<Module>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ModuleDTO()
                 {
+                    ID = s.ID,
                     Key = s.Key,
                     Name = s.Name,
                     Description = s.Description

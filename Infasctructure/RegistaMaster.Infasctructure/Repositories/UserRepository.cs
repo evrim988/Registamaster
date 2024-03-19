@@ -77,6 +77,7 @@ public class UserRepository : Repository, IUserRepository
         {
             return GetNonDeletedAndActive<User>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new UserDTO()
             {
+                ID = s.ID,
                 AuthorizationStatus = s.AuthorizationStatus,
                 Name = s.Name,
                 Surname = s.Surname,
