@@ -98,6 +98,7 @@ public class ActionRepository : Repository, IActionRepository
                 ActionDescription = s.ActionDescription,
                 RequestID = s.RequestID,
                 ActionPriorityStatus = s.ActionPriorityStatus,
+                CreatedBy = s.CreatedBy,
 
             });
         }

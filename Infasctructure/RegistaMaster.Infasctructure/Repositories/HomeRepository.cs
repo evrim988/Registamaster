@@ -40,7 +40,7 @@ public class HomeRepository : Repository, IHomeRepository
     {
         try
         {
-            var model = GetNonDeletedAndActive<Action>(t => t.ResponsibleID == session.ID || t.LastModifiedBy == session.Name).Select(s => new ActionDTO()
+            var model = GetNonDeletedAndActive<Action>(t => t.ResponsibleID == session.ID || t.CreatedBy == session.ID).Select(s => new ActionDTO()
             {
                 ID = s.ID,
                 Description = s.Description,
@@ -52,6 +52,7 @@ public class HomeRepository : Repository, IHomeRepository
                 RequestID = s.RequestID,
                 ActionPriorityStatus = s.ActionPriorityStatus,
                 LastModifiedBy = s.LastModifiedBy,
+                CreatedBy = s.CreatedBy,
             }).ToList();
 
             return model;
