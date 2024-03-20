@@ -88,7 +88,7 @@ function GetList() {
                 widget: "dxButton",
                 options: {
                     icon: "plus", text: "Yeni Talep Ekle", onClick: function (e) {
-                        AddRequestCheckAuth();
+                      $('#RequestCreateModal').modal('toggle');
                     }
                 },
                 location: "after",
