@@ -51,11 +51,11 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp without time zone");
-                   
-                   b.Property<DateTime>("FinishDate")
+
+                    b.Property<DateTime>("FinishDate")
                         .HasColumnType("timestamp without time zone");
 
-                   b.Property<string>("LastModifiedBy")
+                    b.Property<string>("LastModifiedBy")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -86,7 +86,52 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("ResponsibleID");
 
-                    b.ToTable("Actions", (string)null);
+                    b.ToTable("Actions");
+                });
+
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.ActionNote", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("ActionID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("ObjectStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ActionID");
+
+                    b.ToTable("ActionNotes");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Customer", b =>
