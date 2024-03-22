@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegistaMaster.Persistance.RegistaMasterContextes;
@@ -11,9 +12,10 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    partial class RegistaMasterContextModelSnapshot : ModelSnapshot
+    [Migration("20240321123256_innit_3")]
+    partial class innit_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
