@@ -13,6 +13,8 @@ using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
+using RegistaMaster.Domain.DTOModels.Entities.ActionNoteModels;
+using RegistaMaster.Domain.Entities;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -175,6 +177,8 @@ public class RequestController : Controller
                 RequestID = ID,
                 CreatedOn = item.CreatedOn,
                 CreatedBy = item.CreatedBy,
+                FinishDate=item.FinishDate,
+                StartDate=item.StartDate,
             };
             if (item.ActionStatus == ActionStatus.Contiuned || item.ActionStatus == ActionStatus.notStarted)
             {
@@ -371,4 +375,6 @@ public class RequestController : Controller
             throw ex;
         }
     }
+
+
 }
