@@ -749,7 +749,9 @@ function refreshGridAfterEdit() {
    $("#actionNotesGridContainer").dxDataGrid("instance").refresh();
 }
 
-
+function CancelModalClose() {
+  $('#CancelModal').modal('toggle');
+}
 
 function CancelModalSave() {
   var model = {};
