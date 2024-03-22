@@ -174,9 +174,10 @@ public class ActionController : Controller
       _uow.Repository.Update(action);
       await _uow.SaveChanges();
 
-      var requestActions = _uow.Repository.GetNonDeletedAndActive<Action>(t => t.RequestID == action.RequestID).Where(x => x.ActionStatus == ActionStatus.Contiuned).Count();
+         var requestActions = _uow.Repository.GetNonDeletedAndActive<Action>(t => t.RequestID == action.RequestID).Where(x => x.ActionStatus == ActionStatus.Contiuned || x.ActionStatus == ActionStatus.notStarted);
+         var continuedActions = requestActions.Where(x => x.ActionStatus == ActionStatus.Contiuned).Count();
 
-      if (requestActions > 0)
+      if (continuedActions > 0)
       {
         var request = await _uow.Repository.GetById<Request>(action.RequestID);
         request.RequestStatus = RequestStatus.Start;
@@ -185,7 +186,7 @@ public class ActionController : Controller
         return "2";
       }
 
-      if (requestActions == 0)
+      if (requestActions.Count() == 0)
       {
         var request = await _uow.Repository.GetById<Request>(action.RequestID);
         request.RequestStatus = RequestStatus.Closed;
