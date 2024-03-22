@@ -617,8 +617,12 @@ function ChanceActionStatus() {
    formData.append("id", $("#actionID").val());
    formData.append("startDate", $("#actionStartDate").val());
    formData.append("finishDate", $("#actionFinishDate").val());
-   formData.append("actionStatus", $("#actionStatusValue").val());
-
+  formData.append("actionStatus", $("#actionStatusValue").val());
+  if ($("#actionStatusValue").val() == "3") {
+    $("#changeActionStatus").modal("hide");
+    $("#CancelModal").modal("toggle");
+  }
+  else {
    $.ajax({
       url: "/Action/ChangeActionStatus",
       type: 'POST',
@@ -636,6 +640,7 @@ function ChanceActionStatus() {
          location.reload();
       }
    });
+  }
 }
 
 //aksiyon not sil
@@ -742,4 +747,56 @@ function closeModalActionEditNote() {
 
 function refreshGridAfterEdit() {
    $("#actionNotesGridContainer").dxDataGrid("instance").refresh();
+}
+
+
+
+function CancelModalSave() {
+  var model = {};
+  model.ActionID = $('#actionID').val();
+  model.Title = "İptal/Reddedildi Neden"
+  model.Description = $('#CancelNoteDescription').val();
+
+
+  $.ajax({
+    url: '/Action/AddActionNote',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(model),
+    success: function (response) {
+      console.log(response);
+      $('#CancelModal').modal('toggle');
+      refreshGridAfterEdit();
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    },
+    complete: function () {
+      console.log("complete");
+    }
+  });
+
+
+  var formData = new FormData();
+  formData.append("id", $("#actionID").val());
+  formData.append("startDate", $("#actionStartDate").val());
+  formData.append("finishDate", $("#actionFinishDate").val());
+  formData.append("actionStatus", $("#actionStatusValue").val());
+  $.ajax({
+    url: "/Action/ChangeActionStatus",
+    type: 'POST',
+    data: formData,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      $("#changeActionStatus").modal("hide");
+    },
+    error: function (e) {
+      console.log(e);
+    },
+    complete: function () {
+      location.reload();
+    }
+  });
 }
