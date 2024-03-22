@@ -18,6 +18,20 @@
 
 <div class="main-content">
     <div class="row">
+       <div class="col-12">
+         @switch (user.Authorization)
+         {
+            case AuthorizationStatus.Admin:
+               <partial name="ChartPartials/AdminChartPartial" />
+               break;
+            case AuthorizationStatus.TeamsLeader:
+               <partial name="ChartPartials/TeamLeaderChartPartial" />
+               break;
+            case AuthorizationStatus.Developer:
+               <partial name="ChartPartials/DeveloperChartPartial" />
+               break;
+         }
+       </div>
         <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
             <div class="card card-primary">
                 <div class="card-header">
@@ -57,20 +71,7 @@
     </div>
 </div>
 
-<div class="container">
-    @switch (user.Authorization)
-    {
-        case AuthorizationStatus.Admin:
-            <partial name="ChartPartials/AdminChartPartial" />
-            break;
-        case AuthorizationStatus.TeamsLeader:
-            <partial name="ChartPartials/TeamLeaderChartPartial" />
-            break;
-        case AuthorizationStatus.Developer:
-            <partial name="ChartPartials/DeveloperChartPartial" />
-            break;
-    }
-</div>
+
 
 @* Aksiyon Detayını Gösteren Modal *@
 <div class="modal fade" id="ActionDetail" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
@@ -112,6 +113,55 @@
             </div>
         </div>
     </div>
+</div>
+
+<!--Aksiyon Ayrıntıları Modal-->
+<div class="modal fade" id="DetailAction" aria-labelledby="DetailActionLabel" tabindex="-1" style="display: none;" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content" id="clear">
+         <div class="modal-header">
+            <h1 class="modal-title fs-5" id="DetailActionLabel">Aksiyon Detayı</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form>
+               <div class="row">
+                  <div class="col-4">
+                     <label style="font-weight:bold;">Aksiyondan Sorumlu Kişi</label>
+                     <input class="form-control mt-2" readonly id="actionDetailResponsible" />
+                  </div>
+                  <div class="col-4">
+                     <label style="font-weight:bold;">Aksiyon Öncelik Durumu</label>
+                     <input class="form-control mt-2" readonly id="actionDetailActionPriority"/>
+                  </div>
+                  <div class="col-4">
+                     <label style="font-weight:bold;">Aksiyon Durumu</label>
+                     <input id="actionDetailStatus" readonly class="form-control mt-2"/>
+                  </div>
+                  <div class="col-6 mt-3">
+                     <label style="font-weight:bold;">Aksiyon Başlangıç Tarihi</label>
+                     <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
+                  </div>
+                  <div class="col-6 mt-3">
+                     <label style="font-weight:bold;">Aksiyon Bitiş Tarihi</label>
+                     <input class="form-control mt-2" readonly id="actionDetailEndDate" />
+                  </div>
+                  <div class="col-12 mt-3">
+                     <label style="font-weight:bold;">Aksiyon Konusu</label>
+                     <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
+                  </div>
+                  <div class="col-12 mt-3">
+                     <label style="font-weight:bold;">Aksiyon Açıklama</label>
+                     <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
+                  </div>
+               </div>
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+         </div>
+      </div>
+   </div>
 </div>
 
 @section Scripts {

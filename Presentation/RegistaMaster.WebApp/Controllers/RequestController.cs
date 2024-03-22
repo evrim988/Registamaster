@@ -46,7 +46,6 @@ public class RequestController : Controller
         model.Project = await uow.RequestRepository.GetProjectSelect();
        
         model.Responsible = await uow.RequestRepository.ResponsibleSelectList();
-        model.ActionPriorityStatus = await uow.ActionRepository.ActionProrityStatusList();
         return View(model);
     }
    
@@ -367,23 +366,6 @@ public class RequestController : Controller
             return "1";
         }
 
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-
-   //talebi reddet
-    public async Task<string> CancelRequest(int ID)
-    {
-        try
-        {
-            var request = await uow.Repository.GetById<Request>(ID);
-            request.RequestStatus = RequestStatus.Cancel;
-            uow.RequestRepository.Update(request);
-            await uow.SaveChanges();
-            return "1";
-        }
         catch (Exception ex)
         {
             throw ex;

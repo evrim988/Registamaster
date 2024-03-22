@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RegistaMaster.Persistance.RegistaMasterContextes;
@@ -11,9 +12,10 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    partial class RegistaMasterContextModelSnapshot : ModelSnapshot
+    [Migration("20240321123256_innit_3")]
+    partial class innit_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,9 +54,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("FinishDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
                         .HasColumnType("text");
@@ -77,9 +76,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ResponsibleID")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -90,51 +86,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.HasIndex("ResponsibleID");
 
                     b.ToTable("Actions");
-                });
-
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.ActionNote", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ActionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("ObjectStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ActionID");
-
-                    b.ToTable("ActionNotes");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Customer", b =>
@@ -792,17 +743,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Navigation("Responsible");
                 });
 
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.ActionNote", b =>
-                {
-                    b.HasOne("RegistaMaster.Domain.Entities.Action", "Action")
-                        .WithMany("ActionNotes")
-                        .HasForeignKey("ActionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Action");
-                });
-
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Module", b =>
                 {
                     b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
@@ -893,11 +833,6 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.Action", b =>
-                {
-                    b.Navigation("ActionNotes");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Customer", b =>

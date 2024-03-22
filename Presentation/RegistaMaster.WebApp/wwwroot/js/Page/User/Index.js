@@ -117,7 +117,7 @@ function GetList() {
                 alignment: 'center',
             },
             {
-                dataField: "username",
+                dataField: "userName",
                 caption: "Kullanıcı Adı",
                 alignment: 'center',
             },
@@ -210,6 +210,9 @@ function GetList() {
     }).dxDataGrid("instance");
 
 }
+function gridRefresh() {
+   $("#userGridContainer").dxDataGrid("instance").refresh();
+}
 
 //kullanıcı ekle
 function AddUser() {
@@ -239,7 +242,7 @@ function AddUser() {
             console.log(e);
         },
         complete: function () {
-            location.reload();
+           gridRefresh();
         }
     });
 }
@@ -285,7 +288,7 @@ function UpdateUser() {
             console.log(e);
         },
         complete: function () {
-            location.reload();
+           gridRefresh();
         }
     });
 }
@@ -323,7 +326,7 @@ function ChangeAuthorization() {
             console.log(e);
         },
         complete: function () {
-            location.reload();
+           gridRefresh();
         }
     });
 }
@@ -370,7 +373,7 @@ function DeleteUser(ID) {
                     console.log('ERRORS:23 ');
                 },
                 complete: function () {
-                    location.reload();
+                   gridRefresh();
                 }
             });
         } else if (result.dismiss === swal.DismissReason.cancel) {

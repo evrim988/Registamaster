@@ -90,7 +90,7 @@ function GetList() {
                             validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
                         },
                         {
-                            dataField: "address",
+                            dataField: "adress",
                             caption: "Adres",
                         },
                         {
@@ -139,7 +139,7 @@ function GetList() {
 
             },
             {
-                dataField: "address",
+                dataField: "adress",
                 caption: "Adres",
                 alignment: 'center',
             },

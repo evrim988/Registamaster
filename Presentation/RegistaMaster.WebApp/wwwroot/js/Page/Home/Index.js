@@ -97,6 +97,7 @@ function GetList() {
 
       },
       columns: [
+         //SÜTUN EKLEYECEK-SİLECEK VEYA YERLERİNİN DEĞİŞTİRLECEĞİ DURUMDA LÜTFEN "DETAY MODAL NOT" KISMINI OKUYUNUZ!!
          {
             dataField: "id",
             caption: "Aksiyon No",
@@ -114,7 +115,7 @@ function GetList() {
             dataField: "description",
             caption: "Aksiyon Açıklaması",
             alignment: 'center',
-
+            width: 200,
          },
          {
             dataField: "responsibleID",
@@ -246,7 +247,16 @@ function GetList() {
                      data = e.row.data;
                      ChangeActionStatusModal(data);
                   }
-               }
+               },
+               {
+                  hint: "Aksiyon Detayı",
+                  icon: "textdocument",
+                  onClick: function (e) {
+                     data = e.row.data;
+                     console.log(e);
+                     OpenActionDetailModal(e);
+                  }
+               },
 
             ]
 
@@ -258,7 +268,6 @@ function GetList() {
 
    var auth = $("#auth").val();
    if (auth == 0) {
-      grid.columnOption("İşlemler", "visible", false);
       grid.columnOption("createdBy", "visible", false);
    }
 }
@@ -310,4 +319,26 @@ function ChanceActionStatus() {
          location.reload();
       }
    });
+}
+
+//aksiyon detay modal
+/*DETAY MODAL NOT : Aksiyon detay modal için veriler doldurulurken ResponsibleID gibi sayı halinde gelen verilerin tabloda gösterilen verilerine erişebilmek için 
+"e.row.cells[sütun numarası(visible:false olan ıd sütun olarak sayılmıyor ve indis 0 ile başlıyor)].displayValue" kullanılmıştır. Sütunların yerleri değiştirildiği,
+sütun eklenip-silindiği durumda doğru sütunun "display value"su alınamayacağı için aşağıdaki alanda sütun numaralarının değiştirlmesi gerekmektedir!*/
+function OpenActionDetailModal(e) {
+   data = e.row.data;
+   $("#actionDetailActionDescription").val(data.actionDescription);
+   $("#actionDetailDescription").val(data.description);
+   $("#actionDetailActionPriority").val(e.row.cells[5].displayValue);
+   $("#actionDetailStatus").val(e.row.cells[6].displayValue);
+   $("#actionDetailResponsible").val(e.row.cells[2].displayValue);
+
+
+   let opDate = new Date(data.openingDate).toLocaleDateString();
+   $("#actionDetailOpeningDate").val(opDate);
+
+   let endDate = new Date(data.endDate).toLocaleDateString();
+   $("#actionDetailEndDate").val(endDate);
+
+   $("#DetailAction").modal('toggle');
 }

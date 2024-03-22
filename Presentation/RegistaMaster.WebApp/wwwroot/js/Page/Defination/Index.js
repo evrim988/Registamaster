@@ -1,382 +1,382 @@
 ﻿$(document).ready(function () {
-    DevExpress.localization.locale('tr');
-    GetModules();
-    GetVersion();
+   DevExpress.localization.locale('tr');
+   GetModules();
+   GetVersion();
 });
 function GetModules() {
-    var grid = $(modulesGridContainer).dxDataGrid({
-        dataSource: DevExpress.data.AspNet.createStore({
-            key: "id",
-            loadUrl: "/Defination/GetModules",
-            insertUrl: "/Defination/AddModules",
-            updateUrl: "/Defination/ModuleUpdate",
-            deleteUrl: "/Defination/DeleteModule",
-            onBeforeSend: function (method, ajaxOptions) {
-                ajaxOptions.xhrFields = { withCredentials: true };
+   var grid = $(modulesGridContainer).dxDataGrid({
+      dataSource: DevExpress.data.AspNet.createStore({
+         key: "id",
+         loadUrl: "/Defination/GetModules",
+         insertUrl: "/Defination/AddModules",
+         updateUrl: "/Defination/ModuleUpdate",
+         deleteUrl: "/Defination/DeleteModule",
+         onBeforeSend: function (method, ajaxOptions) {
+            ajaxOptions.xhrFields = { withCredentials: true };
+         }
+      }),
+      onCellPrepared(e) {
+         if (e.rowType == "header") {
+            e.cellElement.css("text-align", "center");
+         }
+      },
+      onRowPrepared: function (e) {
+         if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+      },
+      rowAlternationEnabled: true,
+      grouping: {
+         contextMenuEnabled: true
+      },
+      groupPanel: {
+         visible: true   // or "auto"
+      },
+      columnAutoWidth: true,
+      remoteOperations: true,
+      allowColumnReordering: true,
+      showBorders: true,
+      allowColumnResizing: true,
+      columnResizingMode: 'widget',
+      filterRow: {
+         visible: true,
+      },
+      searchPanel: {
+         visible: true,
+         width: 240,
+         placeholder: 'Ara...',
+      },
+      headerFilter: {
+         visible: true,
+      },
+      paging: { enabled: true },
+      height: "100%",
+      pager: {
+         visible: true,
+         allowedPageSizes: [10, 20, 50],
+         showPageSizeSelector: true,
+         showInfo: true,
+         showNavigationButtons: true,
+      },
+      onEditingStart: function (e) {
+         title = e.data.Date;
+
+      },
+      onInitNewRow: function (e) {
+         title = "";
+      },
+      loadPanel: {
+         enabled: true,
+      },
+      editing: {
+         mode: 'popup',
+         allowUpdating: true,
+         allowDeleting: true,
+         allowAdding: true,
+         popup: {
+            title: 'Ekle',
+            showTitle: true,
+            width: 500,
+            height: 315,
+         },
+         form: {
+            items: [{
+               itemType: 'group',
+               colCount: 2,
+               colSpan: 2,
+               items: [
+                  {
+                     dataField: "name",
+                     caption: "Adı",
+                     validationRules: [{ type: "required", message: "Bu alan zorunludur." }]
+                  },
+                  {
+                     dataField: "projectID",
+                     caption: "Proje",
+                     validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+                     lookup: {
+                        dataSource: DevExpress.data.AspNet.createStore({
+                           key: "Id",
+                           loadUrl: "/Defination/GetProject/",
+                           onBeforeSend: function (method, ajaxOptions) {
+                              ajaxOptions.xhrFields = { withCredentials: true, };
+                           },
+                        }),
+                        valueExpr: "id",
+                        displayExpr: "name",
+                     }
+                  },
+                  {
+                     dataField: "description",
+                     caption: "Açıklama",
+                     editorType: "dxTextArea",
+                     editorOptions: {
+                        height: 100
+                     },
+                     colSpan: 2
+                  },
+               ],
+            }],
+
+         },
+
+      },
+
+      onContentReady: function (e) {
+
+         var $filterButton = $('<div id="filterButton">').dxButton({
+            icon: 'clearformat',
+            onClick: function () {
+               grid.clearFilter();
             }
-        }),
-        onCellPrepared(e) {
-            if (e.rowType == "header") {
-                e.cellElement.css("text-align", "center");
+         });
+         if (e.element.find('#filterButton').length == 0)
+            e.element
+               .find('.dx-toolbar-after')
+               .prepend($filterButton);
+         var $refreshButton = $('<div id="refreshButton">').dxButton({
+            icon: 'refresh',
+            onClick: function () {
+               grid.refresh();
             }
-        },
-        onRowPrepared: function (e) {
-            if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
-        },
-        rowAlternationEnabled: true,
-        grouping: {
-            contextMenuEnabled: true
-        },
-        groupPanel: {
-            visible: true   // or "auto"
-        },
-        columnAutoWidth: true,
-        remoteOperations: true,
-        allowColumnReordering: true,
-        showBorders: true,
-        allowColumnResizing: true,
-        columnResizingMode: 'widget',
-        filterRow: {
-            visible: true,
-        },
-        searchPanel: {
-            visible: true,
-            width: 240,
-            placeholder: 'Ara...',
-        },
-        headerFilter: {
-            visible: true,
-        },
-        paging: { enabled: true },
-        height: "100%",
-        pager: {
-            visible: true,
-            allowedPageSizes: [10, 20, 50],
-            showPageSizeSelector: true,
-            showInfo: true,
-            showNavigationButtons: true,
-        },
-        onEditingStart: function (e) {
-            title = e.data.Date;
+         });
+         if (e.element.find('#refreshButton').length == 0)
+            e.element
+               .find('.dx-toolbar-after')
+               .prepend($refreshButton);
+      },
 
-        },
-        onInitNewRow: function (e) {
-            title = "";
-        },
-        loadPanel: {
-            enabled: true,
-        },
-        editing: {
-            mode: 'popup',
-            allowUpdating: true,
-            allowDeleting: true,
-            allowAdding: true,
-            popup: {
-                title: 'Ekle',
-                showTitle: true,
-                width: 500,
-                height: 325,
-            },
-            form: {
-                items: [{
-                    itemType: 'group',
-                    colCount: 2,
-                    colSpan: 2,
-                    items: [
-                        {
-                            dataField: "name",
-                            caption: "Adı",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }]
-                        },
-                        {
-                            dataField: "description",
-                            caption: "Açıklama",
-                        },
+      columns: [
+         {
+            dataField: "name",
+            caption: "Adı",
+            alignment: 'center',
+         },
+         {
+            dataField: "description",
+            caption: "Açıklama",
+            alignment: 'center',
+         },
+         {
+            dataField: "projectID",
+            caption: "Proje",
+            alignment: 'center',
+            lookup: {
+               dataSource: DevExpress.data.AspNet.createStore({
+                  key: "Id",
+                  loadUrl: "/Defination/GetProject/",
+                  onBeforeSend: function (method, ajaxOptions) {
+                     ajaxOptions.xhrFields = { withCredentials: true, };
+                  },
+               }),
+               valueExpr: "id",
+               displayExpr: "name",
+            }
+         },
+      ],
 
-                        {
-                            dataField: "projectID",
-                            caption: "Proje",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Defination/GetProject/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "id",
-                                displayExpr: "name",
-                            }
-                        },
-                    ],
-                }],
-
-            },
-
-        },
-
-        onContentReady: function (e) {
-
-            var $filterButton = $('<div id="filterButton">').dxButton({
-                icon: 'clearformat',
-                onClick: function () {
-                    grid.clearFilter();
-                }
-            });
-            if (e.element.find('#filterButton').length == 0)
-                e.element
-                    .find('.dx-toolbar-after')
-                    .prepend($filterButton);
-            var $refreshButton = $('<div id="refreshButton">').dxButton({
-                icon: 'refresh',
-                onClick: function () {
-                    grid.refresh();
-                }
-            });
-            if (e.element.find('#refreshButton').length == 0)
-                e.element
-                    .find('.dx-toolbar-after')
-                    .prepend($refreshButton);
-        },
-
-        columns: [
-            {
-                dataField: "name",
-                caption: "Adı",
-                alignment: 'center',
-            },
-            {
-                dataField: "description",
-                caption: "Açıklama",
-                alignment: 'center',
-            },
-            {
-                dataField: "projectID",
-                caption: "Proje",
-                alignment: 'center',
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
-                        loadUrl: "/Defination/GetProject/",
-                        onBeforeSend: function (method, ajaxOptions) {
-                            ajaxOptions.xhrFields = { withCredentials: true, };
-                        },
-                    }),
-                    valueExpr: "id",
-                    displayExpr: "name",
-                }
-            },
-        ],
-
-    }).dxDataGrid("instance");
+   }).dxDataGrid("instance");
 
 }
 
 
 function GetVersion() {
-    var grid = $(versionGridContainer).dxDataGrid({
-        dataSource: DevExpress.data.AspNet.createStore({
-            key: "id",
-            loadUrl: "/Defination/GetVersion",
-            insertUrl: "/Defination/AddVersion",
-            updateUrl: "/Defination/UpdateVersion",
-            deleteUrl: "/Defination/DeleteVersion",
-            onBeforeSend: function (method, ajaxOptions) {
-                ajaxOptions.xhrFields = { withCredentials: true };
+   var grid = $(versionGridContainer).dxDataGrid({
+      dataSource: DevExpress.data.AspNet.createStore({
+         key: "id",
+         loadUrl: "/Defination/GetVersion",
+         insertUrl: "/Defination/AddVersion",
+         updateUrl: "/Defination/UpdateVersion",
+         deleteUrl: "/Defination/DeleteVersion",
+         onBeforeSend: function (method, ajaxOptions) {
+            ajaxOptions.xhrFields = { withCredentials: true };
+         }
+      }),
+      onCellPrepared(e) {
+         if (e.rowType == "header") {
+            e.cellElement.css("text-align", "center");
+         }
+      },
+      onRowPrepared: function (e) {
+         if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+      },
+      rowAlternationEnabled: true,
+      grouping: {
+         contextMenuEnabled: true
+      },
+      groupPanel: {
+         visible: true   // or "auto"
+      },
+      columnAutoWidth: true,
+      remoteOperations: true,
+      allowColumnReordering: true,
+      showBorders: true,
+      allowColumnResizing: true,
+      columnResizingMode: 'widget',
+      filterRow: {
+         visible: true,
+      },
+      searchPanel: {
+         visible: true,
+         width: 240,
+         placeholder: 'Ara...',
+      },
+      headerFilter: {
+         visible: true,
+      },
+      paging: { enabled: true },
+      height: "100%",
+      pager: {
+         visible: true,
+         allowedPageSizes: [10, 20, 50],
+         showPageSizeSelector: true,
+         showInfo: true,
+         showNavigationButtons: true,
+      },
+      onEditingStart: function (e) {
+         title = e.data.Date;
+
+      },
+      onInitNewRow: function (e) {
+         title = "";
+      },
+      loadPanel: {
+         enabled: true,
+      },
+      editing: {
+         mode: 'popup',
+         allowUpdating: true,
+         allowDeleting: true,
+         allowAdding: true,
+         popup: {
+            title: 'Ekle',
+            showTitle: true,
+            width: 600,
+            height: 330,
+         },
+         form: {
+            items: [{
+               itemType: 'group',
+               colCount: 2,
+               colSpan: 2,
+               items: [
+                  //{
+                  //   dataField: "name",
+                  //   caption: "Adı",
+                  //   validationRules: [{ type: "required", message: "Bu alan zorunludur." }]
+                  //},
+                  
+                  {
+                     dataField: "projectID",
+                     caption: "Proje",
+                     validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+                     lookup: {
+                        dataSource: DevExpress.data.AspNet.createStore({
+                           key: "Id",
+                           loadUrl: "/Defination/GetProject/",
+                           onBeforeSend: function (method, ajaxOptions) {
+                              ajaxOptions.xhrFields = { withCredentials: true, };
+                           },
+                        }),
+                        valueExpr: "id",
+                        displayExpr: "name",
+                     }
+                  },
+                  {
+                     dataField: "databaseChange",
+                     caption: "Veritabanı Değişiliği Var Mı?",
+                     dataType: "boolean",
+                     editorType: "dxCheckBox",
+                  },
+                  {
+                     dataField: "description",
+                     caption: "Açıklama",
+                     editorType: "dxTextArea",
+                     editorOptions: {
+                        height: 100
+                     },
+                     colSpan: 2
+                  },
+               ],
+            }],
+
+         },
+
+      },
+
+      onContentReady: function (e) {
+
+         var $filterButton = $('<div id="filterButton">').dxButton({
+            icon: 'clearformat',
+            onClick: function () {
+               grid.clearFilter();
             }
-        }),
-        onCellPrepared(e) {
-            if (e.rowType == "header") {
-                e.cellElement.css("text-align", "center");
+         });
+         if (e.element.find('#filterButton').length == 0)
+            e.element
+               .find('.dx-toolbar-after')
+               .prepend($filterButton);
+
+         var $refreshButton = $('<div id="refreshButton">').dxButton({
+            icon: 'refresh',
+            onClick: function () {
+               grid.refresh();
             }
-        },
-        onRowPrepared: function (e) {
-            if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
-        },
-        rowAlternationEnabled: true,
-        grouping: {
-            contextMenuEnabled: true
-        },
-        groupPanel: {
-            visible: true   // or "auto"
-        },
-        columnAutoWidth: true,
-        remoteOperations: true,
-        allowColumnReordering: true,
-        showBorders: true,
-        allowColumnResizing: true,
-        columnResizingMode: 'widget',
-        filterRow: {
-            visible: true,
-        },
-        searchPanel: {
-            visible: true,
-            width: 240,
-            placeholder: 'Ara...',
-        },
-        headerFilter: {
-            visible: true,
-        },
-        paging: { enabled: true },
-        height: "100%",
-        pager: {
-            visible: true,
-            allowedPageSizes: [10, 20, 50],
-            showPageSizeSelector: true,
-            showInfo: true,
-            showNavigationButtons: true,
-        },
-        onEditingStart: function (e) {
-            title = e.data.Date;
+         });
+         if (e.element.find('#refreshButton').length == 0)
+            e.element
+               .find('.dx-toolbar-after')
+               .prepend($refreshButton);
+      },
 
-        },
-        onInitNewRow: function (e) {
-            title = "";
-        },
-        loadPanel: {
-            enabled: true,
-        },
-        editing: {
-            mode: 'popup',
-            allowUpdating: true,
-            allowDeleting: true,
-            allowAdding: true,
-            popup: {
-                title: 'Ekle',
-                showTitle: true,
-                width: 600,
-                height: 400,
-            },
-            form: {
-                items: [{
-                    itemType: 'group',
-                    colCount: 2,
-                    colSpan: 2,
-                    items: [
-                        {
-                            dataField: "name",
-                            caption: "Adı",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }]
-                        },
-                        {
-                            dataField: "description",
-                            caption: "Açıklama",
-                        },
-                        {
-                            dataField: "projectID",
-                            caption: "Proje",
-                            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Defination/GetProject/",
-                                    onBeforeSend: function (method, ajaxOptions) {
-                                        ajaxOptions.xhrFields = { withCredentials: true, };
-                                    },
-                                }),
-                                valueExpr: "id",
-                                displayExpr: "name",
-                            }
-                        },
-                        {
-                            dataField: "databaseChangeStatus",
-                            caption: "Veritabanı Değişiliği Var Mı?",
-                            lookup: {
-                                dataSource: DevExpress.data.AspNet.createStore({
-                                    key: "Id",
-                                    loadUrl: "/Defination/GetDatabaseStatus",
-                                    onBeforeSend: function (method, ajaxoptions) {
-                                        ajaxoptions.xhrFields = { withCredentials: true };
-                                    },
-                                }),
-                                valueExpr: "Id",
-                                displayExpr: "Text"
-                            }
-                        },
-                    ],
-                }],
+      columns: [
+         {
+            dataField: "name",
+            caption: "Adı",
+            alignment: 'center',
+         },
+         {
+            dataField: "description",
+            caption: "Açıklama",
+            alignment: 'center',
+         },
+         {
+            dataField: "date",
+            caption: "Tarih",
+            dataType: 'date',
+            format: 'dd/MM/yyyy',
+         },
+         {
+            dataField: "projectID",
+            caption: "Proje",
+            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+            lookup: {
+               dataSource: DevExpress.data.AspNet.createStore({
+                  key: "Id",
+                  loadUrl: "/Defination/GetProject/",
+                  onBeforeSend: function (method, ajaxOptions) {
+                     ajaxOptions.xhrFields = { withCredentials: true, };
+                  },
+               }),
+               valueExpr: "id",
+               displayExpr: "name",
+            }
+         },
+         {
+            dataField: "databaseChange",
+            caption: "Veritabanı Değişikliği",
+            alignment: 'center',
+            dataType: "boolean",
+            lookup: {
+               dataSource: [
+                  { id: true, text: "Evet" },
+                  { id: false, text: "Hayır" }
+               ],
+               valueExpr: "id",
+               displayExpr: "text"
+            }
+         },
 
-            },
+      ],
 
-        },
-
-        onContentReady: function (e) {
-
-            var $filterButton = $('<div id="filterButton">').dxButton({
-                icon: 'clearformat',
-                onClick: function () {
-                    grid.clearFilter();
-                }
-            });
-            if (e.element.find('#filterButton').length == 0)
-                e.element
-                    .find('.dx-toolbar-after')
-                    .prepend($filterButton);
-
-            var $refreshButton = $('<div id="refreshButton">').dxButton({
-                icon: 'refresh',
-                onClick: function () {
-                    grid.refresh();
-                }
-            });
-            if (e.element.find('#refreshButton').length == 0)
-                e.element
-                    .find('.dx-toolbar-after')
-                    .prepend($refreshButton);
-        },
-
-        columns: [
-            {
-                dataField: "name",
-                caption: "Adı",
-                alignment: 'center',
-            },
-            {
-                dataField: "description",
-                caption: "Açıklama",
-                alignment: 'center',
-            },
-            {
-                dataField: "date",
-                caption: "Tarih",
-                dataType: 'date',
-                format: 'dd/MM/yyyy',
-            },
-            {
-                dataField: "projectID",
-                caption: "Proje",
-                validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
-                        loadUrl: "/Defination/GetProject/",
-                        onBeforeSend: function (method, ajaxOptions) {
-                            ajaxOptions.xhrFields = { withCredentials: true, };
-                        },
-                    }),
-                    valueExpr: "id",
-                    displayExpr: "name",
-                }
-            },
-            {
-                dataField: "databaseChangeStatus",
-                caption: "Veritabanı Değişiliği Var Mı?",
-                lookup: {
-                    dataSource: DevExpress.data.AspNet.createStore({
-                        key: "Id",
-                        loadUrl: "/Defination/GetDatabaseStatus",
-                        onBeforeSend: function (method, ajaxoptions) {
-                            ajaxoptions.xhrFields = { withCredentials: true };
-                        },
-                    }),
-                    valueExpr: "Id",
-                    displayExpr: "Text"
-                }
-            },
-
-        ],
-
-    }).dxDataGrid("instance");
+   }).dxDataGrid("instance");
 
 }

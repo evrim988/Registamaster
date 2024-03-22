@@ -58,7 +58,6 @@ public class HomeRepository : Repository, IHomeRepository
             chart.RequestOpen = requests.Where(t => t.RequestStatus == RequestStatus.Open).Count();
             chart.RequestStart = requests.Where(t => t.RequestStatus == RequestStatus.Start).Count();
             chart.RequestClosed = requests.Where(t => t.RequestStatus == RequestStatus.Closed).Count();
-            chart.RequestCancel = requests.Where(t => t.RequestStatus == RequestStatus.Cancel).Count();
 
             var actions = GetNonDeletedAndActive<Action>(t => true);
             chart.ActionNotStarted = actions.Where(t => t.ActionStatus == ActionStatus.notStarted).Count();
@@ -117,7 +116,6 @@ public class HomeRepository : Repository, IHomeRepository
             chart.RequestOpen = requests.Where(t => t.RequestStatus == RequestStatus.Open).Count();
             chart.RequestStart = requests.Where(t => t.RequestStatus == RequestStatus.Start).Count();
             chart.RequestClosed = requests.Where(t => t.RequestStatus == RequestStatus.Closed).Count();
-            chart.RequestCancel = requests.Where(t => t.RequestStatus == RequestStatus.Cancel).Count();
 
             var actions = GetNonDeletedAndActive<Action>(t => t.CreatedBy == ID);
             chart.ActionNotStarted = actions.Where(t => t.ActionStatus == ActionStatus.notStarted).Count();

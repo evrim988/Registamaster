@@ -35,7 +35,6 @@ public class RequestDTO
     //public List<SelectListItem> Module { get; set; }
     //public List<SelectListItem> Version { get; set; }
     public List<SelectListItem> Responsible { get; set; }
-    public List<SelectListItem> ActionPriorityStatus { get; set; }
     public List<SelectListItem> NotificationType { get; set; }
     public List<SelectListItem> Category { get; set; }
 }

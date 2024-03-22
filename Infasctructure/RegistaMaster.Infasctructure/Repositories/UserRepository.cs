@@ -83,6 +83,7 @@ public class UserRepository : Repository, IUserRepository
                 Surname = s.Surname,
                 Email = s.Email,
                 Password = s.Password,
+                UserName = s.Username,
             });
         }
         catch (Exception ex)

@@ -18,13 +18,13 @@ public class ProjectRepository : Repository, IProjectRepository
         this.uow = _uow;
         this.session = _session;
     }
-    public async Task<string> AddProject(Project model)
+    public async Task<int> AddProject(Project model)
     {
         try
         {
             await uow.Repository.Add(model);
             await uow.SaveChanges();
-            return "1";
+            return model.ID ;
         }
         catch (Exception e)
         {
@@ -77,9 +77,12 @@ public class ProjectRepository : Repository, IProjectRepository
         }
     }
 
-    public async Task<string> Update(Project model)
+    public async Task<string> UpdateProject(ProjectDTO model)
     {
-        Update(model);
+      var project = await GetById<Project>(model.ID);
+      project.ProjectDescription = model.ProjectDescription;
+      project.ProjectName = model.ProjectName;
+        Update(project);
         await uow.SaveChanges();
         return "1";
     }

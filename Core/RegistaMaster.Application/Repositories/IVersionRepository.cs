@@ -9,4 +9,6 @@ public interface IVersionRepository : IRepository
     public Task<string> AddVersion(Version model);
     public Task<string> UpdateVersion(Version model);
     public string DeleteVersion(int ID);
+   public string DeleteVersionWithProjectID(int ID);
+   public double GetVersionName(int ID);
 }

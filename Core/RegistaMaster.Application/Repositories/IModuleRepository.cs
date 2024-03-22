@@ -11,4 +11,5 @@ public interface IModuleRepository : IRepository
     public Task<string> UpdateModule(Module model);
     public string DeleteModule(int ID);
     Task<List<ResponsibleDevextremeSelectListHelper>> GetProject();
+   public string DeleteModuleWithProjectID(int ID);
 }
