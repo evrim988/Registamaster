@@ -250,7 +250,6 @@ public class ActionController : Controller
     }
     catch (Exception e)
     {
-
       throw e;
     }
   }
@@ -268,7 +267,6 @@ public class ActionController : Controller
     }
     catch (Exception e)
     {
-
       throw e;
     }
   }

@@ -41,7 +41,7 @@
   </div>
 </div>
 @* Aksiyon Durumu Güncelleme *@
-<div class="modal fade" id="changeActionStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
@@ -143,7 +143,7 @@
 </div>
 
 
-<div class="modal fade" id="actionNoteAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="actionNoteAddModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
@@ -153,13 +153,13 @@
       <div class="modal-body">
         <input hidden id="actionID">
         <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-8">
+          <div class="col-md-10">
             <label for="actionNoteTitle" style="font-size:1.2rem;" class="form-label">Aksiyon Başlığı</label>
             <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteTitle">
           </div>
         </div>
         <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-8">
+          <div class="col-md-10">
             <label for="actionNoteDescription" style="font-size:1.2rem;" class="form-label">Aksiyon Notu</label>
             <textarea style="font-size:1rem;" class="form-control" id="actionNoteDescription" rows="10"></textarea>
           </div>
@@ -167,6 +167,37 @@
       </div>
       <div class="modal-footer">
         <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button type="button" onclick="ActionNoteSave()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="actionNoteEditModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header mt-3">
+        <h5 class="modal-title" style="font-size:1.4rem;" id="exampleModalLabel">Not Ekle</h5>
+      </div>
+      <hr />
+      <div class="modal-body">
+        <input hidden id="EditactionID">
+        <div class="row mt-3 justify-content-md-center">
+          <div class="col-md-10">
+            <label for="actionNoteEditTitle" style="font-size:1.2rem;" class="form-label">Aksiyon Başlığı</label>
+            <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteEditTitle">
+          </div>
+        </div>
+        <div class="row mt-3 justify-content-md-center">
+          <div class="col-md-10">
+            <label for="actionNoteEditDescription" style="font-size:1.2rem;" class="form-label">Aksiyon Notu</label>
+            <textarea style="font-size:1rem;" class="form-control" id="actionNoteEditDescription" rows="15"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closeModalActionEditNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
         <button type="button" onclick="ActionNoteSave()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>

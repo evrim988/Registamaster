@@ -437,14 +437,14 @@ function GetActionNoteList(ID) {
             icon: "edit",
             onClick: function (e) {
               data = e.row.data;
-              OpenActionNoteEditModals(data);
+              ActionNoteEdit(data);
             }
           },
           {
             hint: "Sil",
             icon: "trash",
             onClick: function (e) {
-              DeleteActionNoteDialog(e.row.data.id);
+              DeleteActionNote(e.row.data.id);
             }
           },
         ]
@@ -732,6 +732,82 @@ function ChanceActionStatus() {
     }
   });
 }
+
+function DeleteActionNote(ID) {
+  console.log(ID);
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    cancelButtonClass: 'btn btn-danger',
+    buttonsStyling: false,
+  })
+
+  swalWithBootstrapButtons({
+    title: "Uyarı",
+    text: "Silme İşlemini Onaylıyor Musunuz?",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Evet',
+    cancelButtonText: 'Hayır',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.value) {
+      var data = new FormData();
+
+      data.append('id', ID);
+
+      $.ajax({
+        url: "/Action/ActionNoteDelete/",
+        type: 'POST',
+        async: false,
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          //console.log(response);
+          if (data == "1") {
+            swalWithBootstrapButtons(
+              'Bilgi',
+              'Silme İşlemi Başarılı',
+              'success'
+            )
+          }
+        },
+        error: function (textStatus) {
+          console.log('ERRORS:23 ');
+        },
+        complete: function () {
+          gridRefresh();
+        }
+      });
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      swalWithBootstrapButtons(
+        'Bilgi',
+        'Silme İşlemi İptal Edildi',
+        'info'
+      )
+    }
+  })
+}
+
+function ActionNoteEdit(data) {
+  console.log(data);
+
+  $("#EditactionID").val(data.id);
+  $("#actionNoteEditDescription").val(data.description);
+  $("#actionNoteEditTitle").val(data.title);
+  
+  $("#actionNoteEditModal").modal("toggle");
+  $("#changeActionStatus").modal("hide");
+}
+
+function closeModalActionEditNote() {
+  $("#actionNoteEditModal").modal("toggle");
+  $("#changeActionStatus").modal("show");
+}
+
+
+
 function gridRefresh() {
   $("#actionGridContainer").dxDataGrid("instance").refresh();
 }
