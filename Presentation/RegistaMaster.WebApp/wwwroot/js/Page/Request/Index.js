@@ -2212,7 +2212,7 @@ function CancelModalSave() {
   $("#detail").val("");
   var model = {};
   model.ActionID = $('#actionID').val();
-  model.Title = "İptal/Reddedildi Neden"
+  model.Title = "İptal/Reddedildi Nedeni"
   model.Description = $('#CancelNoteDescription').val();
 
 
@@ -2254,7 +2254,7 @@ function CancelModalSave() {
       console.log(e);
     },
     complete: function () {
-      location.reload();
+      gridRefresh();
     }
   });
 }

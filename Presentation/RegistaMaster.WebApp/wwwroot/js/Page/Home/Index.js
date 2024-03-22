@@ -756,7 +756,7 @@ function CancelModalClose() {
 function CancelModalSave() {
   var model = {};
   model.ActionID = $('#actionID').val();
-  model.Title = "İptal/Reddedildi Neden"
+  model.Title = "İptal/Reddedildi Nedeni"
   model.Description = $('#CancelNoteDescription').val();
 
 
