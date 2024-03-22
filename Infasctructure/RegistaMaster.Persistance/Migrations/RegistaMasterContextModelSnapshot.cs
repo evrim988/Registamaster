@@ -52,9 +52,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("FinishDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
                         .HasColumnType("text");
@@ -77,9 +74,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ResponsibleID")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -89,52 +83,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("ResponsibleID");
 
-                    b.ToTable("Actions");
-                });
-
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.ActionNote", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ActionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("ObjectStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ActionID");
-
-                    b.ToTable("ActionNotes");
+                    b.ToTable("Actions", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Customer", b =>
@@ -199,7 +148,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.ErrorLog", b =>
@@ -252,7 +201,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("ErrorLogs");
+                    b.ToTable("ErrorLogs", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.HealthCheck", b =>
@@ -299,7 +248,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("HealthChecks");
+                    b.ToTable("HealthChecks", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Module", b =>
@@ -346,7 +295,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("ProjectID");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Modules", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Project", b =>
@@ -388,7 +337,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.ProjectNote", b =>
@@ -445,7 +394,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("ProjectID");
 
-                    b.ToTable("ProjectNotes");
+                    b.ToTable("ProjectNotes", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Request", b =>
@@ -537,7 +486,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("VersionID");
 
-                    b.ToTable("Requests");
+                    b.ToTable("Requests", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Task", b =>
@@ -605,7 +554,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("RequestID");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.User", b =>
@@ -671,7 +620,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("CustomerID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.UserLog", b =>
@@ -720,7 +669,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("UserLogs");
+                    b.ToTable("UserLogs", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Version", b =>
@@ -770,7 +719,7 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.HasIndex("ProjectID");
 
-                    b.ToTable("Versions");
+                    b.ToTable("Versions", (string)null);
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Action", b =>
@@ -790,17 +739,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Navigation("Request");
 
                     b.Navigation("Responsible");
-                });
-
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.ActionNote", b =>
-                {
-                    b.HasOne("RegistaMaster.Domain.Entities.Action", "Action")
-                        .WithMany("ActionNotes")
-                        .HasForeignKey("ActionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Action");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Module", b =>
@@ -893,11 +831,6 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.Action", b =>
-                {
-                    b.Navigation("ActionNotes");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Customer", b =>

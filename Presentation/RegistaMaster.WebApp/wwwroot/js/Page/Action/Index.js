@@ -131,7 +131,7 @@ function GetList() {
         dataField: "description",
         caption: "Açıklama",
         alignment: 'left',
-        width:200
+        width: 200
       },
       {
         dataField: "createdBy",
@@ -329,7 +329,7 @@ function GetActionNoteList(ID) {
         }
       };
     },
-    //rowAlternationEnabled: true,
+    rowAlternationEnabled: true,
     columnAutoWidth: true,
     remoteOperations: true,
     allowColumnReordering: true,
@@ -423,14 +423,22 @@ function GetActionNoteList(ID) {
       },
       {
         dataField: "title",
-        caption: "Aksiyon Başlık",
-        alignment: 'left',
+        caption: "Not Başlığı",
+        alignment: 'center',
+        width: '30%'
+      },
+      {
+        dataField: "description", 
+        caption: "Not İçeriği",
+        alignment: 'center',
+        width: '60%'
       },
       {
         caption: "İşlemler",
         type: "buttons",
         fixed: true,
         fixedPosition: "right",
+        width: '10%',
         buttons: [
           {
             hint: "Düzenle",
@@ -445,6 +453,14 @@ function GetActionNoteList(ID) {
             icon: "trash",
             onClick: function (e) {
               DeleteActionNote(e.row.data.id);
+            }
+          },
+          {
+            hint: "Not Detayı",
+            icon: "textdocument",
+            onClick: function (e) {
+              data = e.row.data;
+              ActionNoteDetail(data);
             }
           },
         ]
@@ -684,6 +700,7 @@ function ActionNoteSave() {
     success: function (response) {
       console.log(response);
       $('#actionNoteAddModal').modal('toggle');
+      $('#changeActionStatus').modal('show');
       refreshGridAfterEdit();
     },
     error: function (xhr, status, error) {
@@ -777,7 +794,7 @@ function DeleteActionNote(ID) {
           console.log('ERRORS:23 ');
         },
         complete: function () {
-          gridRefresh();
+          refreshGridAfterEdit();
         }
       });
     } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -790,19 +807,63 @@ function DeleteActionNote(ID) {
   })
 }
 
+function ActionNoteDetail(data) {
+  console.log(data);
+
+  $("#DetailactionID").val(data.id);
+  $("#actionNoteDetailDescription").val(data.description);
+  $("#actionNoteDetailTitle").val(data.title);
+
+  $("#actionNoteDetail").modal("toggle");
+  $("#changeActionStatus").modal("hide");
+}
+
 function ActionNoteEdit(data) {
   console.log(data);
 
   $("#EditactionID").val(data.id);
   $("#actionNoteEditDescription").val(data.description);
   $("#actionNoteEditTitle").val(data.title);
-  
+
   $("#actionNoteEditModal").modal("toggle");
   $("#changeActionStatus").modal("hide");
 }
 
+function ActionNoteEditSave() {
+  var model = {};
+  model.ActionID = $('#EditactionID').val();
+  model.Title = $('#actionNoteEditTitle').val();
+  model.Description = $('#actionNoteEditDescription').val();
+
+
+  $.ajax({
+    url: '/Action/ActionNoteUpdate',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(model),
+    success: function (response) {
+      console.log(response);
+      $('#actionNoteEditModal').modal('toggle');
+      $('#changeActionStatus').modal('show');
+      refreshGridAfterEdit();
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    },
+    complete: function () {
+      console.log("complete");
+    }
+  });
+}
+
+
 function closeModalActionEditNote() {
   $("#actionNoteEditModal").modal("toggle");
+  $("#changeActionStatus").modal("show");
+}
+
+function closeModalActionDetailNote() {
+  $("#actionNoteDetail").modal("toggle");
   $("#changeActionStatus").modal("show");
 }
 

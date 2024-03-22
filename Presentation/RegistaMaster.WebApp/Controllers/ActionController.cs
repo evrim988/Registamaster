@@ -208,11 +208,6 @@ public class ActionController : Controller
 
 
 
-
-
-
-
-
   public async Task<string> AddActionNote([FromBody] ActionNote model)
   {
     try
@@ -254,11 +249,11 @@ public class ActionController : Controller
     }
   }
   [HttpPost]
-  public async Task<string> ActionNoteUpdate(ActionNoteDTO model)
+  public async Task<string> ActionNoteUpdate([FromBody] ActionNoteDTO model)
   {
     try
     {
-      var actionNote = await _uow.Repository.GetById<ActionNote>(model.ID);
+      var actionNote = await _uow.Repository.GetById<ActionNote>(model.ActionID);
       actionNote.Description = model.Description;
       actionNote.Title = model.Title;
       _uow.Repository.Update(actionNote);
