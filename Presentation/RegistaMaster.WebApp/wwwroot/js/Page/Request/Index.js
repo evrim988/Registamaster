@@ -589,7 +589,8 @@ function GetList() {
                     icon: "textdocument",
                     onClick: function (e) {
                       data = e.row.data;
-                      OpenActionDetailModal(data);
+                       OpenActionDetailModal(data);
+                       GetActionNoteList(e.row.data.ID);
                     }
                   },
                   {
@@ -1733,6 +1734,7 @@ function DeleteActionDialog(ID) {
     }
   })
 }
+
 //aksiyon durum değiştir modal
 function ChanceActionStatus() {
   var formData = new FormData();
@@ -1755,7 +1757,8 @@ function ChanceActionStatus() {
     processData: false,
     contentType: false,
     success: function (data) {
-      $("#changeActionStatus").modal("hide");
+       $("#changeActionStatus").modal("hide");
+       $("#detail").val("");
     },
     error: function (e) {
       console.log(e);
@@ -1788,6 +1791,7 @@ function OpenActionDetailModal(data) {
 
 //aksiyon durum değiştir
 function ChangeActionStatusModal(data) {
+   $("#detail").val(2);
   $("#actionID").val(data.ID);
   GetActionNoteList(data.ID);
 
@@ -1844,6 +1848,7 @@ function ChangeActionStatusModal(data) {
   selectButtonByStatus(actionStatus);
   $("#changeActionStatus").modal("toggle");
 }
+
 function GetActionNoteList(ID) {
   console.log(ID);
   var grid = $(actionNotesGridContainer).dxDataGrid({
@@ -1862,13 +1867,6 @@ function GetActionNoteList(ID) {
     },
     onRowPrepared: function (e) {
       if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
-
-      if (e.data != undefined) {
-        if (e.data.color === "clsRed") {
-          //console.log("red");
-          e.rowElement.css('background-color', "#fb6969");
-        }
-      };
     },
     rowAlternationEnabled: true,
     columnAutoWidth: true,
@@ -1914,18 +1912,21 @@ function GetActionNoteList(ID) {
       allowUpdating: true,
       allowDeleting: true,
     },
-    onToolbarPreparing: function (e) {
-      let toolbarItems = e.toolbarOptions.items;
-      toolbarItems.push({
-        widget: "dxButton",
-        options: {
-          icon: "plus", text: "Yeni Aksiyon Notu Ekle", onClick: function (e) {
-            $('#actionNoteAddModal').modal('toggle');
-            $('#changeActionStatus').modal('hide');
-          }
-        },
-        location: "after",
-      });
+     onToolbarPreparing: function (e) {
+        var detail = $("#detail").val();
+        if (detail == 2) {
+           let toolbarItems = e.toolbarOptions.items;
+           toolbarItems.push({
+              widget: "dxButton",
+              options: {
+                 icon: "plus", text: "Yeni Aksiyon Notu Ekle", onClick: function (e) {
+                    $('#actionNoteAddModal').modal('toggle');
+                    $('#changeActionStatus').modal('hide');
+                 }
+              },
+              location: "after",
+           });
+        }
     },
 
     onContentReady: function (e) {
@@ -1983,7 +1984,12 @@ function GetActionNoteList(ID) {
         buttons: [
           {
             hint: "Düzenle",
-            icon: "edit",
+              icon: "edit",
+              visible: function (e) {
+                 var detail = $("#detail").val();
+                 if (detail == 2)   //aksiyon durum değiştir drumunda not düzenle aktif
+                    return true;
+              },
             onClick: function (e) {
               data = e.row.data;
               ActionNoteEdit(data);
@@ -1991,7 +1997,12 @@ function GetActionNoteList(ID) {
           },
           {
             hint: "Sil",
-            icon: "trash",
+             icon: "trash",
+             visible: function (e) {
+                var detail = $("#detail").val();
+                if (detail == 2)   //aksiyon durum değiştir drumunda not sil aktif
+                   return true;
+             },
             onClick: function (e) {
               DeleteActionNote(e.row.data.id);
             }
@@ -2109,15 +2120,30 @@ function ActionNoteSave() {
   });
 }
 
+function closeModalActionNote() {
+   $("#actionNoteTitle").val("");
+   $("#actionNoteDescription").val("");
+
+   $("#actionNoteAddModal").modal("toggle");
+   $("#changeActionStatus").modal("show");
+}
+
 function ActionNoteDetail(data) {
-  console.log(data);
+  //console.log(data);
 
   $("#DetailactionID").val(data.id);
   $("#actionNoteDetailDescription").val(data.description);
-  $("#actionNoteDetailTitle").val(data.title);
+   $("#actionNoteDetailTitle").val(data.title);
+
+   if ($("#detail").val() != 2)
+      $("#detail").val(1);
+
+   if ($("#detail").val() == 1)
+      $("#DetailAction").modal('hide');
+   else
+      $("#changeActionStatus").modal('hide');
 
   $("#actionNoteDetail").modal("toggle");
-  $("#changeActionStatus").modal("hide");
 }
 
 function ActionNoteEdit(data) {
@@ -2163,11 +2189,18 @@ function closeModalActionEditNote() {
   $("#actionNoteEditModal").modal("toggle");
   $("#changeActionStatus").modal("show");
 }
-
+//
 function closeModalActionDetailNote() {
   $("#actionNoteDetail").modal("toggle");
-  $("#changeActionStatus").modal("show");
+   if ($("#detail").val() == 1)
+      $("#DetailAction").modal('show');
+   else
+      $("#changeActionStatus").modal('show');
 }
 function refreshGridAfterEdit() {
   $("#actionNotesGridContainer").dxDataGrid("instance").refresh();
+}
+
+function CloseChangeStatusModal() {
+   $("#detail").val("");
 }

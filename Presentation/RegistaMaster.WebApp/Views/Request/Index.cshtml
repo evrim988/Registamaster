@@ -9,6 +9,7 @@
 }
 <input type="hidden" id="userID" value="@user.ID" />
 <input type="hidden" id="auth" value="@Convert.ToInt32(user.Authorization)" />
+<input type="hidden" id="detail" />
 
 <h1>Index</h1>
 
@@ -302,7 +303,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" onclick="CloseChangeStatusModal()" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
         <button type="button" onclick="ChanceActionStatus()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
@@ -475,17 +476,17 @@
                      <label style="font-weight:bold;">Aksiyon Durumu</label>
                      <select id="actionDetailStatus" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control mt-2"></select>
                   </div>
-                  <div class="col-6 mt-3">
+                  <div class="col-4 mt-3">
+                     <label style="font-weight:bold;">Aksiyon Konusu</label>
+                     <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
+                  </div>
+                  <div class="col-4 mt-3">
                      <label style="font-weight:bold;">Aksiyon Başlangıç Tarihi</label>
                      <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
                   </div>
-                  <div class="col-6 mt-3">
+                  <div class="col-4 mt-3">
                      <label style="font-weight:bold;">Aksiyon Bitiş Tarihi</label>
                      <input class="form-control mt-2" readonly id="actionDetailEndDate" />
-                  </div>
-                  <div class="col-12 mt-3">
-                     <label style="font-weight:bold;">Aksiyon Konusu</label>
-                     <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
                   </div>
                   <div class="col-12 mt-3">
                      <label style="font-weight:bold;">Aksiyon Açıklama</label>
@@ -493,6 +494,13 @@
                   </div>
                </div>
             </form>
+            <div class="row" style="padding-left:10px;padding-right:10px">
+               <h5 class="modal-title mt-5" style="padding-left:20px">Aksiyon Notları</h5>
+               <hr />
+               <div class="col-12">
+                  <div id="actionNotesGridContainer"></div>
+               </div>
+            </div>
          </div>
          <div class="modal-footer">
             <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
