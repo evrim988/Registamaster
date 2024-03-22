@@ -91,8 +91,12 @@ public class UnitOfWork : IUnitOfWork
     {
         get => _healthCheckRepository ?? (_healthCheckRepository = new HealthCheckRepository(context,this, session));
     }
+  private IActionNoteRepository _actionNoteRepository;
+  public IActionNoteRepository ActionNoteRepository {
+    get => _actionNoteRepository ?? (_actionNoteRepository = new ActionNoteRepository(context, this, session));
+  }
 
-    public async Task<int> SaveChanges()
+  public async Task<int> SaveChanges()
     {
         try
         {
