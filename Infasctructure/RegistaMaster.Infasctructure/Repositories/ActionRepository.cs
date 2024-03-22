@@ -99,7 +99,8 @@ public class ActionRepository : Repository, IActionRepository
                 RequestID = s.RequestID,
                 ActionPriorityStatus = s.ActionPriorityStatus,
                 CreatedBy = s.CreatedBy,
-
+                StartDate= s.StartDate,
+                FinishDate= s.FinishDate,
             });
         }
         catch (Exception e)
