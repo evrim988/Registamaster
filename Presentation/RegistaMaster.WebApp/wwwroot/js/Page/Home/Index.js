@@ -703,7 +703,7 @@ function DeleteActionNote(ID) {
 
 //akisyon notu düzenle
 function ActionNoteEdit(data) {
-   console.log(data);
+   //console.log(data);
 
    $("#EditactionID").val(data.id);
    $("#actionNoteEditDescription").val(data.description);
@@ -801,4 +801,8 @@ function CancelModalSave() {
       location.reload();
     }
   });
+}
+
+function closeActionStatusModal() {
+   $("#detail").val("");
 }
