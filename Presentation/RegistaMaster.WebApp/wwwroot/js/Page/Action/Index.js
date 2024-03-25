@@ -38,6 +38,7 @@ function GetList() {
     showBorders: true,
     allowColumnResizing: true,
     columnResizingMode: 'widget',
+    showRowLines: true,
     grouping: {
       contextMenuEnabled: true
     },
@@ -968,8 +969,8 @@ function CancelModalSave() {
 
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("startDate", $("#actionStartDate").val());
-  formData.append("finishDate", $("#actionFinishDate").val());
+  formData.append("openingDate", $("#actionOpeningDate").val());
+  formData.append("endDate", $("#actionEndDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
   $.ajax({
     url: "/Action/ChangeActionStatus",

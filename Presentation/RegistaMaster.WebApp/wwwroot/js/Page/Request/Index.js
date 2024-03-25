@@ -1769,10 +1769,8 @@ function SaveActionUpdate() {
     processData: false,
     contentType: false,
     success: function (data) {
-
-      //console.log(data);
+      $("#EditAction").modal("toggle");
       gridRefresh();
-
     },
     error: function (e) {
       console.log(e);
@@ -1841,8 +1839,8 @@ function DeleteActionDialog(ID) {
 function ChanceActionStatus() {
   var formData = new FormData();
   formData.append("ID", $("#actionID").val());
-  formData.append("StartDate", $("#actionStartDate").val());
-  formData.append("FinishDate", $("#actionFinishDate").val());
+  formData.append("OpeningDate", $("#actionStatusOpeningDate").val());
+  formData.append("EndDate", $("#actionStatusEndDate").val());
   formData.append("ActionStatus", $("#actionStatusValue").val());
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
@@ -1872,17 +1870,22 @@ function ChanceActionStatus() {
 
 //aksiyon detay modal
 function OpenActionDetailModal(data) {
+  console.log(data);
   $("#actionDetailActionDescription").val(data.ActionDescription);
   $("#actionDetailDescription").val(data.Description);
   $("#actionDetailResponsible").val(data.ResponsibleID);
   $("#actionDetailActionPriority").val(data.ActionPriorityStatus);
   $("#actionDetailStatus").val(data.ActionStatus);
 
-  let opDate = new Date(data.OpeningDate).toLocaleDateString();
-  $("#actionDetailOpeningDate").val(opDate);
+  let OpeningDate = new Date(data.OpeningDate).toLocaleDateString();
+  $("#actionDetailOpeningDate").val(OpeningDate);
 
-  let endDate = new Date(data.EndDate).toLocaleDateString();
-  $("#actionDetailEndDate").val(endDate);
+  let EndDate = new Date(data.EndDate).toLocaleDateString();
+  $("#actionDetailEndDate").val(EndDate);
+
+
+  console.log(OpeningDate);
+  console.log(EndDate);
 
   $("#DetailAction").modal('toggle');
 }
@@ -1907,8 +1910,8 @@ function ChangeActionStatusModal(data) {
   const OpeningDate = data.OpeningDate !== "0001-01-01T00:00:00" ? new Date(data.OpeningDate) : new Date();
   const EndDate = data.EndDate !== "0001-01-01T00:00:00" ? new Date(data.EndDate) : new Date();
 
-  $("#actionDetailOpeningDate").val(formatDate(OpeningDate));
-  $("#actionDetailEndDate").val(formatDate(EndDate));
+  $("#actionStatusOpeningDate").val(formatDate(OpeningDate));
+  $("#actionStatusEndDate").val(formatDate(EndDate));
 
   // Modal açıldığında toggle butonları kontrol et
   $('#changeActionStatus').on('shown.bs.modal', function () {
@@ -2339,8 +2342,8 @@ function CancelModalSave() {
 
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("startDate", $("#actionStartDate").val());
-  formData.append("finishDate", $("#actionFinishDate").val());
+  formData.append("openingDate", $("#actionStatusOpeningDate").val());
+  formData.append("endDate", $("#actionStatusEndDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
   $.ajax({
     url: "/Action/ChangeActionStatus",
