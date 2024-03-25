@@ -13,6 +13,6 @@ public enum RequestStatus
     [Display(Name = "Kapandı")]
     Closed = 2,
 
-   [Display(Name = "İptal/Reddedildi")]
-   Cancel = 3,
+   [Display(Name = "Beklemede")]
+   Waiting = 3,
 }

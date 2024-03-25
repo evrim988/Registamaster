@@ -13,8 +13,10 @@ public interface IRepository
     Task<T> GetById<T>(int id) where T : BaseEntitiy;
     IQueryable<T> GetList<T>(Expression<Func<T, bool>> where) where T : BaseEntitiy;
     IQueryable<T> GetNonDeletedAndActive<T>(Expression<Func<T, bool>> expression) where T : BaseEntitiy;
+   IQueryable<T> GetQueryable<T>(Expression<Func<T, bool>> where) where T : BaseEntitiy;
 
-    List<SelectModel> GetEnumSelect<E>();
+
+   List<SelectModel> GetEnumSelect<E>();
     string GetDisplayValue<E>(E value);
     string lookupResource(Type resourceManagerProvider, string resourceKey);
 }

@@ -291,11 +291,11 @@ function GetList() {
               .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Kapandı"))
               .appendTo(container);
           }
-          //else if (info.data.requestStatus == 3) {
-          //   $('<div id="Closed">')
-          //      .append($('<a>', { class: "btn btn-sm btn-danger" }).append("İptal/Reddedildi"))
-          //      .appendTo(container);
-          //}
+          else if (info.data.requestStatus == 3) {
+             $('<div id="Closed">')
+                .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Beklemede"))
+                .appendTo(container);
+          }
         }
       },
       {
@@ -361,21 +361,33 @@ function GetList() {
                   })
                   .appendTo(container);
               }
-              break;
+                break;
+             case 3:  //talep bekleme durumundaysa
+                $("<div>")
+                   .dxButton({
+                      icon: "preferences",
+                      hint: "İşlemler",
+                      stylingMode: "text",
+                      onClick: function (e) {
+                         showContextMenuWaiting(options, e);
+                      }
+                   })
+                   .appendTo(container);
+                break;
 
             default:
               var userID = $("#userID").val();
               if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
-                $("<div>")
-                  .dxButton({
-                    icon: "preferences",
-                    hint: "İşlemler",
-                     stylingMode: "text",
-                    onClick: function (e) {
-                      showContextMenu(options, e);
-                    }
-                  })
-                  .appendTo(container);
+                 $("<div>")
+                    .dxButton({
+                       icon: "preferences",
+                       hint: "İşlemler",
+                       stylingMode: "text",
+                       onClick: function (e) {
+                          showContextMenu(options, e);
+                       }
+                    })
+                    .appendTo(container);
               }
               else {
                 var auth = $("#auth").val();
@@ -865,6 +877,25 @@ function showContextMenuAdmin(options, e) {
   contextMenu.show();
 }
 
+//bekleme contextmenu
+function showContextMenuWaiting(options, e) {
+  var contextMenu = $("<div>")
+    .dxContextMenu({
+      dataSource: [
+        { text: "Aksiyon Ekle", icon: "plus" },
+          { text: "Tamamlandı Yap", icon: "check" },
+      ],
+      onItemClick: function (item) {
+        handleItemClick(item, options);
+      }
+    })
+    .appendTo("body")
+    .dxContextMenu("instance");
+
+  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
+  contextMenu.show();
+}
+
 function handleItemClick(item, options) {
   var items = item.itemData.text;
   var ID = options.data.id;
@@ -881,11 +912,37 @@ function handleItemClick(item, options) {
       openEditModals(data, ID);
       break;
     case "Sil":
-      DeleteRequestCheckActions(ID);
+        DeleteRequestCheckActions(ID);
+     case "Tamamlandı Yap":
+      CompleteRequest(ID);
     default:
       break;
   }
 }
+
+//bekleme durumundaki talebi tamamla
+function CompleteRequest(ID) {
+   var requestID = new FormData();
+
+   requestID.append('id', ID);
+
+   $.ajax({
+      url: "/Request/CompleteRequest",
+      type: 'POST',
+      data: requestID,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+         gridRefresh();
+      },
+      error: function (e) {
+         console.log(e);
+      },
+   });
+}
+
+
 
 //talep detay modal
 function RequestDetail(data) {
@@ -1327,12 +1384,12 @@ function saveData(form, popup, ID) {
 
     success: function (result) {
       //console.log("Veri başarıyla kaydedildi:", result);
-      popup.hide();
     },
     error: function (error) {
       console.error("AJAX isteği sırasında bir hata oluştu:", error);
     },
-    complete: function () {
+     complete: function () {
+        popup.hide();
       gridRefresh();
     }
   });
@@ -1835,8 +1892,8 @@ function DeleteActionDialog(ID) {
   })
 }
 
-//aksiyon durum değiştir modal
-function ChanceActionStatus() {
+//aksiyon durum değiştir
+function ChangeActionStatus() {
   var formData = new FormData();
   formData.append("ID", $("#actionID").val());
   formData.append("OpeningDate", $("#actionStatusOpeningDate").val());
