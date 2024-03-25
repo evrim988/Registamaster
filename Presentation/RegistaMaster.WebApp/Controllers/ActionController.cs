@@ -1,4 +1,5 @@
-﻿using DevExtreme.AspNet.Data;
+﻿using DevExpress.XtraEditors.Filtering;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -152,11 +153,15 @@ public class ActionController : Controller
    {
       try
       {
-         var actionNotes = _uow.Repository.GetNonDeletedAndActive<ActionNote>(t => t.ActionID == ID);
-         foreach (var note in actionNotes)
+         var actionNotes = _uow.Repository.GetNonDeletedAndActive<ActionNote>(t => t.ActionID == ID).ToList();
+         for(int i = 0; i < actionNotes.Count(); i++)
          {
-            await _uow.Repository.Delete<ActionNote>(note.ID);
+            await _uow.Repository.Delete<ActionNote>(actionNotes[i].ID);
          }
+         //foreach (var note in actionNotes)
+         //{
+         //   await _uow.Repository.Delete<ActionNote>(note.ID);
+         //}
          await _uow.Repository.Delete<Action>(ID);
          await _uow.SaveChanges();
          return "1";
@@ -221,11 +226,6 @@ public class ActionController : Controller
          throw ex;
       }
    }
-
-
-
-
-
 
    public async Task<string> AddActionNote([FromBody] ActionNote model)
    {

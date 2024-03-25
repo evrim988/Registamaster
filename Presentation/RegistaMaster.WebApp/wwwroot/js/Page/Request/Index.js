@@ -911,10 +911,12 @@ function handleItemClick(item, options) {
     case "Düzenle":
       openEditModals(data, ID);
       break;
-    case "Sil":
+     case "Sil":
         DeleteRequestCheckActions(ID);
+        break;
      case "Tamamlandı Yap":
-      CompleteRequest(ID);
+        CompleteRequest(ID);
+        break;
     default:
       break;
   }

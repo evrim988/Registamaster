@@ -373,10 +373,10 @@ public class RequestController : Controller
          foreach (var action in actions)
          {
             await uow.Repository.Delete<Action>(action.ID);
-            var actionNotes = uow.Repository.GetNonDeletedAndActive<ActionNote>(t => t.ActionID == action.ID);
-            foreach (var note in actionNotes)
+            var actionNotes = uow.Repository.GetNonDeletedAndActive<ActionNote>(t => t.ActionID == action.ID).ToList();
+            for (int i = 0; i < actionNotes.Count(); i++)
             {
-               await uow.Repository.Delete<ActionNote>(note.ID);
+               await uow.Repository.Delete<ActionNote>(actionNotes[i].ID);
             }
          }
 
