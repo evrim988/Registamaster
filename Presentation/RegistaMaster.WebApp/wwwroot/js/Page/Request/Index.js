@@ -888,7 +888,7 @@ function handleItemClick(item, options) {
 
 //talep detay modal
 function RequestDetail(data) {
-   console.log(data);
+   //console.log(data);
    $("#detailNotificationTypeID").val(data.notificationTypeID);
    $("#detailCategoryID").val(data.categoryID);
    $("#detailProjectID").val(data.projectID);
@@ -917,7 +917,7 @@ function RequestDetail(data) {
       processData: false,
       contentType: false,
       success: function (data) {
-         console.log(data);
+         //console.log(data);
          if (!data || data === "1") {
             return;
          }
@@ -948,7 +948,7 @@ function RequestDetail(data) {
       processData: false,
       contentType: false,
       success: function (data) {
-         console.log(data);
+         /*console.log(data);*/
          if (!data || data === "1") {
             return;
          }
