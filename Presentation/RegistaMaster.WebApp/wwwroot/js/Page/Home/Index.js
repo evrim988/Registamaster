@@ -597,7 +597,8 @@ function ActionNoteSave() {
          console.error(xhr.responseText);
       },
       complete: function () {
-         console.log("complete");
+        $("#actionNoteDescription").val("");
+        $("#actionNoteTitle").val("");
       }
    });
 }
@@ -613,7 +614,7 @@ function closeModalActionNote() {
 }
 
 //aksiyon durumu değiştir
-function ChanceActionStatus() {
+function ChangeActionStatus() {
    var formData = new FormData();
    formData.append("id", $("#actionID").val());
   formData.append("openingDate", $("#actionOpeningDate").val());
@@ -752,6 +753,8 @@ function refreshGridAfterEdit() {
 
 function CancelModalClose() {
   $('#CancelModal').modal('toggle');
+  $("#CancelNoteDescription").val("");
+  $('#changeActionStatus').modal('show');
 }
 
 function CancelModalSave() {
