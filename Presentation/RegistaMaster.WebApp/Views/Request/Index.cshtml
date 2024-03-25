@@ -175,21 +175,21 @@
 
 @* Talep Düzenleme Modalı *@
 <div class="modal fade" id="RequestEditModal" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="büyükModalLabel">Yeni Talep Ekle</h5>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Bildirim Türü:</label>
-              <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="NotificationEditTypeID" class="form-control select2" name="NotificationTypeID">
-                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
-            </div>
+   <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="büyükModalLabel">Yeni Talep Ekle</h5>
+         </div>
+         <div class="modal-body">
+            <form>
+               <div class="row">
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Bildirim Türü:</label>
+                     <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="NotificationEditTypeID" class="form-control select2" name="NotificationTypeID">
+                        <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+                     </select>
+                     <h1></h1>
+                  </div>
 
             <div class="form-group col-md-6">
               <label style="font-weight:bold;">Kategori:</label>
@@ -205,55 +205,54 @@
               </select>
               <h1></h1>
 
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Modül:</label>
-              <select asp-for="ModuleID" id="ModuleEditID" class="form-control select2" name="ModuleID">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Versiyon:</label>
-              <select asp-for="VersionID" id="VersionEditID" class="form-control select2" name="VersionID">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Sayfa Linki:</label>
-              <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control" name="PageUrl" />
-            </div>
-            <div class="form-group col-md-12">
-              <label style="font-weight:bold;">Konu:</label>
-              <input asp-for="RequestSubject" type="text" id="RequestEditSubject" required class="form-control" name="Category" />
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-12">
-              <label style="font-weight:bold;">Açıklama:</label>
-              <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control" rows="10" name="Description"></textarea>
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Görüntü:</label>
-              <div class="card-img-container">
-                <img id="RequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
-              </div>
-            </div>
-          </div>
-          <div id="ID" hidden></div>
-          <div id="LastModifiedBy" hidden></div>
-          <div id="CustomerID" hidden></div>
-          <div id="CreatedOn" hidden></div>
-        </form>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Modül:</label>
+                     <select asp-for="ModuleID" id="ModuleEditID" class="form-control select2" name="ModuleID">
+                        <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                     </select>
+                     <h1></h1>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Versiyon:</label>
+                     <select asp-for="VersionID" id="VersionEditID" class="form-control select2" name="VersionID">
+                        <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                     </select>
+                     <h1></h1>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Konu:</label>
+                     <input asp-for="RequestSubject" type="text" id="RequestEditSubject" required class="form-control" name="Category" />
+                     <h1></h1>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Sayfa Linki:</label>
+                     <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control" name="PageUrl" />
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Açıklama:</label>
+                     <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control" name="Description"></textarea>
+                     <h1></h1>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Görüntü:</label>
+                     <div class="card-img-container">
+                        <img id="RequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
+                     </div>
+                  </div>
+               </div>
+               <div id="ID" hidden></div>
+               <div id="LastModifiedBy" hidden></div>
+               <div id="CustomerID" hidden></div>
+               <div id="CreatedOn" hidden></div>
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button type="button" onclick="closeEditRequestModal()" class="btn btn-dark">Kapat</button>
+            <button type="button" onclick="SaveRequestEditModal()" class="btn btn-primary">Kaydet</button>
+         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" onclick="closeEditRequestModal()" class="btn btn-dark">Kapat</button>
-        <button type="button" onclick="SaveRequestEditModal()" class="btn btn-primary">Kaydet</button>
-      </div>
-    </div>
-  </div>
+   </div>
 </div>
 
 @* Aksiyon Durumu Güncelleme *@
