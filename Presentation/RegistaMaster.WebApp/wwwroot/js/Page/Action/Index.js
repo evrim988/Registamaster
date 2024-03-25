@@ -729,7 +729,8 @@ function ActionNoteSave() {
       console.error(xhr.responseText);
     },
     complete: function () {
-      console.log("complete");
+      $("#actionNoteDescription").val("");
+      $("#actionNoteTitle").val("");
     }
   });
 }
@@ -742,6 +743,9 @@ function closeModal() {
 }
 
 function closeModalActionNote() {
+  $("#actionNoteTitle").val("");
+  $("#actionNoteDescription").val("");
+
   $("#actionNoteAddModal").modal("toggle");
   $("#changeActionStatus").modal("show");
 }
@@ -938,6 +942,8 @@ function OpenActionDetailModal(e) {
 
 function CancelModalClose() {
   $('#CancelModal').modal('toggle');
+  $("#CancelNoteDescription").val("");
+  $('#changeActionStatus').modal('show');
 }
 
 function CancelModalSave() {
