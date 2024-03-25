@@ -114,6 +114,7 @@ function GetList() {
         dataField: "requestID",
         caption: "Talep",
         alignment: 'center',
+        width: 250,
         lookup: {
           dataSource: DevExpress.data.AspNet.createStore({
             loadUrl: "/Action/GetRequest/",
@@ -126,12 +127,13 @@ function GetList() {
         dataField: "actionDescription",
         caption: "Aksiyon Konusu",
         alignment: 'left',
+        width: 200,
       },
       {
         dataField: "description",
         caption: "Açıklama",
         alignment: 'left',
-        width: 200
+        width: 250
       },
       {
         dataField: "createdBy",
@@ -485,6 +487,7 @@ function GetActionNoteList(ID) {
 
   }).dxDataGrid("instance");
 }
+
 
 
 //aksiyon güncelle modal

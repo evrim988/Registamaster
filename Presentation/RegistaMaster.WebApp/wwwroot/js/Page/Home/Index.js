@@ -108,14 +108,14 @@ function GetList() {
             dataField: "actionDescription",
             caption: "Aksiyon Konusu",
             alignment: 'left',
-            alignment: 'center',
-
+           alignment: 'center',
+           width: 200,
          },
          {
             dataField: "description",
             caption: "Aksiyon Açıklaması",
             alignment: 'center',
-            width: 200,
+            width: 250,
          },
          {
             dataField: "responsibleID",

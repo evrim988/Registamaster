@@ -472,6 +472,7 @@ function GetList() {
                 dataField: "ActionDescription",
                 caption: "Aksiyon Konusu",
                 alignment: 'center',
+                width: 200,
               },
               {
                 dataField: "Description",
@@ -1903,11 +1904,11 @@ function ChangeActionStatusModal(data) {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const startDate = data.StartDate !== "0001-01-01T00:00:00" ? new Date(data.StartDate) : new Date();
-  const finishDate = data.FinishDate !== "0001-01-01T00:00:00" ? new Date(data.FinishDate) : new Date();
+  const OpeningDate = data.OpeningDate !== "0001-01-01T00:00:00" ? new Date(data.OpeningDate) : new Date();
+  const EndDate = data.EndDate !== "0001-01-01T00:00:00" ? new Date(data.EndDate) : new Date();
 
-  $("#actionStartDate").val(formatDate(startDate));
-  $("#actionFinishDate").val(formatDate(finishDate));
+  $("#actionDetailOpeningDate").val(formatDate(OpeningDate));
+  $("#actionDetailEndDate").val(formatDate(EndDate));
 
   // Modal açıldığında toggle butonları kontrol et
   $('#changeActionStatus').on('shown.bs.modal', function () {
