@@ -20,11 +20,6 @@ public class Action : BaseEntitiy
 
   public string? Description { get; set; }
 
-  [DisplayName("Başlangıç Tarihi")]
-  public DateTime StartDate { get; set; }
-  [DisplayName("Bitiş Tarihi")]
-  public DateTime FinishDate{ get; set; }
-
   [DisplayName("Durum")]
   public ActionStatus ActionStatus { get; set; }
   public RequestStatus RequestStatus { get; set; }

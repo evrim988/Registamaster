@@ -654,11 +654,12 @@ function ChangeActionStatusModal(data) {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const startDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate) : new Date();
-  const finishDate = data.finishDate !== "0001-01-01T00:00:00" ? new Date(data.finishDate) : new Date();
+  const openingDate = data.openingDate !== "0001-01-01T00:00:00" ? new Date(data.openingDate) : new Date();
+  const endDate = data.endDate !== "0001-01-01T00:00:00" ? new Date(data.endDate) : new Date();
 
-  $("#actionStartDate").val(formatDate(startDate));
-  $("#actionFinishDate").val(formatDate(finishDate));
+  $("#actionOpeningDate").val(formatDate(openingDate));
+  $("#actionEndDate").val(formatDate(endDate));
+
 
   // Modal açıldığında toggle butonları kontrol et
   $('#changeActionStatus').on('shown.bs.modal', function () {
@@ -745,8 +746,8 @@ function closeModalActionNote() {
 function ChanceActionStatus() {
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("startDate", $("#actionStartDate").val());
-  formData.append("finishDate", $("#actionFinishDate").val());
+  formData.append("openingDate", $("#actionOpeningDate").val());
+  formData.append("endDate", $("#actionEndDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
@@ -920,10 +921,10 @@ function OpenActionDetailModal(e) {
   $("#actionDetailStatus").val(e.row.cells[8].displayValue);
   $("#actionDetailResponsible").val(e.row.cells[4].displayValue);
 
-  const opDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate).toLocaleDateString() : new Date(data.openingDate).toLocaleDateString();
-  const endDate = data.finishDate !== "0001-01-01T00:00:00" ? new Date(data.finishDate).toLocaleDateString() : new Date(data.endDate).toLocaleDateString();
+  const openingDate = data.openingDate !== "0001-01-01T00:00:00" ? new Date(data.openingDate).toLocaleDateString() : new Date(data.openingDate).toLocaleDateString();
+  const endDate = data.endDate !== "0001-01-01T00:00:00" ? new Date(data.endDate).toLocaleDateString() : new Date(data.endDate).toLocaleDateString();
 
-  $("#actionDetailOpeningDate").val(opDate);
+  $("#actionDetailOpeningDate").val(openingDate);
 
   $("#actionDetailEndDate").val(endDate);
 

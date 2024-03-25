@@ -11,8 +11,6 @@ public class ActionDTO
     public int RequestID { get; set; }
     public DateTime OpeningDate { get; set; }
     public DateTime EndDate { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime FinishDate { get; set; }
     public DateTime? CreatedOn { get; set; }
     public ActionStatus ActionStatus { get; set; }
     public RequestStatus RequestStatus { get; set; }

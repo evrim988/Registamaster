@@ -39,8 +39,6 @@ public class HomeRepository : Repository, IHomeRepository
                 ActionPriorityStatus = s.ActionPriorityStatus,
                 LastModifiedBy = s.LastModifiedBy,
                 CreatedBy = s.CreatedBy,
-                StartDate = s.StartDate,
-                FinishDate = s.FinishDate,
             }).OrderBy(s => s.ID).ToList();
 
             return model;

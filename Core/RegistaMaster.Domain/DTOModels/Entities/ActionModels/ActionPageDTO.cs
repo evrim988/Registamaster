@@ -12,8 +12,4 @@ public class ActionPageDTO
     public string Description { get; set; }
     public ActionStatus ActionStatus { get; set; }
     public int RequestID { get; set; }
-  [DisplayName("Başlangıç Tarihi")]
-  public DateTime StartDate { get; set; }
-  [DisplayName("Bitiş Tarihi")]
-  public DateTime FinishDate { get; set; }
 }
