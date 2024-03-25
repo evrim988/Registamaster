@@ -2276,7 +2276,8 @@ function ActionNoteSave() {
       console.error(xhr.responseText);
     },
     complete: function () {
-      console.log("complete");
+      $("#actionNoteDescription").val("");
+      $("#actionNoteTitle").val("");
     }
   });
 }
@@ -2368,6 +2369,8 @@ function CloseChangeStatusModal() {
 
 function CancelModalClose() {
   $('#CancelModal').modal('toggle');
+  $("#CancelNoteDescription").val("");
+  $('#changeActionStatus').modal('show');
 }
 
 function CancelModalSave() {
