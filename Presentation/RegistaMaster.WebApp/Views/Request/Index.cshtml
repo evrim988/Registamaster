@@ -178,7 +178,7 @@
    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="büyükModalLabel">Yeni Talep Ekle</h5>
+            <h5 class="modal-title" id="büyükModalLabel">Talep Düzenle</h5>
          </div>
          <div class="modal-body">
             <form>
@@ -221,15 +221,15 @@
                      <h1></h1>
                   </div>
                   <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Sayfa Linki:</label>
+                     <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control" name="PageUrl" />
+                  </div>
+                  <div class="form-group col-md-12">
                      <label style="font-weight:bold;">Konu:</label>
                      <input asp-for="RequestSubject" type="text" id="RequestEditSubject" required class="form-control" name="Category" />
                      <h1></h1>
                   </div>
-                  <div class="form-group col-md-6">
-                     <label style="font-weight:bold;">Sayfa Linki:</label>
-                     <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control" name="PageUrl" />
-                  </div>
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-12">
                      <label style="font-weight:bold;">Açıklama:</label>
                      <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control" name="Description"></textarea>
                      <h1></h1>
@@ -254,6 +254,76 @@
       </div>
    </div>
 </div>
+
+
+@* Talep Detay Modalı *@
+<div class="modal fade" id="RequestDetailModal" tabindex="-1" role="dialog" aria-labelledby="RequestDetailModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="RequestDetailModalLabel">Talep Detayı</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
+         </div>
+         <hr />
+         <div class="modal-body">
+            <form>
+               <div class="row">
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Bildirim Türü:</label>
+                     <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="detailNotificationTypeID" class="form-control mt-2" disabled name="NotificationTypeID"></select>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label style="font-weight:bold;">Kategori:</label>
+                     <select asp-for="CategoryID" asp-items="@Model.Category" id="detailCategoryID" class="form-control mt-2" disabled name="CategoryID"></select>
+                  </div>
+                  <div class="form-group col-md-6 mt-3">
+                     <label style="font-weight:bold;">Proje:</label>
+                     <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="detailProjectID" class="form-control mt-2" disabled name="ProjectID"></select>
+                  </div>
+                  <div class="form-group col-md-6 mt-3">
+                     <label style="font-weight:bold;">Modül:</label>
+                     <select asp-for="ModuleID" id="detailModuleID" class="form-control mt-2" disabled name="ModuleID"></select>
+                  </div>
+                  <div class="form-group col-md-6 mt-3">
+                     <label style="font-weight:bold;">Versiyon:</label>
+                     <select asp-for="VersionID" id="detailVersionID" class="form-control mt-2" disabled name="VersionID"></select>
+                  </div>
+                  <div class="form-group col-md-6 mt-3">
+                     <label style="font-weight:bold;">Sayfa Linki:</label>
+                     <input asp-for="PageUrl" type="text" id="detailPageUrl" readonly class="form-control mt-2" name="PageUrl" />
+                  </div>
+                  <div class="col-6 mt-3">
+                     <label style="font-weight:bold;">Talep Açılma Tarihi</label>
+                     <input class="form-control mt-2" readonly id="detailOpeningDate" />
+                  </div>
+                  <div class="col-6 mt-3">
+                     <label style="font-weight:bold;">Talep Tamamlanma Tarihi</label>
+                     <input class="form-control mt-2" readonly id="detailEndDate" />
+                  </div>
+                  <div class="form-group col-md-12 mt-3">
+                     <label style="font-weight:bold;">Konu:</label>
+                     <input asp-for="RequestSubject" type="text" id="detailRequestSubject" readonly class="form-control mt-2" name="Category" />
+                  </div>
+                  <div class="form-group col-md-12 mt-3">
+                     <label style="font-weight:bold;">Açıklama:</label>
+                     <textarea asp-for="Description" type="text" id="detailDescription" readonly class="form-control mt-2" rows="5" name="Description"></textarea>
+                  </div>
+                  <div class="form-group col-md-6 mt-3">
+                     <label style="font-weight:bold;">Görüntü:</label>
+                     <div class="card-img-container mt-2">
+                        <img id="detailRequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
+                     </div>
+                  </div>
+               </div>
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button type="button" data-bs-dismiss="modal" class="btn btn-dark">Kapat</button>
+         </div>
+      </div>
+   </div>
+</div>
+
 
 @* Aksiyon Durumu Güncelleme *@
 <div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

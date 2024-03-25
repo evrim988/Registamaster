@@ -175,7 +175,8 @@ function GetList() {
       {
         dataField: "notificationTypeID",
         caption: "Bildirim Türü",
-        alignment: 'center',
+         alignment: 'center',
+         width:140,
         lookup: {
           dataSource: DevExpress.data.AspNet.createStore({
             key: "Id",
@@ -185,23 +186,26 @@ function GetList() {
             },
           }),
           valueExpr: "value",
-          displayExpr: "text",
+           displayExpr: "text",
         }
       },
       {
         dataField: "requestSubject",
         caption: "Konu",
-        alignment: 'center',
+         alignment: 'center',
+         width:200,
       },
       {
         dataField: "description",
         caption: "Açıklama",
-        alignment: 'center',
+         alignment: 'center',
+         width:250
       },
       {
         dataField: "pageURL",
         caption: "Sayfa Linki",
-        alignment: 'center',
+         alignment: 'center',
+         width:150
       },
       {
         dataField: "categoryID",
@@ -321,19 +325,20 @@ function GetList() {
           valueExpr: "id",
           displayExpr: "fullname"
         }
-      },
+       },
       {
         caption: "İşlemler",
         fixed: true,
         fixedPosition: "right",
-        cellTemplate: function (container, options) {
+         cellTemplate: function (container, options) {
+            
           switch (options.data.requestStatus) {
             case 1://talep başlandı durumundaysa yalnızca talebe aksiyon ekleme işlemi yapılabilir
               $("<div>")
                 .dxButton({
                   icon: "add",
                   hint: "Aksiyon Ekle",
-                  stylingMode: "outlined",
+                   stylingMode: "text",
                   onClick: function (e) {
                     openPopup(options.data.id);
                   }
@@ -348,7 +353,7 @@ function GetList() {
                   .dxButton({
                     icon: "trash",
                     hint: "Sil",
-                    stylingMode: "outlined",
+                     stylingMode: "text",
                     onClick: function (e) {
                       var ID = options.data.id;
                       DeleteRequestCheckActions(ID);
@@ -365,7 +370,7 @@ function GetList() {
                   .dxButton({
                     icon: "preferences",
                     hint: "İşlemler",
-                    stylingMode: "outlined",
+                     stylingMode: "text",
                     onClick: function (e) {
                       showContextMenu(options, e);
                     }
@@ -379,7 +384,7 @@ function GetList() {
                     .dxButton({
                       icon: "preferences",
                       hint: "İşlemler",
-                      stylingMode: "outlined",
+                       stylingMode: "text",
                       onClick: function (e) {
                         showContextMenuAdmin(options, e);
                       }
@@ -391,7 +396,7 @@ function GetList() {
                     .dxButton({
                       icon: "add",
                       hint: "Aksiyon Ekle",
-                      stylingMode: "outlined",
+                       stylingMode: "text",
                       onClick: function (e) {
                         openPopup(options.data.id);
                       }
@@ -400,7 +405,17 @@ function GetList() {
                 }
               }
               break;
-          }
+            };
+            $("<div>")
+               .dxButton({
+                  icon: "textdocument",
+                  hint: "Talep Detayı",
+                  stylingMode: "text",
+                  onClick: function (e) {
+                     RequestDetail(options.data);
+                  }
+               })
+               .appendTo(container);
         }
       }
     ],
@@ -871,6 +886,92 @@ function handleItemClick(item, options) {
   }
 }
 
+//talep detay modal
+function RequestDetail(data) {
+   console.log(data);
+   $("#detailNotificationTypeID").val(data.notificationTypeID);
+   $("#detailCategoryID").val(data.categoryID);
+   $("#detailProjectID").val(data.projectID);
+   $("#detailRequestSubject").val(data.requestSubject);
+   $("#detailDescription").val(data.description);
+   $("#detailPageUrl").val(data.pageUrl);
+   $("#detailOpeningDate").val(new Date(data.createdOn).toLocaleDateString());
+   $("#detailEndDate").val(new Date(data.planedEndDate).toLocaleDateString());
+   $("#detailRequestImage").val(data.pictureURL);
+
+
+   var imagePath = data.pictureURL ? "/Modernize/Img/RequestFile/" + data.pictureURL : "/Modernize/Img/yok.png";
+   $("#detailRequestImage").attr("src", imagePath);
+
+   var projectID = new FormData();
+
+   projectID.append('id', data.projectID);
+
+   //module select list
+   $.ajax({
+      url: "/Request/GetModuleList",
+      type: 'POST',
+      async: false,
+      data: projectID,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+         console.log(data);
+         if (!data || data === "1") {
+            return;
+         }
+         $("#detailModuleID").empty();
+         var object = JSON.parse(data);
+         if (object.length != 0) {
+            var s;
+            for (var i = 0; i < object.length; i++) {
+               s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+            }
+
+            $("#detailModuleID").html(s);
+         }
+
+      },
+      complete: function () {
+         $("#detailModuleID").val(data.moduleID);
+      }
+   });
+
+   //versiyon select list
+   $.ajax({
+      url: "/Request/GetVersionList",
+      type: 'POST',
+      async: false,
+      data: projectID,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+         console.log(data);
+         if (!data || data === "1") {
+            return;
+         }
+         $("#VersionEditID").empty();
+         var object = JSON.parse(data);
+         if (object.length != 0) {
+            var s;
+            for (var i = 0; i < object.length; i++) {
+               s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+            }
+
+            $("#detailVersionID").html(s);
+         }
+
+      },
+      complete: function () {
+         $("#detailVersionID").val(data.versionID);
+      }
+   });
+
+   $("#RequestDetailModal").modal("toggle");
+
+}
 
 //talep düzenle modal
 function openEditModals(data, ID) {
@@ -891,7 +992,7 @@ function openEditModals(data, ID) {
   $("#CreatedOn").val(data.createdOn);
 
 
-  var imagePath = data.pictureURL ? "/Modernize/Img/RequestFiles/" + data.pictureURL : "/Modernize/Img/yok.png";
+  var imagePath = data.pictureURL ? "/Modernize/Img/RequestFile/" + data.pictureURL : "/Modernize/Img/yok.png";
   $("#RequestImage").attr("src", imagePath);
 
   var projectID = new FormData();
