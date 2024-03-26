@@ -39,6 +39,7 @@ public class HomeRepository : Repository, IHomeRepository
             ActionPriorityStatus = s.ActionPriorityStatus,
             LastModifiedBy = s.LastModifiedBy,
             CreatedBy = s.CreatedBy,
+            CreatedOn=s.CreatedOn
          }).OrderBy(s => s.ID).ToList();
 
          return model;

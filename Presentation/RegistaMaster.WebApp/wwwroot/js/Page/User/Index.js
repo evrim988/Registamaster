@@ -176,14 +176,14 @@ function GetList() {
             icon: "trash",
             visible: function (e) {
               var auth = $("#auth").val();
-              console.log(auth);
+              //console.log(auth);
               if (auth == 0)
                 return true;
               else
                 return false;
             },
             onClick: function (e) {
-              console.log(e.row.data);
+              //console.log(e.row.data);
               var ID = e.row.data.id;
               DeleteUser(ID);
             }
@@ -235,7 +235,7 @@ function AddUser() {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
+      //console.log(data);
       $('#addUser').modal('toggle');
     },
     error: function (e) {
@@ -271,7 +271,7 @@ function UpdateUser() {
   formData.append("email", $("#editEmail").val());
   formData.append("password", $("#editPassword").val());
 
-  console.log(formData);
+  //console.log(formData);
 
   $.ajax({
     url: "/User/UpdateUser",
@@ -309,7 +309,7 @@ function ChangeAuthorization() {
   formData.append("id", $("#chanceAuthID").val());
   formData.append("authorizationStatus", $("#changeAuthStatus").val());
 
-  console.log(formData);
+  //console.log(formData);
 
   $.ajax({
     url: "/User/ChangeAuthorization",
@@ -362,7 +362,7 @@ function DeleteUser(ID) {
         processData: false,
         contentType: false,
         success: function (data) {
-          console.log(data);
+          //console.log(data);
           swalWithBootstrapButtons(
             'Bilgi',
             'Silme İşlemi Başarılı',
@@ -384,4 +384,11 @@ function DeleteUser(ID) {
       )
     }
   })
+}
+
+function CloseAddUser() {
+  $('#addUser').modal('toggle');
+}
+function CloseEditUser() {
+  $('#editUser').modal('toggle');
 }

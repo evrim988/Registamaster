@@ -46,7 +46,8 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
-        <h5 class="modal-title" style="font-size:1.4rem;" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
+        <h5 class="modal-title h3"  id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
+        <button type="button" class="btn-close" onclick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <hr />
       <div class="modal-body">
@@ -80,7 +81,7 @@
             <input class="form-control mt-2" type="date" id="actionEndDate" />
           </div>
         </div>
-        <h5 class="modal-title mt-5" style="font-size:1.4rem;" id="exampleModalLabel">Notlar</h5>
+        <h5 class="modal-title mt-5 h3" id="exampleModalLabel">Notlar</h5>
         <hr />
             <div class="row mt-3">
           <div class="demo-container">
@@ -98,22 +99,23 @@
 
 @* !--Edit Action Modal--> *@
 <div class="modal fade" id="EditAction" aria-labelledby="EditActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content" id="clear">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="EditActionLabel">Aksiyon Düzenle</h1>
+        <h1 class="modal-title h3" id="EditActionLabel">Aksiyon Düzenle</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
       </div>
+        <hr />
       <div class="modal-body">
         <form>
           <div class="row">
             <input class="form-control" type="hidden" id="editActionID" />
             <div class="col-12">
-              <label style="font-weight:bold;">Aksiyon Konusu</label>
+              <label style="font-weight:bold;">Konu</label>
               <input class="form-control" id="editActionActionDescription" />
             </div>
             <div class="col-12 mt-2">
-              <label style="font-weight:bold;">Aksiyon Açıklama</label>
+              <label style="font-weight:bold;">Açıklama</label>
               <textarea class="form-control" id="actionEditDescription" rows="2"></textarea>
             </div>
             <div class="col-6 mt-2">
@@ -121,11 +123,11 @@
               <input class="form-control" type="date" id="actionEditOpeningDate" />
             </div>
             <div class="col-6 mt-2">
-              <label style="font-weight:bold;">Aksiyon Bitiş Tarihi</label>
+              <label style="font-weight:bold;">Bitiş Tarihi</label>
               <input class="form-control" type="date" id="actionEditEndDate" />
             </div>
             <div class="col-12 mt-2">
-              <label style="font-weight:bold;">Aksiyon Öncelik Durumu</label>
+              <label style="font-weight:bold;">Öncelik Durumu</label>
               <select class="form-select" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority"></select>
             </div>
             <div class="col-12 mt-2">
@@ -148,20 +150,21 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
-        <h5 class="modal-title" style="font-size:1.4rem;" id="exampleModalLabel">Not Ekle</h5>
+        <h5 class="modal-title h3" id="exampleModalLabel">Not Ekle</h5>
+        <button type="button" class="btn-close" onclick="closeModalActionNote()" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
       <div class="modal-body">
         <input hidden id="actionID">
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-10">
-            <label for="actionNoteTitle" style="font-size:1.2rem;" class="form-label">Not Başlığı</label>
+            <label for="actionNoteTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
             <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteTitle">
           </div>
         </div>
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-10">
-            <label for="actionNoteDescription" style="font-size:1.2rem;" class="form-label">Not İçeriği</label>
+            <label for="actionNoteDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
             <textarea style="font-size:1rem;" class="form-control" id="actionNoteDescription" rows="10"></textarea>
           </div>
         </div>
@@ -179,21 +182,22 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
-        <h5 class="modal-title" style="font-size:1.4rem;" id="exampleModalLabel">Not Düzenle</h5>
+        <h5 class="modal-title h3" id="exampleModalLabel">Not Düzenle</h5>
+        <button type="button" class="btn-close" onclick="closeModalActionEditNote()" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
       <div class="modal-body">
         <input hidden id="EditactionID">
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-10">
-            <label for="actionNoteEditTitle" style="font-size:1.2rem;" class="form-label">Not Başlığı</label>
+            <label for="actionNoteEditTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
             <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteEditTitle">
           </div>
         </div>
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-10">
-            <label for="actionNoteEditDescription" style="font-size:1.2rem;" class="form-label">Not İçeriği</label>
-            <textarea style="font-size:1rem;" class="form-control" id="actionNoteEditDescription" rows="15"></textarea>
+            <label for="actionNoteEditDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
+            <textarea style="font-size:1rem;" class="form-control" id="actionNoteEditDescription" rows="10"></textarea>
           </div>
         </div>
       </div>
@@ -207,25 +211,26 @@
 
 
 @* Aksiyon Notu Görüntüleme *@
-<div class="modal fade" id="actionNoteDetail" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="actionNoteDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
-        <h5 class="modal-title" style="font-size:1.4rem;" id="exampleModalLabel">Not Detayı</h5>
+        <h5 class="modal-title h3" id="exampleModalLabel">Not Detayı</h5>
+        <button type="button" class="btn-close" onclick="closeModalActionDetailNote()" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
       <div class="modal-body">
         <input hidden id="DetailactionID">
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-10">
-            <label for="actionNoteDetailTitle" style="font-size:1.2rem;" class="form-label">Not Başlığı</label>
+            <label for="actionNoteDetailTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
             <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteDetailTitle">
           </div>
         </div>
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-10">
-            <label for="actionNoteDetailDescription" style="font-size:1.2rem;" class="form-label">Not İçeriği</label>
-            <textarea style="font-size:1rem;" class="form-control" id="actionNoteDetailDescription" rows="15"></textarea>
+            <label for="actionNoteDetailDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
+            <textarea style="font-size:1rem;" class="form-control" id="actionNoteDetailDescription" rows="10"></textarea>
           </div>
         </div>
       </div>
@@ -241,7 +246,7 @@
    <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content" id="clear">
          <div class="modal-header">
-            <h5 class="modal-title" style="font-size:1.4rem;" id="exampleModalLabel">Aksiyon Detayı</h5>
+            <h5 class="modal-title h3" id="exampleModalLabel">Aksiyon Detayı</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
          </div>
          <hr />
@@ -249,37 +254,37 @@
             <form>
                <div class="row" style="padding-left:10px;padding-right:10px">
                   <div class="col-4">
-                     <label style="font-weight:bold;">Aksiyondan Sorumlu Kişi</label>
+                     <label style="font-weight:bold;">Sorumlu Kişi</label>
                      <input class="form-control mt-2" readonly id="actionDetailResponsible" />
                   </div>
                   <div class="col-4">
-                     <label style="font-weight:bold;">Aksiyon Öncelik Durumu</label>
+                     <label style="font-weight:bold;">Öncelik Durumu</label>
                      <input class="form-control mt-2" readonly id="actionDetailActionPriority" />
                   </div>
                   <div class="col-4">
-                     <label style="font-weight:bold;">Aksiyon Durumu</label>
+                     <label style="font-weight:bold;">Durum</label>
                      <input id="actionDetailStatus" readonly class="form-control mt-2" />
                   </div>
                   <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Aksiyon Konusu</label>
+                     <label style="font-weight:bold;">Konu</label>
                      <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
                   </div>
                   <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Aksiyon Başlangıç Tarihi</label>
+                     <label style="font-weight:bold;">Başlangıç Tarihi</label>
                      <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
                   </div>
                   <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Aksiyon Bitiş Tarihi</label>
+                     <label style="font-weight:bold;">Bitiş Tarihi</label>
                      <input class="form-control mt-2" readonly id="actionDetailEndDate" />
                   </div>
                   <div class="col-12 mt-3">
-                     <label style="font-weight:bold;">Aksiyon Açıklama</label>
+                     <label style="font-weight:bold;">Açıklama</label>
                      <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
                   </div>
                </div>
             </form>
-            <div class="row" style="padding-left:10px;padding-right:10px">
-               <h5 class="modal-title mt-5" style="padding-left:20px">Aksiyon Notları</h5>
+            <div class="row">
+               <h5 class="modal-title mt-5 h3">Notlar</h5>
                <hr />
                <div class="col-12">
                   <div id="actionNotesGridContainer"></div>
@@ -298,7 +303,8 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
-        <h5 class="modal-title" style="font-size:1.4rem;" id="exampleModalLabel">İptal/Reddedildi</h5>
+        <h5 class="modal-title h3" id="exampleModalLabel">İptal/Reddedildi</h5>
+        <button type="button" class="btn-close" onclick="CancelModalClose()" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
       <div class="modal-body">
@@ -306,7 +312,8 @@
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-11">
             <label for="actionNoteDescription" style="font-size:1.2rem;" class="form-label">İptal/Reddedildi Nedeni</label>
-            <textarea style="font-size:1rem;" class="form-control" id="CancelNoteDescription" rows="10"></textarea>
+            <textarea class="form-control mb-2" id="CancelNoteDescription" rows="10"></textarea>
+            <span id="checkText" class="text-danger h5"></span>
           </div>
         </div>
       </div>

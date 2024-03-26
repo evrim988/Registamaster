@@ -5,7 +5,7 @@ function ImageClick(url) {
 
     if (url != '') {
         var a = '/Modernize/Img/TaskFiles/' + url;
-        console.log(a);
+        //console.log(a);
         $("#imgModal").attr("src", a);
     } else {
         $("#imgModal").attr("src", '/Modernize/Img/yok.png');

@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
   DevExpress.localization.locale('tr');
   GetList();
-  console.log(actionID);
+  //console.log(actionID);
 });
 function gridRefresh() {
   $("#actionGridContainer").dxDataGrid("instance").refresh();
@@ -161,8 +161,15 @@ function GetList() {
         }
       },
       {
-        dataField: "openingDate",
+        dataField: "createdOn",
         caption: "Açılma Tarihi",
+        alignment: 'center',
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
+      },
+      {
+        dataField: "openingDate",
+        caption: "Başlangıç Tarihi",
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
@@ -170,7 +177,7 @@ function GetList() {
       {
         dataField: "endDate",
         caption: "Son Tarih",
-        alignment: 'left',
+        alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
       },
@@ -293,7 +300,7 @@ function GetList() {
             onClick: function (e) {
               data = e.row.data;
               ChangeActionStatusModal(data);
-              console.log(data);
+              //console.log(data);
 
             }
           },
@@ -317,7 +324,7 @@ function GetList() {
 
 
 function GetActionNoteList(ID) {
-  console.log(ID);
+  //console.log(ID);
   var grid = $(actionNotesGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: "id",
@@ -493,7 +500,7 @@ function GetActionNoteList(ID) {
 
 //aksiyon güncelle modal
 function OpenActionEditModals(data) {
-  console.log(data);
+  //console.log(data);
 
   $("#editActionID").val(data.id);
   $("#editActionActionDescription").val(data.actionDescription);
@@ -573,7 +580,7 @@ function SaveActionUpdate() {
 
 //aksiyon sil
 function DeleteActionDialog(ID) {
-  console.log(ID);
+  //console.log(ID);
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
     cancelButtonClass: 'btn btn-danger',
@@ -720,7 +727,7 @@ function ActionNoteSave() {
     contentType: 'application/json',
     data: JSON.stringify(model),
     success: function (response) {
-      console.log(response);
+      //console.log(response);
       $('#actionNoteAddModal').modal('toggle');
       $('#changeActionStatus').modal('show');
       refreshGridAfterEdit();
@@ -784,7 +791,7 @@ function ChanceActionStatus() {
 }
 
 function DeleteActionNote(ID) {
-  console.log(ID);
+  //console.log(ID);
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
     cancelButtonClass: 'btn btn-danger',
@@ -881,7 +888,7 @@ function ActionNoteEditSave() {
     contentType: 'application/json',
     data: JSON.stringify(model),
     success: function (response) {
-      console.log(response);
+      //console.log(response);
       $('#actionNoteEditModal').modal('toggle');
       $('#changeActionStatus').modal('show');
       refreshGridAfterEdit();
@@ -890,7 +897,7 @@ function ActionNoteEditSave() {
       console.error(xhr.responseText);
     },
     complete: function () {
-      console.log("complete");
+      //console.log("complete");
     }
   });
 }
@@ -944,15 +951,20 @@ function CancelModalClose() {
   $('#CancelModal').modal('toggle');
   $("#CancelNoteDescription").val("");
   $('#changeActionStatus').modal('show');
+  $("#checkText").val("");
 }
 
 function CancelModalSave() {
-  $("#detail").val("");
   var model = {};
   model.ActionID = $('#actionID').val();
   model.Title = "İptal/Reddedildi Nedeni"
   model.Description = $('#CancelNoteDescription').val();
-
+  if (model.Description == '') {
+    $("#checkText").text("*İptal Nedeni Boş Geçilemez!")
+    return;
+  }
+  $("#detail").val("");
+  
 
   $.ajax({
     url: '/Action/AddActionNote',
@@ -960,7 +972,8 @@ function CancelModalSave() {
     contentType: 'application/json',
     data: JSON.stringify(model),
     success: function (response) {
-      console.log(response);
+      //console.log(response);
+      $("#checkText").val("");
       $('#CancelModal').modal('toggle');
       refreshGridAfterEdit();
     },
@@ -968,7 +981,7 @@ function CancelModalSave() {
       console.error(xhr.responseText);
     },
     complete: function () {
-      console.log("complete");
+      //console.log("complete");
     }
   });
 
