@@ -177,6 +177,8 @@ public class RequestController : Controller
         RequestID = ID,
         CreatedOn = item.CreatedOn,
         CreatedBy = item.CreatedBy,
+        StartDate = item.StartDate,
+        CompleteDate = item.CompleteDate,
       };
       if (item.ActionStatus == ActionStatus.Contiuned || item.ActionStatus == ActionStatus.notStarted)
       {

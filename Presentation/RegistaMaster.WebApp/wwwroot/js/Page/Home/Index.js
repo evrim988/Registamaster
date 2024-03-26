@@ -152,6 +152,20 @@ function GetList() {
         format: 'dd/MM/yyyy',
       },
       {
+        dataField: "startDate",
+        caption: "Başlama Tarihi",
+        alignment: 'center',
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
+      },
+      {
+        dataField: "completeDate",
+        caption: "Tamamlama Tarihi",
+        alignment: 'center',
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
+      },
+      {
         dataField: "actionPriorityStatus",
         caption: "Öncelik",
         alignment: 'center',
@@ -254,6 +268,7 @@ function GetList() {
             onClick: function (e) {
               data = e.row.data;
               ChangeActionStatusModal(data);
+              console.log(data);
             }
           },
           {
@@ -528,17 +543,18 @@ function ChangeActionStatusModal(data) {
   $("#detail").val(2);
   $("#actionID").val(data.id);
   GetActionNoteList(data.id);
+  console.log(data);
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = ("0" + date.getDate()).slice(-2);
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const openingDate = data.openingDate !== "0001-01-01T00:00:00" ? new Date(data.openingDate) : new Date();
-  const endDate = data.endDate !== "0001-01-01T00:00:00" ? new Date(data.endDate) : new Date();
+  const startDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate) : "";
+  const completeDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate) : "";
 
-  $("#actionOpeningDate").val(formatDate(openingDate));
-  $("#actionEndDate").val(formatDate(endDate));
+  $("#actionStartDate").val(formatDate(startDate));
+  $("#actionCompleteDate").val(formatDate(completeDate));
 
   // Modal açıldığında toggle butonları kontrol et
   $('#changeActionStatus').on('shown.bs.modal', function () {
@@ -618,15 +634,16 @@ function closeModalActionNote() {
 
   $("#actionNoteAddModal").modal("toggle");
   $("#changeActionStatus").modal("show");
-}
+} 
 
 //aksiyon durumu değiştir
 function ChangeActionStatus() {
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("openingDate", $("#actionOpeningDate").val());
-  formData.append("endDate", $("#actionEndDate").val());
+  formData.append("startDate", $("#actionStartDate").val());
+  formData.append("completeDate", $("#actionCompleteDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
+
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
     $("#CancelModal").modal("toggle");
@@ -797,8 +814,8 @@ function CancelModalSave() {
 
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("openingDate", $("#actionOpeningDate").val());
-  formData.append("endDate", $("#actionEndDate").val());
+  formData.append("startDate", $("#actionStartDate").val());
+  formData.append("completeDate", $("#actionCompleteDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
   $.ajax({
     url: "/Action/ChangeActionStatus",

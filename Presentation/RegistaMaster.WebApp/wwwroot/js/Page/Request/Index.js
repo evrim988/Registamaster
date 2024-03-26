@@ -520,7 +520,20 @@ function GetList() {
                 format: 'dd/MM/yyyy',
                 allowEditing: false,
               },
-
+              {
+                dataField: "StartDate",
+                caption: "Başlama Tarihi",
+                alignment: 'center',
+                dataType: 'date',
+                format: 'dd/MM/yyyy',
+              },
+              {
+                dataField: "CompleteDate",
+                caption: "Tamamlama Tarihi",
+                alignment: 'center',
+                dataType: 'date',
+                format: 'dd/MM/yyyy',
+              },
               {
                 dataField: "ActionStatus",
                 caption: "Durum",
@@ -1897,8 +1910,8 @@ function DeleteActionDialog(ID) {
 function ChangeActionStatus() {
   var formData = new FormData();
   formData.append("ID", $("#actionID").val());
-  formData.append("OpeningDate", $("#actionStatusOpeningDate").val());
-  formData.append("EndDate", $("#actionStatusEndDate").val());
+  formData.append("StartDate", $("#actionStartDate").val());
+  formData.append("CompleteDate", $("#actionCompleteDate").val());
   formData.append("ActionStatus", $("#actionStatusValue").val());
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
@@ -1961,11 +1974,11 @@ function ChangeActionStatusModal(data) {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const OpeningDate = data.OpeningDate !== "0001-01-01T00:00:00" ? new Date(data.OpeningDate) : new Date();
-  const EndDate = data.EndDate !== "0001-01-01T00:00:00" ? new Date(data.EndDate) : new Date();
+  const StartDate = data.StartDate !== "0001-01-01T00:00:00" ? new Date(data.StartDate) :"";
+  const CompleteDate = data.CompleteDate !== "0001-01-01T00:00:00" ? new Date(data.CompleteDate) : "";
 
-  $("#actionStatusOpeningDate").val(formatDate(OpeningDate));
-  $("#actionStatusEndDate").val(formatDate(EndDate));
+  $("#actionStartDate").val(formatDate(StartDate));
+  $("#actionCompleteDate").val(formatDate(CompleteDate));
 
   // Modal açıldığında toggle butonları kontrol et
   $('#changeActionStatus').on('shown.bs.modal', function () {
@@ -2405,8 +2418,8 @@ function CancelModalSave() {
 
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("openingDate", $("#actionStatusOpeningDate").val());
-  formData.append("endDate", $("#actionStatusEndDate").val());
+  formData.append("StartDate", $("#actionStartDate").val());
+  formData.append("CompleteDate", $("#actionCompleteDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
   $.ajax({
     url: "/Action/ChangeActionStatus",

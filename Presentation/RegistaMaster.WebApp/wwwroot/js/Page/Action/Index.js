@@ -666,6 +666,7 @@ function ChangeActionStatusModal(data) {
   $("#actionID").val(data.id);
   GetActionNoteList(data.id);
 
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = ("0" + date.getDate()).slice(-2);
@@ -770,8 +771,6 @@ function ChangeActionStatus() {
   formData.append("startDate", $("#actionStartDate").val());
   formData.append("completeDate", $("#actionCompleteDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
-
-
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
     $("#CancelModal").modal("toggle");

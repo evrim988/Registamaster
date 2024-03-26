@@ -2,11 +2,11 @@
 @model RegistaMaster.Domain.DTOModels.Entities.ActionModels.ActionDTO
 
 @{
-   ViewData["Title"] = "Home Page";
-   Layout = "~/Views/Shared/_Layout.cshtml";
+  ViewData["Title"] = "Home Page";
+  Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
-   var user = session.GetUser();
+  var user = session.GetUser();
 }
 <input type="hidden" id="userID" value="@user.ID" />
 <input type="hidden" id="auth" value="@Convert.ToInt32(user.Authorization)" />
@@ -17,93 +17,93 @@
 
 
 <div class="main-content">
-   <div class="row">
-      <div class="col-12">
-         @switch (user.Authorization)
-         {
-            case AuthorizationStatus.Admin:
-               <partial name="ChartPartials/AdminChartPartial" />
-               break;
-            case AuthorizationStatus.TeamsLeader:
-               <partial name="ChartPartials/TeamLeaderChartPartial" />
-               break;
-            case AuthorizationStatus.Developer:
-               <partial name="ChartPartials/DeveloperChartPartial" />
-               break;
-         }
-      </div>
-      <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
-         <div class="card card-primary">
-            <div class="card-content collapse show">
-               <div class="heading-elements">
-               </div>
-               <div class="card-body card-dashboard">
-                  <h3>Aksiyonlar</h3>
-                  <div class="demo-container">
-                     <div id="actionsGridContainer"></div>
-                  </div>
-               </div>
+  <div class="row">
+    <div class="col-12">
+      @switch (user.Authorization)
+      {
+        case AuthorizationStatus.Admin:
+          <partial name="ChartPartials/AdminChartPartial" />
+          break;
+        case AuthorizationStatus.TeamsLeader:
+          <partial name="ChartPartials/TeamLeaderChartPartial" />
+          break;
+        case AuthorizationStatus.Developer:
+          <partial name="ChartPartials/DeveloperChartPartial" />
+          break;
+      }
+    </div>
+    <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
+      <div class="card card-primary">
+        <div class="card-content collapse show">
+          <div class="heading-elements">
+          </div>
+          <div class="card-body card-dashboard">
+            <h3>Aksiyonlar</h3>
+            <div class="demo-container">
+              <div id="actionsGridContainer"></div>
             </div>
-         </div>
-
+          </div>
+        </div>
       </div>
-   </div>
+
+    </div>
+  </div>
 </div>
 
 @* Aksiyon Durumu Güncelleme *@
 <div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-         <div class="modal-header mt-3">
-            <h5 class="modal-title h3" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header mt-3">
+        <h5 class="modal-title h3" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
         <button type="button" class="btn-close" onclick="CloseChangeStatusModal()" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <hr />
-         <div class="modal-body">
-            <input hidden id="actionID" />
-            <div class="row mb-3 justify-content-md-center">
-               <input type="hidden" id="actionStatusValue" />
-               <div class="col-md-2">
-                  <input type="checkbox" class="btn-check" id="btn-check-1" data-value="0" autocomplete="off">
-                  <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
-               </div>
-               <div class="col-md-2">
-                  <input type="checkbox" class="btn-check" id="btn-check-2" data-value="1" autocomplete="off">
-                  <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
-               </div>
-               <div class="col-md-2">
-                  <input type="checkbox" class="btn-check" id="btn-check-3" data-value="2" autocomplete="off">
-                  <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
-               </div>
-               <div class="col-md-2">
-                  <input type="checkbox" class="btn-check" id="btn-check-4" data-value="3" autocomplete="off">
-                  <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
-               </div>
-            </div>
-            <div class="row mt-5">
-               <div class="col-md-6">
-                  <label style="font-weight:bold; font-size:1.2rem;">Aksiyon Başlangıç Tarihi</label>
-                  <input class="form-control mt-2" type="date" id="actionOpeningDate" />
-               </div>
-               <div class="col-md-6">
-                  <label style="font-weight:bold;font-size:1.2rem;">Aksiyon Bitiş Tarihi</label>
-                  <input class="form-control mt-2" type="date" id="actionEndDate" />
-               </div>
-            </div>
-            <h5 class="modal-title mt-5 h3" id="exampleModalLabel">Notlar</h5>
-            <hr />
-            <div class="row mt-3">
-               <div class="demo-container">
-                  <div id="actionNotesGridContainer"></div>
-               </div>
-            </div>
-         </div>
-         <div class="modal-footer">
-            <button type="button" onclick="closeActionStatusModal()" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-            <button type="button" onclick="ChangeActionStatus()" class="btn btn-primary">Kaydet</button>
-         </div>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <input hidden id="actionID" />
+        <div class="row mb-3 justify-content-md-center">
+          <input type="hidden" id="actionStatusValue" />
+          <div class="col-md-2">
+            <input type="checkbox" class="btn-check" id="btn-check-1" data-value="0" autocomplete="off">
+            <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
+          </div>
+          <div class="col-md-2">
+            <input type="checkbox" class="btn-check" id="btn-check-2" data-value="1" autocomplete="off">
+            <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
+          </div>
+          <div class="col-md-2">
+            <input type="checkbox" class="btn-check" id="btn-check-3" data-value="2" autocomplete="off">
+            <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
+          </div>
+          <div class="col-md-2">
+            <input type="checkbox" class="btn-check" id="btn-check-4" data-value="3" autocomplete="off">
+            <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col-md-6">
+            <label style="font-weight:bold; font-size:1.2rem;">Aksiyon Başlangıç Tarihi</label>
+            <input class="form-control mt-2" type="date" id="actionStartDate" />
+          </div>
+          <div class="col-md-6">
+            <label style="font-weight:bold;font-size:1.2rem;">Aksiyon Bitiş Tarihi</label>
+            <input class="form-control mt-2" type="date" id="actionCompleteDate" />
+          </div>
+        </div>
+        <h5 class="modal-title mt-5 h3" id="exampleModalLabel">Notlar</h5>
+        <hr />
+        <div class="row mt-3">
+          <div class="demo-container">
+            <div id="actionNotesGridContainer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closeActionStatusModal()" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="button" onclick="ChangeActionStatus()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 @* Aksiyon Detayını Gösteren Modal *@
@@ -150,89 +150,89 @@
 
 <!--Aksiyon Ayrıntıları Modal-->
 <div class="modal fade" id="DetailAction" aria-labelledby="DetailActionLabel" tabindex="-1" style="display: none;" aria-hidden="true">
-   <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content" id="clear">
-         <div class="modal-header">
-            <h5 class="modal-title h3" id="exampleModalLabel">Aksiyon Detayı</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
-         </div>
-         <hr />
-         <div class="modal-body">
-            <form>
-               <div class="row" style="padding-left:10px;padding-right:10px">
-                  <div class="col-4">
-                     <label style="font-weight:bold;">Sorumlu Kişi</label>
-                     <input class="form-control mt-2" readonly id="actionDetailResponsible" />
-                  </div>
-                  <div class="col-4">
-                     <label style="font-weight:bold;">Öncelik Durumu</label>
-                     <input class="form-control mt-2" readonly id="actionDetailActionPriority" />
-                  </div>
-                  <div class="col-4">
-                     <label style="font-weight:bold;">Durum</label>
-                     <input id="actionDetailStatus" readonly class="form-control mt-2" />
-                  </div>
-                  <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Konu</label>
-                     <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
-                  </div>
-                  <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Başlangıç Tarihi</label>
-                     <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
-                  </div>
-                  <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Bitiş Tarihi</label>
-                     <input class="form-control mt-2" readonly id="actionDetailEndDate" />
-                  </div>
-                  <div class="col-12 mt-3">
-                     <label style="font-weight:bold;">Açıklama</label>
-                     <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
-                  </div>
-               </div>
-            </form>
-            <div class="row">
-               <h5 class="modal-title mt-5 h3" >Notlar</h5>
-               <hr />
-               <div class="col-12">
-                  <div id="actionNotesGridContainer"></div>
-               </div>
-            </div>
-            <div class="modal-footer">
-               <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-            </div>
-         </div>
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content" id="clear">
+      <div class="modal-header">
+        <h5 class="modal-title h3" id="exampleModalLabel">Aksiyon Detayı</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row" style="padding-left:10px;padding-right:10px">
+            <div class="col-4">
+              <label style="font-weight:bold;">Sorumlu Kişi</label>
+              <input class="form-control mt-2" readonly id="actionDetailResponsible" />
+            </div>
+            <div class="col-4">
+              <label style="font-weight:bold;">Öncelik Durumu</label>
+              <input class="form-control mt-2" readonly id="actionDetailActionPriority" />
+            </div>
+            <div class="col-4">
+              <label style="font-weight:bold;">Durum</label>
+              <input id="actionDetailStatus" readonly class="form-control mt-2" />
+            </div>
+            <div class="col-4 mt-3">
+              <label style="font-weight:bold;">Konu</label>
+              <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
+            </div>
+            <div class="col-4 mt-3">
+              <label style="font-weight:bold;">Başlangıç Tarihi</label>
+              <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
+            </div>
+            <div class="col-4 mt-3">
+              <label style="font-weight:bold;">Bitiş Tarihi</label>
+              <input class="form-control mt-2" readonly id="actionDetailEndDate" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <h5 class="modal-title mt-5 h3">Notlar</h5>
+          <hr />
+          <div class="col-12">
+            <div id="actionNotesGridContainer"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!--Aksiyon Not Ayrıntıları Modal-->
 <div class="modal fade" id="actionNoteDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-         <div class="modal-header mt-3">
-            <h5 class="modal-title h3" id="exampleModalLabel">Not Detayı</h5>
-            <button type="button" class="btn-close" onclick="closActionNoteDetailModal()" aria-label="Kapat"></button>
-         </div>
-         <hr />
-         <div class="modal-body">
-            <div class="row mt-3 justify-content-md-center">
-               <div class="col-md-11">
-                  <label style="font-size:1.2rem;" class="form-label">Başlık</label>
-                  <input type="text" style="font-size:1rem;" readonly class="form-control" id="detailNoteTitle">
-               </div>
-            </div>
-            <div class="row mt-3 justify-content-md-center">
-               <div class="col-md-11">
-                  <label style="font-size:1.2rem;" class="form-label">İçerik</label>
-                  <textarea style="font-size:1rem;" readonly class="form-control" id="detailNoteDescription" rows="10"></textarea>
-               </div>
-            </div>
-         </div>
-         <div class="modal-footer">
-            <button type="button" onclick="closActionNoteDetailModal()" class="btn btn-secondary">Kapat</button>
-         </div>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header mt-3">
+        <h5 class="modal-title h3" id="exampleModalLabel">Not Detayı</h5>
+        <button type="button" class="btn-close" onclick="closActionNoteDetailModal()" aria-label="Kapat"></button>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <div class="row mt-3 justify-content-md-center">
+          <div class="col-md-11">
+            <label style="font-size:1.2rem;" class="form-label">Başlık</label>
+            <input type="text" style="font-size:1rem;" readonly class="form-control" id="detailNoteTitle">
+          </div>
+        </div>
+        <div class="row mt-3 justify-content-md-center">
+          <div class="col-md-11">
+            <label style="font-size:1.2rem;" class="form-label">İçerik</label>
+            <textarea style="font-size:1rem;" readonly class="form-control" id="detailNoteDescription" rows="10"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closActionNoteDetailModal()" class="btn btn-secondary">Kapat</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!--Aksiyon notu ekle modal-->
@@ -296,36 +296,36 @@
 
 <!--Aksiyon notu düzenle modal-->
 <div class="modal fade" id="actionNoteEditModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-         <div class="modal-header mt-3">
-            <h5 class="modal-title h3" id="exampleModalLabel">Not Düzenle</h5>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header mt-3">
+        <h5 class="modal-title h3" id="exampleModalLabel">Not Düzenle</h5>
         <button type="button" class="btn-close" onclick="closeModalActionEditNote()" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <hr />
-         <div class="modal-body">
-            <input hidden id="EditactionID">
-            <div class="row mt-3 justify-content-md-center">
-               <div class="col-md-11">
-                  <label for="actionNoteEditTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
-                  <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteEditTitle">
-               </div>
-            </div>
-            <div class="row mt-3 justify-content-md-center">
-               <div class="col-md-11">
-                  <label for="actionNoteEditDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
-                  <textarea style="font-size:1rem;" class="form-control" id="actionNoteEditDescription" rows="10"></textarea>
-               </div>
-            </div>
-         </div>
-         <div class="modal-footer">
-            <button type="button" onclick="closeModalActionEditNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-            <button type="button" onclick="ActionNoteEditSave()" class="btn btn-primary">Kaydet</button>
-         </div>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <input hidden id="EditactionID">
+        <div class="row mt-3 justify-content-md-center">
+          <div class="col-md-11">
+            <label for="actionNoteEditTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
+            <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteEditTitle">
+          </div>
+        </div>
+        <div class="row mt-3 justify-content-md-center">
+          <div class="col-md-11">
+            <label for="actionNoteEditDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
+            <textarea style="font-size:1rem;" class="form-control" id="actionNoteEditDescription" rows="10"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closeModalActionEditNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button type="button" onclick="ActionNoteEditSave()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 @section Scripts {
-   <script src="/js/Page/Home/Index.js"></script>
+  <script src="/js/Page/Home/Index.js"></script>
 }
