@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace RegistaMaster.Persistance.Migrations
 {
-    public partial class _1001 : Migration
+    public partial class init_5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -231,7 +231,7 @@ namespace RegistaMaster.Persistance.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DatabaseChangeStatus = table.Column<int>(type: "integer", nullable: true),
+                    DatabaseChange = table.Column<bool>(type: "boolean", nullable: false),
                     ProjectID = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -317,6 +317,8 @@ namespace RegistaMaster.Persistance.Migrations
                     ResponsibleID = table.Column<int>(type: "integer", nullable: false),
                     OpeningDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CompleteDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     ActionStatus = table.Column<int>(type: "integer", nullable: false),
                     RequestStatus = table.Column<int>(type: "integer", nullable: false),
@@ -385,6 +387,38 @@ namespace RegistaMaster.Persistance.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "ActionNotes",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ActionID = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActionNotes", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ActionNotes_Actions_ActionID",
+                        column: x => x.ActionID,
+                        principalTable: "Actions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActionNotes_ActionID",
+                table: "ActionNotes",
+                column: "ActionID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Actions_RequestID",
@@ -455,7 +489,7 @@ namespace RegistaMaster.Persistance.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Actions");
+                name: "ActionNotes");
 
             migrationBuilder.DropTable(
                 name: "ErrorLogs");
@@ -473,19 +507,22 @@ namespace RegistaMaster.Persistance.Migrations
                 name: "UserLogs");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Actions");
 
             migrationBuilder.DropTable(
                 name: "Requests");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Modules");
 
             migrationBuilder.DropTable(
                 name: "Versions");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Projects");

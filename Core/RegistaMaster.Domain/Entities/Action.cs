@@ -18,6 +18,12 @@ public class Action : BaseEntitiy
   [DisplayName("Son Tarih")]
   public DateTime EndDate { get; set; }
 
+  [DisplayName("Başlama Tarihi")]
+  public DateTime StartDate { get; set; }
+
+  [DisplayName("Tamamlanma Tarih")]
+  public DateTime CompleteDate { get; set; }
+
   public string? Description { get; set; }
 
   [DisplayName("Durum")]

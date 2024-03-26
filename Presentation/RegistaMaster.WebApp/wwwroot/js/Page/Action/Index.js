@@ -161,15 +161,8 @@ function GetList() {
         }
       },
       {
-        dataField: "createdOn",
-        caption: "Açılma Tarihi",
-        alignment: 'center',
-        dataType: 'date',
-        format: 'dd/MM/yyyy',
-      },
-      {
         dataField: "openingDate",
-        caption: "Başlangıç Tarihi",
+        caption: "Açılma Tarihi",
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
@@ -177,6 +170,20 @@ function GetList() {
       {
         dataField: "endDate",
         caption: "Son Tarih",
+        alignment: 'center',
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
+      },
+      {
+        dataField: "startDate",
+        caption: "Başlama Tarihi",
+        alignment: 'center',
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
+      },
+      {
+        dataField: "completeDate",
+        caption: "Tamamlama Tarihi",
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
@@ -300,7 +307,7 @@ function GetList() {
             onClick: function (e) {
               data = e.row.data;
               ChangeActionStatusModal(data);
-              //console.log(data);
+              console.log(data);
 
             }
           },
@@ -665,12 +672,11 @@ function ChangeActionStatusModal(data) {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const openingDate = data.openingDate !== "0001-01-01T00:00:00" ? new Date(data.openingDate) : new Date();
-  const endDate = data.endDate !== "0001-01-01T00:00:00" ? new Date(data.endDate) : new Date();
+  const startDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate) : new Date();
+  const completeDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate) : new Date();
 
-  $("#actionOpeningDate").val(formatDate(openingDate));
-  $("#actionEndDate").val(formatDate(endDate));
-
+  $("#actionStartDate").val(formatDate(startDate));
+  $("#actionCompleteDate").val(formatDate(completeDate));
 
   // Modal açıldığında toggle butonları kontrol et
   $('#changeActionStatus').on('shown.bs.modal', function () {
@@ -758,12 +764,14 @@ function closeModalActionNote() {
 }
 
 //aksiyon durumu değiştir
-function ChanceActionStatus() {
+function ChangeActionStatus() {
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("openingDate", $("#actionOpeningDate").val());
-  formData.append("endDate", $("#actionEndDate").val());
+  formData.append("startDate", $("#actionStartDate").val());
+  formData.append("completeDate", $("#actionCompleteDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
+
+
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
     $("#CancelModal").modal("toggle");
@@ -936,8 +944,8 @@ function OpenActionDetailModal(e) {
   $("#actionDetailStatus").val(e.row.cells[8].displayValue);
   $("#actionDetailResponsible").val(e.row.cells[4].displayValue);
 
-  const openingDate = data.openingDate !== "0001-01-01T00:00:00" ? new Date(data.openingDate).toLocaleDateString() : new Date(data.openingDate).toLocaleDateString();
-  const endDate = data.endDate !== "0001-01-01T00:00:00" ? new Date(data.endDate).toLocaleDateString() : new Date(data.endDate).toLocaleDateString();
+  const openingDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate).toLocaleDateString() : new Date(data.openingDate).toLocaleDateString();
+  const endDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate).toLocaleDateString() : new Date(data.endDate).toLocaleDateString();
 
   $("#actionDetailOpeningDate").val(openingDate);
 
@@ -964,7 +972,7 @@ function CancelModalSave() {
     return;
   }
   $("#detail").val("");
-  
+
 
   $.ajax({
     url: '/Action/AddActionNote',
@@ -988,8 +996,8 @@ function CancelModalSave() {
 
   var formData = new FormData();
   formData.append("id", $("#actionID").val());
-  formData.append("openingDate", $("#actionOpeningDate").val());
-  formData.append("endDate", $("#actionEndDate").val());
+  formData.append("startDate", $("#actionStartDate").val());
+  formData.append("completeDate", $("#actionCompleteDate").val());
   formData.append("actionStatus", $("#actionStatusValue").val());
   $.ajax({
     url: "/Action/ChangeActionStatus",

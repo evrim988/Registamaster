@@ -40,6 +40,9 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ActionStatus")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("CompleteDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<int>("CreatedBy")
                         .HasColumnType("integer");
 
@@ -73,6 +76,9 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<int>("ResponsibleID")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");

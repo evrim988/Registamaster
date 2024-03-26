@@ -12,8 +12,8 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    [Migration("20240325075431_init_4")]
-    partial class init_4
+    [Migration("20240326115856_init_5")]
+    partial class init_5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,9 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<int>("ActionStatus")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("CompleteDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("integer");
@@ -75,6 +78,9 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<int>("ResponsibleID")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");

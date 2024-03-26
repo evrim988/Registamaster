@@ -179,8 +179,8 @@ public class ActionController : Controller
       {
          var action = await _uow.Repository.GetById<Action>(model.ID);
          action.ActionStatus = model.ActionStatus;
-         action.OpeningDate = model.OpeningDate;
-         action.EndDate = model.EndDate;
+         action.StartDate = model.StartDate;
+         action.CompleteDate = model.CompleteDate;
          _uow.Repository.Update(action);
          await _uow.SaveChanges();
 
