@@ -57,10 +57,10 @@ public class VersionRepository : Repository, IVersionRepository
       return "1";
    }
 
-   public string DeleteVersionWithProjectID(int ID)
+   public async Task<string> DeleteVersionWithProjectID(int ID)
    {
       var version = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID);
-      DeleteRange(version.ToList());
+      await DeleteRange(version.ToList());
       return "1";
    }
 

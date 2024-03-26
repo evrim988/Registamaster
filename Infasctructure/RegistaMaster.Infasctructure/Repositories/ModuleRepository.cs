@@ -100,10 +100,10 @@ namespace RegistaMaster.Infasctructure.Repositories
          }
       }
 
-      public string DeleteModuleWithProjectID(int ID)
+      public async Task<string> DeleteModuleWithProjectID(int ID)
       {
          var module = GetNonDeletedAndActive<Module>(t => t.ProjectID == ID);
-         DeleteRange(module.ToList());
+         await DeleteRange(module.ToList());
          return "1";
       }
 

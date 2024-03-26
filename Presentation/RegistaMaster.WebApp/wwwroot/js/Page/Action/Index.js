@@ -103,7 +103,7 @@ function GetList() {
 
 
     },
-
+    //SÜTUN EKLEYECEK-SİLECEK VEYA YERLERİNİN DEĞİŞTİRLECEĞİ DURUMDA LÜTFEN "DETAY MODAL NOT" KISMINI OKUYUNUZ!!
     columns: [
       {
         dataField: "id",
@@ -575,12 +575,13 @@ function SaveActionUpdate() {
     contentType: false,
     success: function (data) {
       //console.log(data);
+      $("#EditAction").modal("toggle");
+      gridRefresh();
     },
     error: function (e) {
       console.log(e);
     },
     complete: function () {
-      gridRefresh();
     }
   });
 }
@@ -672,8 +673,8 @@ function ChangeActionStatusModal(data) {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const startDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate) : new Date();
-  const completeDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate) : new Date();
+  const startDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate) : "";
+  const completeDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate) : "";
 
   $("#actionStartDate").val(formatDate(startDate));
   $("#actionCompleteDate").val(formatDate(completeDate));
@@ -940,16 +941,18 @@ function OpenActionDetailModal(e) {
   data = e.row.data;
   $("#actionDetailActionDescription").val(data.actionDescription);
   $("#actionDetailDescription").val(data.description);
-  $("#actionDetailActionPriority").val(e.row.cells[7].displayValue);
-  $("#actionDetailStatus").val(e.row.cells[8].displayValue);
+  $("#actionDetailActionPriority").val(e.row.cells[9].displayValue);
+  $("#actionDetailStatus").val(e.row.cells[10].displayValue);
   $("#actionDetailResponsible").val(e.row.cells[4].displayValue);
 
-  const openingDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate).toLocaleDateString() : new Date(data.openingDate).toLocaleDateString();
-  const endDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate).toLocaleDateString() : new Date(data.endDate).toLocaleDateString();
 
-  $("#actionDetailOpeningDate").val(openingDate);
+  const start = data.startDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.startDate).toLocaleDateString();
+  const complete = data.completeDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.completeDate).toLocaleDateString();
 
-  $("#actionDetailEndDate").val(endDate);
+  $("#actionDetailOpeningDate").val(new Date(data.openingDate).toLocaleDateString());
+  $("#actionDetailEndDate").val(new Date(data.endDate).toLocaleDateString());
+  $("#actionDetailStartDate").val(start);
+  $("#actionDetailCompleteDate").val(complete);
 
   $("#DetailAction").modal('toggle');
 }

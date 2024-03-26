@@ -96,10 +96,10 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
       }
    }
 
-   public string DeleteNoteWithProjectID(int ID)
+   public async Task<string> DeleteNoteWithProjectID(int ID)
    {
       var project = GetNonDeletedAndActive<ProjectNote>(t => t.ProjectID == ID);
-      DeleteRange(project.ToList());
+      await DeleteRange(project.ToList());
       return "1";
    }
 }

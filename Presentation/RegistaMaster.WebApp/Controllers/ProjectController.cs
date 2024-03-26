@@ -62,9 +62,9 @@ public class ProjectController : Controller
   {
     try
     {
-      uow.VersionRepository.DeleteVersionWithProjectID(ID);
-      uow.ModuleRepository.DeleteModuleWithProjectID(ID);
-      uow.ProjectNoteRepository.DeleteNoteWithProjectID(ID);
+      await uow.VersionRepository.DeleteVersionWithProjectID(ID);
+      await uow.ModuleRepository.DeleteModuleWithProjectID(ID);
+      await uow.ProjectNoteRepository.DeleteNoteWithProjectID(ID);
       await uow.Repository.Delete<Project>(ID);
       await uow.SaveChanges();
       return "1";
