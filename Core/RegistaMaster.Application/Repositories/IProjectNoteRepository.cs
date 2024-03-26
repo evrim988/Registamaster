@@ -11,5 +11,5 @@ public interface IProjectNoteRepository : IRepository
    public void Delete(int id);
    public Task<IQueryable<ProjectNoteDTO>> GetList();
    Task<List<ResponsibleDevextremeSelectListHelper>> GetProject();
-   public string DeleteNoteWithProjectID(int ID);
+   public Task<string> DeleteNoteWithProjectID(int ID);
 }
