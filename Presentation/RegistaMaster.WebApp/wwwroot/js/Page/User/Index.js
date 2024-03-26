@@ -29,7 +29,7 @@ function GetList() {
         toolbarItems.push({
           widget: "dxButton",
           options: {
-            icon: "plus", text: "Yeni Kullanıcı Ekle", onClick: function (e) {
+            icon: "plus", text: "Kullanıcı Ekle", onClick: function (e) {
               $('#addUser').modal('toggle');
             }
           },

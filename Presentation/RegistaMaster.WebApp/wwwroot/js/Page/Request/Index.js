@@ -87,7 +87,7 @@ function GetList() {
         toolbarItems.push({
           widget: "dxButton",
           options: {
-            icon: "plus", text: "Yeni Talep Ekle", onClick: function (e) {
+            icon: "plus", text: "Talep Ekle", onClick: function (e) {
               $('#RequestCreateModal').modal('toggle');
             }
           },
@@ -882,7 +882,7 @@ function showContextMenuWaiting(options, e) {
     .dxContextMenu({
       dataSource: [
         { text: "Aksiyon Ekle", icon: "plus" },
-          { text: "Tamamlandı Yap", icon: "check" },
+          { text: "Tamamla", icon: "check" },
       ],
       onItemClick: function (item) {
         handleItemClick(item, options);
@@ -913,7 +913,7 @@ function handleItemClick(item, options) {
      case "Sil":
         DeleteRequestCheckActions(ID);
         break;
-     case "Tamamlandı Yap":
+     case "Tamamla":
         CompleteRequest(ID);
         break;
     default:
@@ -2077,7 +2077,7 @@ function GetActionNoteList(ID) {
            toolbarItems.push({
               widget: "dxButton",
               options: {
-                 icon: "plus", text: "Yeni Aksiyon Notu Ekle", onClick: function (e) {
+                 icon: "plus", text: "Not Ekle", onClick: function (e) {
                     $('#actionNoteAddModal').modal('toggle');
                     $('#changeActionStatus').modal('hide');
                  }
@@ -2390,6 +2390,7 @@ function CancelModalSave() {
     success: function (response) {
       //console.log(response);
       $("#checkText").text("");
+      $('#CancelNoteDescription').val("");
       $('#CancelModal').modal('toggle');
       refreshGridAfterEdit();
     },

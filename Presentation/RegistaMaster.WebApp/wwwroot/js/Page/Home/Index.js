@@ -339,7 +339,7 @@ function GetActionNoteList(ID) {
         toolbarItems.push({
           widget: "dxButton",
           options: {
-            icon: "plus", text: "Yeni Aksiyon Notu Ekle", onClick: function (e) {
+            icon: "plus", text: "Not Ekle", onClick: function (e) {
               $('#actionNoteAddModal').modal('toggle');
               $('#changeActionStatus').modal('hide');
             }
