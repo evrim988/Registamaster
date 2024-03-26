@@ -6,6 +6,7 @@
   var user = session.GetUser();
 }
 <input type="hidden" id="auth" value="@Convert.ToInt32(user.Authorization)" />
+<input type="hidden" id="ID" value="@user.ID" />
 <h1>Projeler</h1>
 
 <style>
@@ -19,12 +20,9 @@
   <div class="row">
     <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
       <div class="card card-primary">
-        <div class="card-header">
-        </div>
         <div class="card-content collapse show">
           <div class="card-body card-dashboard">
             <h3>Projeler</h3>
-
             <div class="demo-container">
               <div id="projectGridContainer"></div>
             </div>
@@ -41,7 +39,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content" id="clear">
       <div class="modal-header">
-        <h3 class="modal-title fs-5" id="AddProjectLabel">Proje Ekle</h3>
+        <h3 class="modal-title" id="AddProjectLabel">Proje Ekle</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" onclick="ClearModal()" aria-label="Close"></button>
       </div>
       <hr />
@@ -72,7 +70,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content" id="clear">
       <div class="modal-header">
-        <h3 class="modal-title fs-5" id="EditProjectLabel">Proje Düzenle</h3>
+        <h3 class="modal-title" id="EditProjectLabel">Proje Düzenle</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
@@ -104,7 +102,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content" id="clear">
       <div class="modal-header">
-        <h3 class="modal-title fs-5" id="AddProjectNoteLabel">Proje Notu Ekle</h3>
+        <h3 class="modal-title" id="AddProjectNoteLabel">Proje Notu Ekle</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="ClearModal()" aria-label="Close"></button>
       </div>
       <hr />
@@ -137,7 +135,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content" id="clear">
       <div class="modal-header">
-        <h3 class="modal-title fs-5" id="EditProjectNoteLabel">Proje Notu Düzenle</h3>
+        <h3 class="modal-title" id="EditProjectNoteLabel">Proje Notu Düzenle</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
@@ -169,7 +167,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content" id="clear">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="DetailProjectNoteLabel">Proje Notu Detay</h1>
+        <h3 class="modal-title" id="DetailProjectNoteLabel">Proje Notu Detay</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
@@ -177,7 +175,7 @@
         <form>
           <div class="row">
             <div class="col-6">
-              <label style="font-weight:bold;">Ekleyen</label>
+              <label style="font-weight:bold;">Ekleyen Kişi</label>
               <input class="form-control mt-2" readonly id="detailAddedUser" />
             </div>
             <div class="col-6">
@@ -185,7 +183,7 @@
               <input class="form-control mt-2" readonly id="detailDate" />
             </div>
             <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Konusu</label>
+              <label style="font-weight:bold;">Konu</label>
               <input class="form-control mt-2" readonly id="detailNoteType" />
             </div>
             <div class="col-12 mt-3">
