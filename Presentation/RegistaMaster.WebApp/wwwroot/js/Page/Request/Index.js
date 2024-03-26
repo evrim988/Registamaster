@@ -511,7 +511,6 @@ function GetList() {
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
                 allowEditing: false,
-
               },
               {
                 dataField: "EndDate",
@@ -613,15 +612,6 @@ function GetList() {
                 fixedPosition: "right",
                 buttons: [
                   {
-                    hint: "Aksiyon Detayı",
-                    icon: "textdocument",
-                    onClick: function (e) {
-                      data = e.row.data;
-                       OpenActionDetailModal(data);
-                       GetActionNoteList(e.row.data.ID);
-                    }
-                  },
-                  {
                     hint: "Düzenle",
                     icon: "edit",
                     visible: function (e) {
@@ -661,6 +651,15 @@ function GetList() {
                     onClick: function (e) {
                       data = e.row.data;
                       ChangeActionStatusModal(data);
+                    }
+                  },
+                  {
+                    hint: "Aksiyon Detayı",
+                    icon: "textdocument",
+                    onClick: function (e) {
+                      data = e.row.data;
+                      OpenActionDetailModal(data);
+                      GetActionNoteList(e.row.data.ID);
                     }
                   },
                 ]
@@ -782,7 +781,7 @@ function GetSelectList() {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
+      //console.log(data);
       $("#ModuleID").empty();
       if (!data || data === "1") {
         return;
@@ -810,7 +809,7 @@ function GetSelectList() {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
+      //console.log(data);
       $("#VersionID").empty();
 
       if (!data || data === "1") {
@@ -1035,8 +1034,8 @@ function RequestDetail(data) {
 
 //talep düzenle modal
 function openEditModals(data, ID) {
-  console.log(data);
-  console.log(ID);
+  //console.log(data);
+  //console.log(ID);
   // Modal form alanlarını seçilen satırdan gelen veri ile doldurun
   $("#NotificationEditTypeID").val(data.notificationTypeID);
   $("#CategoryEditID").val(data.categoryID);
@@ -1069,7 +1068,7 @@ function openEditModals(data, ID) {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
+      //console.log(data);
       if (!data || data === "1") {
         return;
       }
@@ -1101,7 +1100,7 @@ function openEditModals(data, ID) {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
+      //console.log(data);
       if (!data || data === "1") {
         return;
       }
@@ -1141,7 +1140,7 @@ function GetSelectListEdit() {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
+      //console.log(data);
       $("#ModuleEditID").empty();
       if (!data || data === "1") {
         return;
@@ -1168,7 +1167,7 @@ function GetSelectListEdit() {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
+      //console.log(data);
       $("#VersionEditID").empty();
       if (!data || data === "1") {
         return;
@@ -1204,7 +1203,7 @@ function SaveRequestEditModal() {
   formData.append("customerID", $("#CustomerID").val());
   formData.append("createdOn", $("#CreatedOn").val());
 
-  console.log(formData);
+  //console.log(formData);
 
   $.ajax({
     url: "/Request/RequestUpdate",
@@ -1215,7 +1214,7 @@ function SaveRequestEditModal() {
     contentType: false,
     success: function (data) {
 
-      console.log(data);
+      //console.log(data);
       gridRefresh();
 
     },
@@ -1376,7 +1375,7 @@ function openPopup(ID) {
 //aksiyon ekle kayıt
 function saveData(form, popup, ID) {
   var formData = form.option("formData");
-  console.log(formData);
+  //console.log(formData);
 
   $.ajax({
     url: "/Request/AddActionItem/" + ID,
@@ -1399,7 +1398,7 @@ function saveData(form, popup, ID) {
 
 //talep sil
 function DeleteDialog(ID) {
-  console.log(ID);
+  //console.log(ID);
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
     cancelButtonClass: 'btn btn-danger',
@@ -1429,7 +1428,7 @@ function DeleteDialog(ID) {
         processData: false,
         contentType: false,
         success: function (data) {
-          console.log(data);
+          //console.log(data);
           if (data == "-1") {
             swalWithBootstrapButtons(
               'Uyarı',
@@ -1477,7 +1476,7 @@ function validateForm() {
   return true;
 }
 function OpenPartImage(image) {
-  console.log(image);
+  //console.log(image);
 
   $.fancybox.open({
     src: image, // Açılacak resmin URL'si
@@ -1676,7 +1675,7 @@ function DeleteRequestWithActions(ID) {
         processData: false,
         contentType: false,
         success: function (data) {
-          console.log(data);
+          //console.log(data);
           swalWithBootstrapButtons(
             'Bilgi',
             'Silme İşlemi Başarılı',
@@ -1818,7 +1817,7 @@ function SaveActionUpdate() {
   formData.append("endDate", $("#actionEditEndDate").val());
   formData.append("responsibleID", $("#actionEditResponsible").val());
 
-  console.log(formData);
+  //console.log(formData);
 
   $.ajax({
     url: "/Action/ActionUpdate",
@@ -1838,7 +1837,7 @@ function SaveActionUpdate() {
 }
 //aksiyon sil
 function DeleteActionDialog(ID) {
-  console.log(ID);
+  //console.log(ID);
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
     cancelButtonClass: 'btn btn-danger',
@@ -1868,7 +1867,7 @@ function DeleteActionDialog(ID) {
         processData: false,
         contentType: false,
         success: function (response) {
-          console.log(response);
+          //console.log(response);
           if (data == "1") {
             swalWithBootstrapButtons(
               'Bilgi',
@@ -1929,7 +1928,7 @@ function ChangeActionStatus() {
 
 //aksiyon detay modal
 function OpenActionDetailModal(data) {
-  console.log(data);
+  //console.log(data);
   $("#actionDetailActionDescription").val(data.ActionDescription);
   $("#actionDetailDescription").val(data.Description);
   $("#actionDetailResponsible").val(data.ResponsibleID);
@@ -1941,10 +1940,6 @@ function OpenActionDetailModal(data) {
 
   let EndDate = new Date(data.EndDate).toLocaleDateString();
   $("#actionDetailEndDate").val(EndDate);
-
-
-  console.log(OpeningDate);
-  console.log(EndDate);
 
   $("#DetailAction").modal('toggle');
 }
@@ -1958,7 +1953,7 @@ function ChangeActionStatusModal(data) {
   $("#actionID").val(data.ID);
   GetActionNoteList(data.ID);
 
-  console.log(data);
+  //console.log(data);
   
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -2013,7 +2008,7 @@ function ChangeActionStatusModal(data) {
 }
 
 function GetActionNoteList(ID) {
-  console.log(ID);
+  //console.log(ID);
   var grid = $(actionNotesGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: "id",
@@ -2201,7 +2196,7 @@ function toggleButtons() {
 }
 
 function DeleteActionNote(ID) {
-  console.log(ID);
+  //console.log(ID);
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
     cancelButtonClass: 'btn btn-danger',
@@ -2269,7 +2264,7 @@ function ActionNoteSave() {
     contentType: 'application/json',
     data: JSON.stringify(model),
     success: function (response) {
-      console.log(response);
+      //console.log(response);
       $('#actionNoteAddModal').modal('toggle');
       $('#changeActionStatus').modal('show');
       refreshGridAfterEdit();
@@ -2311,7 +2306,7 @@ function ActionNoteDetail(data) {
 }
 
 function ActionNoteEdit(data) {
-  console.log(data);
+  //console.log(data);
 
   $("#EditactionID").val(data.id);
   $("#actionNoteEditDescription").val(data.description);
@@ -2334,7 +2329,7 @@ function ActionNoteEditSave() {
     contentType: 'application/json',
     data: JSON.stringify(model),
     success: function (response) {
-      console.log(response);
+      //console.log(response);
       $('#actionNoteEditModal').modal('toggle');
       $('#changeActionStatus').modal('show');
       refreshGridAfterEdit();
@@ -2343,7 +2338,7 @@ function ActionNoteEditSave() {
       console.error(xhr.responseText);
     },
     complete: function () {
-      console.log("complete");
+      //console.log("complete");
     }
   });
 }
@@ -2370,18 +2365,22 @@ function CloseChangeStatusModal() {
 }
 
 function CancelModalClose() {
+  $("#checkText").text("");
   $('#CancelModal').modal('toggle');
   $("#CancelNoteDescription").val("");
   $('#changeActionStatus').modal('show');
 }
 
 function CancelModalSave() {
-  $("#detail").val("");
-  var model = {};
+   var model = {};
   model.ActionID = $('#actionID').val();
   model.Title = "İptal/Reddedildi Nedeni"
   model.Description = $('#CancelNoteDescription').val();
-
+  if (model.Description == '') {
+    $("#checkText").text("*İptal Nedeni Boş Geçilemez!")
+    return;
+  }
+  $("#detail").val("");
 
   $.ajax({
     url: '/Action/AddActionNote',
@@ -2389,7 +2388,8 @@ function CancelModalSave() {
     contentType: 'application/json',
     data: JSON.stringify(model),
     success: function (response) {
-      console.log(response);
+      //console.log(response);
+      $("#checkText").text("");
       $('#CancelModal').modal('toggle');
       refreshGridAfterEdit();
     },
@@ -2397,7 +2397,7 @@ function CancelModalSave() {
       console.error(xhr.responseText);
     },
     complete: function () {
-      console.log("complete");
+      //console.log("complete");
     }
   });
 

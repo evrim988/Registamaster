@@ -194,7 +194,7 @@ function GetList() {
                },
                {
                   hint: "Not Ekle",
-                  icon: "verticalalignbottom",
+                  icon: "add",
                   onClick: function (e) {
                      AddProjectNoteModal(e.row.data.id);
                   }
@@ -248,12 +248,12 @@ function GetList() {
                      },
                      {
                         dataField: "AddUserNote",
-                        caption: "Not Ekleyen Kullanıcı",
+                        caption: "Notu Ekleyen Kullanıcı",
                         alignment: 'center',
                      },
                      {
                         dataField: "Date",
-                        caption: "Tarih",
+                        caption: "Eklenme Tarihi",
                         alignment: 'center',
                         dataType: 'date',
                         format: 'dd/MM/yyyy',
@@ -265,16 +265,8 @@ function GetList() {
                         fixedPosition: "right",
                         buttons: [
                            {
-                              hint: "Not Detay",
-                              icon: "textdocument",
-                              onClick: function (e) {
-                                 ProjectNoteDetailModal(e.row.data);
-                              }
-                           },
-                           {
                               hint: "Düzenle",
                               icon: "edit",
-
                               onClick: function (e) {
                                  data = e.row.data;
                                  OpenProjectNoteEditModal(data);
@@ -286,7 +278,14 @@ function GetList() {
                               onClick: function (e) {
                                  DeleteProjectNote(e.row.data.ID);
                               }
-                           },
+                          },
+                          {
+                            hint: "Detay",
+                            icon: "textdocument",
+                            onClick: function (e) {
+                              ProjectNoteDetailModal(e.row.data);
+                            }
+                          },
                         ]
                      },
 
