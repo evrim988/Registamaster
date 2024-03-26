@@ -1,9 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+  ViewData["Title"] = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
-   var user = session.GetUser();
+  var user = session.GetUser();
 }
 <input type="hidden" id="auth" value="@Convert.ToInt32(user.Authorization)" />
 <h1>Projeler</h1>
@@ -16,193 +16,198 @@
 <link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
 
 <div class="main-content">
-    <div class="row">
-        <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
-            <div class="card card-primary">
-                <div class="card-header">
-                </div>
-                <div class="card-content collapse show">
-                    <div class="card-body card-dashboard">
-                        <h3>Projeler</h3>
-
-                        <div class="demo-container">
-                            <div id="projectGridContainer"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+  <div class="row">
+    <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
+      <div class="card card-primary">
+        <div class="card-header">
         </div>
+        <div class="card-content collapse show">
+          <div class="card-body card-dashboard">
+            <h3>Projeler</h3>
+
+            <div class="demo-container">
+              <div id="projectGridContainer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
 </div>
 
 <!--Proje Ekle Modal-->
 <div class="modal fade" id="AddProject" aria-labelledby="AddProjectLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content" id="clear">
-         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="AddProjectLabel">Proje Ekle</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" onclick="ClearModal()" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form>
-               <div class="row">
-                  <div class="col-12">
-                     <label style="font-weight:bold;">Proje Adı</label>
-                     <input class="form-control" id="addProjectName" />
-                  </div>
-                  <div class="col-12 mt-2">
-                     <label style="font-weight:bold;">Proje Açıklama</label>
-                     <textarea class="form-control" id="addProjectDescription" rows="4"></textarea>
-                  </div>
-               </div>
-            </form>
-         </div>
-         <div class="modal-footer">
-            <button type="button" data-bs-dismiss="modal" onclick="ClearModal()" class="btn btn-secondary">Kapat</button>
-            <button type="button" onclick="SaveProject()" class="btn btn-primary">Kaydet</button>
-         </div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="clear">
+      <div class="modal-header">
+        <h3 class="modal-title fs-5" id="AddProjectLabel">Proje Ekle</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" onclick="ClearModal()" aria-label="Close"></button>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-12">
+              <label style="font-weight:bold;">Adı</label>
+              <input class="form-control mt-2" id="addProjectName" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" id="addProjectDescription" rows="4"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" onclick="ClearModal()" class="btn btn-secondary">Kapat</button>
+        <button type="button" onclick="SaveProject()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!--Proje Düzenle Modal-->
 <div class="modal fade" id="EditProject" aria-labelledby="EditProjectLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content" id="clear">
-         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="EditProjectLabel">Proje Düzenle</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form>
-               <div class="row">
-                  <input class="form-control" type="hidden" id="editProjectID" />
-                  <div class="col-12">
-                     <label style="font-weight:bold;">Proje Adı</label>
-                     <input class="form-control" id="editProjectName" />
-                  </div>
-                  <div class="col-12 mt-2">
-                     <label style="font-weight:bold;">Proje Açıklama</label>
-                     <textarea class="form-control" id="editProjectDescription" rows="4"></textarea>
-                  </div>
-               </div>
-            </form>
-         </div>
-         <div class="modal-footer">
-            <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-            <button type="button" onclick="SaveProjectUpdate()" class="btn btn-primary">Kaydet</button>
-         </div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="clear">
+      <div class="modal-header">
+        <h3 class="modal-title fs-5" id="EditProjectLabel">Proje Düzenle</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <input class="form-control" type="hidden" id="editProjectID" />
+            <div class="col-12">
+              <label style="font-weight:bold;">Adı</label>
+              <input class="form-control mt-2" id="editProjectName" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" id="editProjectDescription" rows="4"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+        <button type="button" onclick="SaveProjectUpdate()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!--Proje Notu Ekle Modal-->
 <div class="modal fade" id="AddProjectNote" aria-labelledby="AddProjectNoteLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content" id="clear">
-         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="AddProjectNoteLabel">Proje Notu Ekle</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="ClearModal()" id="CloseModal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form>
-               <div class="row">
-                  <input class="form-control" type="hidden" id="addProjectID" />
-                  <div class="col-12">
-                     <label style="font-weight:bold;">Not Konusu</label>
-                     <input class="form-control" id="addNoteType" />
-                  </div>
-                  <div class="col-12 mt-2">
-                     <label style="font-weight:bold;">Not Açıklama</label>
-                     <textarea class="form-control" id="addDescription" rows="4"></textarea>
-                  </div>
-               </div>
-            </form>
-         </div>
-         <div class="modal-footer">
-            <button type="button" onclick="ClearModal()" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-            <button type="button" onclick="SaveProjectNote()" class="btn btn-primary">Kaydet</button>
-         </div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="clear">
+      <div class="modal-header">
+        <h3 class="modal-title fs-5" id="AddProjectNoteLabel">Proje Notu Ekle</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="ClearModal()" aria-label="Close"></button>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <input class="form-control" type="hidden" id="addProjectID" />
+            <div class="col-12">
+              <label style="font-weight:bold;">Konu</label>
+              <input class="form-control mt-2" id="addNoteType" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" id="addDescription" rows="4"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="ClearModal()" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+        <button type="button" onclick="SaveProjectNote()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
 <!--Proje Notu Düzenle Modal-->
 <div class="modal fade" id="EditProjectNote" aria-labelledby="EditProjectNoteLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content" id="clear">
-         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="EditProjectNoteLabel">Proje Notu Ekle</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form>
-               <div class="row">
-                  <input class="form-control" type="hidden" id="editProjectNoteID" />
-                  <div class="col-12">
-                     <label style="font-weight:bold;">Not Konusu</label>
-                     <input class="form-control" id="editNoteType" />
-                  </div>
-                  <div class="col-12 mt-2">
-                     <label style="font-weight:bold;">Not Açıklama</label>
-                     <textarea class="form-control" id="editDescription" rows="4"></textarea>
-                  </div>
-               </div>
-            </form>
-         </div>
-         <div class="modal-footer">
-            <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-            <button type="button" onclick="SaveProjectNoteUpdate()" class="btn btn-primary">Kaydet</button>
-         </div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="clear">
+      <div class="modal-header">
+        <h3 class="modal-title fs-5" id="EditProjectNoteLabel">Proje Notu Düzenle</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <input class="form-control" type="hidden" id="editProjectNoteID" />
+            <div class="col-12">
+              <label style="font-weight:bold;">Konu</label>
+              <input class="form-control mt-2" id="editNoteType" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" id="editDescription" rows="4"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+        <button type="button" onclick="SaveProjectNoteUpdate()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!--Proje Notu Detay Modal-->
 <div class="modal fade" id="DetailProjectNote" aria-labelledby="DetailProjectNoteLabel" tabindex="-1" style="display: none;" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content" id="clear">
-         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="DetailProjectNoteLabel">Proje Notu Detay</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form>
-               <div class="row">
-                  <div class="col-6">
-                     <label style="font-weight:bold;">Not Ekleyen</label>
-                     <input class="form-control" readonly id="detailAddedUser" />
-                  </div>
-                  <div class="col-6">
-                     <label style="font-weight:bold;">Not Ekleme Tarihi</label>
-                     <input class="form-control" readonly id="detailDate" />
-                  </div>
-                  <div class="col-12 mt-2">
-                     <label style="font-weight:bold;">Not Konusu</label>
-                     <input class="form-control" readonly id="detailNoteType" />
-                  </div>
-                  <div class="col-12 mt-2">
-                     <label style="font-weight:bold;">Not Açıklama</label>
-                     <textarea class="form-control" readonly id="detailDescription" rows="4"></textarea>
-                  </div>
-               </div>
-            </form>
-         </div>
-         <div class="modal-footer">
-            <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-         </div>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="clear">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="DetailProjectNoteLabel">Proje Notu Detay</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-   </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-6">
+              <label style="font-weight:bold;">Ekleyen</label>
+              <input class="form-control mt-2" readonly id="detailAddedUser" />
+            </div>
+            <div class="col-6">
+              <label style="font-weight:bold;">Eklenme Tarihi</label>
+              <input class="form-control mt-2" readonly id="detailDate" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Konusu</label>
+              <input class="form-control mt-2" readonly id="detailNoteType" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" readonly id="detailDescription" rows="4"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
 
 @section Scripts
-    {
+{
 
-    <script src="~/js/Page/Project/Index.js"></script>
+  <script src="~/js/Page/Project/Index.js"></script>
 
 
 }

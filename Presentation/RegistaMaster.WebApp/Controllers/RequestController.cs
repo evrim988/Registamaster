@@ -397,6 +397,7 @@ public class RequestController : Controller
       {
          var request = await uow.Repository.GetById<Request>(ID);
          request.RequestStatus = RequestStatus.Closed;
+         request.PlanedEndDate = DateTime.Now;
          uow.Repository.Update<Request>(request);
          await uow.SaveChanges();
          return "1";
