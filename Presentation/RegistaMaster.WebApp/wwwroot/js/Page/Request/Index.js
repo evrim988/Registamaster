@@ -1953,6 +1953,11 @@ function OpenActionDetailModal(data) {
 
   let EndDate = new Date(data.EndDate).toLocaleDateString();
   $("#actionDetailEndDate").val(EndDate);
+  const Start = data.StartDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.StartDate).toLocaleDateString();
+  const Complete = data.CompleteDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.CompleteDate).toLocaleDateString();
+  $("#actionDetailStartDate").val(Start);
+  $("#actionDetailCompleteDate").val(Complete);
+
 
   $("#DetailAction").modal('toggle');
 }

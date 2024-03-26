@@ -316,16 +316,17 @@ function OpenActionDetailModal(e) {
   data = e.row.data;
   $("#actionDetailActionDescription").val(data.actionDescription);
   $("#actionDetailDescription").val(data.description);
-  $("#actionDetailActionPriority").val(e.row.cells[5].displayValue);
-  $("#actionDetailStatus").val(e.row.cells[6].displayValue);
+  $("#actionDetailActionPriority").val(e.row.cells[9].displayValue);
+  $("#actionDetailStatus").val(e.row.cells[10].displayValue);
   $("#actionDetailResponsible").val(e.row.cells[2].displayValue);
 
-  const openingDate = data.openingDate !== "0001-01-01T00:00:00" ? new Date(data.openingDate).toLocaleDateString() : new Date(data.openingDate).toLocaleDateString();
-  const endDate = data.endDate !== "0001-01-01T00:00:00" ? new Date(data.endDate).toLocaleDateString() : new Date(data.endDate).toLocaleDateString();
+  const start = data.startDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.startDate).toLocaleDateString();
+  const complete = data.completeDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.completeDate).toLocaleDateString();
 
-  $("#actionDetailOpeningDate").val(openingDate);
-
-  $("#actionDetailEndDate").val(endDate);
+  $("#actionDetailOpeningDate").val(new Date(data.openingDate).toLocaleDateString());
+  $("#actionDetailEndDate").val(new Date(data.endDate).toLocaleDateString());
+  $("#actionDetailStartDate").val(start);
+  $("#actionDetailCompleteDate").val(complete);
 
   $("#DetailAction").modal('toggle');
 }

@@ -560,34 +560,42 @@
          <div class="modal-body">
             <form>
                <div class="row">
-                  <div class="col-4">
-                     <label style="font-weight:bold;">Sorumlu Kişi</label>
-                     <select class="form-control mt-2" disabled asp-items="@Model.Responsible" id="actionDetailResponsible"></select>
-                  </div>
-                  <div class="col-4">
+                  <div class="col-6">
                      <label style="font-weight:bold;">Öncelik Durumu</label>
                      <select class="form-control mt-2" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionDetailActionPriority"></select>
                   </div>
-                  <div class="col-4">
+                  <div class="col-6">
                      <label style="font-weight:bold;">Durum</label>
                      <select id="actionDetailStatus" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control mt-2"></select>
                   </div>
-                  <div class="col-4 mt-3">
+            <div class="col-6">
+              <label style="font-weight:bold;">Sorumlu Kişi</label>
+              <select class="form-control mt-2" disabled asp-items="@Model.Responsible" id="actionDetailResponsible"></select>
+            </div>
+                  <div class="col-6 mt-3">
                      <label style="font-weight:bold;">Konu</label>
                      <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
                   </div>
-                  <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Başlangıç Tarihi:</label>
-                     <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
-                  </div>
-                  <div class="col-4 mt-3">
-                     <label style="font-weight:bold;">Bitiş Tarihi</label>
-                     <input class="form-control mt-2" readonly id="actionDetailEndDate" />
-                  </div>
-                  <div class="col-12 mt-3">
-                     <label style="font-weight:bold;">Açıklama</label>
-                     <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
-                  </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Açılma Tarihi</label>
+              <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Son Tarih</label>
+              <input class="form-control mt-2" readonly id="actionDetailEndDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Başlangıç Tarihi</label>
+              <input class="form-control mt-2" readonly id="actionDetailStartDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Bitiş Tarihi</label>
+              <input class="form-control mt-2" readonly id="actionDetailCompleteDate" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
+            </div>
                </div>
             </form>
             <div class="row" style="padding-left:10px;padding-right:10px">
