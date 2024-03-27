@@ -100,7 +100,9 @@ function GetList() {
           widget: "dxButton",
           options: {
             icon: "plus", text: "Proje Ekle", onClick: function (e) {
-              $('#AddProject').modal('toggle');
+              $('#ProjectModalLabel').text('Proje Ekle');
+
+              $('#ProjectModal').modal('toggle');
             }
           },
           location: "after",
@@ -265,20 +267,6 @@ function GetList() {
                 fixedPosition: "right",
                 buttons: [
                   {
-                    hint: "Düzenle",
-                    icon: "edit",
-                    visible: function (e) {
-                      var auth = $("#auth").val();
-                      var id = $("#ID").val();
-                      if (auth == 0 || id == e.row.data.CreatedBy)//not admin veya oluşturan tarafından düzenlenebilir
-                        return true;
-                    },
-                    onClick: function (e) {
-                      data = e.row.data;
-                      OpenProjectNoteEditModal(data);
-                    }
-                  },
-                  {
                     hint: "Sil",
                     icon: "trash",
                     visible: function (e) {
@@ -326,72 +314,78 @@ function gridRefresh() {
   $("#projectGridContainer").dxDataGrid("instance").refresh();
 }
 
+//modal temizlemek için ortak fonkiyon
 function ClearModal() {
   $('#clear input').val("");
   $('#clear textarea').val("");
 }
 
+//proje ekle
 function SaveProject() {
-  var formData = new FormData();
-  formData.append('ProjectName', $('#addProjectName').val());
-  formData.append('ProjectDescription', $('#addProjectDescription').val());
+  if ($('#ProjectID').val() == 0) {
+    var formData = new FormData();
+    formData.append('ProjectName', $('#ProjectName').val());
+    formData.append('ProjectDescription', $('#ProjectDescription').val());
 
-  $.ajax({
-    url: "/Project/AddProject",
-    type: 'POST',
-    data: formData,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
+    $.ajax({
+      url: "/Project/AddProject",
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
 
-      $('#AddProject').modal('toggle');
-      gridRefresh();
-      ClearModal();
-    },
-    error: function (e) {
-      console.log(e);
-    },
-    complete: function () {
-    }
-  });
+        $('#ProjectModal').modal('toggle');
+        gridRefresh();
+        ClearModal();
+      },
+      error: function (e) {
+        console.log(e);
+      },
+      complete: function () {
+      }
+    });
+  }
+  else {
+    var formData = new FormData();
+    formData.append('ID', $('#ProjectID').val());
+    formData.append('ProjectName', $('#ProjectName').val());
+    formData.append('ProjectDescription', $('#ProjectDescription').val());
+
+    $.ajax({
+      url: "/Project/ProjectEdit",
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+
+        $('#ProjectModal').modal('toggle');
+        gridRefresh();
+        ClearModal();
+      },
+      error: function (e) {
+        console.log(e);
+      },
+      complete: function () {
+      }
+    });
+  }
 }
 
+//proje düzenle modal
 function OpenProjectEditModal(data) {
+  $('#ProjectModalLabel').text('Proje Düzenle');
+  $("#ProjectID").val(data.id);
+  $("#ProjectName").val(data.projectName);
+  $("#ProjectDescription").val(data.projectDescription);
 
-  $("#editProjectID").val(data.id);
-  $("#editProjectName").val(data.projectName);
-  $("#editProjectDescription").val(data.projectDescription);
-
-  $("#EditProject").modal("toggle");
+  $("#ProjectModal").modal("toggle");
 }
 
-function SaveProjectUpdate() {
-  var formData = new FormData();
-  formData.append('ID', $('#editProjectID').val());
-  formData.append('ProjectName', $('#editProjectName').val());
-  formData.append('ProjectDescription', $('#editProjectDescription').val());
-
-  $.ajax({
-    url: "/Project/ProjectEdit",
-    type: 'POST',
-    data: formData,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
-
-      $('#EditProject').modal('toggle');
-      gridRefresh();
-    },
-    error: function (e) {
-      console.log(e);
-    },
-    complete: function () {
-    }
-  });
-}
-
+//proje silme işleminde projeye ait tammalanmamış talep kontrolü
 function CheckRequest(ID) {
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
@@ -425,7 +419,7 @@ function CheckRequest(ID) {
           if (data == "-1") {
             swalWithBootstrapButtons(
               'Hata',
-              'Projeye Bağlı Tamamlanmamış Talepler Bulunmaktadır Bulunmaktadır, Silme İşlemi Başarız.',
+              'Projeye Ait Tamamlanmamış Talepler Bulunmaktadır Bulunmaktadır, Silme İşlemi Başarız.',
               'error'
             )
           }
@@ -447,6 +441,7 @@ function CheckRequest(ID) {
   })
 }
 
+//proje sil
 function DeleteProject(ID) {
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
@@ -480,11 +475,13 @@ function DeleteProject(ID) {
 
 }
 
+//proje notu ekle modal
 function AddProjectNoteModal(ID) {
   $("#addProjectID").val(ID);
   $("#AddProjectNote").modal("toggle");
 }
 
+//proje notu ekle
 function SaveProjectNote() {
   var formData = new FormData();
 
@@ -513,12 +510,20 @@ function SaveProjectNote() {
   });
 }
 
+//proje noru detay modal
 function ProjectNoteDetailModal(data) {
+  var auth = $("#auth").val();
+  var id = $("#ID").val();
+  if (auth == 0 || data.CreatedBy == id) {
+    $("#editButton").removeClass("invisible");
+  }
+
   let date = new Date(data.Date);
   var day = ("0" + date.getDate()).slice(-2);
   var month = ("0" + (date.getMonth() + 1)).slice(-2);
   var fullDate = date.getFullYear() + "-" + (month) + "-" + (day);
 
+  $('#detailProjectNoteID').val(data.ID);
   $('#detailAddedUser').val(data.AddUserNote);
   $('#detailDate').val(fullDate);
   $('#detailNoteType').val(data.NoteType);
@@ -527,20 +532,26 @@ function ProjectNoteDetailModal(data) {
   $('#DetailProjectNote').modal('toggle');
 }
 
-function OpenProjectNoteEditModal(data) {
-
-  $("#editProjectNoteID").val(data.ID);
-  $("#editNoteType").val(data.NoteType);
-  $("#editDescription").val(data.Description);
-
-  $("#EditProjectNote").modal("toggle");
+function CloseDetailModal() {
+  $("#saveButton").addClass("invisible");
+  $("#editButton").addClass("invisible");
+  $("#detailNoteType").attr("readonly");
+  $("#detailDescription").attr("readonly");
 }
 
-function SaveProjectNoteUpdate() {
+//proje detay düzenlemeye aç
+function OpenToEdit() {
+  $("#detailNoteType").prop("readonly", false);
+  $("#detailDescription").prop("readonly", false);
+  $("#saveButton").removeClass("invisible");
+}
+
+//proje notu düzenle kaydet
+function SaveEdit() {
   var formData = new FormData();
-  formData.append('ID', $('#editProjectNoteID').val());
-  formData.append('NoteType', $('#editNoteType').val());
-  formData.append('Description', $('#editDescription').val());
+  formData.append('ID', $('#detailProjectNoteID').val());
+  formData.append('NoteType', $('#detailNoteType').val());
+  formData.append('Description', $('#detailDescription').val());
 
   $.ajax({
     url: "/Project/EditProjectNote",
@@ -550,8 +561,10 @@ function SaveProjectNoteUpdate() {
     processData: false,
     contentType: false,
     success: function (data) {
+      $("#saveButton").addClass("invisible");
+      $("#detailNoteType").prop("readonly", true);
+      $("#detailDescription").prop("readonly", true);
 
-      $('#EditProjectNote').modal('toggle');
       gridRefresh();
     },
     error: function (e) {
@@ -562,7 +575,7 @@ function SaveProjectNoteUpdate() {
   });
 }
 
-
+//proje notu sil
 function DeleteProjectNote(ID) {
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',

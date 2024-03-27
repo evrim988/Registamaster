@@ -175,8 +175,8 @@ function GetList() {
       {
         dataField: "notificationTypeID",
         caption: "Bildirim Türü",
-         alignment: 'center',
-         width:140,
+        alignment: 'center',
+        width: 140,
         lookup: {
           dataSource: DevExpress.data.AspNet.createStore({
             key: "Id",
@@ -186,26 +186,26 @@ function GetList() {
             },
           }),
           valueExpr: "value",
-           displayExpr: "text",
+          displayExpr: "text",
         }
       },
       {
         dataField: "requestSubject",
         caption: "Konu",
-         alignment: 'center',
-         width:200,
+        alignment: 'center',
+        width: 200,
       },
       {
         dataField: "description",
         caption: "Açıklama",
-         alignment: 'center',
-         width:250
+        alignment: 'center',
+        width: 250
       },
       {
         dataField: "pageURL",
         caption: "Sayfa Linki",
-         alignment: 'center',
-         width:150
+        alignment: 'center',
+        width: 150
       },
       {
         dataField: "categoryID",
@@ -292,9 +292,9 @@ function GetList() {
               .appendTo(container);
           }
           else if (info.data.requestStatus == 3) {
-             $('<div id="Closed">')
-                .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Beklemede"))
-                .appendTo(container);
+            $('<div id="Closed">')
+              .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Beklemede"))
+              .appendTo(container);
           }
         }
       },
@@ -325,109 +325,111 @@ function GetList() {
           valueExpr: "id",
           displayExpr: "fullname"
         }
-       },
+      },
       {
         caption: "İşlemler",
         fixed: true,
         fixedPosition: "right",
-         cellTemplate: function (container, options) {
-            
-          switch (options.data.requestStatus) {
-            case 1://talep başlandı durumundaysa yalnızca talebe aksiyon ekleme işlemi yapılabilir
-              $("<div>")
-                .dxButton({
-                  icon: "add",
-                  hint: "Aksiyon Ekle",
-                   stylingMode: "text",
-                  onClick: function (e) {
-                    openPopup(options.data.id);
-                  }
-                })
-                .appendTo(container);
-              break;
-            case 2:  //talep tamamlanmış durumdaysa
-              var userID = $("#userID").val();
-              var auth = $("#auth").val();
-              if (options.data.createdBy == userID || auth == 0) { //yalnızca talebi açan kişi veya admin tarafından silinebilir
+        cellTemplate: function (container, options) {
+          var auth = $("#auth").val();
+          if (auth != 2) {
+            switch (options.data.requestStatus) {
+              case 1://talep başlandı durumundaysa yalnızca talebe aksiyon ekleme işlemi yapılabilir
                 $("<div>")
                   .dxButton({
-                    icon: "trash",
-                    hint: "Sil",
-                     stylingMode: "text",
+                    icon: "add",
+                    hint: "Aksiyon Ekle",
+                    stylingMode: "text",
                     onClick: function (e) {
-                      var ID = options.data.id;
-                      DeleteRequestCheckActions(ID);
+                      openPopup(options.data.id);
                     }
                   })
                   .appendTo(container);
-              }
                 break;
-             case 3:  //talep bekleme durumundaysa
+              case 2:  //talep tamamlanmış durumdaysa
+                var userID = $("#userID").val();
+                var auth = $("#auth").val();
+                if (options.data.createdBy == userID || auth == 0) { //yalnızca talebi açan kişi veya admin tarafından silinebilir
+                  $("<div>")
+                    .dxButton({
+                      icon: "trash",
+                      hint: "Sil",
+                      stylingMode: "text",
+                      onClick: function (e) {
+                        var ID = options.data.id;
+                        DeleteRequestCheckActions(ID);
+                      }
+                    })
+                    .appendTo(container);
+                }
+                break;
+              case 3:  //talep bekleme durumundaysa
                 $("<div>")
-                   .dxButton({
+                  .dxButton({
+                    icon: "preferences",
+                    hint: "İşlemler",
+                    stylingMode: "text",
+                    onClick: function (e) {
+                      showContextMenuWaiting(options, e);
+                    }
+                  })
+                  .appendTo(container);
+                break;
+
+              default:
+                var userID = $("#userID").val();
+                if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
+                  $("<div>")
+                    .dxButton({
                       icon: "preferences",
                       hint: "İşlemler",
                       stylingMode: "text",
                       onClick: function (e) {
-                         showContextMenuWaiting(options, e);
-                      }
-                   })
-                   .appendTo(container);
-                break;
-
-            default:
-              var userID = $("#userID").val();
-              if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
-                 $("<div>")
-                    .dxButton({
-                       icon: "preferences",
-                       hint: "İşlemler",
-                       stylingMode: "text",
-                       onClick: function (e) {
-                          showContextMenu(options, e);
-                       }
-                    })
-                    .appendTo(container);
-              }
-              else {
-                var auth = $("#auth").val();
-                if (auth == 0) {     //talep başlanmamış durumdaysa admin için contextmenu
-                  $("<div>")
-                    .dxButton({
-                      icon: "preferences",
-                      hint: "İşlemler",
-                       stylingMode: "text",
-                      onClick: function (e) {
-                        showContextMenuAdmin(options, e);
+                        showContextMenu(options, e);
                       }
                     })
                     .appendTo(container);
                 }
-                else {      //talep başlanmamış durumdaysa ekip lideri için yalnızca aksiyon ekleyebilir
-                  $("<div>")
-                    .dxButton({
-                      icon: "add",
-                      hint: "Aksiyon Ekle",
-                       stylingMode: "text",
-                      onClick: function (e) {
-                        openPopup(options.data.id);
-                      }
-                    })
-                    .appendTo(container);
-                }
-              }
-              break;
-            };
-            $("<div>")
-               .dxButton({
-                  icon: "textdocument",
-                  hint: "Talep Detayı",
-                  stylingMode: "text",
-                  onClick: function (e) {
-                     RequestDetail(options.data);
+                else {
+                  var auth = $("#auth").val();
+                  if (auth == 0) {     //talep başlanmamış durumdaysa admin için contextmenu
+                    $("<div>")
+                      .dxButton({
+                        icon: "preferences",
+                        hint: "İşlemler",
+                        stylingMode: "text",
+                        onClick: function (e) {
+                          showContextMenuAdmin(options, e);
+                        }
+                      })
+                      .appendTo(container);
                   }
-               })
-               .appendTo(container);
+                  else {      //talep başlanmamış durumdaysa ekip lideri için yalnızca aksiyon ekleyebilir
+                    $("<div>")
+                      .dxButton({
+                        icon: "add",
+                        hint: "Aksiyon Ekle",
+                        stylingMode: "text",
+                        onClick: function (e) {
+                          openPopup(options.data.id);
+                        }
+                      })
+                      .appendTo(container);
+                  }
+                }
+                break;
+            };
+          }
+          $("<div>")
+            .dxButton({
+              icon: "textdocument",
+              hint: "Talep Detayı",
+              stylingMode: "text",
+              onClick: function (e) {
+                RequestDetail(options.data);
+              }
+            })
+            .appendTo(container);
         }
       }
     ],
@@ -695,10 +697,10 @@ function GetList() {
   }).dxDataGrid("instance");
 
   //kullanıcı developer ise talepler işlemler kolonunu kapat
-  var auth = $("#auth").val();
-  if (auth == 2) {
-    grid.columnOption("İşlemler", "visible", false);
-  }
+  //var auth = $("#auth").val();
+  //if (auth == 2) {
+  //  grid.columnOption("İşlemler", "visible", false);
+  //}
 }
 
 function closeRequestModal() {
@@ -895,7 +897,7 @@ function showContextMenuWaiting(options, e) {
     .dxContextMenu({
       dataSource: [
         { text: "Aksiyon Ekle", icon: "plus" },
-          { text: "Tamamla", icon: "check" },
+        { text: "Tamamla", icon: "check" },
       ],
       onItemClick: function (item) {
         handleItemClick(item, options);
@@ -923,12 +925,12 @@ function handleItemClick(item, options) {
     case "Düzenle":
       openEditModals(data, ID);
       break;
-     case "Sil":
-        DeleteRequestCheckActions(ID);
-        break;
-     case "Tamamla":
-        CompleteRequest(ID);
-        break;
+    case "Sil":
+      DeleteRequestCheckActions(ID);
+      break;
+    case "Tamamla":
+      CompleteRequest(ID);
+      break;
     default:
       break;
   }
@@ -936,112 +938,112 @@ function handleItemClick(item, options) {
 
 //bekleme durumundaki talebi tamamla
 function CompleteRequest(ID) {
-   var requestID = new FormData();
+  var requestID = new FormData();
 
-   requestID.append('id', ID);
+  requestID.append('id', ID);
 
-   $.ajax({
-      url: "/Request/CompleteRequest",
-      type: 'POST',
-      data: requestID,
-      cache: false,
-      processData: false,
-      contentType: false,
-      success: function (data) {
-         gridRefresh();
-      },
-      error: function (e) {
-         console.log(e);
-      },
-   });
+  $.ajax({
+    url: "/Request/CompleteRequest",
+    type: 'POST',
+    data: requestID,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      gridRefresh();
+    },
+    error: function (e) {
+      console.log(e);
+    },
+  });
 }
 
 
 
 //talep detay modal
 function RequestDetail(data) {
-   //console.log(data);
-   $("#detailNotificationTypeID").val(data.notificationTypeID);
-   $("#detailCategoryID").val(data.categoryID);
-   $("#detailProjectID").val(data.projectID);
-   $("#detailRequestSubject").val(data.requestSubject);
-   $("#detailDescription").val(data.description);
-   $("#detailPageUrl").val(data.pageUrl);
-   $("#detailOpeningDate").val(new Date(data.createdOn).toLocaleDateString());
-   $("#detailEndDate").val(new Date(data.planedEndDate).toLocaleDateString());
-   $("#detailRequestImage").val(data.pictureURL);
+  //console.log(data);
+  $("#detailNotificationTypeID").val(data.notificationTypeID);
+  $("#detailCategoryID").val(data.categoryID);
+  $("#detailProjectID").val(data.projectID);
+  $("#detailRequestSubject").val(data.requestSubject);
+  $("#detailDescription").val(data.description);
+  $("#detailPageUrl").val(data.pageUrl);
+  $("#detailOpeningDate").val(new Date(data.createdOn).toLocaleDateString());
+  $("#detailEndDate").val(new Date(data.planedEndDate).toLocaleDateString());
+  $("#detailRequestImage").val(data.pictureURL);
 
 
-   var imagePath = data.pictureURL ? "/Modernize/Img/RequestFile/" + data.pictureURL : "/Modernize/Img/yok.png";
-   $("#detailRequestImage").attr("src", imagePath);
+  var imagePath = data.pictureURL ? "/Modernize/Img/RequestFile/" + data.pictureURL : "/Modernize/Img/yok.png";
+  $("#detailRequestImage").attr("src", imagePath);
 
-   var projectID = new FormData();
+  var projectID = new FormData();
 
-   projectID.append('id', data.projectID);
+  projectID.append('id', data.projectID);
 
-   //module select list
-   $.ajax({
-      url: "/Request/GetModuleList",
-      type: 'POST',
-      async: false,
-      data: projectID,
-      cache: false,
-      processData: false,
-      contentType: false,
-      success: function (data) {
-         //console.log(data);
-         if (!data || data === "1") {
-            return;
-         }
-         $("#detailModuleID").empty();
-         var object = JSON.parse(data);
-         if (object.length != 0) {
-            var s;
-            for (var i = 0; i < object.length; i++) {
-               s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
-            }
-
-            $("#detailModuleID").html(s);
-         }
-
-      },
-      complete: function () {
-         $("#detailModuleID").val(data.moduleID);
+  //module select list
+  $.ajax({
+    url: "/Request/GetModuleList",
+    type: 'POST',
+    async: false,
+    data: projectID,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      //console.log(data);
+      if (!data || data === "1") {
+        return;
       }
-   });
+      $("#detailModuleID").empty();
+      var object = JSON.parse(data);
+      if (object.length != 0) {
+        var s;
+        for (var i = 0; i < object.length; i++) {
+          s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+        }
 
-   //versiyon select list
-   $.ajax({
-      url: "/Request/GetVersionList",
-      type: 'POST',
-      async: false,
-      data: projectID,
-      cache: false,
-      processData: false,
-      contentType: false,
-      success: function (data) {
-         /*console.log(data);*/
-         if (!data || data === "1") {
-            return;
-         }
-         $("#VersionEditID").empty();
-         var object = JSON.parse(data);
-         if (object.length != 0) {
-            var s;
-            for (var i = 0; i < object.length; i++) {
-               s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
-            }
-
-            $("#detailVersionID").html(s);
-         }
-
-      },
-      complete: function () {
-         $("#detailVersionID").val(data.versionID);
+        $("#detailModuleID").html(s);
       }
-   });
 
-   $("#RequestDetailModal").modal("toggle");
+    },
+    complete: function () {
+      $("#detailModuleID").val(data.moduleID);
+    }
+  });
+
+  //versiyon select list
+  $.ajax({
+    url: "/Request/GetVersionList",
+    type: 'POST',
+    async: false,
+    data: projectID,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      /*console.log(data);*/
+      if (!data || data === "1") {
+        return;
+      }
+      $("#VersionEditID").empty();
+      var object = JSON.parse(data);
+      if (object.length != 0) {
+        var s;
+        for (var i = 0; i < object.length; i++) {
+          s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+        }
+
+        $("#detailVersionID").html(s);
+      }
+
+    },
+    complete: function () {
+      $("#detailVersionID").val(data.versionID);
+    }
+  });
+
+  $("#RequestDetailModal").modal("toggle");
 
 }
 
@@ -1402,8 +1404,8 @@ function saveData(form, popup, ID) {
     error: function (error) {
       console.error("AJAX isteği sırasında bir hata oluştu:", error);
     },
-     complete: function () {
-        popup.hide();
+    complete: function () {
+      popup.hide();
       gridRefresh();
     }
   });
@@ -1918,24 +1920,24 @@ function ChangeActionStatus() {
     $("#CancelModal").modal("toggle");
   }
   else {
-  $.ajax({
-    url: "/Action/ChangeActionStatus",
-    type: 'POST',
-    data: formData,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
-       $("#changeActionStatus").modal("hide");
-       $("#detail").val("");
-    },
-    error: function (e) {
-      console.log(e);
-    },
-    complete: function () {
-      gridRefresh();
-    }
-  });
+    $.ajax({
+      url: "/Action/ChangeActionStatus",
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        $("#changeActionStatus").modal("hide");
+        $("#detail").val("");
+      },
+      error: function (e) {
+        console.log(e);
+      },
+      complete: function () {
+        gridRefresh();
+      }
+    });
   }
 }
 
@@ -1962,19 +1964,19 @@ function OpenActionDetailModal(data) {
 
 //aksiyon durum değiştir
 function ChangeActionStatusModal(data) {
-   $("#detail").val(2);
+  $("#detail").val(2);
   $("#actionID").val(data.ID);
   GetActionNoteList(data.ID);
 
   //console.log(data);
-  
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = ("0" + date.getDate()).slice(-2);
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const StartDate = data.StartDate !== "0001-01-01T00:00:00" ? new Date(data.StartDate) :"";
+  const StartDate = data.StartDate !== "0001-01-01T00:00:00" ? new Date(data.StartDate) : "";
   const CompleteDate = data.CompleteDate !== "0001-01-01T00:00:00" ? new Date(data.CompleteDate) : "";
 
   $("#actionStartDate").val(formatDate(StartDate));
@@ -2083,21 +2085,21 @@ function GetActionNoteList(ID) {
       allowUpdating: true,
       allowDeleting: true,
     },
-     onToolbarPreparing: function (e) {
-        var detail = $("#detail").val();
-        if (detail == 2) {
-           let toolbarItems = e.toolbarOptions.items;
-           toolbarItems.push({
-              widget: "dxButton",
-              options: {
-                 icon: "plus", text: "Not Ekle", onClick: function (e) {
-                    $('#actionNoteAddModal').modal('toggle');
-                    $('#changeActionStatus').modal('hide');
-                 }
-              },
-              location: "after",
-           });
-        }
+    onToolbarPreparing: function (e) {
+      var detail = $("#detail").val();
+      if (detail == 2) {
+        let toolbarItems = e.toolbarOptions.items;
+        toolbarItems.push({
+          widget: "dxButton",
+          options: {
+            icon: "plus", text: "Not Ekle", onClick: function (e) {
+              $('#actionNoteAddModal').modal('toggle');
+              $('#changeActionStatus').modal('hide');
+            }
+          },
+          location: "after",
+        });
+      }
     },
 
     onContentReady: function (e) {
@@ -2155,12 +2157,12 @@ function GetActionNoteList(ID) {
         buttons: [
           {
             hint: "Düzenle",
-              icon: "edit",
-              visible: function (e) {
-                 var detail = $("#detail").val();
-                 if (detail == 2)   //aksiyon durum değiştir drumunda not düzenle aktif
-                    return true;
-              },
+            icon: "edit",
+            visible: function (e) {
+              var detail = $("#detail").val();
+              if (detail == 2)   //aksiyon durum değiştir drumunda not düzenle aktif
+                return true;
+            },
             onClick: function (e) {
               data = e.row.data;
               ActionNoteEdit(data);
@@ -2168,12 +2170,12 @@ function GetActionNoteList(ID) {
           },
           {
             hint: "Sil",
-             icon: "trash",
-             visible: function (e) {
-                var detail = $("#detail").val();
-                if (detail == 2)   //aksiyon durum değiştir drumunda not sil aktif
-                   return true;
-             },
+            icon: "trash",
+            visible: function (e) {
+              var detail = $("#detail").val();
+              if (detail == 2)   //aksiyon durum değiştir drumunda not sil aktif
+                return true;
+            },
             onClick: function (e) {
               DeleteActionNote(e.row.data.id);
             }
@@ -2293,11 +2295,11 @@ function ActionNoteSave() {
 }
 
 function closeModalActionNote() {
-   $("#actionNoteTitle").val("");
-   $("#actionNoteDescription").val("");
+  $("#actionNoteTitle").val("");
+  $("#actionNoteDescription").val("");
 
-   $("#actionNoteAddModal").modal("toggle");
-   $("#changeActionStatus").modal("show");
+  $("#actionNoteAddModal").modal("toggle");
+  $("#changeActionStatus").modal("show");
 }
 
 function ActionNoteDetail(data) {
@@ -2305,15 +2307,15 @@ function ActionNoteDetail(data) {
 
   $("#DetailactionID").val(data.id);
   $("#actionNoteDetailDescription").val(data.description);
-   $("#actionNoteDetailTitle").val(data.title);
+  $("#actionNoteDetailTitle").val(data.title);
 
-   if ($("#detail").val() != 2)
-      $("#detail").val(1);
+  if ($("#detail").val() != 2)
+    $("#detail").val(1);
 
-   if ($("#detail").val() == 1)
-      $("#DetailAction").modal('hide');
-   else
-      $("#changeActionStatus").modal('hide');
+  if ($("#detail").val() == 1)
+    $("#DetailAction").modal('hide');
+  else
+    $("#changeActionStatus").modal('hide');
 
   $("#actionNoteDetail").modal("toggle");
 }
@@ -2364,17 +2366,17 @@ function closeModalActionEditNote() {
 //
 function closeModalActionDetailNote() {
   $("#actionNoteDetail").modal("toggle");
-   if ($("#detail").val() == 1)
-      $("#DetailAction").modal('show');
-   else
-      $("#changeActionStatus").modal('show');
+  if ($("#detail").val() == 1)
+    $("#DetailAction").modal('show');
+  else
+    $("#changeActionStatus").modal('show');
 }
 function refreshGridAfterEdit() {
   $("#actionNotesGridContainer").dxDataGrid("instance").refresh();
 }
 
 function CloseChangeStatusModal() {
-   $("#detail").val("");
+  $("#detail").val("");
 }
 
 function CancelModalClose() {
@@ -2385,7 +2387,7 @@ function CancelModalClose() {
 }
 
 function CancelModalSave() {
-   var model = {};
+  var model = {};
   model.ActionID = $('#actionID').val();
   model.Title = "İptal/Reddedildi Nedeni"
   model.Description = $('#CancelNoteDescription').val();
