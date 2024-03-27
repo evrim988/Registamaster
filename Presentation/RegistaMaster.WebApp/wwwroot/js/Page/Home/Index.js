@@ -543,8 +543,6 @@ function ChangeActionStatusModal(data) {
   $("#actionStatusValue").val(data.actionStatus);
   GetActionNoteList(data.id);
   onchangeData = data;
-
-  console.log(data);
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = ("0" + date.getDate()).slice(-2);
@@ -606,9 +604,6 @@ function ChangeActionStatusModal(data) {
   var actionStatus = data.actionStatus;
   selectButtonByStatus(actionStatus);
   $("#changeActionStatus").modal("toggle");
-
-
-
 }
 
 

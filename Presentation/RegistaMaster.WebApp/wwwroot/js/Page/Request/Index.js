@@ -22,6 +22,9 @@
   });
 
 });
+
+var onchangeData;
+
 function gridRefresh() {
   $("#requestGridContainer").dxDataGrid("instance").refresh();
 }
@@ -536,7 +539,6 @@ function GetList() {
                   }
                   else {
                     $('<div>')
-                      .append($('<text>').append(new Date(info.data.StartDate).toLocaleDateString()))
                       .append($('<text>').append(new Date(info.data.StartDate).toLocaleDateString()))
                       .appendTo(container);
                   }
@@ -1941,7 +1943,7 @@ function ChangeActionStatusModal(data) {
   $("#detail").val(2);
   $("#actionID").val(data.ID);
   GetActionNoteList(data.ID);
-
+  onchangeData = data;
   //console.log(data);
 
   function formatDate(dateString) {
@@ -1952,6 +1954,14 @@ function ChangeActionStatusModal(data) {
   }
   const StartDate = data.StartDate !== "0001-01-01T00:00:00" ? new Date(data.StartDate) : "";
   const CompleteDate = data.CompleteDate !== "0001-01-01T00:00:00" ? new Date(data.CompleteDate) : "";
+
+  if ($("#actionStatusValue").val() == 0) {
+    $("#actionStartDate").prop("disabled", true);
+    $("#actionCompleteDate").prop("disabled", true);
+  }
+  if ($("#actionStatusValue").val() != 0) {
+    $("#btn-check-1").prop("disabled", true);
+  }
 
   $("#actionStartDate").val(formatDate(StartDate));
   $("#actionCompleteDate").val(formatDate(CompleteDate));
@@ -2410,4 +2420,44 @@ function CancelModalSave() {
     complete: function () {
     }
   });
+}
+
+function CheckButtonStatus(data) {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    return date.getFullYear() + "-" + month + "-" + day;
+  }
+  const newStartDate = onchangeData.StartDate !== "0001-01-01T00:00:00" ? new Date(onchangeData.StartDate) : new Date();
+  const newCompleteDate = onchangeData.CompleteDate !== "0001-01-01T00:00:00" ? new Date(onchangeData.CompleteDate) : new Date();
+  switch ($("#actionStatusValue").val()) {
+    case "0":
+
+      $("#actionStartDate").prop("disabled", true);
+      $("#actionCompleteDate").prop("disabled", true);
+      $("#actionStartDate").val("");
+      $("#actionCompleteDate").val("");
+
+      break;
+    case "1":
+      $("#actionStartDate").prop("disabled", false);
+      $("#actionCompleteDate").prop("disabled", false);
+      $("#actionStartDate").val(formatDate(newStartDate));
+      $("#actionCompleteDate").val("");
+      break;
+    case "2":
+      $("#actionStartDate").prop("disabled", false);
+      $("#actionCompleteDate").prop("disabled", false);
+      $("#actionStartDate").val(formatDate(newStartDate));
+      $("#actionCompleteDate").val(formatDate(newCompleteDate));
+      break;
+    case "3":
+      $("#actionStartDate").prop("disabled", false);
+      $("#actionCompleteDate").prop("disabled", false);
+      $("#actionStartDate").val(formatDate(newStartDate));
+      $("#actionCompleteDate").val(formatDate(newCompleteDate));
+      break;
+    default:
+  }
 }

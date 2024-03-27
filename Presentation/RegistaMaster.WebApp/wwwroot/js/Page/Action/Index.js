@@ -3,6 +3,7 @@
   GetList();
   //console.log(actionID);
 });
+var onchangeData;
 function gridRefresh() {
   $("#actionGridContainer").dxDataGrid("instance").refresh();
 }
@@ -331,8 +332,6 @@ function GetList() {
             onClick: function (e) {
               data = e.row.data;
               ChangeActionStatusModal(data);
-              console.log(data);
-
             }
           },
           {
@@ -691,6 +690,7 @@ function ChangeActionStatusModal(data) {
   $("#detail").val(2);
   $("#actionID").val(data.id);
   GetActionNoteList(data.id);
+  onchangeData = data;
 
 
   function formatDate(dateString) {
@@ -701,6 +701,14 @@ function ChangeActionStatusModal(data) {
   }
   const startDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate) : "";
   const completeDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate) : "";
+
+  if ($("#actionStatusValue").val() == 0) {
+    $("#actionStartDate").prop("disabled", true);
+    $("#actionCompleteDate").prop("disabled", true);
+  }
+  if ($("#actionStatusValue").val() != 0) {
+    $("#btn-check-1").prop("disabled", true);
+  }
 
   $("#actionStartDate").val(formatDate(startDate));
   $("#actionCompleteDate").val(formatDate(completeDate));
@@ -1040,4 +1048,44 @@ function CancelModalSave() {
     complete: function () {
     }
   });
+}
+
+function CheckButtonStatus(data) {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    return date.getFullYear() + "-" + month + "-" + day;
+  }
+  const newStartDate = onchangeData.startDate !== "0001-01-01T00:00:00" ? new Date(onchangeData.startDate) : new Date();
+  const newCompleteDate = onchangeData.completeDate !== "0001-01-01T00:00:00" ? new Date(onchangeData.completeDate) : new Date();
+  switch ($("#actionStatusValue").val()) {
+    case "0":
+
+      $("#actionStartDate").prop("disabled", true);
+      $("#actionCompleteDate").prop("disabled", true);
+      $("#actionStartDate").val("");
+      $("#actionCompleteDate").val("");
+
+      break;
+    case "1":
+      $("#actionStartDate").prop("disabled", false);
+      $("#actionCompleteDate").prop("disabled", false);
+      $("#actionStartDate").val(formatDate(newStartDate));
+      $("#actionCompleteDate").val("");
+      break;
+    case "2":
+      $("#actionStartDate").prop("disabled", false);
+      $("#actionCompleteDate").prop("disabled", false);
+      $("#actionStartDate").val(formatDate(newStartDate));
+      $("#actionCompleteDate").val(formatDate(newCompleteDate));
+      break;
+    case "3":
+      $("#actionStartDate").prop("disabled", false);
+      $("#actionCompleteDate").prop("disabled", false);
+      $("#actionStartDate").val(formatDate(newStartDate));
+      $("#actionCompleteDate").val(formatDate(newCompleteDate));
+      break;
+    default:
+  }
 }
