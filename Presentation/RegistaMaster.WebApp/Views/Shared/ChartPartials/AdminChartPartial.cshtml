@@ -161,7 +161,10 @@
         }, {
       reqstatus: "Kapandı",
       value: @ViewBag.Chart.RequestClosed
-        }]);
+          }, {
+      reqstatus: "Beklemede",
+      value: @ViewBag.Chart.RequestWaiting
+          }]);
 
 
     var series2 = chart2.series.push(
@@ -178,7 +181,8 @@
     series2.get("colors").set("colors", [
       am5.color(0xffdfba),
       am5.color(0xbae1ff),
-      am5.color(0xbaffc9)
+      am5.color(0xbaffc9),
+      am5.color(0xffb3ba)
     ]);
     series2.data.setAll(data2);
 

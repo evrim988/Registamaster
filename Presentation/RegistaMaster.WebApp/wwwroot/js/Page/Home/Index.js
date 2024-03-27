@@ -153,6 +153,18 @@ function GetList() {
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
+        cellTemplate: function (container, info) {
+          if (info.data.startDate == "0001-01-01T00:00:00") {
+            $('<div>')
+              .append($('<text>').append("-"))
+              .appendTo(container);
+          }
+          else {
+            $('<div>')
+              .append($('<text>').append(new Date(info.data.startDate).toLocaleDateString()))
+              .appendTo(container);
+          }
+        }
       },
       {
         dataField: "completeDate",
@@ -160,6 +172,18 @@ function GetList() {
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
+        cellTemplate: function (container, info) {
+          if (info.data.completeDate == "0001-01-01T00:00:00") {
+            $('<div>')
+              .append($('<text>').append("-"))
+              .appendTo(container);
+          }
+          else {
+            $('<div>')
+              .append($('<text>').append(new Date(info.data.completeDate).toLocaleDateString()))
+              .appendTo(container);
+          }
+        }
       },
       {
         dataField: "actionPriorityStatus",
@@ -352,7 +376,8 @@ function GetActionNoteList(ID) {
           widget: "dxButton",
           options: {
             icon: "plus", text: "Not Ekle", onClick: function (e) {
-              $('#actionNoteAddModal').modal('toggle');
+              $('#actionNoteModalLabel').text('Not Ekle');
+              $('#actionNoteModal').modal('toggle');
               $('#changeActionStatus').modal('hide');
             }
           },
@@ -543,6 +568,8 @@ function ChangeActionStatusModal(data) {
   $("#actionStatusValue").val(data.actionStatus);
   GetActionNoteList(data.id);
   onchangeData = data;
+
+  //console.log(data);
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = ("0" + date.getDate()).slice(-2);
@@ -609,31 +636,55 @@ function ChangeActionStatusModal(data) {
 
 //not kaydet
 function ActionNoteSave() {
-  var model = {};
-  model.ActionID = $('#actionID').val();
-  model.Title = $('#actionNoteTitle').val();
-  model.Description = $('#actionNoteDescription').val();
+  if ($('#actionNoteID').val() == 0) {
+    var model = {};
+    model.ActionID = $('#actionID').val();
+    model.Title = $('#actionNoteTitle').val();
+    model.Description = $('#actionNoteDescription').val();
+
+    $.ajax({
+      url: '/Action/AddActionNote',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(model),
+      success: function (response) {
+        //console.log(response);
+        closeModalActionNote();
+        refreshGridAfterEdit();
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr.responseText);
+      },
+      complete: function () {
+      }
+    });
+  }
+  else {
+    var model = {};
+    model.ID = $('#actionNoteID').val();
+    model.Title = $('#actionNoteTitle').val();
+    model.Description = $('#actionNoteDescription').val();
 
 
-  $.ajax({
-    url: '/Action/AddActionNote',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(model),
-    success: function (response) {
-      //console.log(response);
-      $('#actionNoteAddModal').modal('toggle');
-      $('#changeActionStatus').modal('show');
-      refreshGridAfterEdit();
-    },
-    error: function (xhr, status, error) {
-      console.error(xhr.responseText);
-    },
-    complete: function () {
-      $("#actionNoteDescription").val("");
-      $("#actionNoteTitle").val("");
-    }
-  });
+    $.ajax({
+      url: '/Action/ActionNoteUpdate',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(model),
+      success: function (response) {
+        //console.log(response);
+        $('#actionNoteID').val("0");
+        closeModalActionNote();
+        refreshGridAfterEdit();
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr.responseText);
+      },
+      complete: function () {
+        //console.log("complete");
+      }
+    });
+  }
 }
 
 
@@ -642,7 +693,7 @@ function closeModalActionNote() {
   $("#actionNoteTitle").val("");
   $("#actionNoteDescription").val("");
 
-  $("#actionNoteAddModal").modal("toggle");
+  $("#actionNoteModal").modal("toggle");
   $("#changeActionStatus").modal("show");
 }
 
@@ -712,19 +763,19 @@ function DeleteActionNote(ID) {
         contentType: false,
         success: function (response) {
           //console.log(response);
-          if (data == "1") {
+          if (response == "1") {
             swalWithBootstrapButtons(
               'Bilgi',
               'Silme İşlemi Başarılı',
               'success'
-            )
+            );
+            refreshGridAfterEdit();
           }
         },
         error: function (textStatus) {
           console.log('ERRORS:23 ');
         },
         complete: function () {
-          refreshGridAfterEdit();
         }
       });
     } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -741,45 +792,48 @@ function DeleteActionNote(ID) {
 function ActionNoteEdit(data) {
   //console.log(data);
 
-  $("#EditactionID").val(data.id);
-  $("#actionNoteEditDescription").val(data.description);
-  $("#actionNoteEditTitle").val(data.title);
+  $("#actionNoteID").val(data.id);
+  $("#actionNoteDescription").val(data.description);
+  $("#actionNoteTitle").val(data.title);
 
-  $("#actionNoteEditModal").modal("toggle");
+  $('#actionNoteModalLabel').text('Not Düzenle');
+  $('#actionNoteModal').modal('toggle');
+
+  //$("#actionNoteEditModal").modal("toggle");
   $("#changeActionStatus").modal("hide");
 }
 
-function ActionNoteEditSave() {
-  var model = {};
-  model.ActionID = $('#EditactionID').val();
-  model.Title = $('#actionNoteEditTitle').val();
-  model.Description = $('#actionNoteEditDescription').val();
+//function ActionNoteEditSave() {
+//  var model = {};
+//  model.ActionID = $('#EditactionID').val();
+//  model.Title = $('#actionNoteEditTitle').val();
+//  model.Description = $('#actionNoteEditDescription').val();
 
 
-  $.ajax({
-    url: '/Action/ActionNoteUpdate',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(model),
-    success: function (response) {
-      //console.log(response);
-      $('#actionNoteEditModal').modal('toggle');
-      $('#changeActionStatus').modal('show');
-      refreshGridAfterEdit();
-    },
-    error: function (xhr, status, error) {
-      console.error(xhr.responseText);
-    },
-    complete: function () {
-      //console.log("complete");
-    }
-  });
-}
+//  $.ajax({
+//    url: '/Action/ActionNoteUpdate',
+//    type: 'POST',
+//    contentType: 'application/json',
+//    data: JSON.stringify(model),
+//    success: function (response) {
+//      //console.log(response);
+//      $('#actionNoteEditModal').modal('toggle');
+//      $('#changeActionStatus').modal('show');
+//      refreshGridAfterEdit();
+//    },
+//    error: function (xhr, status, error) {
+//      console.error(xhr.responseText);
+//    },
+//    complete: function () {
+//      //console.log("complete");
+//    }
+//  });
+//}
 
-function closeModalActionEditNote() {
-  $("#changeActionStatus").modal("show");
-  $("#actionNoteEditModal").modal("toggle");
-}
+//function closeModalActionEditNote() {
+//  $("#changeActionStatus").modal("show");
+//  $("#actionNoteEditModal").modal("toggle");
+//}
 
 function refreshGridAfterEdit() {
   $("#actionNotesGridContainer").dxDataGrid("instance").refresh();

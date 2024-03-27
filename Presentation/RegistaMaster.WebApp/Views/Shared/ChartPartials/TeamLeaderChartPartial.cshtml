@@ -1,22 +1,22 @@
 ﻿@using RegistaMaster.Domain.DTOModels.ChartModels;
 
 <div class="row justify-content-md-center" style="padding-top: 80px; padding-right: 40px; padding-left: 40px; padding-bottom:40px">
-   <div class="col-12 mb-5">
-      <div class="row">
-         <div class="col-6">
-            <label>AÇTIĞIM TALEPLER</label>
-            <div id="chartdiv1" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
-         </div>
-         <div class="col-6">
-            <label>AÇTIĞIM AKSİYONLAR</label>
-            <div id="chartdiv2" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
-         </div>
+  <div class="col-12 mb-5">
+    <div class="row">
+      <div class="col-6">
+        <label>AÇTIĞIM TALEPLER</label>
+        <div id="chartdiv1" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
       </div>
-   </div>
-   <div class="col-6" style="margin-top:40px">
-      <label>BANA AİT AKSİYONLAR</label>
-      <div id="chartdiv3" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
-   </div>
+      <div class="col-6">
+        <label>AÇTIĞIM AKSİYONLAR</label>
+        <div id="chartdiv2" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6" style="margin-top:40px">
+    <label>BANA AİT AKSİYONLAR</label>
+    <div id="chartdiv3" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
+  </div>
 
 </div>
 
@@ -25,154 +25,158 @@
 <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 <script>
-   am5.ready(function () {
+  am5.ready(function () {
 
-      //Talep Chart
+    //Talep Chart
 
-      var root2 = am5.Root.new("chartdiv1");
+    var root2 = am5.Root.new("chartdiv1");
 
-      root2.setThemes([
-         am5themes_Animated.new(root2),
-      ]);
+    root2.setThemes([
+      am5themes_Animated.new(root2),
+    ]);
 
-      var chart2 = root2.container.children.push(
-         am5percent.PieChart.new(root2, {
-            layout: root2.verticalLayout
-         })
-      );
+    var chart2 = root2.container.children.push(
+      am5percent.PieChart.new(root2, {
+        layout: root2.verticalLayout
+      })
+    );
 
-      var data2 = ([{
-         reqstatus: "Açık",
-         value: @ViewBag.Chart.RequestOpen
-         }, {
-         reqstatus: "Başlandı",
-         value: @ViewBag.Chart.RequestStart
-         }, {
-         reqstatus: "Kapandı",
-         value: @ViewBag.Chart.RequestClosed
-         }]);
-
-
-      var series2 = chart2.series.push(
-         am5percent.PieSeries.new(root2, {
-            name: "Series",
-            valueField: "value",
-            categoryField: "reqstatus",
-            legendLabelText: "{category}",
-            legendValueText: "{value}"
-         })
-      );
-      series2.slices.template.set('tooltipText', '{category}: {value}');
-      series2.labels.template.set('text', '{category}: {value}');
-      series2.get("colors").set("colors", [
-         am5.color(0xffdfba),
-         am5.color(0xbae1ff),
-         am5.color(0xbaffc9)
-      ]);
-     
-      series2.data.setAll(data2);
-
-
-      //aksiyon chart
-
-      var root3 = am5.Root.new("chartdiv2");
-
-      root3.setThemes([
-         am5themes_Animated.new(root3)
-      ]);
-
-      var chart3 = root3.container.children.push(
-         am5percent.PieChart.new(root3, {
-            layout: root3.verticalLayout
-         })
-      );
-
-
-      var data3 = ([{
-         actionstatus: "Başlamadı",
-         value: @ViewBag.Chart.ActionNotStarted
-         }, {
-         actionstatus: "Devam Ediyor",
-         value: @ViewBag.Chart.ActionContinued
-         }, {
-         actionstatus: "Tamamlandı",
-         value: @ViewBag.Chart.ActionCompleted
-         }, {
-         actionstatus: "İptal/Reddedildi",
-         value: @ViewBag.Chart.ActionCancel
-         }]);
-
-
-      var series3 = chart3.series.push(
-         am5percent.PieSeries.new(root3, {
-            name: "Series",
-            valueField: "value",
-            categoryField: "actionstatus",
-            legendLabelText: "{category}",
-            legendValueText: "{value}"
-         })
-      );
-      series3.slices.template.set('tooltipText', '{category}: {value}');
-      series3.labels.template.set('text', '{category}: {value}');
-      series3.get("colors").set("colors", [
-         am5.color(0xffdfba),
-         am5.color(0xbae1ff),
-         am5.color(0xbaffc9),
-         am5.color(0xffb3ba)
-      ]);
-      series3.data.setAll(data3);
-
-
-      //ekip lideri aksiyon chart
-
-      var root1 = am5.Root.new("chartdiv3");
-
-      root1.setThemes([
-         am5themes_Animated.new(root1)
-      ]);
-
-      var chart1 = root1.container.children.push(
-         am5percent.PieChart.new(root1, {
-            layout: root1.verticalLayout
-         })
-      );
-
-
-      var data1 = ([{
-         actionstatus: "Başlamadı",
-         value: @ViewBag.Chart.UserChartDTO.NotStarted
+    var data2 = ([{
+      reqstatus: "Açık",
+      value: @ViewBag.Chart.RequestOpen
             }, {
-         actionstatus: "Devam Ediyor",
-         value: @ViewBag.Chart.UserChartDTO.Continued
+      reqstatus: "Başlandı",
+      value: @ViewBag.Chart.RequestStart
             }, {
-         actionstatus: "Tamamlandı",
-         value: @ViewBag.Chart.UserChartDTO.Completed
-            }, {
-         actionstatus: "İptal/Reddedildi",
-         value: @ViewBag.Chart.UserChartDTO.Cancel
-            }]);
+      reqstatus: "Kapandı",
+      value: @ViewBag.Chart.RequestClosed
+              }, {
+      reqstatus: "Beklemede",
+      value: @ViewBag.Chart.RequestWaiting
+              }]);
 
 
-      var series1 = chart1.series.push(
-         am5percent.PieSeries.new(root1, {
-            name: "Series",
-            valueField: "value",
-            categoryField: "actionstatus",
-            legendLabelText: "{category}",
-            legendValueText: "{value}"
-         })
-      );
-      series1.slices.template.set('tooltipText', '{category}: {value}');
-      series1.labels.template.set('text', '{category}: {value}');
-      series1.get("colors").set("colors", [
-         am5.color(0xffdfba),
-         am5.color(0xbae1ff),
-         am5.color(0xbaffc9),
-         am5.color(0xffb3ba)
-      ]);
-      series1.data.setAll(data1);
+    var series2 = chart2.series.push(
+      am5percent.PieSeries.new(root2, {
+        name: "Series",
+        valueField: "value",
+        categoryField: "reqstatus",
+        legendLabelText: "{category}",
+        legendValueText: "{value}"
+      })
+    );
+    series2.slices.template.set('tooltipText', '{category}: {value}');
+    series2.labels.template.set('text', '{category}: {value}');
+    series2.get("colors").set("colors", [
+      am5.color(0xffdfba),
+      am5.color(0xbae1ff),
+      am5.color(0xbaffc9),
+      am5.color(0xffb3ba)
+    ]);
+
+    series2.data.setAll(data2);
+
+
+    //aksiyon chart
+
+    var root3 = am5.Root.new("chartdiv2");
+
+    root3.setThemes([
+      am5themes_Animated.new(root3)
+    ]);
+
+    var chart3 = root3.container.children.push(
+      am5percent.PieChart.new(root3, {
+        layout: root3.verticalLayout
+      })
+    );
+
+
+    var data3 = ([{
+      actionstatus: "Başlamadı",
+      value: @ViewBag.Chart.ActionNotStarted
+           }, {
+      actionstatus: "Devam Ediyor",
+      value: @ViewBag.Chart.ActionContinued
+           }, {
+      actionstatus: "Tamamlandı",
+      value: @ViewBag.Chart.ActionCompleted
+           }, {
+      actionstatus: "İptal/Reddedildi",
+      value: @ViewBag.Chart.ActionCancel
+           }]);
+
+
+    var series3 = chart3.series.push(
+      am5percent.PieSeries.new(root3, {
+        name: "Series",
+        valueField: "value",
+        categoryField: "actionstatus",
+        legendLabelText: "{category}",
+        legendValueText: "{value}"
+      })
+    );
+    series3.slices.template.set('tooltipText', '{category}: {value}');
+    series3.labels.template.set('text', '{category}: {value}');
+    series3.get("colors").set("colors", [
+      am5.color(0xffdfba),
+      am5.color(0xbae1ff),
+      am5.color(0xbaffc9),
+      am5.color(0xffb3ba)
+    ]);
+    series3.data.setAll(data3);
+
+
+    //ekip lideri aksiyon chart
+
+    var root1 = am5.Root.new("chartdiv3");
+
+    root1.setThemes([
+      am5themes_Animated.new(root1)
+    ]);
+
+    var chart1 = root1.container.children.push(
+      am5percent.PieChart.new(root1, {
+        layout: root1.verticalLayout
+      })
+    );
+
+
+    var data1 = ([{
+      actionstatus: "Başlamadı",
+      value: @ViewBag.Chart.UserChartDTO.NotStarted
+              }, {
+      actionstatus: "Devam Ediyor",
+      value: @ViewBag.Chart.UserChartDTO.Continued
+              }, {
+      actionstatus: "Tamamlandı",
+      value: @ViewBag.Chart.UserChartDTO.Completed
+              }, {
+      actionstatus: "İptal/Reddedildi",
+      value: @ViewBag.Chart.UserChartDTO.Cancel
+              }]);
+
+
+    var series1 = chart1.series.push(
+      am5percent.PieSeries.new(root1, {
+        name: "Series",
+        valueField: "value",
+        categoryField: "actionstatus",
+        legendLabelText: "{category}",
+        legendValueText: "{value}"
+      })
+    );
+    series1.slices.template.set('tooltipText', '{category}: {value}');
+    series1.labels.template.set('text', '{category}: {value}');
+    series1.get("colors").set("colors", [
+      am5.color(0xffdfba),
+      am5.color(0xbae1ff),
+      am5.color(0xbaffc9),
+      am5.color(0xffb3ba)
+    ]);
+    series1.data.setAll(data1);
 
 
 
-   }); // end am5.ready()
+  }); // end am5.ready()
 </script>
