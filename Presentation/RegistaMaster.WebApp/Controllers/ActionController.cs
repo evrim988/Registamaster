@@ -40,7 +40,7 @@ public class ActionController : Controller
   {
     try
     {
-      var model = _uow.ActionRepository.GetList().ToList();
+      var model = _uow.ActionRepository.GetList().OrderByDescending(t => t.ID).ToList();
       foreach (var item in model)
       {
         if (item.ActionStatus == ActionStatus.Contiuned || item.ActionStatus == ActionStatus.notStarted)
@@ -237,7 +237,7 @@ public class ActionController : Controller
   {
     try
     {
-      var model = _uow.ActionNoteRepository.GetList(ID).ToList();
+      var model = _uow.ActionNoteRepository.GetList(ID).OrderByDescending(t => t.ID).ToList();
       return DataSourceLoader.Load(model, options);
     }
     catch (Exception e)
@@ -265,7 +265,7 @@ public class ActionController : Controller
   {
     try
     {
-      var actionNote = await _uow.Repository.GetById<ActionNote>(model.ActionID);
+      var actionNote = await _uow.Repository.GetById<ActionNote>(model.ID);
       actionNote.Description = model.Description;
       actionNote.Title = model.Title;
       _uow.Repository.Update(actionNote);

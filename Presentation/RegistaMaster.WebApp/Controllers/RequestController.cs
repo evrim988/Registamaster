@@ -157,7 +157,7 @@ public class RequestController : Controller
 
   public async Task<string> GetRequestDetail(int ID)
   {
-    var model = uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted);
+    var model = uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).OrderByDescending(t => t.ID);
 
     List<ActionDTO> actionList = new List<ActionDTO>();
 

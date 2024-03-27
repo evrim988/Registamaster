@@ -528,6 +528,19 @@ function GetList() {
                 alignment: 'center',
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
+                cellTemplate: function (container, info) {
+                  if (info.data.StartDate == "0001-01-01T00:00:00") {
+                    $('<div>')
+                      .append($('<text>').append("-"))
+                      .appendTo(container);
+                  }
+                  else {
+                    $('<div>')
+                      .append($('<text>').append(new Date(info.data.StartDate).toLocaleDateString()))
+                      .append($('<text>').append(new Date(info.data.StartDate).toLocaleDateString()))
+                      .appendTo(container);
+                  }
+                }
               },
               {
                 dataField: "CompleteDate",
@@ -535,6 +548,18 @@ function GetList() {
                 alignment: 'center',
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
+                cellTemplate: function (container, info) {
+                  if (info.data.CompleteDate == "0001-01-01T00:00:00") {
+                    $('<div>')
+                      .append($('<text>').append("-"))
+                      .appendTo(container);
+                  }
+                  else {
+                    $('<div>')
+                      .append($('<text>').append(new Date(info.data.CompleteDate).toLocaleDateString()))
+                      .appendTo(container);
+                  }
+                }
               },
               {
                 dataField: "ActionStatus",
@@ -771,12 +796,12 @@ function SaveRequestModal() {
     success: function (data) {
       //console.log(data);
       closeRequestModal();
+      gridRefresh();
     },
     error: function (e) {
       console.log(e);
     },
     complete: function () {
-      gridRefresh();
     }
   });
 }
@@ -1696,12 +1721,12 @@ function DeleteRequestWithActions(ID) {
             'Silme İşlemi Başarılı',
             'success'
           );
+          gridRefresh();
         },
         error: function (textStatus) {
           console.log('ERRORS:23 ');
         },
         complete: function () {
-          gridRefresh();
         }
       });
     } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -1714,63 +1739,6 @@ function DeleteRequestWithActions(ID) {
   })
 }
 
-//talebi reddet
-//function CancelRequest(ID) {
-//   //console.log(ID);
-//   const swalWithBootstrapButtons = swal.mixin({
-//      confirmButtonClass: 'btn btn-success',
-//      cancelButtonClass: 'btn btn-danger',
-//      buttonsStyling: false,
-//   })
-
-//   swalWithBootstrapButtons({
-//      title: "Uyarı",
-//      text: "Talep Reddedilecek, İşlemi Onaylıyor Musunuz?",
-//      type: 'warning',
-//      showCancelButton: true,
-//      confirmButtonText: 'Evet',
-//      cancelButtonText: 'Hayır',
-//      reverseButtons: true
-//   }).then((result) => {
-//      if (result.value) {
-//         var data = new FormData();
-
-//         data.append('id', ID);
-
-//         $.ajax({
-//            url: "/Request/CancelRequest/",
-//            type: 'POST',
-//            async: false,
-//            data: data,
-//            cache: false,
-//            processData: false,
-//            contentType: false,
-//            success: function (response) {
-//               console.log(response);
-//               if (data == "1") {
-//                  swalWithBootstrapButtons(
-//                     'Bilgi',
-//                     'İşlem Başarılı',
-//                     'success'
-//                  )
-//               }
-//            },
-//            error: function (textStatus) {
-//               console.log('ERRORS:23 ');
-//            },
-//            complete: function () {
-//               gridRefresh();
-//            }
-//         });
-//      } else if (result.dismiss === swal.DismissReason.cancel) {
-//         swalWithBootstrapButtons(
-//            'Bilgi',
-//            'İşlem İptal Edildi',
-//            'info'
-//         )
-//      }
-//   })
-//}
 
 //Aksiyon düzenle modal
 function OpenActionEditModals(data) {
@@ -1883,19 +1851,19 @@ function DeleteActionDialog(ID) {
         contentType: false,
         success: function (response) {
           //console.log(response);
-          if (data == "1") {
+          if (response == "1") {
             swalWithBootstrapButtons(
               'Bilgi',
               'Silme İşlemi Başarılı',
               'success'
-            )
+            );
+            gridRefresh();
           }
         },
         error: function (textStatus) {
           console.log('ERRORS:23 ');
         },
         complete: function () {
-          gridRefresh();
         }
       });
     } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -1910,16 +1878,17 @@ function DeleteActionDialog(ID) {
 
 //aksiyon durum değiştir
 function ChangeActionStatus() {
-  var formData = new FormData();
-  formData.append("ID", $("#actionID").val());
-  formData.append("StartDate", $("#actionStartDate").val());
-  formData.append("CompleteDate", $("#actionCompleteDate").val());
-  formData.append("ActionStatus", $("#actionStatusValue").val());
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
     $("#CancelModal").modal("toggle");
   }
   else {
+    var formData = new FormData();
+    formData.append("ID", $("#actionID").val());
+    formData.append("StartDate", $("#actionStartDate").val());
+    formData.append("CompleteDate", $("#actionCompleteDate").val());
+    formData.append("ActionStatus", $("#actionStatusValue").val());
+
     $.ajax({
       url: "/Action/ChangeActionStatus",
       type: 'POST',
@@ -1930,12 +1899,12 @@ function ChangeActionStatus() {
       success: function (data) {
         $("#changeActionStatus").modal("hide");
         $("#detail").val("");
+        gridRefresh();
       },
       error: function (e) {
         console.log(e);
       },
       complete: function () {
-        gridRefresh();
       }
     });
   }
@@ -2098,7 +2067,8 @@ function GetActionNoteList(ID) {
           widget: "dxButton",
           options: {
             icon: "plus", text: "Not Ekle", onClick: function (e) {
-              $('#actionNoteAddModal').modal('toggle');
+              $('#actionNoteModalLabel').text('Not Ekle');
+              $('#actionNoteModal').modal('toggle');
               $('#changeActionStatus').modal('hide');
             }
           },
@@ -2247,19 +2217,19 @@ function DeleteActionNote(ID) {
         contentType: false,
         success: function (response) {
           //console.log(response);
-          if (data == "1") {
+          if (response == "1") {
             swalWithBootstrapButtons(
               'Bilgi',
               'Silme İşlemi Başarılı',
               'success'
-            )
+            );
+            refreshGridAfterEdit();
           }
         },
         error: function (textStatus) {
           console.log('ERRORS:23 ');
         },
         complete: function () {
-          refreshGridAfterEdit();
         }
       });
     } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -2272,38 +2242,63 @@ function DeleteActionNote(ID) {
   })
 }
 function ActionNoteSave() {
-  var model = {};
-  model.ActionID = $('#actionID').val();
-  model.Title = $('#actionNoteTitle').val();
-  model.Description = $('#actionNoteDescription').val();
+  if ($('#actionNoteID').val() == 0) {
+    var model = {};
+    model.ActionID = $('#actionID').val();
+    model.Title = $('#actionNoteTitle').val();
+    model.Description = $('#actionNoteDescription').val();
 
 
-  $.ajax({
-    url: '/Action/AddActionNote',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(model),
-    success: function (response) {
-      //console.log(response);
-      $('#actionNoteAddModal').modal('toggle');
-      $('#changeActionStatus').modal('show');
-      refreshGridAfterEdit();
-    },
-    error: function (xhr, status, error) {
-      console.error(xhr.responseText);
-    },
-    complete: function () {
-      $("#actionNoteDescription").val("");
-      $("#actionNoteTitle").val("");
-    }
-  });
+    $.ajax({
+      url: '/Action/AddActionNote',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(model),
+      success: function (response) {
+        //console.log(response);
+        closeModalActionNote();
+        refreshGridAfterEdit();
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr.responseText);
+      },
+      complete: function () {
+      }
+    });
+  }
+  else {
+    var model = {};
+    model.ID = $('#actionNoteID').val();
+    model.Title = $('#actionNoteTitle').val();
+    model.Description = $('#actionNoteDescription').val();
+
+
+    $.ajax({
+      url: '/Action/ActionNoteUpdate',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(model),
+      success: function (response) {
+        //console.log(response);
+        $('#actionNoteID').val("0");
+        closeModalActionNote();
+        refreshGridAfterEdit();
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr.responseText);
+      },
+      complete: function () {
+        //console.log("complete");
+      }
+    });
+  }
 }
 
 function closeModalActionNote() {
   $("#actionNoteTitle").val("");
   $("#actionNoteDescription").val("");
 
-  $("#actionNoteAddModal").modal("toggle");
+  $("#actionNoteModal").modal("toggle");
   $("#changeActionStatus").modal("show");
 }
 
@@ -2328,47 +2323,17 @@ function ActionNoteDetail(data) {
 function ActionNoteEdit(data) {
   //console.log(data);
 
-  $("#EditactionID").val(data.id);
-  $("#actionNoteEditDescription").val(data.description);
-  $("#actionNoteEditTitle").val(data.title);
+  $("#actionNoteID").val(data.id);
+  $("#actionNoteDescription").val(data.description);
+  $("#actionNoteTitle").val(data.title);
 
-  $("#actionNoteEditModal").modal("toggle");
+  $('#actionNoteModalLabel').text('Not Düzenle');
+  $('#actionNoteModal').modal('toggle');
+
+  //$("#actionNoteEditModal").modal("toggle");
   $("#changeActionStatus").modal("hide");
 }
 
-function ActionNoteEditSave() {
-  var model = {};
-  model.ActionID = $('#EditactionID').val();
-  model.Title = $('#actionNoteEditTitle').val();
-  model.Description = $('#actionNoteEditDescription').val();
-
-
-  $.ajax({
-    url: '/Action/ActionNoteUpdate',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(model),
-    success: function (response) {
-      //console.log(response);
-      $('#actionNoteEditModal').modal('toggle');
-      $('#changeActionStatus').modal('show');
-      refreshGridAfterEdit();
-    },
-    error: function (xhr, status, error) {
-      console.error(xhr.responseText);
-    },
-    complete: function () {
-      //console.log("complete");
-    }
-  });
-}
-
-
-function closeModalActionEditNote() {
-  $("#actionNoteEditModal").modal("toggle");
-  $("#changeActionStatus").modal("show");
-}
-//
 function closeModalActionDetailNote() {
   $("#actionNoteDetail").modal("toggle");
   if ($("#detail").val() == 1)
@@ -2437,12 +2402,12 @@ function CancelModalSave() {
     contentType: false,
     success: function (data) {
       $("#changeActionStatus").modal("hide");
+      gridRefresh();
     },
     error: function (e) {
       console.log(e);
     },
     complete: function () {
-      gridRefresh();
     }
   });
 }

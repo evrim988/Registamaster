@@ -375,25 +375,26 @@
   </div>
 </div>
 
-@* Aksiyon Notu Ekleme *@
-<div class="modal fade" id="actionNoteAddModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@* Aksiyon Notu Ekleme/Düzenleme Modal *@
+<div class="modal fade" id="actionNoteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="actionNoteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
-        <h3 class="modal-title" id="exampleModalLabel">Not Ekle</h3>
+        <h5 class="modal-title h3" id="actionNoteModalLabel"></h5>
         <button type="button" class="btn-close" onclick="closeModalActionNote()" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
       <div class="modal-body">
         <input hidden id="actionID">
+        <input hidden id="actionNoteID">
         <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
+          <div class="col-md-10">
             <label for="actionNoteTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
             <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteTitle">
           </div>
         </div>
         <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
+          <div class="col-md-10">
             <label for="actionNoteDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
             <textarea style="font-size:1rem;" class="form-control" id="actionNoteDescription" rows="10"></textarea>
           </div>
@@ -402,38 +403,6 @@
       <div class="modal-footer">
         <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
         <button type="button" onclick="ActionNoteSave()" class="btn btn-primary">Kaydet</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-@* Aksiyon Notu Düzenleme *@
-<div class="modal fade" id="actionNoteEditModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header mt-3">
-        <h3 class="modal-title" id="exampleModalLabel">Not Düzenle</h3>
-        <button type="button" class="btn-close" onclick="closeModalActionEditNote()" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <hr />
-      <div class="modal-body">
-        <input hidden id="EditactionID">
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
-            <label for="actionNoteEditTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
-            <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteEditTitle">
-          </div>
-        </div>
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
-            <label for="actionNoteEditDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
-            <textarea style="font-size:1rem;" class="form-control" id="actionNoteEditDescription" rows="10"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="closeModalActionEditNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-        <button type="button" onclick="ActionNoteEditSave()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
   </div>
@@ -454,13 +423,13 @@
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-11">
             <label for="actionNoteDetailTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
-            <input type="text" style="font-size:1rem;" class="form-control" id="actionNoteDetailTitle">
+            <input type="text" style="font-size:1rem;" readonly class="form-control" id="actionNoteDetailTitle">
           </div>
         </div>
         <div class="row mt-3 justify-content-md-center">
           <div class="col-md-11">
             <label for="actionNoteDetailDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
-            <textarea style="font-size:1rem;" class="form-control" id="actionNoteDetailDescription" rows="10"></textarea>
+            <textarea style="font-size:1rem;" readonly class="form-control" id="actionNoteDetailDescription" rows="10"></textarea>
           </div>
         </div>
       </div>
