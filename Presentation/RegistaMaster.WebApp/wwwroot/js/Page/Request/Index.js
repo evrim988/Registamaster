@@ -333,6 +333,7 @@ function GetList() {
         caption: "İşlemler",
         fixed: true,
         fixedPosition: "right",
+        alignment: 'center',
         cellTemplate: function (container, options) {
           var auth = $("#auth").val();
           if (auth != 2) {
@@ -652,6 +653,7 @@ function GetList() {
                 type: "buttons",
                 fixed: true,
                 fixedPosition: "right",
+                alignment: 'center',
                 buttons: [
                   {
                     hint: "Düzenle",
@@ -2140,6 +2142,7 @@ function GetActionNoteList(ID) {
         fixed: true,
         fixedPosition: "right",
         width: '10%',
+        alignment: 'center',
         buttons: [
           {
             hint: "Düzenle",

@@ -152,6 +152,7 @@ function GetList() {
         type: "buttons",
         fixed: true,
         fixedPosition: "right",
+        alignment: 'center',
         buttons: [
 
           {
@@ -237,12 +238,12 @@ function AddUser() {
     success: function (data) {
       //console.log(data);
       $('#addUser').modal('toggle');
+      gridRefresh();
     },
     error: function (e) {
       console.log(e);
     },
     complete: function () {
-      gridRefresh();
     }
   });
 }
@@ -283,12 +284,12 @@ function UpdateUser() {
     success: function (data) {
       //console.log(data);
       $('#editUser').modal('toggle');
+      gridRefresh();
     },
     error: function (e) {
       console.log(e);
     },
     complete: function () {
-      gridRefresh();
     }
   });
 }
@@ -321,12 +322,12 @@ function ChangeAuthorization() {
     success: function (data) {
       //console.log(data);
       $('#changeAuthorization').modal('toggle');
+      gridRefresh();
     },
     error: function (e) {
       console.log(e);
     },
     complete: function () {
-      gridRefresh();
     }
   });
 }
@@ -368,12 +369,12 @@ function DeleteUser(ID) {
             'Silme İşlemi Başarılı',
             'success'
           );
+          gridRefresh();
         },
         error: function (textStatus) {
           console.log('ERRORS:23 ');
         },
         complete: function () {
-          gridRefresh();
         }
       });
     } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -388,6 +389,8 @@ function DeleteUser(ID) {
 
 function CloseAddUser() {
   $('#addUser').modal('toggle');
+  $("#clear input").val("");
+  $("#clear select").val(0);
 }
 function CloseEditUser() {
   $('#editUser').modal('toggle');

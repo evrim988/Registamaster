@@ -292,6 +292,7 @@ function GetList() {
         type: "buttons",
         fixed: true,
         fixedPosition: "right",
+        alignment: 'center',
         buttons: [
           {
             hint: "Düzenle",
@@ -423,7 +424,7 @@ function GetActionNoteList(ID) {
         toolbarItems.push({
           widget: "dxButton",
           options: {
-            icon: "plus", text: "Aksiyon Notu Ekle", onClick: function (e) {
+            icon: "plus", text: "Not Ekle", onClick: function (e) {
               $('#actionNoteModalLabel').text('Not Ekle');
               $('#actionNoteModal').modal('toggle');
               $('#changeActionStatus').modal('hide');
@@ -486,6 +487,7 @@ function GetActionNoteList(ID) {
         fixed: true,
         fixedPosition: "right",
         width: '10%',
+        alignment: 'center',
         buttons: [
           {
             hint: "Düzenle",

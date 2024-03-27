@@ -168,6 +168,7 @@ function GetList() {
         type: "buttons",
         fixed: true,
         fixedPosition: "right",
+        alignment: 'center',
         buttons: [
           {
             hint: "Düzenle",
@@ -265,6 +266,7 @@ function GetList() {
                 type: "buttons",
                 fixed: true,
                 fixedPosition: "right",
+                alignment: 'center',
                 buttons: [
                   {
                     hint: "Sil",

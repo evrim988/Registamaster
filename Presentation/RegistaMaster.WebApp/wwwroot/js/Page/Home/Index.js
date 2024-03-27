@@ -276,6 +276,7 @@ function GetList() {
         type: "buttons",
         fixed: true,
         fixedPosition: "right",
+        alignment: 'center',
         buttons: [
           {
             hint: "Durum Değiştir",
@@ -475,6 +476,7 @@ function GetActionNoteList(ID) {
         fixed: true,
         fixedPosition: "right",
         width: "10%",
+        alignment: 'center',
         buttons: [
           {
             hint: "Düzenle",
