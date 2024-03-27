@@ -118,27 +118,39 @@ public class RequestController : Controller
   {
     try
     {
-      var request = new Request()
-      {
-        ID = model.ID,
-        NotificationTypeID = model.NotificationTypeID,
-        CategoryID = model.CategoryID,
-        ProjectID = model.ProjectID,
-        ModuleID = model.ModuleID,
-        VersionID = model.VersionID,
-        RequestSubject = model.RequestSubject,
-        Description = model.Description,
-        PageURL = model.PageUrl,
-        PictureURL = model.PictureURL,
-        LastModifiedBy = model.LastModifiedBy,
-        LastModifiedOn = DateTime.Now,
-        CreatedOn = model.CreatedOn,
-        ObjectStatus = ObjectStatus.NonDeleted,
-        Status = Status.Active,
-        StartDate = DateTime.Now,
-        PlanedEndDate = DateTime.Now.AddDays(7),
-      };
-      context.Update(request);
+      var req = await uow.Repository.GetById<Request>(model.ID);
+
+      req.NotificationTypeID = model.NotificationTypeID;
+      req.CategoryID = model.CategoryID;
+      req.ProjectID = model.ProjectID;
+      req.ModuleID = model.ModuleID;
+      req.VersionID = model.VersionID;
+      req.RequestSubject = model.RequestSubject;
+      req.Description = model.Description;
+      req.PageURL = model.PageUrl;
+      req.PictureURL = model.PictureURL;
+
+      //var request = new Request()
+      //{
+      //  ID = model.ID,
+      //  NotificationTypeID = model.NotificationTypeID,
+      //  CategoryID = model.CategoryID,
+      //  ProjectID = model.ProjectID,
+      //  ModuleID = model.ModuleID,
+      //  VersionID = model.VersionID,
+      //  RequestSubject = model.RequestSubject,
+      //  Description = model.Description,
+      //  PageURL = model.PageUrl,
+      //  PictureURL = model.PictureURL,
+      //  LastModifiedBy = model.LastModifiedBy,
+      //  LastModifiedOn = DateTime.Now,
+      //  CreatedOn = model.CreatedOn,
+      //  ObjectStatus = ObjectStatus.NonDeleted,
+      //  Status = Status.Active,
+      //  StartDate = DateTime.Now,
+      //  PlanedEndDate = DateTime.Now.AddDays(7),
+      //};
+      context.Update(req);
       await context.SaveChangesAsync();
       return "1";
     }

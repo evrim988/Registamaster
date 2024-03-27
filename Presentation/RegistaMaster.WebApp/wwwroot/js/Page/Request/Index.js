@@ -338,6 +338,48 @@ function GetList() {
           var auth = $("#auth").val();
           if (auth != 2) {
             switch (options.data.requestStatus) {
+              case 0:
+                var userID = $("#userID").val();
+                if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
+                  $("<div>")
+                    .dxButton({
+                      icon: "preferences",
+                      hint: "İşlemler",
+                      stylingMode: "text",
+                      onClick: function (e) {
+                        showContextMenu(options, e);
+                      }
+                    })
+                    .appendTo(container);
+                }
+                else {
+                  var auth = $("#auth").val();
+                  if (auth == 0) {     //talep başlanmamış durumdaysa admin için contextmenu
+                    $("<div>")
+                      .dxButton({
+                        icon: "preferences",
+                        hint: "İşlemler",
+                        stylingMode: "text",
+                        onClick: function (e) {
+                          showContextMenuAdmin(options, e);
+                        }
+                      })
+                      .appendTo(container);
+                  }
+                  else {      //talep başlanmamış durumdaysa ekip lideri için yalnızca aksiyon ekleyebilir
+                    $("<div>")
+                      .dxButton({
+                        icon: "add",
+                        hint: "Aksiyon Ekle",
+                        stylingMode: "text",
+                        onClick: function (e) {
+                          openPopup(options.data.id);
+                        }
+                      })
+                      .appendTo(container);
+                  }
+                }
+                break;
               case 1://talep başlandı durumundaysa yalnızca talebe aksiyon ekleme işlemi yapılabilir
                 $("<div>")
                   .dxButton({
@@ -380,48 +422,6 @@ function GetList() {
                   .appendTo(container);
                 break;
 
-              default:
-                var userID = $("#userID").val();
-                if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
-                  $("<div>")
-                    .dxButton({
-                      icon: "preferences",
-                      hint: "İşlemler",
-                      stylingMode: "text",
-                      onClick: function (e) {
-                        showContextMenu(options, e);
-                      }
-                    })
-                    .appendTo(container);
-                }
-                else {
-                  var auth = $("#auth").val();
-                  if (auth == 0) {     //talep başlanmamış durumdaysa admin için contextmenu
-                    $("<div>")
-                      .dxButton({
-                        icon: "preferences",
-                        hint: "İşlemler",
-                        stylingMode: "text",
-                        onClick: function (e) {
-                          showContextMenuAdmin(options, e);
-                        }
-                      })
-                      .appendTo(container);
-                  }
-                  else {      //talep başlanmamış durumdaysa ekip lideri için yalnızca aksiyon ekleyebilir
-                    $("<div>")
-                      .dxButton({
-                        icon: "add",
-                        hint: "Aksiyon Ekle",
-                        stylingMode: "text",
-                        onClick: function (e) {
-                          openPopup(options.data.id);
-                        }
-                      })
-                      .appendTo(container);
-                  }
-                }
-                break;
             };
           }
           $("<div>")
@@ -1087,7 +1087,7 @@ function openEditModals(data, ID) {
 
   $("#RequestEditSubject").val(data.requestSubject);
   $("#DescriptionEdit").val(data.description);
-  $("#PageEditUrl").val(data.pageUrl);
+  $("#PageEditUrl").val(data.pageURL);
   $("#RequestImage").val(data.pictureURL);
   $("#ID").val(ID);
   $("#LastModifiedBy").val(data.lastModifiedBy);
@@ -1259,6 +1259,7 @@ function SaveRequestEditModal() {
     success: function (data) {
 
       //console.log(data);
+      $("#RequestEditModal").modal("toggle");
       gridRefresh();
 
     },
