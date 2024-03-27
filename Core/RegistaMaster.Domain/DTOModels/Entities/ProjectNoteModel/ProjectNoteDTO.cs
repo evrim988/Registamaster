@@ -13,6 +13,6 @@ namespace RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel
     public string? NoteType { get; set; }
     public string? Description { get; set; }
     public string AddUserNote { get; set; }
-    public int CrearedBy { get; set; }
+    public int CreatedBy { get; set; }
   }
 }

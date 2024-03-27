@@ -89,7 +89,7 @@ public class ProjectController : Controller
       Description = p.Description,
       ID = p.ID,
       NoteType = p.NoteType,
-      CrearedBy = p.CreatedBy,
+      CreatedBy = p.CreatedBy,
     });
 
     return JsonConvert.SerializeObject(notes);

@@ -517,6 +517,8 @@ function ProjectNoteDetailModal(data) {
   $("#detailDescription").prop("readonly", true);
   var auth = $("#auth").val();
   var id = $("#ID").val();
+  console.log(id);
+  console.log(data.CreatedBy);
   if (auth == 0 || data.CreatedBy == id) {
     $("#editButton").removeClass("invisible");
   }
