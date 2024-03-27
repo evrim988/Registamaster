@@ -180,6 +180,18 @@ function GetList() {
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
+        cellTemplate: function (container, info) {
+          if (info.data.startDate == "0001-01-01T00:00:00") {
+            $('<div>')
+              .append($('<text>').append("-"))
+              .appendTo(container);
+          }
+          else {
+            $('<div>')
+              .append($('<text>').append(new Date(info.data.startDate).toLocaleDateString()))
+              .appendTo(container);
+          }
+        }
       },
       {
         dataField: "completeDate",
@@ -187,6 +199,18 @@ function GetList() {
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
+        cellTemplate: function (container, info) {
+          if (info.data.completeDate == "0001-01-01T00:00:00") {
+            $('<div>')
+              .append($('<text>').append("-"))
+              .appendTo(container);
+          }
+          else {
+            $('<div>')
+              .append($('<text>').append(new Date(info.data.completeDate).toLocaleDateString()))
+              .appendTo(container);
+          }
+        }
       },
       {
         dataField: "actionPriorityStatus",
