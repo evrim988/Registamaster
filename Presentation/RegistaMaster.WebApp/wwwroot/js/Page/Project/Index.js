@@ -510,8 +510,11 @@ function SaveProjectNote() {
   });
 }
 
-//proje noru detay modal
+//proje notu detay modal
 function ProjectNoteDetailModal(data) {
+  $("#saveButton").addClass("invisible");
+  $("#detailNoteType").prop("readonly", true);
+  $("#detailDescription").prop("readonly", true);
   var auth = $("#auth").val();
   var id = $("#ID").val();
   if (auth == 0 || data.CreatedBy == id) {

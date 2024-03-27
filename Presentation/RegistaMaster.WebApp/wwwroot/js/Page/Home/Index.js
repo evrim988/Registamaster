@@ -161,7 +161,7 @@ function GetList() {
           }
           else {
             $('<div>')
-              .append($('<text>').append(new Date(info.data.startDate).toLocaleDateString()))
+              .append($('<text>').append(new Date(info.data.startDate).toLocaleDateString().replace('.', '/').replace('.', '/')))
               .appendTo(container);
           }
         }
@@ -180,7 +180,7 @@ function GetList() {
           }
           else {
             $('<div>')
-              .append($('<text>').append(new Date(info.data.completeDate).toLocaleDateString()))
+              .append($('<text>').append(new Date(info.data.completeDate).toLocaleDateString().replace('.', '/').replace('.', '/')))
               .appendTo(container);
           }
         }
@@ -576,10 +576,10 @@ function ChangeActionStatusModal(data) {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  
+
   const startDate = data.startDate !== "0001-01-01T00:00:00" ? new Date(data.startDate) : "";
   const completeDate = data.completeDate !== "0001-01-01T00:00:00" ? new Date(data.completeDate) : "";
-  
+
 
   if ($("#actionStatusValue").val() == 0) {
     $("#actionStartDate").prop("disabled", true);
@@ -592,7 +592,7 @@ function ChangeActionStatusModal(data) {
   $("#actionStartDate").val(formatDate(startDate));
   $("#actionCompleteDate").val(formatDate(completeDate));
 
-  
+
   // Modal açıldığında toggle butonları kontrol et
   $('#changeActionStatus').on('shown.bs.modal', function () {
     toggleButtons();
@@ -917,18 +917,21 @@ function CheckButtonStatus(data) {
   const newCompleteDate = onchangeData.completeDate !== "0001-01-01T00:00:00" ? new Date(onchangeData.completeDate) : new Date();
   switch ($("#actionStatusValue").val()) {
     case "0":
-      
       $("#actionStartDate").prop("disabled", true);
       $("#actionCompleteDate").prop("disabled", true);
       $("#actionStartDate").val("");
       $("#actionCompleteDate").val("");
-
       break;
     case "1":
       $("#actionStartDate").prop("disabled", false);
       $("#actionCompleteDate").prop("disabled", false);
       $("#actionStartDate").val(formatDate(newStartDate));
-      $("#actionCompleteDate").val("");
+      if (formatDate(newCompleteDate) == formatDate(new Date())){
+        $("#actionCompleteDate").val("");
+      }
+      else {
+        $("#actionCompleteDate").val(formatDate(newCompleteDate));
+      }
       break;
     case "2":
       $("#actionStartDate").prop("disabled", false);

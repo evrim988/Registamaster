@@ -189,7 +189,7 @@ function GetList() {
           }
           else {
             $('<div>')
-              .append($('<text>').append(new Date(info.data.startDate).toLocaleDateString()))
+              .append($('<text>').append(new Date(info.data.startDate).toLocaleDateString().replace('.', '/').replace('.', '/')))
               .appendTo(container);
           }
         }
@@ -208,7 +208,7 @@ function GetList() {
           }
           else {
             $('<div>')
-              .append($('<text>').append(new Date(info.data.completeDate).toLocaleDateString()))
+              .append($('<text>').append(new Date(info.data.completeDate).toLocaleDateString().replace('.', '/').replace('.', '/')))
               .appendTo(container);
           }
         }
@@ -1072,7 +1072,12 @@ function CheckButtonStatus(data) {
       $("#actionStartDate").prop("disabled", false);
       $("#actionCompleteDate").prop("disabled", false);
       $("#actionStartDate").val(formatDate(newStartDate));
-      $("#actionCompleteDate").val("");
+      if (formatDate(newCompleteDate) == formatDate(new Date())) {
+        $("#actionCompleteDate").val("");
+      }
+      else {
+        $("#actionCompleteDate").val(formatDate(newCompleteDate));
+      }
       break;
     case "2":
       $("#actionStartDate").prop("disabled", false);

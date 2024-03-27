@@ -539,7 +539,7 @@ function GetList() {
                   }
                   else {
                     $('<div>')
-                      .append($('<text>').append(new Date(info.data.StartDate).toLocaleDateString()))
+                      .append($('<text>').append(new Date(info.data.StartDate).toLocaleDateString().replace('.', '/').replace('.', '/')))
                       .appendTo(container);
                   }
                 }
@@ -558,7 +558,7 @@ function GetList() {
                   }
                   else {
                     $('<div>')
-                      .append($('<text>').append(new Date(info.data.CompleteDate).toLocaleDateString()))
+                      .append($('<text>').append(new Date(info.data.CompleteDate).toLocaleDateString().replace('.', '/').replace('.', '/')))
                       .appendTo(container);
                   }
                 }
@@ -1943,6 +1943,7 @@ function ChangeActionStatusModal(data) {
   $("#detail").val(2);
   $("#actionID").val(data.ID);
   GetActionNoteList(data.ID);
+  $("#actionStatusValue").val(data.ActionStatus);
   onchangeData = data;
   //console.log(data);
 
@@ -2433,7 +2434,6 @@ function CheckButtonStatus(data) {
   const newCompleteDate = onchangeData.CompleteDate !== "0001-01-01T00:00:00" ? new Date(onchangeData.CompleteDate) : new Date();
   switch ($("#actionStatusValue").val()) {
     case "0":
-
       $("#actionStartDate").prop("disabled", true);
       $("#actionCompleteDate").prop("disabled", true);
       $("#actionStartDate").val("");
@@ -2444,7 +2444,12 @@ function CheckButtonStatus(data) {
       $("#actionStartDate").prop("disabled", false);
       $("#actionCompleteDate").prop("disabled", false);
       $("#actionStartDate").val(formatDate(newStartDate));
-      $("#actionCompleteDate").val("");
+      if (formatDate(newCompleteDate) == formatDate(new Date())) {
+        $("#actionCompleteDate").val("");
+      }
+      else {
+        $("#actionCompleteDate").val(formatDate(newCompleteDate));
+      }
       break;
     case "2":
       $("#actionStartDate").prop("disabled", false);
