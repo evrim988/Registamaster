@@ -475,13 +475,13 @@ function GetList() {
                 allowEditing: false,
                 visible: false,
               },
-              {
-                dataField: "CreatedOn",
-                caption: "Aksiyon Açılma Tarihi",
-                alignment: 'center',
-                dataType: 'date',
-                format: 'dd/MM/yyyy',
-              },
+              //{
+              //  dataField: "CreatedOn",
+              //  caption: "Aksiyon Açılma Tarihi",
+              //  alignment: 'center',
+              //  dataType: 'date',
+              //  format: 'dd/MM/yyyy',
+              //},
               {
                 dataField: "ActionDescription",
                 caption: "Aksiyon Konusu",
@@ -508,7 +508,7 @@ function GetList() {
               },
               {
                 dataField: "OpeningDate",
-                caption: "Başlangıç Tarihi",
+                caption: "Açılma Tarihi",
                 alignment: 'center',
                 dataType: 'date',
                 format: 'dd/MM/yyyy',

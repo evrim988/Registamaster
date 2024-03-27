@@ -131,15 +131,8 @@ function GetList() {
         }
       },
       {
-        dataField: "createdOn",
-        caption: "Açılma Tarihi",
-        alignment: 'center',
-        dataType: 'date',
-        format: 'dd/MM/yyyy',
-      },
-      {
         dataField: "openingDate",
-        caption: "Başlangıç Tarihi",
+        caption: "Açılma Tarihi",
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
@@ -153,7 +146,7 @@ function GetList() {
       },
       {
         dataField: "startDate",
-        caption: "Başlama Tarihi",
+        caption: "Başlangıç Tarihi",
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
@@ -316,8 +309,8 @@ function OpenActionDetailModal(e) {
   data = e.row.data;
   $("#actionDetailActionDescription").val(data.actionDescription);
   $("#actionDetailDescription").val(data.description);
-  $("#actionDetailActionPriority").val(e.row.cells[9].displayValue);
-  $("#actionDetailStatus").val(e.row.cells[10].displayValue);
+  $("#actionDetailActionPriority").val(e.row.cells[7].displayValue);
+  $("#actionDetailStatus").val(e.row.cells[8].displayValue);
   $("#actionDetailResponsible").val(e.row.cells[2].displayValue);
 
   const start = data.startDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.startDate).toLocaleDateString();
