@@ -64,20 +64,20 @@
         <div class="row mb-3 justify-content-md-center">
           <input type="hidden" id="actionStatusValue" />
           <div class="col-md-2">
-            <input type="checkbox" class="btn-check" id="btn-check-1" data-value="0" autocomplete="off">
+            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-1" data-value="0" autocomplete="off">
             <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" class="btn-check" id="btn-check-2" data-value="1" autocomplete="off">
+            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-2" data-value="1" autocomplete="off">
             <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" class="btn-check" id="btn-check-3" data-value="2" autocomplete="off">
+            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-3" data-value="2" autocomplete="off">
             <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
           </div>
           <div class="col-md-2">
-            <input type="checkbox" class="btn-check" id="btn-check-4" data-value="3" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
+            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()"  id="btn-check-4" data-value="3" autocomplete="off">
+            <label class="btn btn-primary btn-lg"  for="btn-check-4">İptal/Reddedildi</label>
           </div>
         </div>
         <div class="row mt-5">
