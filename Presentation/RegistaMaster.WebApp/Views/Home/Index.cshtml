@@ -160,29 +160,37 @@
       <div class="modal-body">
         <form>
           <div class="row" style="padding-left:10px;padding-right:10px">
-            <div class="col-4">
-              <label style="font-weight:bold;">Sorumlu Kişi</label>
-              <input class="form-control mt-2" readonly id="actionDetailResponsible" />
-            </div>
-            <div class="col-4">
+            <div class="col-6">
               <label style="font-weight:bold;">Öncelik Durumu</label>
               <input class="form-control mt-2" readonly id="actionDetailActionPriority" />
             </div>
-            <div class="col-4">
+            <div class="col-6">
               <label style="font-weight:bold;">Durum</label>
               <input id="actionDetailStatus" readonly class="form-control mt-2" />
             </div>
-            <div class="col-4 mt-3">
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Sorumlu Kişi</label>
+              <input class="form-control mt-2" readonly id="actionDetailResponsible" />
+            </div>
+            <div class="col-6 mt-3">
               <label style="font-weight:bold;">Konu</label>
               <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
             </div>
-            <div class="col-4 mt-3">
-              <label style="font-weight:bold;">Başlangıç Tarihi</label>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Açılma Tarihi</label>
               <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
             </div>
-            <div class="col-4 mt-3">
-              <label style="font-weight:bold;">Bitiş Tarihi</label>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Son Tarih</label>
               <input class="form-control mt-2" readonly id="actionDetailEndDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Başlangıç Tarihi</label>
+              <input class="form-control mt-2" readonly id="actionDetailStartDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Bitiş Tarihi</label>
+              <input class="form-control mt-2" readonly id="actionDetailCompleteDate" />
             </div>
             <div class="col-12 mt-3">
               <label style="font-weight:bold;">Açıklama</label>
@@ -204,6 +212,7 @@
     </div>
   </div>
 </div>
+
 
 <!--Aksiyon Not Ayrıntıları Modal-->
 <div class="modal fade" id="actionNoteDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
