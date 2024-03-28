@@ -37,6 +37,5 @@ public class Request : BaseEntitiy
   
     public int ProjectID { get; set; }
     public Project Project { get; set; }
-    public ICollection<Task> Tasks { get; set; }
     public ICollection<Action> Actions { get; set; }
 }

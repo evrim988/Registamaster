@@ -18,7 +18,7 @@ public class ActionDTO
   public RequestStatus RequestStatus { get; set; }
   public ActionPriorityStatus ActionPriorityStatus { get; set; }
   public string Description { get; set; }
-  public string LastModifiedBy { get; set; }
+  public int LastModifiedBy { get; set; }
   public string Color { get; set; }
   public int CreatedBy { get; set; }
   public List<SelectListItem> ResponsiblehelperModelList { get; set; }

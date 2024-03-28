@@ -43,7 +43,7 @@ public class Repository : IRepository
     {
       foreach (var item in _objectList)
       {
-        item.LastModifiedBy = session.FullName;
+        item.LastModifiedBy = session.ID;
         item.LastModifiedOn = DateTime.Now;
       }
       GetTable<T>().UpdateRange(_objectList);
@@ -61,7 +61,7 @@ public class Repository : IRepository
     {
       foreach (var item in _objectList)
       {
-        item.LastModifiedBy = session.FullName;
+        item.LastModifiedBy = session.ID;
         item.LastModifiedOn = DateTime.Now;
         item.ObjectStatus = ObjectStatus.Deleted;
         item.Status = Status.Passive;
@@ -89,7 +89,7 @@ public class Repository : IRepository
   public async Task<T> Add<T>(T _object) where T : BaseEntitiy
   {
     _object.CreatedBy = session.ID;
-    _object.LastModifiedBy = session.FullName;
+    _object.LastModifiedBy = session.ID;
     _object.LastModifiedOn = DateTime.Now;
     _object.CreatedOn = DateTime.Now;
     _object.Status = Status.Active;
@@ -127,7 +127,7 @@ public class Repository : IRepository
   public T Update<T>(T _object) where T : BaseEntitiy
   {
     _object.LastModifiedOn = DateTime.Now;
-    _object.LastModifiedBy = session.FullName;
+    _object.LastModifiedBy = session.ID;
     GetTable<T>().Update(_object);
     return _object;
   }

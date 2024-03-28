@@ -23,8 +23,6 @@ public class Customer : BaseEntitiy
 
   [DisplayName("Müşteri Tanım No")]
   public int? CustomerDescriptionID { get; set; }
-  public int EmailInfoID { get; set; }
-  public EmailInformation EmailInformation { get; set; }
   public ICollection<Request> Requests { get; set; }
   public ICollection<ProjectNote> ProjectNotes { get; set; }
 }

@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace RegistaMaster.Persistance.Migrations
 {
-    public partial class init_6 : Migration
+    public partial class init_1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,24 +18,39 @@ namespace RegistaMaster.Persistance.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Address = table.Column<string>(type: "character varying(600)", maxLength: 600, nullable: true),
-                    ContactEmail = table.Column<string>(type: "text", nullable: true),
-                    EmailHost = table.Column<string>(type: "text", nullable: true),
-                    EmailPort = table.Column<string>(type: "text", nullable: true),
-                    EnableSsl = table.Column<bool>(type: "boolean", nullable: false),
-                    EmailPassword = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: true),
                     ApiKey = table.Column<string>(type: "text", nullable: true),
                     CustomerDescriptionID = table.Column<int>(type: "integer", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FoodCharts",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    PersonNumber = table.Column<int>(type: "integer", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
+                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FoodCharts", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,7 +65,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -76,7 +91,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -106,7 +121,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -134,7 +149,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -157,12 +172,11 @@ namespace RegistaMaster.Persistance.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Key = table.Column<string>(type: "text", nullable: true),
                     ProjectID = table.Column<int>(type: "integer", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -186,13 +200,12 @@ namespace RegistaMaster.Persistance.Migrations
                     Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     NoteType = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    AddUserNote = table.Column<string>(type: "text", nullable: false),
                     ProjectID = table.Column<int>(type: "integer", nullable: true),
                     CustomerID = table.Column<int>(type: "integer", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -225,7 +238,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -254,7 +267,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -275,13 +288,12 @@ namespace RegistaMaster.Persistance.Migrations
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RequestSubject = table.Column<string>(type: "text", nullable: false),
+                    Subject = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Category = table.Column<string>(type: "text", nullable: true),
                     CategoryID = table.Column<int>(type: "integer", nullable: true),
                     NotificationType = table.Column<string>(type: "text", nullable: true),
                     NotificationTypeID = table.Column<int>(type: "integer", nullable: true),
-                    NotificationTypeCNC = table.Column<int>(type: "integer", nullable: false),
                     PageURL = table.Column<string>(type: "text", nullable: true),
                     PictureURL = table.Column<string>(type: "text", nullable: true),
                     StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -295,7 +307,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -331,7 +343,7 @@ namespace RegistaMaster.Persistance.Migrations
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ActionDescription = table.Column<string>(type: "text", nullable: false),
+                    Subject = table.Column<string>(type: "text", nullable: false),
                     ResponsibleID = table.Column<int>(type: "integer", nullable: false),
                     OpeningDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -345,7 +357,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -367,46 +379,6 @@ namespace RegistaMaster.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tasks",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PlanedStart = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    PlanedEnd = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Image = table.Column<string>(type: "text", nullable: true),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    ResponsibleID = table.Column<int>(type: "integer", nullable: false),
-                    TaskStatus = table.Column<int>(type: "integer", nullable: false),
-                    PriorityStatus = table.Column<int>(type: "integer", nullable: false),
-                    CustomerID = table.Column<int>(type: "integer", nullable: false),
-                    RequestID = table.Column<int>(type: "integer", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
-                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tasks", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Customers_CustomerID",
-                        column: x => x.CustomerID,
-                        principalTable: "Customers",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Requests_RequestID",
-                        column: x => x.RequestID,
-                        principalTable: "Requests",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ActionNotes",
                 columns: table => new
                 {
@@ -418,7 +390,7 @@ namespace RegistaMaster.Persistance.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: false),
                     ObjectStatus = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -494,16 +466,6 @@ namespace RegistaMaster.Persistance.Migrations
                 column: "VersionID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_CustomerID",
-                table: "Tasks",
-                column: "CustomerID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_RequestID",
-                table: "Tasks",
-                column: "RequestID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserLogs_ProjectID",
                 table: "UserLogs",
                 column: "ProjectID");
@@ -528,13 +490,13 @@ namespace RegistaMaster.Persistance.Migrations
                 name: "ErrorLogs");
 
             migrationBuilder.DropTable(
+                name: "FoodCharts");
+
+            migrationBuilder.DropTable(
                 name: "HealthChecks");
 
             migrationBuilder.DropTable(
                 name: "ProjectNotes");
-
-            migrationBuilder.DropTable(
-                name: "Tasks");
 
             migrationBuilder.DropTable(
                 name: "UserLogs");

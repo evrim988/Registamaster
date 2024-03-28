@@ -520,7 +520,7 @@ function GetList() {
               },
               {
                 dataField: "EndDate",
-                caption: "Son Tarih",
+                caption: "Hedef Tarih",
                 alignment: 'center',
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
@@ -1318,7 +1318,7 @@ function openPopup(ID) {
     },
     {
       dataField: "endDate",
-      caption: "Son Tarih",
+      caption: "Hedef Tarih",
       alignment: 'center',
       dataType: 'date',
       editorType: "dxDateBox",
