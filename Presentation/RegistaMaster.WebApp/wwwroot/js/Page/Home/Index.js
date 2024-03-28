@@ -109,7 +109,7 @@ function GetList() {
         visible: false
       },
       {
-        dataField: "actionDescription",
+        dataField: "subject",
         caption: "Aksiyon Konusu",
         alignment: 'left',
         alignment: 'center',
@@ -320,7 +320,7 @@ function openEditModal(data) {
 
 
   $("#LastModifiedBy").val(data.lastModifiedBy);
-  $("#ActionDescription").val(data.actionDescription);
+  $("#Subject").val(data.subject);
   $("#Description").val(data.description);
 
 
@@ -335,7 +335,7 @@ sütun eklenip-silindiği durumda doğru sütunun "display value"su alınamayaca
 function OpenActionDetailModal(e) {
   //console.log(data);
   data = e.row.data;
-  $("#actionDetailActionDescription").val(data.actionDescription);
+  $("#actionDetailSubject").val(data.subject);
   $("#actionDetailDescription").val(data.description);
   $("#actionDetailActionPriority").val(e.row.cells[7].displayValue);
   $("#actionDetailStatus").val(e.row.cells[8].displayValue);

@@ -117,7 +117,7 @@ public class RequestRepository : Repository, IRequestRepository
             OpeningDate = s.OpeningDate,
             ResponsibleID = s.ResponsibleID,
             ActionStatus = s.ActionStatus,
-            ActionDescription = s.ActionDescription,
+            Subject = s.Subject,
             LastModifiedBy = s.LastModifiedBy,
             RequestID = RequestId,
             CreatedOn = s.CreatedOn,

@@ -84,7 +84,6 @@ public class ProjectController : Controller
   {
     var notes = uow.Repository.GetNonDeletedAndActive<ProjectNote>(t => t.ProjectID == ID).Select(p => new ProjectNoteDTO
     {
-      AddUserNote = p.AddUserNote,
       Date = p.CreatedOn,
       Description = p.Description,
       ID = p.ID,
@@ -139,6 +138,19 @@ public class ProjectController : Controller
       if (uow.Repository.GetNonDeletedAndActive<Request>(t => t.ProjectID == ID && t.RequestStatus != RequestStatus.Closed).Count() != 0)
         return "-1";
       return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<object> GetCreatedBy(DataSourceLoadOptions loadOptions)
+  {
+    try
+    {
+      var model = await uow.UserRepository.GetCreatedBy();
+      return DataSourceLoader.Load(model, loadOptions);
     }
     catch (Exception ex)
     {

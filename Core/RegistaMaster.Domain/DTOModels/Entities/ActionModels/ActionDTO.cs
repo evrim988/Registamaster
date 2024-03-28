@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using RegistaMaster.Domain.Enums;
-using System.ComponentModel;
 
 namespace RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 
 public class ActionDTO
 {
   public int ID { get; set; }
-  public string ActionDescription { get; set; }
+  public string Subject { get; set; }
   public int ResponsibleID { get; set; }
   public int RequestID { get; set; }
   public DateTime OpeningDate { get; set; }

@@ -19,9 +19,6 @@ public class ProjectNote : BaseEntitiy
     [DataType(DataType.Text)]
     public string? Description { get; set; }
 
-    [DisplayName("NotEkleyenKullanıcı")]
-    public string AddUserNote { get; set; }
-
     public int? ProjectID { get; set; }
     public Project Project { get; set; }
 }

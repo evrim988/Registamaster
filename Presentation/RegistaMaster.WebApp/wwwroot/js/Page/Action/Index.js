@@ -126,7 +126,7 @@ function GetList() {
         }
       },
       {
-        dataField: "actionDescription",
+        dataField: "subject",
         caption: "Aksiyon Konusu",
         alignment: 'left',
         width: 200,
@@ -536,7 +536,7 @@ function OpenActionEditModals(data) {
   //console.log(data);
 
   $("#editActionID").val(data.id);
-  $("#editActionActionDescription").val(data.actionDescription);
+  $("#editActionSubject").val(data.subject);
   $("#actionEditDescription").val(data.description);
   $("#actionEditActionPriority").val(data.actionPriorityStatus);
   $("#actionEditResponsible").val(data.responsibleID);
@@ -583,7 +583,7 @@ function SaveActionUpdate() {
   var formData = new FormData();
 
   formData.append("ID", $("#editActionID").val());
-  formData.append("actionDescription", $("#editActionActionDescription").val());
+  formData.append("subject", $("#editActionSubject").val());
   formData.append("description", $("#actionEditDescription").val());
   formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
   formData.append("openingDate", $("#actionEditOpeningDate").val());
@@ -970,7 +970,7 @@ function refreshGridAfterEdit() {
 sütun eklenip-silindiği durumda doğru sütunun "display value"su alınamayacağı için aşağıdaki alanda sütun numaralarının değiştirlmesi gerekmektedir!*/
 function OpenActionDetailModal(e) {
   data = e.row.data;
-  $("#actionDetailActionDescription").val(data.actionDescription);
+  $("#actionDetailSubject").val(data.subject);
   $("#actionDetailDescription").val(data.description);
   $("#actionDetailActionPriority").val(e.row.cells[9].displayValue);
   $("#actionDetailStatus").val(e.row.cells[10].displayValue);

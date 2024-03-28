@@ -7,7 +7,7 @@ namespace RegistaMaster.Domain.Entities;
 public class Request : BaseEntitiy
 {
     [DisplayName("Konu")]
-    public string RequestSubject { get; set; }
+    public string Subject { get; set; }
     [DisplayName("Açıklama")]
     public string? Description { get; set; }
     [DisplayName("Kategori")]
@@ -16,7 +16,7 @@ public class Request : BaseEntitiy
     [DisplayName("Bildirim Türü")]
     public string? NotificationType { get; set; }
     public int? NotificationTypeID { get; set; }
-    public NotificationTypeCNC NotificationTypeCNC { get; set; }
+
     [DisplayName("Sayfa Linki")]
     public string? PageURL { get; set; }
     [DisplayName("Görüntü")]

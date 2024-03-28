@@ -95,7 +95,7 @@ public class ActionRepository : Repository, IActionRepository
             OpeningDate = s.OpeningDate,
             ResponsibleID = s.ResponsibleID,
             ActionStatus = s.ActionStatus,
-            ActionDescription = s.ActionDescription,
+            Subject = s.Subject,
             RequestID = s.RequestID,
             ActionPriorityStatus = s.ActionPriorityStatus,
             CreatedBy = s.CreatedBy,
@@ -122,7 +122,7 @@ public class ActionRepository : Repository, IActionRepository
             ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
             {
                ID = item.ID,
-               Name = item.RequestSubject,
+               Name = item.Subject,
             };
             RequestHelpers.Add(helper);
          }

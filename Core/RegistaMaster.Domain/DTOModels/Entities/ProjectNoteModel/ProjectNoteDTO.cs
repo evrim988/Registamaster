@@ -12,7 +12,6 @@ namespace RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel
     public DateTime? Date { get; set; }
     public string? NoteType { get; set; }
     public string? Description { get; set; }
-    public string AddUserNote { get; set; }
     public int CreatedBy { get; set; }
   }
 }

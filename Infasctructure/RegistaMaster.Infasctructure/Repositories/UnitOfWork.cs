@@ -48,12 +48,6 @@ public class UnitOfWork : IUnitOfWork
     {
         get => _requestRepository ?? (_requestRepository = new RequestRepository(context, session, this));
     }
-    private ITaskRepository _taskRepository;
-    public ITaskRepository TaskRepository
-    {
-        get => _taskRepository ?? (_taskRepository = new TaskRepository(context, session, this, emailService));
-
-    }
     private IActionRepository _actionRepository;
     public IActionRepository ActionRepository
     {

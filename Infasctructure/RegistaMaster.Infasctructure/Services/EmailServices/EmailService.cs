@@ -50,10 +50,10 @@ public class EmailService : IEmailService
             mm.IsBodyHtml = true;
             mm.Body = email.Body;
             SmtpClient smtp = new SmtpClient(UserWhitCustomer.ContactEmail);
-            smtp.Host = UserWhitCustomer.EmailHost;
-            smtp.Port = Convert.ToInt32(UserWhitCustomer.EmailPort);
-            smtp.EnableSsl = UserWhitCustomer.EnableSsl;
-            NetworkCredential nc = new NetworkCredential(UserWhitCustomer.ContactEmail, UserWhitCustomer.EmailPassword);//Emaili Gönderen Hesap
+            smtp.Host = UserWhitCustomer.EmailInformation.EmailHost;
+            smtp.Port = Convert.ToInt32(UserWhitCustomer.EmailInformation.EmailPort);
+            smtp.EnableSsl = UserWhitCustomer.EmailInformation.EnableSsl;
+            NetworkCredential nc = new NetworkCredential(UserWhitCustomer.ContactEmail, UserWhitCustomer.EmailInformation.EmailPassword);//Emaili Gönderen Hesap
 
             smtp.Credentials = nc;
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate (object s,

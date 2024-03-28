@@ -6,7 +6,7 @@ namespace RegistaMaster.Domain.Entities;
 public class Action : BaseEntitiy
 {
   [DisplayName("Aksiyon Konusu")]
-  public string ActionDescription { get; set; }
+  public string Subject { get; set; }
 
   [DisplayName("Sorumlu")]
   public int ResponsibleID { get; set; }

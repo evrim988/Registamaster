@@ -28,8 +28,7 @@ public class RequestController : ControllerBase
 
             var request = new Request()
             {
-                NotificationTypeCNC = model.TicketType,
-                RequestSubject = model.TicketTitle,
+                Subject = model.TicketTitle,
                 Description = model.TicketContent,
                 PictureURL = model.Image,
                 PageURL = model.PageUrl,

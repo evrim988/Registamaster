@@ -237,7 +237,7 @@ function AddUser() {
     contentType: false,
     success: function (data) {
       //console.log(data);
-      $('#addUser').modal('toggle');
+      CloseAddUser();
       gridRefresh();
     },
     error: function (e) {

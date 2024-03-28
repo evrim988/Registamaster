@@ -6,7 +6,7 @@ namespace RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 
 public class RequestDTO
 {
-    public string RequestSubject { get; set; }
+    public string Subject { get; set; }
     public int ModuleID { get; set; }
     public int ID { get; set; }
     public int VersionID { get; set; }
