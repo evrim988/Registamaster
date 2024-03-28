@@ -47,7 +47,6 @@ namespace RegistaMaster.Infasctructure.Repositories
             {
                 return GetNonDeletedAndActive<ErrorLog>(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active).Select(s => new ErrorLogDTO()
                 {
-                    ProjectKey = s.ProjectKey,
                     NameSurname = s.NameSurname,
                     ErrorDate = s.ErrorDate,
                     ErrorDesc = s.ErrorDesc,

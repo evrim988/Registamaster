@@ -12,8 +12,8 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    [Migration("20240326115856_init_5")]
-    partial class init_5
+    [Migration("20240328064502_init_6")]
+    partial class init_6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -245,14 +245,15 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ObjectStatus")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ProjectKey")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ProjectID")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ProjectID");
 
                     b.ToTable("ErrorLogs");
                 });
@@ -281,9 +282,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ObjectStatus")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ProjectKey")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ProjectID")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("timestamp without time zone");
@@ -300,6 +300,8 @@ namespace RegistaMaster.Persistance.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ProjectID");
 
                     b.ToTable("HealthChecks");
                 });
@@ -713,14 +715,15 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("ObjectStatus")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ProjectKey")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ProjectID")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ProjectID");
 
                     b.ToTable("UserLogs");
                 });
@@ -805,6 +808,28 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Navigation("Action");
                 });
 
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.ErrorLog", b =>
+                {
+                    b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.HealthCheck", b =>
+                {
+                    b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Module", b =>
                 {
                     b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
@@ -884,6 +909,17 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("RegistaMaster.Domain.Entities.UserLog", b =>
+                {
+                    b.HasOne("RegistaMaster.Domain.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Version", b =>

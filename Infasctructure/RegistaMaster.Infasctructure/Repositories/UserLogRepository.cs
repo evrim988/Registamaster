@@ -30,7 +30,6 @@ namespace RegistaMaster.Infasctructure.Repositories
             {
                 return GetNonDeletedAndActive<UserLog>(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active).Select(s => new UserLogDTO()
                 {
-                    ProjectKey = s.ProjectKey,
                     NameSurname=s.NameSurname,
                     LoginDate=s.LoginDate,
                     ClientID=s.ClientID,

@@ -24,7 +24,6 @@ public class UserLogController : BaseController
         {
             var Log = new UserLog()
             {
-                ProjectKey = model.ProjectKey,
                 NameSurname = model.NameSurname,
                 LoginDate = model.LoginDate,
                 ClientID = model.ClientID,

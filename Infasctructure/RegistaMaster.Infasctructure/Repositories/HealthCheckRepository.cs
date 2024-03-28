@@ -29,7 +29,6 @@ namespace RegistaMaster.Infasctructure.Repositories
             {
                 return GetNonDeletedAndActive<HealthCheck>(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active).Select(s => new HealthCheckDTO()
                 {
-                    ProjectKey = s.ProjectKey,
                     Status = s.RequestStatus,
                     RequestDate= s.RequestDate,
                     RequestDesc = s.RequestDesc,

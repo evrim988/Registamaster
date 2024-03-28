@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace RegistaMaster.Persistance.Migrations
 {
-    public partial class init_5 : Migration
+    public partial class init_6 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,52 +39,6 @@ namespace RegistaMaster.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ErrorLogs",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProjectKey = table.Column<string>(type: "text", nullable: false),
-                    NameSurname = table.Column<string>(type: "text", nullable: false),
-                    ErrorDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ErrorDesc = table.Column<string>(type: "text", nullable: false),
-                    ClientID = table.Column<int>(type: "integer", nullable: false),
-                    MemberID = table.Column<int>(type: "integer", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
-                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ErrorLogs", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HealthChecks",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RequestStatus = table.Column<string>(type: "text", nullable: false),
-                    ProjectKey = table.Column<string>(type: "text", nullable: false),
-                    RequestDesc = table.Column<string>(type: "text", nullable: false),
-                    RequestDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
-                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HealthChecks", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
@@ -103,29 +57,6 @@ namespace RegistaMaster.Persistance.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserLogs",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProjectKey = table.Column<string>(type: "text", nullable: false),
-                    NameSurname = table.Column<string>(type: "text", nullable: false),
-                    LoginDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ClientID = table.Column<int>(type: "integer", nullable: true),
-                    MemberID = table.Column<int>(type: "integer", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
-                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserLogs", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +87,64 @@ namespace RegistaMaster.Persistance.Migrations
                         name: "FK_Users_Customers_CustomerID",
                         column: x => x.CustomerID,
                         principalTable: "Customers",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ErrorLogs",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    NameSurname = table.Column<string>(type: "text", nullable: false),
+                    ErrorDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ErrorDesc = table.Column<string>(type: "text", nullable: false),
+                    ClientID = table.Column<int>(type: "integer", nullable: false),
+                    MemberID = table.Column<int>(type: "integer", nullable: false),
+                    ProjectID = table.Column<int>(type: "integer", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ErrorLogs", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ErrorLogs_Projects_ProjectID",
+                        column: x => x.ProjectID,
+                        principalTable: "Projects",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HealthChecks",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RequestStatus = table.Column<string>(type: "text", nullable: false),
+                    RequestDesc = table.Column<string>(type: "text", nullable: false),
+                    RequestDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ProjectID = table.Column<int>(type: "integer", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HealthChecks", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_HealthChecks_Projects_ProjectID",
+                        column: x => x.ProjectID,
+                        principalTable: "Projects",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -220,6 +209,35 @@ namespace RegistaMaster.Persistance.Migrations
                         column: x => x.ProjectID,
                         principalTable: "Projects",
                         principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserLogs",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    NameSurname = table.Column<string>(type: "text", nullable: false),
+                    LoginDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ClientID = table.Column<int>(type: "integer", nullable: true),
+                    MemberID = table.Column<int>(type: "integer", nullable: true),
+                    ProjectID = table.Column<int>(type: "integer", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: false),
+                    ObjectStatus = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLogs", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_UserLogs_Projects_ProjectID",
+                        column: x => x.ProjectID,
+                        principalTable: "Projects",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -431,6 +449,16 @@ namespace RegistaMaster.Persistance.Migrations
                 column: "ResponsibleID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ErrorLogs_ProjectID",
+                table: "ErrorLogs",
+                column: "ProjectID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HealthChecks_ProjectID",
+                table: "HealthChecks",
+                column: "ProjectID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Modules_ProjectID",
                 table: "Modules",
                 column: "ProjectID");
@@ -474,6 +502,11 @@ namespace RegistaMaster.Persistance.Migrations
                 name: "IX_Tasks_RequestID",
                 table: "Tasks",
                 column: "RequestID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserLogs_ProjectID",
+                table: "UserLogs",
+                column: "ProjectID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CustomerID",

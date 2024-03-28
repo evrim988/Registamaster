@@ -72,7 +72,7 @@ function GetModules() {
          allowDeleting: true,
          allowAdding: true,
          popup: {
-            title: 'Ekle',
+            title: 'Modül Ekle',
             showTitle: true,
             width: 500,
             height: 315,
@@ -247,7 +247,7 @@ function GetVersion() {
          allowDeleting: true,
          allowAdding: true,
          popup: {
-            title: 'Ekle',
+            title: 'Versiyon Ekle',
             showTitle: true,
             width: 600,
             height: 330,

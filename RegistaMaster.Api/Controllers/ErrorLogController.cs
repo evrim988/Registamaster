@@ -22,7 +22,6 @@ public class ErrorLogController : BaseController
         {
             var error = new ErrorLog()
             {
-                ProjectKey = model.ProjectKey,
                 NameSurname = model.NameSurname,
                 ErrorDate = model.ErrorDate,
                 ErrorDesc = model.ErrorDesc,
