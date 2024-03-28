@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Yemek Çizelgesi</h1>
+<link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
+<link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
+<div class="main-content">
+  <div class="row">
+    <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
+      <div class="card card-primary">
+        <div class="card-content collapse show">
+          <div class="card-body card-dashboard">
+            <h3>Yemek Çizelgesi</h3>
+
+            <div class="demo-container">
+              <div id="foodChartGridContainer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+@section scripts
+{
+  <script src="~/js/Page/FoodChart/Index.js"></script>
+}
