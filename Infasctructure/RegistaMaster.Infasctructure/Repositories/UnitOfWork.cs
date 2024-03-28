@@ -89,6 +89,11 @@ public class UnitOfWork : IUnitOfWork
   public IActionNoteRepository ActionNoteRepository {
     get => _actionNoteRepository ?? (_actionNoteRepository = new ActionNoteRepository(context, this, session));
   }
+  private IFoodChartRepository _foodChartRepository;
+  public IFoodChartRepository FoodChartRepository
+  {
+    get => _foodChartRepository ?? (_foodChartRepository = new FoodChartRepository(context, session, this));
+  }
 
   public async Task<int> SaveChanges()
     {

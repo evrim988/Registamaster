@@ -18,6 +18,7 @@ public interface IUnitOfWork
   IErrorLogRepository errorLogRepository { get; }
   IHealthCheckRepository healthCheckRepository { get; }
   IActionNoteRepository ActionNoteRepository { get; }
+  IFoodChartRepository FoodChartRepository { get; }
   Task<int> SaveChanges();
   SessionModel GetSession();
 }
