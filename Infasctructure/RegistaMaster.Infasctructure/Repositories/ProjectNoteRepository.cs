@@ -24,7 +24,6 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
    {
       try
       {
-         model.AddUserNote = session.FullName;
          model.Date = DateTime.Now;
          await uow.Repository.Add(model);
          await uow.SaveChanges();
@@ -53,8 +52,6 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
             ID = s.ID,
             Date = s.Date,
             Description = s.Description,
-            NoteType = s.NoteType,
-            AddUserNote = s.AddUserNote
          });
       }
       catch (Exception ex)

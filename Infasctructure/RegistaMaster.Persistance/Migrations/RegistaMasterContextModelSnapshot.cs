@@ -30,10 +30,6 @@ namespace RegistaMaster.Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("ActionDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("ActionPriorityStatus")
                         .HasColumnType("integer");
 
@@ -55,9 +51,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -82,6 +77,10 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("ID");
 
@@ -113,9 +112,8 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -152,9 +150,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("ApiKey")
                         .HasColumnType("text");
 
-                    b.Property<string>("ContactEmail")
-                        .HasColumnType("text");
-
                     b.Property<int>("CreatedBy")
                         .HasColumnType("integer");
 
@@ -167,21 +162,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("EmailHost")
-                        .HasColumnType("text");
-
-                    b.Property<string>("EmailPassword")
-                        .HasColumnType("text");
-
-                    b.Property<string>("EmailPort")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("EnableSsl")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -226,9 +208,8 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -273,9 +254,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -308,9 +288,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -359,12 +338,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("Key")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -403,9 +378,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -439,10 +413,6 @@ namespace RegistaMaster.Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("AddUserNote")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("CreatedBy")
                         .HasColumnType("integer");
 
@@ -459,9 +429,8 @@ namespace RegistaMaster.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -514,9 +483,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -529,9 +497,6 @@ namespace RegistaMaster.Persistance.Migrations
 
                     b.Property<string>("NotificationType")
                         .HasColumnType("text");
-
-                    b.Property<int>("NotificationTypeCNC")
-                        .HasColumnType("integer");
 
                     b.Property<int?>("NotificationTypeID")
                         .HasColumnType("integer");
@@ -554,15 +519,15 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<int>("RequestStatus")
                         .HasColumnType("integer");
 
-                    b.Property<string>("RequestSubject")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int?>("VersionID")
                         .HasColumnType("integer");
@@ -578,74 +543,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.HasIndex("VersionID");
 
                     b.ToTable("Requests");
-                });
-
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.Task", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("ObjectStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("PlanedEnd")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("PlanedStart")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("PriorityStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RequestID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ResponsibleID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TaskStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerID");
-
-                    b.HasIndex("RequestID");
-
-                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.User", b =>
@@ -676,9 +573,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("text");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -731,9 +627,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -787,9 +682,8 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp without time zone");
@@ -917,25 +811,6 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Navigation("Version");
                 });
 
-            modelBuilder.Entity("RegistaMaster.Domain.Entities.Task", b =>
-                {
-                    b.HasOne("RegistaMaster.Domain.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RegistaMaster.Domain.Entities.Request", "Request")
-                        .WithMany("Tasks")
-                        .HasForeignKey("RequestID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Request");
-                });
-
             modelBuilder.Entity("RegistaMaster.Domain.Entities.User", b =>
                 {
                     b.HasOne("RegistaMaster.Domain.Entities.Customer", "Customer")
@@ -991,8 +866,6 @@ namespace RegistaMaster.Persistance.Migrations
             modelBuilder.Entity("RegistaMaster.Domain.Entities.Request", b =>
                 {
                     b.Navigation("Actions");
-
-                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

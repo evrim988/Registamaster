@@ -79,7 +79,7 @@ public class RequestController : Controller
           ProjectID = model.ProjectID,
           ModuleID = model.ModuleID,
           VersionID = model.VersionID,
-          RequestSubject = model.RequestSubject,
+          Subject = model.Subject,
           Description = model.Description,
           PageURL = model.PageUrl
 
@@ -97,7 +97,7 @@ public class RequestController : Controller
           ProjectID = model.ProjectID,
           ModuleID = model.ModuleID,
           VersionID = model.VersionID,
-          RequestSubject = model.RequestSubject,
+          Subject = model.Subject,
           Description = model.Description,
           PageURL = model.PageUrl
 
@@ -125,7 +125,7 @@ public class RequestController : Controller
       req.ProjectID = model.ProjectID;
       req.ModuleID = model.ModuleID;
       req.VersionID = model.VersionID;
-      req.RequestSubject = model.RequestSubject;
+      req.Subject = model.Subject;
       req.Description = model.Description;
       req.PageURL = model.PageUrl;
       req.PictureURL = model.PictureURL;
@@ -184,7 +184,7 @@ public class RequestController : Controller
         ResponsibleID = item.ResponsibleID,
         ActionStatus = item.ActionStatus,
         ActionPriorityStatus = item.ActionPriorityStatus,
-        ActionDescription = item.ActionDescription,
+        Subject = item.Subject,
         LastModifiedBy = item.LastModifiedBy,
         RequestID = ID,
         CreatedOn = item.CreatedOn,

@@ -101,7 +101,6 @@ function GetList() {
 
     },
     columns: [
-      //SÜTUN EKLEYECEK-SİLECEK VEYA YERLERİNİN DEĞİŞTİRLECEĞİ DURUMDA LÜTFEN "DETAY MODAL NOT" KISMINI OKUYUNUZ!!
       {
         dataField: "id",
         caption: "Aksiyon No",
@@ -109,7 +108,7 @@ function GetList() {
         visible: false
       },
       {
-        dataField: "actionDescription",
+        dataField: "subject",
         caption: "Aksiyon Konusu",
         alignment: 'left',
         alignment: 'center',
@@ -142,7 +141,7 @@ function GetList() {
       },
       {
         dataField: "endDate",
-        caption: "Son Tarih",
+        caption: "Hedef Tarih",
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
@@ -299,7 +298,7 @@ function GetList() {
               data = e.row.data;
               //console.log(e);
               GetActionNoteList(e.row.data.id);
-              OpenActionDetailModal(e);
+              OpenActionDetailModal(data);
             }
           },
 
@@ -320,7 +319,7 @@ function openEditModal(data) {
 
 
   $("#LastModifiedBy").val(data.lastModifiedBy);
-  $("#ActionDescription").val(data.actionDescription);
+  $("#Subject").val(data.subject);
   $("#Description").val(data.description);
 
 
@@ -328,18 +327,12 @@ function openEditModal(data) {
 }
 
 
-//aksiyon detay modal
-/*DETAY MODAL NOT : Aksiyon detay modal için veriler doldurulurken ResponsibleID gibi sayı halinde gelen verilerin tabloda gösterilen verilerine erişebilmek için 
-"e.row.cells[sütun numarası(visible:false olan ıd sütun olarak sayılmıyor ve indis 0 ile başlıyor)].displayValue" kullanılmıştır. Sütunların yerleri değiştirildiği,
-sütun eklenip-silindiği durumda doğru sütunun "display value"su alınamayacağı için aşağıdaki alanda sütun numaralarının değiştirlmesi gerekmektedir!*/
-function OpenActionDetailModal(e) {
-  //console.log(data);
-  data = e.row.data;
-  $("#actionDetailActionDescription").val(data.actionDescription);
+function OpenActionDetailModal(data) {
+  $("#actionDetailSubject").val(data.subject);
   $("#actionDetailDescription").val(data.description);
-  $("#actionDetailActionPriority").val(e.row.cells[7].displayValue);
-  $("#actionDetailStatus").val(e.row.cells[8].displayValue);
-  $("#actionDetailResponsible").val(e.row.cells[2].displayValue);
+  $("#actionDetailActionPriority").val(data.actionPriorityStatus);
+  $("#actionDetailStatus").val(data.actionStatus);
+  $("#actionDetailResponsible").val(data.responsibleID);
 
   const start = data.startDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.startDate).toLocaleDateString();
   const complete = data.completeDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.completeDate).toLocaleDateString();

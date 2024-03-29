@@ -21,7 +21,7 @@ public class BaseEntitiy
     public int CreatedBy { get; set; }
 
     [DisplayName("Güncelleyen Kullanıcı")]
-    public string LastModifiedBy { get; set; }
+    public int LastModifiedBy { get; set; }
 
     [DisplayName("Silindi Bilgisi")]
     [DefaultValue(0)]

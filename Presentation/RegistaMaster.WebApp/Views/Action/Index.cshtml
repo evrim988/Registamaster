@@ -110,7 +110,7 @@
             <input class="form-control" type="hidden" id="editActionID" />
             <div class="col-12">
               <label style="font-weight:bold;">Konu</label>
-              <input class="form-control" id="editActionActionDescription" />
+              <input class="form-control" id="editActionSubject" />
             </div>
             <div class="col-12 mt-2">
               <label style="font-weight:bold;">Açıklama</label>
@@ -222,19 +222,19 @@
           <div class="row" style="padding-left:10px;padding-right:10px">
             <div class="col-6">
               <label style="font-weight:bold;">Öncelik Durumu</label>
-              <input class="form-control mt-2" readonly id="actionDetailActionPriority" />
+              <select class="form-control mt-2" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionDetailActionPriority"></select>
             </div>
             <div class="col-6">
               <label style="font-weight:bold;">Durum</label>
-              <input id="actionDetailStatus" readonly class="form-control mt-2" />
+              <select class="form-control mt-2" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" id="actionDetailStatus"></select>
             </div>
             <div class="col-6 mt-3">
               <label style="font-weight:bold;">Sorumlu Kişi</label>
-              <input class="form-control mt-2" readonly id="actionDetailResponsible" />
+              <select class="form-control mt-2" disabled asp-items="@ViewBag.Responsible" id="actionDetailResponsible"></select>
             </div>
             <div class="col-6 mt-3">
               <label style="font-weight:bold;">Konu</label>
-              <input class="form-control mt-2" readonly id="actionDetailActionDescription" />
+              <input class="form-control mt-2" readonly id="actionDetailSubject" />
             </div>
             <div class="col-6 mt-3">
               <label style="font-weight:bold;">Açılma Tarihi</label>

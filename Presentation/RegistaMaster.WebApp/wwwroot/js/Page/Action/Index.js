@@ -104,7 +104,6 @@ function GetList() {
 
 
     },
-    //SÜTUN EKLEYECEK-SİLECEK VEYA YERLERİNİN DEĞİŞTİRLECEĞİ DURUMDA LÜTFEN "DETAY MODAL NOT" KISMINI OKUYUNUZ!!
     columns: [
       {
         dataField: "id",
@@ -126,7 +125,7 @@ function GetList() {
         }
       },
       {
-        dataField: "actionDescription",
+        dataField: "subject",
         caption: "Aksiyon Konusu",
         alignment: 'left',
         width: 200,
@@ -170,7 +169,7 @@ function GetList() {
       },
       {
         dataField: "endDate",
-        caption: "Son Tarih",
+        caption: "Hedef Tarih",
         alignment: 'center',
         dataType: 'date',
         format: 'dd/MM/yyyy',
@@ -342,7 +341,7 @@ function GetList() {
               data = e.row.data;
               //console.log(e);
               GetActionNoteList(e.row.data.id);
-              OpenActionDetailModal(e);
+              OpenActionDetailModal(data);
             }
           },
         ]
@@ -536,7 +535,7 @@ function OpenActionEditModals(data) {
   //console.log(data);
 
   $("#editActionID").val(data.id);
-  $("#editActionActionDescription").val(data.actionDescription);
+  $("#editActionSubject").val(data.subject);
   $("#actionEditDescription").val(data.description);
   $("#actionEditActionPriority").val(data.actionPriorityStatus);
   $("#actionEditResponsible").val(data.responsibleID);
@@ -583,7 +582,7 @@ function SaveActionUpdate() {
   var formData = new FormData();
 
   formData.append("ID", $("#editActionID").val());
-  formData.append("actionDescription", $("#editActionActionDescription").val());
+  formData.append("subject", $("#editActionSubject").val());
   formData.append("description", $("#actionEditDescription").val());
   formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
   formData.append("openingDate", $("#actionEditOpeningDate").val());
@@ -964,17 +963,13 @@ function refreshGridAfterEdit() {
   $("#actionNotesGridContainer").dxDataGrid("instance").refresh();
 }
 
-//aksiyon detay modal
-/*DETAY MODAL NOT : Aksiyon detay modal için veriler doldurulurken ResponsibleID gibi sayı halinde gelen verilerin tabloda gösterilen verilerine erişebilmek için 
-"e.row.cells[sütun numarası(visible:false olan ıd sütun olarak sayılmıyor ve indis 0 ile başlıyor)].displayValue" kullanılmıştır. Sütunların yerleri değiştirildiği,
-sütun eklenip-silindiği durumda doğru sütunun "display value"su alınamayacağı için aşağıdaki alanda sütun numaralarının değiştirlmesi gerekmektedir!*/
-function OpenActionDetailModal(e) {
-  data = e.row.data;
-  $("#actionDetailActionDescription").val(data.actionDescription);
+function OpenActionDetailModal(data) {
+
+  $("#actionDetailSubject").val(data.subject);
   $("#actionDetailDescription").val(data.description);
-  $("#actionDetailActionPriority").val(e.row.cells[9].displayValue);
-  $("#actionDetailStatus").val(e.row.cells[10].displayValue);
-  $("#actionDetailResponsible").val(e.row.cells[4].displayValue);
+  $("#actionDetailActionPriority").val(data.actionPriorityStatus);
+  $("#actionDetailStatus").val(data.actionStatus);
+  $("#actionDetailResponsible").val(data.responsibleID);
 
 
   const start = data.startDate == "0001-01-01T00:00:00" ? "gg.aa.yy" : new Date(data.startDate).toLocaleDateString();

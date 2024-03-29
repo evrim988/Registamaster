@@ -34,7 +34,7 @@ public class HomeRepository : Repository, IHomeRepository
         OpeningDate = s.OpeningDate,
         ResponsibleID = s.ResponsibleID,
         ActionStatus = s.ActionStatus,
-        ActionDescription = s.ActionDescription,
+        Subject = s.Subject,
         RequestID = s.RequestID,
         ActionPriorityStatus = s.ActionPriorityStatus,
         LastModifiedBy = s.LastModifiedBy,

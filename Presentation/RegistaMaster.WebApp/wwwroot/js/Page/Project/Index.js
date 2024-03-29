@@ -250,9 +250,16 @@ function GetList() {
                 visible: false
               },
               {
-                dataField: "AddUserNote",
-                caption: "Notu Ekleyen Kullanıcı",
+                dataField: "CreatedBy",
+                caption: "Ekleyen Kullanıcı",
                 alignment: 'center',
+                lookup: {
+                  dataSource: DevExpress.data.AspNet.createStore({
+                    loadUrl: "/Project/GetCreatedBy/",
+                  }),
+                  valueExpr: "id",
+                  displayExpr: "fullname"
+                }
               },
               {
                 dataField: "Date",
@@ -285,7 +292,7 @@ function GetList() {
                     hint: "Detay",
                     icon: "textdocument",
                     onClick: function (e) {
-                      ProjectNoteDetailModal(e.row.data);
+                      ProjectNoteDetailModal(e.row);
                     }
                   },
                 ]
@@ -513,26 +520,22 @@ function SaveProjectNote() {
 }
 
 //proje notu detay modal
-function ProjectNoteDetailModal(data) {
+function ProjectNoteDetailModal(row) {
   $("#saveButton").addClass("invisible");
   $("#detailNoteType").prop("readonly", true);
   $("#detailDescription").prop("readonly", true);
   var auth = $("#auth").val();
   var id = $("#ID").val();
-  console.log(id);
-  console.log(data.CreatedBy);
+  //console.log(id);
+  //console.log(data.CreatedBy);
+  var data = row.data;
   if (auth == 0 || data.CreatedBy == id) {
     $("#editButton").removeClass("invisible");
   }
 
-  let date = new Date(data.Date);
-  var day = ("0" + date.getDate()).slice(-2);
-  var month = ("0" + (date.getMonth() + 1)).slice(-2);
-  var fullDate = date.getFullYear() + "-" + (month) + "-" + (day);
-
   $('#detailProjectNoteID').val(data.ID);
-  $('#detailAddedUser').val(data.AddUserNote);
-  $('#detailDate').val(fullDate);
+  //$('#detailAddedUser').val(row.cells[9].displayValue);
+  $('#detailDate').val(new Date(data.Date).toLocaleDateString());
   $('#detailNoteType').val(data.NoteType);
   $('#detailDescription').val(data.Description);
 

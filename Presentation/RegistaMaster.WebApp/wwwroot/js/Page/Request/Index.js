@@ -193,7 +193,7 @@ function GetList() {
         }
       },
       {
-        dataField: "requestSubject",
+        dataField: "subject",
         caption: "Konu",
         alignment: 'center',
         width: 200,
@@ -487,7 +487,7 @@ function GetList() {
               //  format: 'dd/MM/yyyy',
               //},
               {
-                dataField: "ActionDescription",
+                dataField: "Subject",
                 caption: "Aksiyon Konusu",
                 alignment: 'center',
                 width: 200,
@@ -520,7 +520,7 @@ function GetList() {
               },
               {
                 dataField: "EndDate",
-                caption: "Son Tarih",
+                caption: "Hedef Tarih",
                 alignment: 'center',
                 dataType: 'date',
                 format: 'dd/MM/yyyy',
@@ -784,7 +784,7 @@ function SaveRequestModal() {
   data.append('ProjectID', $('#ProjectID').val());
   data.append('ModuleID', $('#ModuleID').val());
   data.append('VersionID', $('#VersionID').val());
-  data.append('RequestSubject', $('#RequestSubject').val());
+  data.append('Subject', $('#Subject').val());
   data.append('Description', $('#Description').val());
   data.append('PageUrl', $('#PageUrl').val());
   data.append('base64', $('#base64').val());
@@ -995,7 +995,7 @@ function RequestDetail(data) {
   $("#detailNotificationTypeID").val(data.notificationTypeID);
   $("#detailCategoryID").val(data.categoryID);
   $("#detailProjectID").val(data.projectID);
-  $("#detailRequestSubject").val(data.requestSubject);
+  $("#detailSubject").val(data.subject);
   $("#detailDescription").val(data.description);
   $("#detailPageUrl").val(data.pageUrl);
   $("#detailOpeningDate").val(new Date(data.createdOn).toLocaleDateString());
@@ -1085,7 +1085,7 @@ function openEditModals(data, ID) {
   $("#CategoryEditID").val(data.categoryID);
   $("#ProjectEditID").val(data.projectID);
 
-  $("#RequestEditSubject").val(data.requestSubject);
+  $("#RequestEditSubject").val(data.subject);
   $("#DescriptionEdit").val(data.description);
   $("#PageEditUrl").val(data.pageURL);
   $("#RequestImage").val(data.pictureURL);
@@ -1238,7 +1238,7 @@ function SaveRequestEditModal() {
   formData.append("projectID", $("#ProjectEditID").val());
   formData.append("moduleID", $("#ModuleEditID").val());
   formData.append("versionID", $("#VersionEditID").val());
-  formData.append("requestSubject", $("#RequestEditSubject").val());
+  formData.append("subject", $("#RequestEditSubject").val());
   formData.append("description", $("#DescriptionEdit").val());
   formData.append("pictureURL", $("#RequestImage").val());
   formData.append("pageUrl", $("#PageEditUrl").val());
@@ -1277,7 +1277,7 @@ function openPopup(ID) {
   endDate.setDate(endDate.getDate() + 2);
   var formItems = [
     {
-      dataField: "ActionDescription",
+      dataField: "Subject",
       label: {
         text: "Aksiyon Konusu"
       },
@@ -1318,7 +1318,7 @@ function openPopup(ID) {
     },
     {
       dataField: "endDate",
-      caption: "Son Tarih",
+      caption: "Hedef Tarih",
       alignment: 'center',
       dataType: 'date',
       editorType: "dxDateBox",
@@ -1503,7 +1503,7 @@ function validateForm() {
   var requiredFields = [
     "ProjectID",
     "ModuleID",
-    "RequestSubject",
+    "Subject",
     "Description",
   ];
 
@@ -1750,7 +1750,7 @@ function OpenActionEditModals(data) {
   //console.log(data);
 
   $("#editActionID").val(data.ID);
-  $("#editActionActionDescription").val(data.ActionDescription);
+  $("#editActionSubject").val(data.Subject);
   $("#actionEditDescription").val(data.Description);
   $("#actionEditActionPriority").val(data.ActionPriorityStatus);
   $("#actionEditResponsible").val(data.ResponsibleID);
@@ -1798,7 +1798,7 @@ function SaveActionUpdate() {
   var formData = new FormData();
 
   formData.append("ID", $("#editActionID").val());
-  formData.append("actionDescription", $("#editActionActionDescription").val());
+  formData.append("subject", $("#editActionSubject").val());
   formData.append("description", $("#actionEditDescription").val());
   formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
   formData.append("openingDate", $("#actionEditOpeningDate").val());
@@ -1918,7 +1918,7 @@ function ChangeActionStatus() {
 //aksiyon detay modal
 function OpenActionDetailModal(data) {
   //console.log(data);
-  $("#actionDetailActionDescription").val(data.ActionDescription);
+  $("#actionDetailSubject").val(data.Subject);
   $("#actionDetailDescription").val(data.Description);
   $("#actionDetailResponsible").val(data.ResponsibleID);
   $("#actionDetailActionPriority").val(data.ActionPriorityStatus);

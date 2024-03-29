@@ -10,7 +10,6 @@ public interface IUnitOfWork
   IProjectRepository ProjectRepository { get; }
   IProjectNoteRepository ProjectNoteRepository { get; }
   IRequestRepository RequestRepository { get; }
-  ITaskRepository TaskRepository { get; }
   IActionRepository ActionRepository { get; }
   IHomeRepository HomeRepository { get; }
   IModuleRepository ModuleRepository { get; }

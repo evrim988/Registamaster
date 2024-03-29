@@ -6,7 +6,7 @@ namespace RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 
 public class RequestDTO
 {
-    public string RequestSubject { get; set; }
+    public string Subject { get; set; }
     public int ModuleID { get; set; }
     public int ID { get; set; }
     public int VersionID { get; set; }
@@ -19,7 +19,7 @@ public class RequestDTO
     public int ProjectID { get; set; }
     public int NotificationTypeID { get; set; }
     public int? CategoryID { get; set; }
-    public string LastModifiedBy { get; set; }
+    public int LastModifiedBy { get; set; }
     public DateTime? LastModifiedOn { get; set; }
     public DateTime? CreatedOn { get; set; }
 
@@ -31,9 +31,6 @@ public class RequestDTO
 
     public CategoryStatus CategoryStatus { get; set; }
     public List<SelectListItem> Project { get; set; }
-
-    //public List<SelectListItem> Module { get; set; }
-    //public List<SelectListItem> Version { get; set; }
     public List<SelectListItem> Responsible { get; set; }
     public List<SelectListItem> NotificationType { get; set; }
     public List<SelectListItem> Category { get; set; }

@@ -132,7 +132,7 @@ public class ActionController : Controller
     try
     {
       var action = await _uow.Repository.GetById<Action>(model.ID);
-      action.ActionDescription = model.ActionDescription;
+      action.Subject = model.Subject;
       action.Description = model.Description;
       action.ActionPriorityStatus = model.ActionPriorityStatus;
       action.ResponsibleID = model.ResponsibleID;
