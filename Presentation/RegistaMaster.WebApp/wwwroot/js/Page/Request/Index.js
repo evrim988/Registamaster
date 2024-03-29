@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
   DevExpress.localization.locale('tr');
   GetList();
+  $('select:disabled').css('background-color', '#ffffff');
 
   $('.card-img-container').on('click', function () {
     var imageUrl = $(this).find('img').attr('src');
@@ -24,6 +25,9 @@
 });
 
 var onchangeData;
+var auth = $("#auth").val();
+var userID = $("#userID").val();
+
 
 function gridRefresh() {
   $("#requestGridContainer").dxDataGrid("instance").refresh();
@@ -126,11 +130,7 @@ function GetList() {
         e.element
           .find('.dx-toolbar-after')
           .prepend($filterButton);
-
-
     },
-
-
     columns: [
       {
         dataField: "id",
@@ -154,7 +154,6 @@ function GetList() {
           valueExpr: "id",
           displayExpr: "name",
         },
-
       },
       {
         dataField: "moduleID",
@@ -170,12 +169,8 @@ function GetList() {
           }),
           valueExpr: "id",
           displayExpr: "name",
-
         },
-
       },
-
-
       {
         dataField: "notificationTypeID",
         caption: "Bildirim Türü",
@@ -336,38 +331,38 @@ function GetList() {
         fixedPosition: "right",
         alignment: 'center',
         cellTemplate: function (container, options) {
-          var auth = $("#auth").val();
-          if (auth != 2) {
-            switch (options.data.requestStatus) {
-              case 0:
-                var userID = $("#userID").val();
-                if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
+          switch (options.data.requestStatus) {
+            case 0:
+              if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
+                $("<div>")
+                  .dxButton({
+                    icon: "preferences",
+                    hint: "İşlemler",
+                    stylingMode: "text",
+                    onClick: function (e) {
+                      if (auth == 2)
+                        showContextMenuDeveloper(options, e);
+                      else
+                        showContextMenu(options, e);
+                    }
+                  })
+                  .appendTo(container);
+              }
+              else {
+                if (auth == 0) {     //talep başlanmamış durumdaysa admin için contextmenu
                   $("<div>")
                     .dxButton({
                       icon: "preferences",
                       hint: "İşlemler",
                       stylingMode: "text",
                       onClick: function (e) {
-                        showContextMenu(options, e);
+                        showContextMenuAdmin(options, e);
                       }
                     })
                     .appendTo(container);
                 }
-                else {
-                  var auth = $("#auth").val();
-                  if (auth == 0) {     //talep başlanmamış durumdaysa admin için contextmenu
-                    $("<div>")
-                      .dxButton({
-                        icon: "preferences",
-                        hint: "İşlemler",
-                        stylingMode: "text",
-                        onClick: function (e) {
-                          showContextMenuAdmin(options, e);
-                        }
-                      })
-                      .appendTo(container);
-                  }
-                  else {      //talep başlanmamış durumdaysa ekip lideri için yalnızca aksiyon ekleyebilir
+                else {      //talep başlanmamış durumdaysa ekip lideri için yalnızca aksiyon ekleyebilir
+                  if (auth != 2) {
                     $("<div>")
                       .dxButton({
                         icon: "add",
@@ -380,8 +375,10 @@ function GetList() {
                       .appendTo(container);
                   }
                 }
-                break;
-              case 1://talep başlandı durumundaysa yalnızca talebe aksiyon ekleme işlemi yapılabilir
+              }
+              break;
+            case 1://talep başlandı durumundaysa yalnızca talebe aksiyon ekleme işlemi yapılabilir
+              if (auth != 2) {
                 $("<div>")
                   .dxButton({
                     icon: "add",
@@ -392,25 +389,25 @@ function GetList() {
                     }
                   })
                   .appendTo(container);
-                break;
-              case 2:  //talep tamamlanmış durumdaysa
-                var userID = $("#userID").val();
-                var auth = $("#auth").val();
-                if (options.data.createdBy == userID || auth == 0) { //yalnızca talebi açan kişi veya admin tarafından silinebilir
-                  $("<div>")
-                    .dxButton({
-                      icon: "trash",
-                      hint: "Sil",
-                      stylingMode: "text",
-                      onClick: function (e) {
-                        var ID = options.data.id;
-                        DeleteRequestCheckActions(ID);
-                      }
-                    })
-                    .appendTo(container);
-                }
-                break;
-              case 3:  //talep bekleme durumundaysa
+              }
+              break;
+            case 2:  //talep tamamlanmış durumdaysa
+              if (options.data.createdBy == userID || auth == 0) { //yalnızca talebi açan kişi veya admin tarafından silinebilir
+                $("<div>")
+                  .dxButton({
+                    icon: "trash",
+                    hint: "Sil",
+                    stylingMode: "text",
+                    onClick: function (e) {
+                      var ID = options.data.id;
+                      DeleteRequestCheckActions(ID);
+                    }
+                  })
+                  .appendTo(container);
+              }
+              break;
+            case 3:  //talep bekleme durumundaysa
+              if (auth != 2) {
                 $("<div>")
                   .dxButton({
                     icon: "preferences",
@@ -421,10 +418,9 @@ function GetList() {
                     }
                   })
                   .appendTo(container);
-                break;
-
-            };
-          }
+              }
+              break;
+          };
           $("<div>")
             .dxButton({
               icon: "textdocument",
@@ -660,8 +656,6 @@ function GetList() {
                     hint: "Düzenle",
                     icon: "edit",
                     visible: function (e) {
-                      var userID = $("#userID").val();
-                      var auth = $("#auth").val();
                       if (e.row.data.ActionStatus == 0 && (e.row.data.CreatedBy == userID || auth == 0)) //yalnızca başlanmamış aksiyonları aksiyonu açan veya admin düzenleyebilir
                         return true;
                     },
@@ -674,8 +668,6 @@ function GetList() {
                     hint: "Sil",
                     icon: "trash",
                     visible: function (e) {
-                      var userID = $("#userID").val();
-                      var auth = $("#auth").val();
                       if (e.row.data.ActionStatus != 1 && (e.row.data.CreatedBy == userID || auth == 0)) { //devam etmeyen aksiyonları aksiyonu açan kişi veya admin silebilir
                         return true;
                       }
@@ -689,7 +681,6 @@ function GetList() {
                     hint: "Durum Değiştir",
                     icon: "clock",
                     visible: function (e) {
-                      var userID = $("#userID").val();
                       if ((e.row.data.ActionStatus == 0 || e.row.data.ActionStatus == 1) && e.row.data.ResponsibleID == userID)   //aksiyon durumu aksiyon başlanmamış veya devam ediyorsa sorumlu kişi tarafından değiştirilebilir
                         return true;
                     },
@@ -880,19 +871,30 @@ function showContextMenu(options, e) {
     .dxContextMenu({
       dataSource: [
         { text: "Aksiyon Ekle", icon: "plus" },
-
         { text: "Düzenle", icon: "edit" },
         { text: "Sil", icon: "trash" },
-        //{
-        //   text: "Talebi Reddet",
-        //   icon: "remove"
-        //}
-
       ],
       onItemClick: function (item) {
         handleItemClick(item, options);
+      }
+    })
+    .appendTo("body")
+    .dxContextMenu("instance");
 
+  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
+  contextMenu.show();
+}
 
+//default contextmenu developer
+function showContextMenuDeveloper(options, e) {
+  var contextMenu = $("<div>")
+    .dxContextMenu({
+      dataSource: [
+        { text: "Düzenle", icon: "edit" },
+        { text: "Sil", icon: "trash" },
+      ],
+      onItemClick: function (item) {
+        handleItemClick(item, options);
       }
     })
     .appendTo("body")
@@ -947,7 +949,7 @@ function handleItemClick(item, options) {
 
   switch (items) {
     case "Aksiyon Ekle":
-      openPopup(ID);
+      openPopup(data);
       break;
     //case "Talebi Reddet":
     //   CancelRequest(ID);
@@ -1271,8 +1273,8 @@ function SaveRequestEditModal() {
 
 }
 //aksiyon ekle popup
-function openPopup(ID) {
-
+function openPopup(data) {
+  var ID = data.id;
   var today = new Date();
   var endDate = new Date();
   endDate.setDate(endDate.getDate() + 2);
@@ -1283,7 +1285,9 @@ function openPopup(ID) {
         text: "Aksiyon Konusu"
       },
       validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-
+      editorOptions: {
+        value: data.subject
+      }
     },
 
     {
@@ -1362,8 +1366,9 @@ function openPopup(ID) {
       editorType: "dxTextArea",
       editorOptions: {
         height: 70,
-        width: 415
-      }
+        width: 415,
+        value: data.description
+      },
     },
 
   ];

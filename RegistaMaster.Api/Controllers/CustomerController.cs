@@ -33,7 +33,7 @@ public class CustomerController : BaseController
             var model = new CustomerDTO();
             model.Name = currentCustomer.Name;
             model.Email = currentCustomer.Email;
-            model.Adress = currentCustomer.Address;
+            model.Address = currentCustomer.Address;
             if (currentCustomer == null)
                 return BadRequest();
             return Ok(model);
@@ -52,7 +52,7 @@ public class CustomerController : BaseController
             var customer = new Customer()
             {
                 Name = model.Name,
-                Address = model.Adress,
+                Address = model.Address,
                 Email = model.Email
             };
             await _uow.CustomerRepository.CustomerAdd(customer);

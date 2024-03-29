@@ -15,7 +15,7 @@
   </div>
   <div class="col-12 mt-5 mb-5">
     <label>KULLANICI AKSİYONLARI</label>
-    <div id="chartdiv" style="width: 98%; height: 230px; float: left;margin-top:10px"></div>
+    <div id="chartdiv" style="width: 98%; height: 500px; float: left;margin-top:10px"></div>
   </div>
 </div>
 
@@ -58,12 +58,18 @@
       processData: false,
       contentType: false,
       success: function (response) {
+        console.log(response);
         data1 = JSON.parse(response);
+        console.log(data1);
       },
       error: function (textStatus) {
         console.log('ERRORS:23 ');
       },
     });
+
+    chart1.set("scrollbarY", am5.Scrollbar.new(root1, {
+      orientation: "vertical"
+    }));
 
     var yRenderer = am5xy.AxisRendererY.new(root1, {});
     var yAxis = chart1.yAxes.push(am5xy.CategoryAxis.new(root1, {
@@ -91,6 +97,7 @@
       centerX: am5.p50,
       x: am5.p50
     }));
+
 
     function makeSeries(name, fieldName, color) {
       var series = chart1.series.push(am5xy.ColumnSeries.new(root1, {

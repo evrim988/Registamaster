@@ -2,6 +2,7 @@
   DevExpress.localization.locale('tr');
   GetList();
   //console.log(actionID);
+  $('select:disabled').css('background-color', '#ffffff');
 });
 var onchangeData;
 function gridRefresh() {
@@ -114,7 +115,7 @@ function GetList() {
       {
         dataField: "requestID",
         caption: "Talep",
-        alignment: 'center',
+        alignment: 'left',
         width: 250,
         lookup: {
           dataSource: DevExpress.data.AspNet.createStore({

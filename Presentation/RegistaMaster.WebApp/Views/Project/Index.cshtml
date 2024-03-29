@@ -114,7 +114,7 @@
             <input class="form-control" type="hidden" id="detailProjectNoteID" />
             <div class="col-6">
               <label style="font-weight:bold;">Ekleyen Kişi</label>
-              <input class="form-control mt-2" readonly id="detailAddedUser" />
+              <select class="form-control mt-2" disabled asp-items="@ViewBag.CreatedBy" id="detailCreatedBy"></select>
             </div>
             <div class="col-6">
               <label style="font-weight:bold;">Eklenme Tarihi</label>
