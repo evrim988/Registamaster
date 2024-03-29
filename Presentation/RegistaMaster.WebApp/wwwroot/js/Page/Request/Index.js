@@ -91,6 +91,7 @@ function GetList() {
           widget: "dxButton",
           options: {
             icon: "plus", text: "Talep Ekle", onClick: function (e) {
+              $('#NotificationTypeID').val(-1);
               $('#RequestCreateModal').modal('toggle');
             }
           },

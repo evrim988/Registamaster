@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
   DevExpress.localization.locale('tr');
+  CheckDate();
   GetList();
 
 });
@@ -123,4 +124,28 @@ function GetList() {
 
 }
 
+function CheckDate() {
+  // Bugünün tarihini al
+  var today = new Date();
+  var day = today.getDate();
+  var month = today.getMonth() + 1; // Ay 0'dan başladığı için 1 ekliyoruz
+  var year = today.getFullYear();
 
+  var todayStr = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+
+  $.ajax({
+    url: '/FoodChart/CheckDateExists',
+    type: 'GET',
+    data: { date: todayStr },
+    success: function (response) {
+      if (response.exists) {
+        $('.dx-datagrid-addrow-button').css('display', 'none');
+      }
+      else {
+        $('.dx-datagrid-addrow-button').css('display', 'block');
+      }
+    },
+    error: function () {
+    }
+  });
+}
