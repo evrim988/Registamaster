@@ -88,21 +88,18 @@ function GetList() {
     },
 
     onToolbarPreparing: function (e) {
-      var auth = $("#auth").val();
-      if (auth != 2) {
-        let toolbarItems = e.toolbarOptions.items;
-        toolbarItems.push({
-          widget: "dxButton",
-          options: {
-            icon: "plus", text: "Talep Ekle", onClick: function (e) {
-              $('#NotificationTypeID').val(-1);
-              $('#RequestCreateModal').modal('toggle');
-            }
-          },
-          location: "after",
+      let toolbarItems = e.toolbarOptions.items;
+      toolbarItems.push({
+        widget: "dxButton",
+        options: {
+          icon: "plus", text: "Talep Ekle", onClick: function (e) {
+            $('#NotificationTypeID').val(-1);
+            $('#RequestCreateModal').modal('toggle');
+          }
+        },
+        location: "after",
 
-        });
-      }
+      });
     },
     loadPanel: {
       enabled: true,
