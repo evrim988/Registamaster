@@ -72,9 +72,7 @@ function GetModules() {
     editing: {
       mode: 'popup',
       allowUpdating: true,
-      allowDeleting: function () {
-
-      },
+      allowDeleting: true,
       allowAdding: true,
       popup: {
         title: 'Modül Ekle',
@@ -255,7 +253,7 @@ function GetVersion() {
         title: 'Versiyon Ekle',
         showTitle: true,
         width: 600,
-        height: 330,
+        height: 355,
       },
       form: {
         items: [{
@@ -268,10 +266,10 @@ function GetVersion() {
             //   caption: "Adı",
             //   validationRules: [{ type: "required", message: "Bu alan zorunludur." }]
             //},
-
             {
               dataField: "projectID",
               caption: "Proje",
+              colSpan: 2,
               validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
               lookup: {
                 dataSource: DevExpress.data.AspNet.createStore({
@@ -286,12 +284,6 @@ function GetVersion() {
               }
             },
             {
-              dataField: "databaseChange",
-              caption: "Veritabanı Değişiliği Var Mı?",
-              dataType: "boolean",
-              editorType: "dxCheckBox",
-            },
-            {
               dataField: "description",
               caption: "Açıklama",
               editorType: "dxTextArea",
@@ -300,6 +292,19 @@ function GetVersion() {
               },
               colSpan: 2
             },
+            {
+              dataField: "isNewVersion",
+              caption: "Yeni Versiyon",
+              dataType: "boolean",
+              editorType: "dxCheckBox",
+            },
+            {
+              dataField: "databaseChange",
+              caption: "Veritabanı Değişiliği Var Mı?",
+              dataType: "boolean",
+              editorType: "dxCheckBox",
+            },
+            
           ],
         }],
 
@@ -379,7 +384,21 @@ function GetVersion() {
           displayExpr: "text"
         }
       },
-
+      {
+        dataField: "isNewVersion",
+        caption: "Yeni Versiyon",
+        alignment: 'center',
+        dataType: "boolean",
+        visible:false,
+        lookup: {
+          dataSource: [
+            { id: true, text: "Evet" },
+            { id: false, text: "Hayır" }
+          ],
+          valueExpr: "id",
+          displayExpr: "text"
+        }
+      },
     ],
 
   }).dxDataGrid("instance");

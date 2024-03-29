@@ -342,8 +342,6 @@ public class RequestController : Controller
     try
     {
       var model = await uow.RequestRepository.GetModuleList(ID);
-      if (model.Count == 0)
-        return "1";
       return JsonConvert.SerializeObject(model);
     }
     catch (Exception ex)

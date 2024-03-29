@@ -2,14 +2,12 @@
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.X509;
 using RegistaMaster.Application.Repositories;
-using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectModel;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel;
+using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
-using Version = RegistaMaster.Domain.Entities.Version;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -31,7 +29,7 @@ public class ProjectController : Controller
     try
     {
       var projectID = await uow.ProjectRepository.AddProject(model);
-      var version = new Version()
+      var version = new VersionDTO()
       {
         ProjectID = projectID,
         DatabaseChange = true,
@@ -76,6 +74,7 @@ public class ProjectController : Controller
   }
   public IActionResult Index()
   {
+    ViewBag.CreatedBy = uow.ProjectNoteRepository.CreatedBySelectList();
     return View();
   }
 

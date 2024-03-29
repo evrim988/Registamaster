@@ -3,7 +3,7 @@ using RegistaMaster.Infasctructure.Repositories;
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(150);
+    options.IdleTimeout = TimeSpan.FromMinutes(480);
 });
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();

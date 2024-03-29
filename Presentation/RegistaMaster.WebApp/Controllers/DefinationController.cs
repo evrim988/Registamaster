@@ -3,6 +3,7 @@ using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using Version = RegistaMaster.Domain.Entities.Version;
@@ -95,9 +96,7 @@ public class DefinationController : Controller
    {
       try
       {
-         var model = JsonConvert.DeserializeObject<Version>(values);
-         var olderVersion = _uow.VersionRepository.GetVersionName(model.ProjectID);
-         model.Name = "V"+(olderVersion + 0.1).ToString(".#").Replace(',', '.');
+         var model = JsonConvert.DeserializeObject<VersionDTO>(values);
          await _uow.VersionRepository.AddVersion(model);
          return Ok();
       }

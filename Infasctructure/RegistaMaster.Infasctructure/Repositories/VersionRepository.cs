@@ -1,4 +1,5 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
@@ -10,64 +11,88 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class VersionRepository : Repository, IVersionRepository
 {
-   private readonly IUnitOfWork _uow;
-   private readonly SessionModel _session;
-   private readonly RegistaMasterContext _context;
-   public VersionRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
-   {
-      _uow = uow;
-      _session = session;
-      _context = context;
-   }
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
+  private readonly RegistaMasterContext _context;
+  public VersionRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
+  {
+    _uow = uow;
+    _session = session;
+    _context = context;
+  }
 
-   public async Task<string> AddVersion(Domain.Entities.Version model)
-   {
-      try
+  public async Task<string> AddVersion(VersionDTO model)
+  {
+    try
+    {
+      var olderVersion = GetVersionName(model.ProjectID);
+      if (model.IsNewVersion)
       {
-         model.Date = DateTime.Now;
-         await _uow.Repository.Add(model);
-         await _uow.SaveChanges();
-         return "1";
+        model.Name = "V" + (olderVersion + 0.1).ToString(".#").Replace(',', '.');
+        if (!model.Name.Contains('.'))
+          model.Name += ".0";
       }
-      catch (Exception ex)
+      else
+        model.Name = "V" + olderVersion.ToString(".#").Replace(',', '.');
+
+      await _uow.Repository.Add(new Version()
       {
-         throw ex;
-      }
-   }
-
-
-   public string DeleteVersion(int ID)
-   {
-      var version = GetNonDeletedAndActive<Version>(t => t.ID == ID);
-      DeleteRange(version.ToList());
-      Delete<Version>(ID);
-      return "1";
-   }
-
-   public async Task<IQueryable<Version>> GetList()
-   {
-      var model = GetNonDeletedAndActive<Version>(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active);
-      return model;
-   }
-
-   public async Task<string> UpdateVersion(Version model)
-   {
-      Update(model);
+        Name = model.Name,
+        Date = DateTime.Now,
+        Description = model.Description,
+        DatabaseChange = model.DatabaseChange,
+        ProjectID = model.ProjectID,
+      });
       await _uow.SaveChanges();
       return "1";
-   }
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 
-   public async Task<string> DeleteVersionWithProjectID(int ID)
-   {
-      var version = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID);
-      await DeleteRange(version.ToList());
-      return "1";
-   }
 
-   public double GetVersionName(int ID)
-   {
-      var version = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID).OrderBy(t => t.ID).Last();
-      var versionName = version.Name.Replace('.', ',').Replace("V", "");
-      return Convert.ToDouble(versionName);
-   }
+  public string DeleteVersion(int ID)
+  {
+    var version = GetNonDeletedAndActive<Version>(t => t.ID == ID);
+    DeleteRange(version.ToList());
+    Delete<Version>(ID);
+    return "1";
+  }
+
+  public async Task<IQueryable<VersionDTO>> GetList()
+  {
+    var model = GetNonDeletedAndActive<Version>(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active).Select(s => new VersionDTO()
+    {
+      ID = s.ID,
+      Name = s.Name,
+      Date = s.Date,
+      ProjectID = s.ProjectID,
+      Description = s.Description,
+      DatabaseChange = s.DatabaseChange,
+    });
+    return model;
+  }
+
+  public async Task<string> UpdateVersion(Version model)
+  {
+    Update(model);
+    await _uow.SaveChanges();
+    return "1";
+  }
+
+  public async Task<string> DeleteVersionWithProjectID(int ID)
+  {
+    var version = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID);
+    await DeleteRange(version.ToList());
+    return "1";
+  }
+
+  public double GetVersionName(int ID)
+  {
+    var version = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID).OrderBy(t => t.ID).Last();
+    var versionName = version.Name.Replace('.', ',').Replace("V", "");
+    return Convert.ToDouble(versionName);
+  }
 }

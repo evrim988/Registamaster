@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
   DevExpress.localization.locale('tr');
   GetList();
+  $('select:disabled').css('background-color', '#ffffff');
 
 });
 
@@ -534,7 +535,7 @@ function ProjectNoteDetailModal(row) {
   }
 
   $('#detailProjectNoteID').val(data.ID);
-  //$('#detailAddedUser').val(row.cells[9].displayValue);
+  $('#detailCreatedBy').val(data.CreatedBy);
   $('#detailDate').val(new Date(data.Date).toLocaleDateString());
   $('#detailNoteType').val(data.NoteType);
   $('#detailDescription').val(data.Description);

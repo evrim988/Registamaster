@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
   DevExpress.localization.locale('tr');
   GetList();
+  $('select:disabled').css('background-color', '#ffffff');
 });
 
 var onchangeData;

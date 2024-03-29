@@ -9,67 +9,67 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class CustomerRepository : Repository, ICustomerRepository
 {
-    private readonly RegistaMasterContext context;
+  private readonly RegistaMasterContext context;
 
-    private readonly IUnitOfWork uow;
-    private readonly SessionModel session;
-    public CustomerRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  private readonly IUnitOfWork uow;
+  private readonly SessionModel session;
+  public CustomerRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  {
+    context = _context;
+    uow = _uow;
+    session = _session;
+  }
+
+  public async Task<string> CustomerAdd(Customer model)
+  {
+    try
     {
-        context = _context;
-        uow = _uow;
-        session = _session;
+      await uow.Repository.Add(model);
+      await uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception e)
+    {
+
+      throw e;
     }
 
-    public async Task<string> CustomerAdd(Customer model)
+  }
+
+  public void Delete(int id)
+  {
+    var customer = GetNonDeletedAndActive<Customer>(t => t.ID == id);
+    DeleteRange(customer.ToList());
+
+    Delete<Customer>(id);
+  }
+
+
+
+  public async Task<IQueryable<CustomerDTO>> GetList()
+  {
+    try
     {
-        try
-        {
-            await uow.Repository.Add(model);
-            await uow.SaveChanges();
-            return "1";
-        }
-        catch (Exception e)
-        {
-
-            throw e;
-        }
-
+      return GetNonDeletedAndActive<Customer>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new CustomerDTO()
+      {
+        ID = s.ID,
+        Address = s.Address,
+        Email = s.Email,
+        Name = s.Name,
+      });
+    }
+    catch (Exception ex)
+    {
+      throw ex;
     }
 
-    public void Delete(int id)
-    {
-        var customer = GetNonDeletedAndActive<Customer>(t => t.ID == id);
-        DeleteRange(customer.ToList());
+  }
 
-        Delete<Customer>(id);
-    }
+  public async Task<string> Update(Customer model)
+  {
+    Update(model);
 
-  
-
-    public async Task<IQueryable<CustomerDTO>> GetList()
-    {
-        try
-        {
-            return GetNonDeletedAndActive<Customer>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new CustomerDTO()
-            {
-                ID = s.ID,
-                Adress = s.Address,
-                Email = s.Email,
-                Name = s.Name,
-            });
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        
-    }
-
-    public async Task<string> Update(Customer model)
-    {
-        Update(model);
-
-        await uow.SaveChanges();
-        return "1";
-    }
+    await uow.SaveChanges();
+    return "1";
+  }
 }
