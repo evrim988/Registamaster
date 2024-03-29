@@ -1,4 +1,5 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.ChartModels;
 using RegistaMaster.Domain.DTOModels.Entities.FoodCharts;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
@@ -79,6 +80,91 @@ public class FoodChartRepository : Repository, IFoodChartRepository
       throw e;
     }
   }
+
+  public async Task<List<MonthDTO>> GetChart(int year)
+  {
+    var chart = new FoodChartDTO();
+    var food = GetNonDeletedAndActive<FoodChart>(t => t.Date.Year == year);
+    for (int month = 1; month <= 12; month++)
+    {
+      var monthFood = food.Where(t => t.Date.Month == month).ToList();
+      foreach (var item in monthFood)
+      {
+        switch (month)
+        {
+          case 1: chart.January += item.PersonNumber; break;
+          case 2: chart.February += item.PersonNumber; break;
+          case 3: chart.March += item.PersonNumber; break;
+          case 4: chart.April += item.PersonNumber; break;
+          case 5: chart.May += item.PersonNumber; break;
+          case 6: chart.June += item.PersonNumber; break;
+          case 7: chart.July += item.PersonNumber; break;
+          case 8: chart.August += item.PersonNumber; break;
+          case 9: chart.September += item.PersonNumber; break;
+          case 10: chart.October += item.PersonNumber; break;
+          case 11: chart.November += item.PersonNumber; break;
+          case 12: chart.December += item.PersonNumber; break;
+        }
+      }
+    }
+    List<MonthDTO> monthDTOs = new List<MonthDTO>();
+    monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "Ocak",
+      Count = chart.January
+    });
+    monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "Şubat",
+      Count = chart.February
+    }); 
+    monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "MART",
+      Count = chart.March
+    });
+    monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "NİSAN",
+      Count = chart.April
+    }); monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "MAYIS",
+      Count = chart.May
+    }); monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "HAZİRAN",
+      Count = chart.June
+    }); monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "TEMMUZ",
+      Count = chart.July
+    }); monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "AĞUSTOS",
+      Count = chart.August
+    }); monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "EYLÜL",
+      Count = chart.September
+    });
+    monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "EKİM",
+      Count = chart.October
+    }); monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "KASIM",
+      Count = chart.November
+    });
+    monthDTOs.Add(new MonthDTO()
+    {
+      MonthName = "ARALIK",
+      Count = chart.December
+    });
+    return monthDTOs;
+  }
+  
 }
 
 

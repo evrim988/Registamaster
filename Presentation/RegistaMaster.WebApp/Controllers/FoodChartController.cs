@@ -68,5 +68,21 @@ namespace RegistaMaster.WebApp.Controllers
         throw e;
       }
     }
+    public async Task<object> FoodChartGraph()
+    {
+      return View();
+    }
+    [HttpPost]
+    public async Task<object> FoodChartGraph(int year)
+    {
+      try
+      {
+        return JsonConvert.SerializeObject(_uow.FoodChartRepository.GetChart(year));
+      }
+      catch (Exception e)
+      {
+        throw e;
+      }
+    }
   }
 }
