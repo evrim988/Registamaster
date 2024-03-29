@@ -1,4 +1,5 @@
-﻿using RegistaMaster.Domain.DTOModels.Entities.ActionNoteModels;
+﻿using RegistaMaster.Domain.DTOModels.ChartModels;
+using RegistaMaster.Domain.DTOModels.Entities.ActionNoteModels;
 using RegistaMaster.Domain.DTOModels.Entities.FoodCharts;
 using RegistaMaster.Domain.Entities;
 
@@ -10,4 +11,5 @@ public interface IFoodChartRepository:IRepository
   public Task<string> AddFoodChart(FoodChart model);
   public Task<string> UpdateFoodChart(FoodChart model);
   public void Delete(int ID);
+  public  Task<List<MonthDTO>> GetChart(int year);
 }
