@@ -35,7 +35,6 @@ namespace RegistaMaster.WebApp.Controllers
       }
       catch (Exception e)
       {
-
         throw e;
       }
     }
@@ -102,6 +101,22 @@ namespace RegistaMaster.WebApp.Controllers
         }
 
         return RedirectToAction("Index", "FoodChart");
+      }
+      catch (Exception e)
+      {
+        throw e;
+      }
+    }
+    public async Task<bool> CheckRecordForDate(DateTime date) 
+    {
+      try
+      {
+        var check = await _uow.FoodChartRepository.CheckRecordForDate(date);
+        if (check > 0)
+        {
+          return true;
+        }
+        return false;
       }
       catch (Exception e)
       {

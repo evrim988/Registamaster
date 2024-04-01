@@ -212,57 +212,19 @@ public class FoodChartRepository : Repository, IFoodChartRepository
       throw e;
     }
   }
+
+  public async Task<int> CheckRecordForDate(DateTime date)
+  {
+    try
+    {
+      return _uow.Repository.GetNonDeletedAndActive<FoodChart>(t => t.Date == date).Count();
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+  }
 }
-
-
-
-
-//#region MyRegion
-//public async Task<string> AddFoodChartFromExcel(Stream fileStream)
-//{
-//  try
-//  {
-//    using (var reader = ExcelReaderFactory.CreateReader(fileStream, new ExcelReaderConfiguration()
-//    {
-//      FallbackEncoding = System.Text.Encoding.Default, // Varsayılan karakter kodlamasını kullan
-//      AutodetectSeparators = new char[] { ',', '\t', '|', ';' } // Ayırıcıları otomatik algıla
-//    }))
-//    {
-//      do
-//      {
-//        while (reader.Read()) // Her satırı oku
-//        {
-//          var foodChart = new FoodChart();
-
-//          // İlk sütun tarih olarak kabul edilecek
-//          if (reader.IsDBNull(0))
-//            continue; // Eğer tarih sütunu boşsa, bu satırı atla
-
-//          if (reader.GetFieldType(0) == typeof(DateTime))
-//            foodChart.Date = reader.GetDateTime(0); // Tarih sütununu al
-
-//          // İkinci sütun kişi sayısı olarak kabul edilecek
-//          if (reader.IsDBNull(1))
-//            continue; // Eğer kişi sayısı sütunu boşsa, bu satırı atla
-
-//          if (reader.GetFieldType(1) == typeof(int))
-//            foodChart.PersonNumber = reader.GetInt32(1); // Kişi sayısı sütununu al
-
-//          // Veritabanına ekleyerek devam et
-//          await _uow.FoodChartRepository.AddFoodChart(foodChart);
-//        }
-//      } while (reader.NextResult()); // Bir sonraki veri kümesine geç
-//    }
-
-//    await _uow.SaveChanges();
-//    return "1"; // Başarılı
-//  }
-//  catch (Exception e)
-//  {
-//    throw e; // Hata oluşursa istisna fırlat
-//  }
-//} 
-//#endregion
 
 
 
