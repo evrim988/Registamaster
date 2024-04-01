@@ -25,5 +25,6 @@ namespace RegistaMaster.Persistance.RegistaMasterContextes
     public DbSet<HealthCheck> HealthChecks { get; set; }
     public DbSet<ActionNote> ActionNotes { get; set; }
     public DbSet<FoodChart> FoodCharts { get; set; }
+    public DbSet<RequestFile> RequestFiles { get; set; }
   }
 }

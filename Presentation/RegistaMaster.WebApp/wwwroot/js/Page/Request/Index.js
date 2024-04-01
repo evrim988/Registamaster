@@ -752,7 +752,9 @@ function GetList() {
 
 function closeRequestModal() {
   $('#RequestCreateModal').modal('hide');
-
+  $('#screenshot').css('background', 'none');
+  $('#imagePreviewDiv').attr("hidden", "hidden");
+  $('#imagePreview').attr('src', '');
   $('#ProjectID').val(0);
   $('#CategoryID').val(0);
   $('#NotificationTypeID').val(-1);
@@ -774,7 +776,9 @@ function OpenImageModal() {
 function closeImageModal() {
   $('#m_modal_Image_Paste').modal('hide');
   $('#RequestCreateModal').modal('toggle');
-
+  $('#base64').val('');
+  $('#imagePreviewDiv').attr("hidden", "hidden");
+  $('#screenshot').css('background', 'none');
 }
 function closeEditRequestModal() {
   $('#RequestEditModal').modal('hide');
@@ -1661,6 +1665,17 @@ $("html").pasteImageReader(function (results) {
   var h = img.height;
   $width.val(w);
   $height.val(h);
+  $("#imagePreview").attr('src', dataURL);
+  var img2 = $("#imagePreview");
+  var currentWidth = img2.width();
+  var currentHeight = img2.height();
+
+  if (currentWidth > 500 || currentHeight > 500) {
+    var ratio = Math.min(500 / currentWidth, 500 / currentHeight);
+    img2.width(currentWidth * ratio);
+    img2.height(currentHeight * ratio);
+  }
+  $('#imagePreviewDiv').removeAttr("hidden");
   return $(".actives")
     .css({
       backgroundImage: "url(" + dataURL + ")"
@@ -2528,4 +2543,12 @@ function CheckButtonStatus(data) {
       break;
     default:
   }
+}
+
+function OpenImage() {
+  var imgSrc = $(imagePreview).attr('src');
+  $.fancybox.open({
+    src: imgSrc, // Açılacak resmin URL'si
+    type: 'image'  // Resmin türü (diğer içerik türlerini de kullanabilirsiniz)
+  });
 }
