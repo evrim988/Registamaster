@@ -33,8 +33,6 @@ public class Request : BaseEntitiy
     public int? VersionID {  get; set; }
     public Version Version { get; set; }
     public int? ModuleID { get; set; }
-    public Module Module { get; set; }
-  
     public int ProjectID { get; set; }
     public Project Project { get; set; }
     public ICollection<Action> Actions { get; set; }

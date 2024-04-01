@@ -27,10 +27,37 @@ function GetList() {
       if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
 
       if (e.data != undefined) {
-        if (e.data.color === "clsRed") {
-          //console.log("red");
-          e.rowElement.css('background-color', "#fb6969");
+        //switch (e.data.actionStatus) {
+        //  case 0:
+        //    if (new Date(e.data.endDate) <= new Date())
+        //      e.data.color = "#F1948A";
+        //    break;
+        //  case 1:
+        //    e.data.color = "#D6EAF8";
+        //    break;
+        //  case 2:
+        //    e.data.color = "#D5F5E3";
+        //    break;
+        //  case 3:
+        //    e.data.color = "#FDEBD0";
+        //    break;
+        //}
+        switch (e.data.actionStatus) {
+          case 0:
+            if (new Date(e.data.endDate) <= new Date())
+              e.data.color = "#F1948A";
+            break;
+          case 1:
+            e.data.color = "#CDEFFE";
+            break;
+          case 2:
+            e.data.color = "#E1FFE2";
+            break;
+          case 3:
+            e.data.color = "#FDEBD0";
+            break;
         }
+        e.rowElement.css('background-color', e.data.color);
       };
     },
     //rowAlternationEnabled: true,
@@ -827,7 +854,7 @@ function closeModalActionNote() {
 
 //aksiyon durumu değiştir
 function ChangeActionStatus() {
- 
+
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
     $("#CancelModal").modal("toggle");

@@ -52,8 +52,26 @@ function GetList() {
     },
     onRowPrepared: function (e) {
       if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+      if (e.data != undefined) {
+        switch (e.data.requestStatus) {
+          case 0:
+            if (new Date(e.data.planedEndDate) <= new Date())
+              e.data.color = "#F1948A";
+            break;
+          case 1:
+            e.data.color = "#CDEFFE";
+            break;
+          case 2:
+            e.data.color = "#E1FFE2";
+            break;
+          case 3:
+            e.data.color = "#FDEBD0";
+            break;
+        }
+        e.rowElement.css('background-color', e.data.color);
+      };
     },
-    rowAlternationEnabled: true,
+    rowAlternationEnabled: false,
     grouping: {
       contextMenuEnabled: true
     },
@@ -66,6 +84,7 @@ function GetList() {
     allowColumnResizing: true,
     columnResizingMode: 'widget',
     showBorders: true,
+    showRowLines: true,
     searchPanel: {
       visible: true,
       width: 240,
@@ -274,22 +293,22 @@ function GetList() {
         cellTemplate: function (container, info) {
           if (info.data.requestStatus == 0) {
             $('<div>')
-              .append($('<a>', { class: "btn btn-sm btn-info", }).append("Açık"))
+              .append($('<a>', { class: "btn btn-sm btn-light", }).append("Açık"))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 1) {
             $('<div>')
-              .append($('<a>', { class: "btn btn-sm btn-success" }).append("Başladı"))
+              .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Başladı"))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 2) {
             $('<div>')
-              .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Kapandı"))
+              .append($('<a>', { class: "btn btn-sm btn-success" }).append("Kapandı"))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 3) {
             $('<div id="Closed">')
-              .append($('<a>', { class: "btn btn-sm btn-danger" }).append("Beklemede"))
+              .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Beklemede"))
               .appendTo(container);
           }
         }
@@ -440,8 +459,6 @@ function GetList() {
             showBorders: true,
             showColumnLines: true,
             showRowLines: true,
-
-
             allowColumnReordering: true,
             allowColumnResizing: true,
             columnResizingMode: 'widget',
@@ -449,11 +466,23 @@ function GetList() {
               if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
 
               if (e.data != undefined) {
-                if (e.data.Color === "clsRed") {
-                  e.rowElement.css('background-color', "#fb6969");
+                switch (e.data.ActionStatus) {
+                  case 0:
+                    if (new Date(e.data.EndDate) <= new Date())
+                      e.data.Color = "#F1948A";
+                    break;
+                  case 1:
+                    e.data.Color = "#CDEFFE";
+                    break;
+                  case 2:
+                    e.data.Color = "#E1FFE2";
+                    break;
+                  case 3:
+                    e.data.Color = "#FDEBD0";
+                    break;
                 }
+                e.rowElement.css('background-color', e.data.Color);
               }
-
             },
             onEditingStart(e) {
               title = e.data.ElementDescription;
@@ -816,9 +845,6 @@ function GetSelectList() {
     success: function (data) {
       //console.log(data);
       $("#ModuleID").empty();
-      if (!data || data === "1") {
-        return;
-      }
 
       var object = JSON.parse(data);
       if (object.length != 0) {
@@ -827,8 +853,11 @@ function GetSelectList() {
           s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
         }
 
-        $("#ModuleID").html(s);
       }
+      else
+        var s = '<option selected="selected" disabled value="-1">Bu Projenin Modülü Bulunmamaktadır.</option>';
+
+      $("#ModuleID").html(s);
 
     }
   });
@@ -1035,9 +1064,26 @@ function RequestDetail(data) {
         $("#detailModuleID").html(s);
       }
 
+
+      $("#detailModuleID").empty();
+
+      var object = JSON.parse(data);
+      if (object.length != 0) {
+        var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';
+        for (var i = 0; i < object.length; i++) {
+          s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+        }
+      }
+      else
+        var s = '<option selected="selected" disabled value="-1">Bu Projenin Modülü Bulunmamaktadır.</option>';
+
+      $("#detailModuleID").html(s);
+
+
     },
     complete: function () {
-      $("#detailModuleID").val(data.moduleID);
+      if ($("#detailModuleID option").length != 1)
+        $("#detailModuleID").val(data.moduleID);
     }
   });
 
@@ -1185,20 +1231,21 @@ function GetSelectListEdit() {
     contentType: false,
     success: function (data) {
       //console.log(data);
-      $("#ModuleEditID").empty();
-      if (!data || data === "1") {
-        return;
-      }
+      //$("#ModuleEditID").empty();
+      //if (!data || data === "1") {
+      //  return;
+      //}
       var object = JSON.parse(data);
       if (object.length != 0) {
         var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';
         for (var i = 0; i < object.length; i++) {
           s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
         }
-
-        $("#ModuleEditID").html(s);
       }
-
+      else {
+        var s = '<option selected="selected" disabled value="-1">Bu Projenin Modülü Bulunmamaktadır.</option>';
+      }
+      $("#ModuleEditID").html(s);
     }
   });
 
@@ -1225,7 +1272,6 @@ function GetSelectListEdit() {
 
         $("#VersionEditID").html(s);
       }
-
     }
   });
 }
@@ -1503,13 +1549,23 @@ function DeleteDialog(ID) {
 }
 //modal boş alan kontrolü
 function validateForm() {
-  var requiredFields = [
-    "ProjectID",
-    "ModuleID",
-    "Subject",
-    "Description",
-  ];
-
+  var optionsCount = $("#ModuleID option").length;
+  if (optionsCount == 1) {
+    var requiredFields = [
+      "ProjectID",
+      //"ModuleID",
+      "Subject",
+      "Description",
+    ];
+  }
+  else {
+    var requiredFields = [
+      "ProjectID",
+      "ModuleID",
+      "Subject",
+      "Description",
+    ];
+  }
 
 
   for (var i = 0; i < requiredFields.length; i++) {

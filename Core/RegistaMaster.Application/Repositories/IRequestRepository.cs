@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
+using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
@@ -10,7 +11,7 @@ public interface IRequestRepository : IRepository
 {
     public Task<string> RequestAdd(Request request);
     public void Delete(int id);
-    public Task<IQueryable<Request>> GetList();
+    public Task<List<RequesGridDTO>> GetList();
     Task<List<ResponsibleDevextremeSelectListHelper>> GetProject();
     Task<List<ResponsibleDevextremeSelectListHelper>> GetCustomer();
     public Task<List<ResponsibleDevextremeSelectListHelper>> GetModuleSelect();

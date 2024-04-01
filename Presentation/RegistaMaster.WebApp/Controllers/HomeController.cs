@@ -61,16 +61,25 @@ public class HomeController : Controller
   public async Task<object> GetActionHome(DataSourceLoadOptions options)
   {
     var models = await _uow.HomeRepository.GetActionDtoHome();
-    foreach (var item in models)
-    {
-      if (item.ActionStatus == ActionStatus.Contiuned || item.ActionStatus == ActionStatus.notStarted)
-      {
-        if (item.EndDate <= DateTime.Now)
-        {
-          item.Color = "clsRed";
-        }
-      }
-    }
+    //foreach (var item in models)
+    //{
+    //  switch (item.ActionStatus)
+    //  {
+    //    case ActionStatus.notStarted:
+    //      if (item.EndDate <= DateTime.Now && item.ActionStatus == ActionStatus.notStarted)
+    //        item.Color = "#F1948A";
+    //      break;
+    //    case ActionStatus.Contiuned:
+    //      item.Color = "#D6EAF8";
+    //      break;
+    //    case ActionStatus.Completed:
+    //      item.Color = "#D5F5E3";
+    //      break;
+    //    case ActionStatus.Cancel:
+    //      item.Color = "#FDEBD0";
+    //      break;
+    //  }
+    //}
     return DataSourceLoader.Load(models, options);
   }
 

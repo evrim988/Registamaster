@@ -26,15 +26,18 @@ public class VersionRepository : Repository, IVersionRepository
     try
     {
       var olderVersion = GetVersionName(model.ProjectID);
-      if (model.IsNewVersion)
+      if (olderVersion != 0)
       {
-        model.Name = "V" + (olderVersion + 0.1).ToString(".#").Replace(',', '.');
-        if (!model.Name.Contains('.'))
-          model.Name += ".0";
+        if (model.IsNewVersion)
+        {
+          model.Name = "V" + (olderVersion + 0.1).ToString(".#").Replace(',', '.');
+          if (!model.Name.Contains('.'))
+            model.Name += ".0";
+        }
+        else
+          model.Name = "V" + olderVersion.ToString(".#").Replace(',', '.');
       }
-      else
-        model.Name = "V" + olderVersion.ToString(".#").Replace(',', '.');
-
+      
       await _uow.Repository.Add(new Version()
       {
         Name = model.Name,
@@ -91,8 +94,13 @@ public class VersionRepository : Repository, IVersionRepository
 
   public double GetVersionName(int ID)
   {
-    var version = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID).OrderBy(t => t.ID).Last();
-    var versionName = version.Name.Replace('.', ',').Replace("V", "");
-    return Convert.ToDouble(versionName);
+    var versions = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID);
+    if (versions.Count() != 0)
+    {
+      var version = versions.OrderBy(t => t.ID).Last();
+      var versionName = version.Name.Replace('.', ',').Replace("V", "");
+      return Convert.ToDouble(versionName);
+    }
+    return 0;
   }
 }

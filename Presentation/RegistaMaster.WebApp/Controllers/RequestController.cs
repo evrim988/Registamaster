@@ -161,7 +161,6 @@ public class RequestController : Controller
 
   }
   public async Task<object> GetList(DataSourceLoadOptions options)
-
   {
     var models = await uow.RequestRepository.GetList();
     return DataSourceLoader.Load(models, options);
@@ -192,13 +191,7 @@ public class RequestController : Controller
         StartDate = item.StartDate,
         CompleteDate = item.CompleteDate,
       };
-      if (item.ActionStatus == ActionStatus.Contiuned || item.ActionStatus == ActionStatus.notStarted)
-      {
-        if (item.EndDate <= DateTime.Now)
-        {
-          actions.Color = "clsRed";
-        }
-      }
+
       actionList.Add(actions);
     }
     return JsonConvert.SerializeObject(actionList);

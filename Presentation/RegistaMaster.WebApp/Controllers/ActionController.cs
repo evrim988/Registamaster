@@ -41,16 +41,7 @@ public class ActionController : Controller
     try
     {
       var model = _uow.ActionRepository.GetList().OrderByDescending(t => t.ID).ToList();
-      foreach (var item in model)
-      {
-        if (item.ActionStatus == ActionStatus.Contiuned || item.ActionStatus == ActionStatus.notStarted)
-        {
-          if (item.EndDate <= DateTime.Now)
-          {
-            item.Color = "clsRed";
-          }
-        }
-      }
+
       return DataSourceLoader.Load(model, options);
     }
     catch (Exception e)

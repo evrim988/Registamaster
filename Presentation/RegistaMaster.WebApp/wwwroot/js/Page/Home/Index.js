@@ -26,9 +26,22 @@ function GetList() {
       if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
 
       if (e.data != undefined) {
-        if (e.data.color === "clsRed") {
-          e.rowElement.css('background-color', "#fb6969");
+        switch (e.data.actionStatus) {
+          case 0:
+            if (new Date(e.data.endDate) <= new Date())
+              e.data.color = "#F1948A";
+            break;
+          case 1:
+            e.data.color = "#CDEFFE";
+            break;
+          case 2:
+            e.data.color = "#E1FFE2";
+            break;
+          case 3:
+            e.data.color = "#FDEBD0";
+            break;
         }
+        e.rowElement.css('background-color', e.data.color);
       };
     },
     //rowAlternationEnabled: true,
@@ -922,7 +935,7 @@ function CheckButtonStatus(data) {
       $("#actionStartDate").prop("disabled", false);
       $("#actionCompleteDate").prop("disabled", false);
       $("#actionStartDate").val(formatDate(newStartDate));
-      if (formatDate(newCompleteDate) == formatDate(new Date())){
+      if (formatDate(newCompleteDate) == formatDate(new Date())) {
         $("#actionCompleteDate").val("");
       }
       else {
