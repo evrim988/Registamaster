@@ -997,7 +997,7 @@ function RequestDetail(data) {
   $("#detailProjectID").val(data.projectID);
   $("#detailSubject").val(data.subject);
   $("#detailDescription").val(data.description);
-  $("#detailPageUrl").val(data.pageUrl);
+  $("#detailPageUrl").val(data.pageURL);
   $("#detailOpeningDate").val(new Date(data.createdOn).toLocaleDateString());
   $("#detailEndDate").val(new Date(data.planedEndDate).toLocaleDateString());
   $("#detailRequestImage").val(data.pictureURL);
