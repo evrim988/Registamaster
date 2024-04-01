@@ -84,5 +84,29 @@ namespace RegistaMaster.WebApp.Controllers
         throw e;
       }
     }
+    [HttpPost]
+    public async Task<IActionResult> UploadExcel(IFormFile file)
+    {
+      if (file == null || file.Length <= 0)
+      {
+        return BadRequest("Excel Dosyası Yüklenemedi");
+      }
+
+      try
+      {
+        using (var stream = new MemoryStream())
+        {
+          await file.CopyToAsync(stream);
+          stream.Position = 0;
+          await _uow.FoodChartRepository.AddFoodChartsFromExcel(stream);
+        }
+
+        return RedirectToAction("Index", "FoodChart");
+      }
+      catch (Exception e)
+      {
+        throw e;
+      }
+    }
   }
 }

@@ -1,10 +1,13 @@
-﻿using RegistaMaster.Application.Repositories;
+﻿using ExcelDataReader;
+using OfficeOpenXml;
+using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.ChartModels;
 using RegistaMaster.Domain.DTOModels.Entities.FoodCharts;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
+using System.Data;
 
 namespace RegistaMaster.Infasctructure.Repositories;
 
@@ -64,7 +67,7 @@ public class FoodChartRepository : Repository, IFoodChartRepository
     catch (Exception e)
     {
       throw e;
-    } 
+    }
   }
 
   public async Task<string> UpdateFoodChart(FoodChart model)
@@ -117,7 +120,7 @@ public class FoodChartRepository : Repository, IFoodChartRepository
     {
       MonthName = "Şubat",
       Count = chart.February
-    }); 
+    });
     monthDTOs.Add(new MonthDTO()
     {
       MonthName = "MART",
@@ -164,7 +167,102 @@ public class FoodChartRepository : Repository, IFoodChartRepository
     });
     return monthDTOs;
   }
-  
+
+  public async Task<string> AddFoodChartsFromExcel(Stream fileStream)
+  {
+    try
+    {
+      ExcelPackage package = new ExcelPackage(fileStream);
+      ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+      ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+
+
+
+      int rowCount = worksheet.Dimension.Rows;
+      int columnCount = worksheet.Dimension.Columns;
+      for (int row = 2; row <= rowCount; row++)
+      {
+        var foodChart = new FoodChart();
+
+        for (int col = 1; col <= columnCount; col++)
+        {
+          var cellValue = worksheet.Cells[row, col].Value;
+
+          if (cellValue != null) // Hücre değeri boş değilse işlem yap
+          {
+            if (DateTime.TryParse(cellValue.ToString(), out DateTime date))
+              foodChart.Date = date;
+            else if (int.TryParse(cellValue.ToString(), out int personNumber))
+              foodChart.PersonNumber = personNumber;
+          }
+        }
+
+        // Tüm hücreler boş değilse foodChart'ı ekle
+        if (foodChart.Date != default || foodChart.PersonNumber != default)
+        {
+          await _uow.FoodChartRepository.AddFoodChart(foodChart);
+          await _uow.SaveChanges();
+        }
+      }
+
+      return "1";
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+  }
 }
+
+
+
+
+//#region MyRegion
+//public async Task<string> AddFoodChartFromExcel(Stream fileStream)
+//{
+//  try
+//  {
+//    using (var reader = ExcelReaderFactory.CreateReader(fileStream, new ExcelReaderConfiguration()
+//    {
+//      FallbackEncoding = System.Text.Encoding.Default, // Varsayılan karakter kodlamasını kullan
+//      AutodetectSeparators = new char[] { ',', '\t', '|', ';' } // Ayırıcıları otomatik algıla
+//    }))
+//    {
+//      do
+//      {
+//        while (reader.Read()) // Her satırı oku
+//        {
+//          var foodChart = new FoodChart();
+
+//          // İlk sütun tarih olarak kabul edilecek
+//          if (reader.IsDBNull(0))
+//            continue; // Eğer tarih sütunu boşsa, bu satırı atla
+
+//          if (reader.GetFieldType(0) == typeof(DateTime))
+//            foodChart.Date = reader.GetDateTime(0); // Tarih sütununu al
+
+//          // İkinci sütun kişi sayısı olarak kabul edilecek
+//          if (reader.IsDBNull(1))
+//            continue; // Eğer kişi sayısı sütunu boşsa, bu satırı atla
+
+//          if (reader.GetFieldType(1) == typeof(int))
+//            foodChart.PersonNumber = reader.GetInt32(1); // Kişi sayısı sütununu al
+
+//          // Veritabanına ekleyerek devam et
+//          await _uow.FoodChartRepository.AddFoodChart(foodChart);
+//        }
+//      } while (reader.NextResult()); // Bir sonraki veri kümesine geç
+//    }
+
+//    await _uow.SaveChanges();
+//    return "1"; // Başarılı
+//  }
+//  catch (Exception e)
+//  {
+//    throw e; // Hata oluşursa istisna fırlat
+//  }
+//} 
+//#endregion
+
 
 
