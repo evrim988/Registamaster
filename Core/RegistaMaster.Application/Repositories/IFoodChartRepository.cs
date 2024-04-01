@@ -12,4 +12,6 @@ public interface IFoodChartRepository:IRepository
   public Task<string> UpdateFoodChart(FoodChart model);
   public void Delete(int ID);
   public  Task<List<MonthDTO>> GetChart(int year);
+  public Task<string> AddFoodChartsFromExcel(Stream fileStream);
+
 }

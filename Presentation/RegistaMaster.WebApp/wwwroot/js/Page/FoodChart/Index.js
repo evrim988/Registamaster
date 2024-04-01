@@ -2,7 +2,11 @@
   DevExpress.localization.locale('tr');
   CheckDate();
   GetList();
+  checkFileInput();
 
+  $('#fileInput').on('change', function () {
+    checkFileInput();
+  });
 });
 
 function GetList() {
@@ -149,3 +153,13 @@ function CheckDate() {
     }
   });
 }
+//Dosya seçilme durumuna göre upload butonu durumu
+function checkFileInput() {
+  var fileName = $('#fileInput').val();
+  if (fileName == '') {
+    $('#submitButton').prop('disabled', true);
+  } else {
+    $('#submitButton').prop('disabled', false);
+  }
+}
+
