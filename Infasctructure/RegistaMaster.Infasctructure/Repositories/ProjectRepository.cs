@@ -1,4 +1,5 @@
-﻿using RegistaMaster.Application.Repositories;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
@@ -77,7 +78,20 @@ public class ProjectRepository : Repository, IProjectRepository
         }
     }
 
-    public async Task<string> UpdateProject(ProjectDTO model)
+  public async Task<List<SelectListItem>> GetProjectSelect()
+  {
+    try
+    {
+      return GetNonDeletedAndActive<Project>(t => true)
+          .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.ProjectName }).ToList();
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> UpdateProject(ProjectDTO model)
     {
       var project = await GetById<Project>(model.ID);
       project.ProjectDescription = model.ProjectDescription;

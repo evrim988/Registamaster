@@ -1,5 +1,7 @@
-﻿using RegistaMaster.Application.Repositories;
+﻿using MySqlX.XDevAPI.Relational;
+using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ModuleModel;
+using RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
@@ -106,5 +108,17 @@ namespace RegistaMaster.Infasctructure.Repositories
          return "1";
       }
 
-   }
+    public async Task<string> UpdateModule(ModuleDTO model)
+    {
+      var module = await GetById<Module>(model.ID);
+      module.Name = model.Name;
+      module.Description = model.Description;
+      module.ProjectID = model.ProjectID;
+      Update(module);
+      await _unitOfWork.SaveChanges();
+      return "1";
+    }
+
+
+  }
 }

@@ -2,8 +2,12 @@
   DevExpress.localization.locale('tr');
   GetList();
   $('select:disabled').css('background-color', '#ffffff');
-
 });
+
+function WhiteBackGround() {
+  $('select:disabled').css('background-color', '#ffffff');
+}
+var auth = $("#auth").val();
 
 function GetList() {
   var grid = $(projectGridContainer).dxDataGrid({
@@ -94,7 +98,6 @@ function GetList() {
 
     },
     onToolbarPreparing: function (e) {
-      var auth = $("#auth").val();
       if (auth == 0) {
         let toolbarItems = e.toolbarOptions.items;
         toolbarItems.push({
@@ -152,12 +155,10 @@ function GetList() {
 
     //},
     columns: [
-
       {
         dataField: "projectName",
         caption: "Proje Adı",
         alignment: 'center',
-
       },
       {
         dataField: "projectDescription",
@@ -166,158 +167,39 @@ function GetList() {
       },
       {
         caption: "İşlemler",
-        type: "buttons",
         fixed: true,
         fixedPosition: "right",
         alignment: 'center',
-        buttons: [
-          {
-            hint: "Düzenle",
-            icon: "edit",
-            visible: function (e) {
-              var auth = $("#auth").val();
-              if (auth == 0) //projeyi yalnızca admin düzenleyebilir
-                return true;
-            },
-            onClick: function (e) {
-              data = e.row.data;
-              OpenProjectEditModal(data);
-            }
-          },
-          {
-            hint: "Sil",
-            icon: "trash",
-            visible: function (e) {
-              var auth = $("#auth").val();
-              if (auth == 0) //projeyi yalnızca admin silebilir
-                return true;
-            },
-            onClick: function (e) {
-              CheckRequest(e.row.data.id);
-            }
-          },
-          {
-            hint: "Not Ekle",
-            icon: "add",
-            onClick: function (e) {
-              AddProjectNoteModal(e.row.data.id);
-            }
-          },
-        ]
-      },
+        cellTemplate: function (container, options) {
+          $("<div>")
+            .dxButton({
+              icon: "preferences",
+              hint: "İşlemler",
+              stylingMode: "text",
+              onClick: function (e) {
+                switch (auth) {
+                  case '0':
+                    showContextMenuAdmin(options, e);
+                    break;
+                  case '1':
+                    showContextMenuLeader(options, e);
+                    break;
+                  case '2':
+                    showContextMenuDeveloper(options, e);
+                    break;
+                }
+              }
+            })
+            .appendTo(container);
+        }
+      }
     ],
     masterDetail: {
       enabled: true,
-      template: function (container, options) {
-        return $("<div>")
-          .dxDataGrid({
-            columnAutoWidth: true,
-            showBorders: true,
-            showColumnLines: true,
-            showRowLines: true,
-            rowAlternationEnabled: true,
-            allowColumnReordering: true,
-            allowColumnResizing: true,
-            columnResizingMode: 'widget',
-            onRowPrepared: function (e) {
-              if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
-            },
-            onEditingStart(e) {
-              title = e.data.ElementDescription;
-            },
-            onInitNewRow: function (e) {
-              title = "";
-            },
-            onInitialized: function (e) {
-              actionGridContainer = e.component;
-            },
-
-            columns: [
-              {
-                dataField: "ID",
-                caption: "Proje Not No",
-                alignment: 'center',
-                visible: false
-              },
-              {
-                dataField: "NoteType",
-                caption: "Not Konusu",
-                alignment: 'center',
-              },
-              {
-                dataField: "Description",
-                caption: "Not Açıklaması",
-                alignment: 'center',
-                visible: false
-              },
-              {
-                dataField: "CreatedBy",
-                caption: "Ekleyen Kullanıcı",
-                alignment: 'center',
-                lookup: {
-                  dataSource: DevExpress.data.AspNet.createStore({
-                    loadUrl: "/Project/GetCreatedBy/",
-                  }),
-                  valueExpr: "id",
-                  displayExpr: "fullname"
-                }
-              },
-              {
-                dataField: "Date",
-                caption: "Eklenme Tarihi",
-                alignment: 'center',
-                dataType: 'date',
-                format: 'dd/MM/yyyy',
-              },
-              {
-                caption: "İşlemler",
-                type: "buttons",
-                fixed: true,
-                fixedPosition: "right",
-                alignment: 'center',
-                buttons: [
-                  {
-                    hint: "Sil",
-                    icon: "trash",
-                    visible: function (e) {
-                      var auth = $("#auth").val();
-                      var id = $("#ID").val();
-                      if (auth == 0 || id == e.row.data.CreatedBy)//not admin veya oluşturan tarafından silinebilir
-                        return true;
-                    },
-                    onClick: function (e) {
-                      DeleteProjectNote(e.row.data.ID);
-                    }
-                  },
-                  {
-                    hint: "Detay",
-                    icon: "textdocument",
-                    onClick: function (e) {
-                      ProjectNoteDetailModal(e.row);
-                    }
-                  },
-                ]
-              },
-
-            ],
-            dataSource: DevExpress.data.AspNet.createStore({
-              key: "ID",
-              loadUrl: "/Project/GetProjectNotes/",
-              loadParams: { ID: options.data.id },
-              updateUrl: "/Project/EditProjectNote",
-              deleteUrl: "/Project/DeleteProjectNote",
-
-              onBeforeSend: function (method, ajaxoptions) {
-                ajaxoptions.data.id = options.data.id;
-                ajaxoptions.xhrFields = { withCredentials: true };
-              }
-            })
-          })
-      }
+      template: masterDetailTemplate,
     }
 
   }).dxDataGrid("instance");
-
 }
 
 function gridRefresh() {
@@ -487,7 +369,7 @@ function DeleteProject(ID) {
 
 //proje notu ekle modal
 function AddProjectNoteModal(ID) {
-  $("#addProjectID").val(ID);
+  $("#addProjectNoteProjectID").val(ID);
   $("#AddProjectNote").modal("toggle");
 }
 
@@ -495,7 +377,7 @@ function AddProjectNoteModal(ID) {
 function SaveProjectNote() {
   var formData = new FormData();
 
-  formData.append('ProjectID', $('#addProjectID').val());
+  formData.append('ProjectID', $('#addProjectNoteProjectID').val());
   formData.append('NoteType', $('#addNoteType').val());
   formData.append('Description', $('#addDescription').val());
 
@@ -525,7 +407,6 @@ function ProjectNoteDetailModal(row) {
   $("#saveButton").addClass("invisible");
   $("#detailNoteType").prop("readonly", true);
   $("#detailDescription").prop("readonly", true);
-  var auth = $("#auth").val();
   var id = $("#ID").val();
   //console.log(id);
   //console.log(data.CreatedBy);
@@ -638,4 +519,766 @@ function DeleteProjectNote(ID) {
       )
     }
   })
+}
+
+//MasterDetail Tabs
+function masterDetailTemplate(_, masterDetailOptions) {
+  return $('<div>').dxTabPanel({
+    items: [
+      {
+        title: 'Modüller',
+        template: GetModuleTabTemplate(masterDetailOptions.data),
+      },
+      {
+        title: 'Versiyonlar',
+        template: GetVersionTabTemplate(masterDetailOptions.data),
+      },
+      {
+        title: 'Proje Notları',
+        template: GetProjectNoteTabTemplate(masterDetailOptions.data),
+      }
+    ],
+  });
+}
+
+//MasterDetail ProjectNote Tabs
+function GetProjectNoteTabTemplate(masterDetailData) {
+  return function () {
+    var $projectNoteGrid = $("<div>").dxDataGrid({
+      columnAutoWidth: true,
+      showBorders: true,
+      showColumnLines: true,
+      showRowLines: true,
+      rowAlternationEnabled: true,
+      allowColumnReordering: true,
+      allowColumnResizing: true,
+      columnResizingMode: 'widget',
+      onRowPrepared: function (e) {
+        if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+      },
+      onEditingStart(e) {
+        title = e.data.ElementDescription;
+      },
+      onInitNewRow: function (e) {
+        title = "";
+      },
+      onInitialized: function (e) {
+        actionGridContainer = e.component;
+      },
+      columns: [
+        {
+          dataField: "ID",
+          caption: "Proje Not No",
+          alignment: 'center',
+          visible: false
+        },
+        {
+          dataField: "NoteType",
+          caption: "Not Konusu",
+          alignment: 'center',
+        },
+        {
+          dataField: "Description",
+          caption: "Not Açıklaması",
+          alignment: 'center',
+          visible: false
+        },
+        {
+          dataField: "CreatedBy",
+          caption: "Ekleyen Kullanıcı",
+          alignment: 'center',
+          lookup: {
+            dataSource: DevExpress.data.AspNet.createStore({
+              loadUrl: "/Project/GetCreatedBy/",
+            }),
+            valueExpr: "id",
+            displayExpr: "fullname"
+          }
+        },
+        {
+          dataField: "Date",
+          caption: "Eklenme Tarihi",
+          alignment: 'center',
+          dataType: 'date',
+          format: 'dd/MM/yyyy',
+        },
+        {
+          caption: "İşlemler",
+          type: "buttons",
+          fixed: true,
+          fixedPosition: "right",
+          alignment: 'center',
+          buttons: [
+            {
+              hint: "Sil",
+              icon: "trash",
+              visible: function (e) {
+                var id = $("#ID").val();
+                if (auth == 0 || id == e.row.data.CreatedBy)//not admin veya oluşturan tarafından silinebilir
+                  return true;
+              },
+              onClick: function (e) {
+                DeleteProjectNote(e.row.data.ID);
+              }
+            },
+            {
+              hint: "Detay",
+              icon: "textdocument",
+              onClick: function (e) {
+                ProjectNoteDetailModal(e.row);
+              }
+            },
+          ]
+        },
+      ],
+      dataSource: DevExpress.data.AspNet.createStore({
+        key: "ID",
+        loadUrl: "/Project/GetProjectNotes/",
+        loadParams: { ID: masterDetailData.id },
+        updateUrl: "/Project/EditProjectNote",
+        deleteUrl: "/Project/DeleteProjectNote",
+        onBeforeSend: function (method, ajaxoptions) {
+          ajaxoptions.data.id = masterDetailData.id;
+          ajaxoptions.xhrFields = { withCredentials: true };
+        }
+      })
+    });
+
+    var $container = $("<div>");
+
+    $container.append($projectNoteGrid);
+    return $container;
+  }
+}
+
+//MasterDetail Module Tabs
+function GetModuleTabTemplate(masterDetailData) {
+  return function () {
+    return $("<div>")
+      .dxDataGrid({
+        columnAutoWidth: true,
+        showBorders: true,
+        showColumnLines: true,
+        showRowLines: true,
+        rowAlternationEnabled: true,
+        allowColumnReordering: true,
+        allowColumnResizing: true,
+        columnResizingMode: 'widget',
+        onRowPrepared: function (e) {
+          if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+        },
+        onEditingStart(e) {
+          title = e.data.ElementDescription;
+        },
+        onInitNewRow: function (e) {
+          title = "";
+        },
+        onInitialized: function (e) {
+          actionGridContainer = e.component;
+        },
+        columns: [
+          {
+            dataField: "ID",
+            caption: "Module No",
+            alignment: 'center',
+            visible: false
+          },
+          {
+            dataField: "Name",
+            caption: "Adı",
+            alignment: 'center',
+          },
+          {
+            dataField: "Description",
+            caption: "Açıklama",
+            alignment: 'center',
+          },
+          {
+            dataField: "ProjectID",
+            caption: "Proje",
+            alignment: 'center',
+            lookup: {
+              dataSource: DevExpress.data.AspNet.createStore({
+                key: "Id",
+                loadUrl: "/Defination/GetProject/",
+                onBeforeSend: function (method, ajaxOptions) {
+                  ajaxOptions.xhrFields = { withCredentials: true, };
+                },
+              }),
+              valueExpr: "id",
+              displayExpr: "name",
+            }
+          },
+          {
+            caption: "İşlemler",
+            type: "buttons",
+            fixed: true,
+            fixedPosition: "right",
+            alignment: 'center',
+            buttons: [
+              {
+                hint: "Sil",
+                icon: "trash",
+                visible: function (e) {
+                  var id = $("#ID").val();
+                  if (auth == 0 || id == e.row.data.CreatedBy)//not admin veya oluşturan tarafından silinebilir
+                    return true;
+                },
+                onClick: function (e) {
+                  DeleteProjectModule(e.row.data.ID);
+                }
+              },
+              {
+                hint: "Detay",
+                icon: "textdocument",
+                onClick: function (e) {
+                  ModuleDetailModal(e.row);
+                }
+              },
+            ]
+          },
+        ],
+        dataSource: DevExpress.data.AspNet.createStore({
+          key: "ID",
+          loadUrl: "/Project/GetModules/",
+          loadParams: { ID: masterDetailData.id },
+          updateUrl: "/Project/EditModule",
+          deleteUrl: "/Project/DeleteModule",
+          onBeforeSend: function (method, ajaxoptions) {
+            ajaxoptions.data.id = masterDetailData.id;
+            ajaxoptions.xhrFields = { withCredentials: true };
+          }
+        })
+      })
+  }
+}
+
+//MasterDetail Version Tabs
+function GetVersionTabTemplate(masterDetailData) {
+  return function () {
+    return $("<div>")
+      .dxDataGrid({
+        columnAutoWidth: true,
+        showBorders: true,
+        showColumnLines: true,
+        showRowLines: true,
+        rowAlternationEnabled: true,
+        allowColumnReordering: true,
+        allowColumnResizing: true,
+        columnResizingMode: 'widget',
+        onRowPrepared: function (e) {
+          if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+        },
+        onEditingStart(e) {
+          title = e.data.ElementDescription;
+        },
+        onInitNewRow: function (e) {
+          title = "";
+        },
+        onInitialized: function (e) {
+          actionGridContainer = e.component;
+        },
+
+        columns: [
+          {
+            dataField: "ID",
+            caption: "Version No",
+            alignment: 'center',
+            visible: false
+          },
+          {
+            dataField: "Name",
+            caption: "Adı",
+            alignment: 'center',
+          },
+          {
+            dataField: "Date",
+            caption: "Tarih",
+            dataType: 'date',
+            format: 'dd/MM/yyyy',
+          },
+          {
+            dataField: "ProjectID",
+            caption: "Proje",
+            validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
+            lookup: {
+              dataSource: DevExpress.data.AspNet.createStore({
+                key: "Id",
+                loadUrl: "/Defination/GetProject/",
+                onBeforeSend: function (method, ajaxOptions) {
+                  ajaxOptions.xhrFields = { withCredentials: true, };
+                },
+              }),
+              valueExpr: "id",
+              displayExpr: "name",
+            }
+          },
+          {
+            dataField: "DatabaseChange",
+            caption: "Veritabanı Değişikliği",
+            alignment: 'center',
+            dataType: "boolean",
+            lookup: {
+              dataSource: [
+                { id: true, text: "Evet" },
+                { id: false, text: "Hayır" }
+              ],
+              valueExpr: "id",
+              displayExpr: "text"
+            }
+          },
+          {
+            dataField: "isNewVersion",
+            caption: "Yeni Versiyon",
+            alignment: 'center',
+            dataType: "boolean",
+            visible: false,
+            lookup: {
+              dataSource: [
+                { id: true, text: "Evet" },
+                { id: false, text: "Hayır" }
+              ],
+              valueExpr: "id",
+              displayExpr: "text"
+            }
+          },
+          {
+            caption: "İşlemler",
+            type: "buttons",
+            fixed: true,
+            fixedPosition: "right",
+            alignment: 'center',
+            buttons: [
+              {
+                hint: "Sil",
+                icon: "trash",
+                visible: function (e) {
+                  var id = $("#ID").val();
+                  if (auth == 0 || id == e.row.data.CreatedBy)//not admin veya oluşturan tarafından silinebilir
+                    return true;
+                },
+                onClick: function (e) {
+                  DeleteProjectVersion(e.row.data.ID);
+                }
+              },
+              {
+                hint: "Detay",
+                icon: "textdocument",
+                onClick: function (e) {
+                  VersionDetailModal(e.row);
+                }
+              },
+            ]
+          },
+        ],
+        dataSource: DevExpress.data.AspNet.createStore({
+          key: "ID",
+          loadUrl: "/Project/GetVersion",
+          loadParams: { ID: masterDetailData.id },
+          updateUrl: "/Project/EditVersion",
+          deleteUrl: "/Project/DeleteVersion",
+          onBeforeSend: function (method, ajaxoptions) {
+            ajaxoptions.data.id = masterDetailData.id;
+            ajaxoptions.xhrFields = { withCredentials: true };
+          }
+        })
+      })
+  }
+}
+
+//Proje Versiyon Sil
+function DeleteProjectVersion(ID) {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    cancelButtonClass: 'btn btn-danger',
+    buttonsStyling: false,
+  })
+
+  swalWithBootstrapButtons({
+    title: "Uyarı",
+    text: "Silme İşlemini Onaylıyor Musunuz?",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Evet',
+    cancelButtonText: 'Hayır',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.value) {
+      var data = new FormData();
+
+      data.append('id', ID);
+
+      $.ajax({
+        url: "/Project/DeleteVersion/",
+        type: 'POST',
+        async: false,
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+          swalWithBootstrapButtons(
+            'Bilgi',
+            'Silme İşlemi Başarılı',
+            'success'
+          );
+          gridRefresh();
+        },
+        error: function (textStatus) {
+          console.log('ERRORS:23 ');
+        },
+        complete: function () {
+        }
+      });
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      swalWithBootstrapButtons(
+        'Bilgi',
+        'Silme İşlemi İptal Edildi',
+        'info'
+      )
+    }
+  })
+}
+
+//Proje Modül Sil
+function DeleteProjectModule(ID) {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    cancelButtonClass: 'btn btn-danger',
+    buttonsStyling: false,
+  })
+
+  swalWithBootstrapButtons({
+    title: "Uyarı",
+    text: "Silme İşlemini Onaylıyor Musunuz?",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Evet',
+    cancelButtonText: 'Hayır',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.value) {
+      var data = new FormData();
+
+      data.append('id', ID);
+
+      $.ajax({
+        url: "/Project/DeleteModule/",
+        type: 'POST',
+        async: false,
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+          swalWithBootstrapButtons(
+            'Bilgi',
+            'Silme İşlemi Başarılı',
+            'success'
+          );
+          gridRefresh();
+        },
+        error: function (textStatus) {
+          console.log('ERRORS:23 ');
+        },
+        complete: function () {
+        }
+      });
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      swalWithBootstrapButtons(
+        'Bilgi',
+        'Silme İşlemi İptal Edildi',
+        'info'
+      )
+    }
+  })
+}
+//ContextMenu Admin
+function showContextMenuAdmin(options, e) {
+  var contextMenu = $("<div>")
+    .dxContextMenu({
+      dataSource: [
+        { text: "Proje Not Ekle", icon: "plus" },
+        { text: "Modül Ekle", icon: "plus" },
+        { text: "Versiyon Ekle", icon: "plus" },
+        { text: "Proje Düzenle", icon: "edit" },
+        { text: "Proje Sil", icon: "trash" },
+      ],
+      onItemClick: function (item) {
+        handleItemClick(item, options);
+      }
+    })
+    .appendTo("body")
+    .dxContextMenu("instance");
+
+  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
+  contextMenu.show();
+}
+//ContextMenu Leader
+function showContextMenuLeader(options, e) {
+  var contextMenu = $("<div>")
+    .dxContextMenu({
+      dataSource: [
+        { text: "Proje Not Ekle", icon: "plus" },
+        { text: "Modül Ekle", icon: "plus" },
+        { text: "Versiyon Ekle", icon: "plus" },
+      ],
+      onItemClick: function (item) {
+        handleItemClick(item, options);
+      }
+    })
+    .appendTo("body")
+    .dxContextMenu("instance");
+
+  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
+  contextMenu.show();
+}
+//ContextMenu Developer 
+function showContextMenuDeveloper(options, e) {
+  var contextMenu = $("<div>")
+    .dxContextMenu({
+      dataSource: [
+        { text: "Proje Not Ekle", icon: "plus" },
+      ],
+      onItemClick: function (item) {
+        handleItemClick(item, options);
+      }
+    })
+    .appendTo("body")
+    .dxContextMenu("instance");
+  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
+  contextMenu.show();
+}
+
+function handleItemClick(item, options) {
+  var items = item.itemData.text;
+  var ID = options.data.id;
+  var data = options.data;
+  switch (items) {
+    case "Proje Not Ekle":
+      AddProjectNoteModal(ID);
+      break;
+    case "Modül Ekle":
+      openPopupAddModuleModal(ID);
+      break;
+    case "Versiyon Ekle":
+      openPopupAddVersionModal(ID);
+      break;
+    case "Proje Düzenle":
+      OpenProjectEditModal(data);
+      break;
+    case "Proje Sil":
+      CheckRequest(ID);
+      break;
+    default:
+      break;
+  }
+}
+
+//Modül ekle modal
+function openPopupAddModuleModal(ID) {
+  $("#addModuleProjectID").val(ID);
+  $("#AddModule").modal("toggle");
+}
+
+//Modül ekle
+function SaveModul() {
+  var formData = new FormData();
+
+  formData.append('ProjectID', $('#addModuleProjectID').val());
+  formData.append('Name', $('#addModuleName').val());
+  formData.append('Description', $('#addModuleDescription').val());
+
+  $.ajax({
+    url: "/Project/AddModule",
+    type: 'POST',
+    data: formData,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+
+      $('#AddModule').modal('toggle');
+      gridRefresh();
+      ClearModal();
+    },
+    error: function (e) {
+      console.log(e);
+    },
+    complete: function () {
+    }
+  });
+}
+
+//Versiyon ekle modal
+function openPopupAddVersionModal(ID) {
+  $("#addVersionProjectID").val(ID);
+  $("#AddVersion").modal("toggle");
+}
+
+//Versiyon ekle
+function SaveVersion() {
+  var formData = new FormData();
+
+  formData.append('ProjectID', $('#addVersionProjectID').val());
+  formData.append('Description', $('#addVersionDescription').val());
+  formData.append('DatabaseChange', $("#addVersionDatabaseChange").prop("checked") ? "true" : "false");
+  formData.append('IsNewVersion', $("#addVersionNewVersion").prop("checked") ? "true" : "false");
+
+
+  $.ajax({
+    url: "/Project/AddVersion",
+    type: 'POST',
+    data: formData,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+
+      $('#AddVersion').modal('toggle');
+      gridRefresh();
+      ClearModal();
+    },
+    error: function (e) {
+      console.log(e);
+    },
+    complete: function () {
+    }
+  });
+}
+
+
+//Modül detay düzenlemeye aç
+function openPopupEditModuleModal() {
+  $("#saveButtonModule").removeClass("invisible");
+  $("#DetailModuleName").prop("readonly", false);
+  $("#DetailModuleDescription").prop("readonly", false);
+  $("#DetailModuleProjectName").prop("disabled", false);
+}
+
+//Modül düzenle kaydet
+function openPopupEditModuleSave() {
+  var formData = new FormData();
+  formData.append('ID', $('#DetailModuleID').val());
+  formData.append('ProjectID', $('#DetailModuleProjectName').val());
+  formData.append('Name', $('#DetailModuleName').val());
+  formData.append('Description', $('#DetailModuleDescription').val());
+
+  $.ajax({
+    url: "/Project/EditModule",
+    type: 'POST',
+    data: formData,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      $("#saveButtonModule").addClass("invisible");
+      gridRefresh();
+    },
+    error: function (e) {
+      console.log(e);
+    },
+    complete: function () {
+    }
+  });
+}
+
+//Modül detay modal
+function ModuleDetailModal(row) {
+  $("#saveButtonModule").addClass("invisible");
+  $("#DetailModuleName").prop("readonly", true);
+  $("#DetailModuleDescription").prop("readonly", true);
+  $("#DetailModuleProjectName").prop("disabled", true);
+  WhiteBackGround();
+
+
+  var id = $("#ID").val();
+  //console.log(id);
+  //console.log(data.CreatedBy);
+  var data = row.data;
+  if (auth != 2) {
+    $("#editButtonModule").removeClass("invisible");
+  }
+
+  $('#DetailModuleID').val(data.ID);
+  $('#DetailModuleProjectName').val(data.ProjectID);
+  $('#DetailModuleName').val(data.Name);
+  $('#DetailModuleDescription').val(data.Description);
+
+  $('#DetailModule').modal('toggle');
+}
+
+
+//Versiyon detay düzenlemeye aç
+function openPopupEditVersionModal() {
+  $("#saveButtonVersion").removeClass("invisible");
+  $("#DetailVersionDescription").prop("readonly", false);
+  $("#DetailVersionProjectName").prop("disabled", false);
+  $("#DetailVersionDatabaseChange").prop("disabled", false);
+  $("#DetailVersionNewVersion").prop("disabled", false);
+  $("#DetailVersionNewVersion").removeClass("invisible");
+  $("#DetailVersionNewVersionLabel").removeClass("invisible");
+
+}
+
+//Versiyon düzenle kaydet
+function openPopupEditVersionSave() {
+  var formData = new FormData();
+  formData.append('ID', $('#DetailVersionID').val());
+  formData.append('ProjectID', $('#DetailVersionProjectName').val());
+  formData.append('Description', $('#DetailVersionDescription').val());
+  formData.append('Date', $('#DetailVersionDate').val());
+  formData.append('DatabaseChange', $("#DetailVersionDatabaseChange").prop("checked") ? "true" : "false");
+  formData.append('IsNewVersion', $("#DetailVersionNewVersion").prop("checked") ? "true" : "false");
+
+
+  $.ajax({
+    url: "/Project/EditVersion",
+    type: 'POST',
+    data: formData,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      $("#saveButtonModule").addClass("invisible");
+      gridRefresh();
+    },
+    error: function (e) {
+      console.log(e);
+    },
+    complete: function () {
+    }
+  });
+}
+
+//Versiyon detay modal
+function VersionDetailModal(row) {
+  $("#saveButtonVersion").addClass("invisible");
+  $("#DetailVersionDescription").prop("readonly", true);
+  $("#DetailVersionProjectName").prop("disabled", true);
+  $("#DetailVersionDatabaseChange").prop("disabled", true);
+  $("#DetailVersionNewVersion").addClass("invisible");
+  $("#DetailVersionNewVersionLabel").addClass("invisible");
+
+  WhiteBackGround();
+
+
+  var id = $("#ID").val();
+  //console.log(id);
+  //console.log(data.CreatedBy);
+  var data = row.data;
+  if (auth != 2) {
+    $("#editButtonVersion").removeClass("invisible");
+  }
+
+  $('#DetailVersionID').val(data.ID);
+  $('#DetailVersionProjectName').val(data.ProjectID);
+  $('#DetailVersionDescription').val(data.Description);
+  $('#DetailVersionDatabaseChange').prop('checked', data.DatabaseChange);
+  $('#DetailVersionNewVersion').prop('checked', data.IsNewVersion);
+  $('#DetailVersionDate').val(data.Date);
+
+
+
+  $('#DetailVersion').modal('toggle');
 }
