@@ -52,7 +52,7 @@
 
 @* Aksiyon Durumu Güncelleme *@
 <div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h5 class="modal-title h3" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
@@ -61,24 +61,16 @@
       <hr />
       <div class="modal-body">
         <input hidden id="actionID" />
-        <div class="row mb-3 justify-content-md-center">
-          <input type="hidden" id="actionStatusValue" />
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-1" data-value="0" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-2" data-value="1" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-3" data-value="2" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()"  id="btn-check-4" data-value="3" autocomplete="off">
-            <label class="btn btn-primary btn-lg"  for="btn-check-4">İptal/Reddedildi</label>
-          </div>
+        <input type="hidden" id="actionStatusValue" />
+        <div class="d-flex justify-content-around">
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-1" data-value="0" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-2" data-value="1" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-3" data-value="2" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-4" data-value="3" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
         </div>
         <div class="row mt-5">
           <div class="col-md-6">
@@ -140,7 +132,7 @@
               <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
             </div>
             <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Son Tarih</label>
+              <label style="font-weight:bold;">Hedef Tarih</label>
               <input class="form-control mt-2" readonly id="actionDetailEndDate" />
             </div>
             <div class="col-6 mt-3">
@@ -165,9 +157,9 @@
           </div>
         </div>
       </div>
-        <div class="modal-footer">
-          <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-        </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+      </div>
     </div>
   </div>
 </div>
