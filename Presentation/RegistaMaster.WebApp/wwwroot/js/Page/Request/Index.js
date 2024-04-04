@@ -385,7 +385,7 @@ function GetList() {
                         hint: "Aksiyon Ekle",
                         stylingMode: "text",
                         onClick: function (e) {
-                          openPopup(options.data.id);
+                          openPopup(options.data);
                         }
                       })
                       .appendTo(container);
@@ -401,7 +401,7 @@ function GetList() {
                     hint: "Aksiyon Ekle",
                     stylingMode: "text",
                     onClick: function (e) {
-                      openPopup(options.data.id);
+                      openPopup(options.data);
                     }
                   })
                   .appendTo(container);
@@ -502,13 +502,6 @@ function GetList() {
                 allowEditing: false,
                 visible: false,
               },
-              //{
-              //  dataField: "CreatedOn",
-              //  caption: "Aksiyon Açılma Tarihi",
-              //  alignment: 'center',
-              //  dataType: 'date',
-              //  format: 'dd/MM/yyyy',
-              //},
               {
                 dataField: "Subject",
                 caption: "Aksiyon Konusu",
