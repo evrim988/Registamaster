@@ -160,7 +160,7 @@
             </div>
             <div class="col-md-12 mt-3">
               <div class="mb-3">
-                <input class="form-control" type="file" id="fileInput" multiple>
+                <input class="form-control" onchange="CheckFileSize('fileInput')" type="file" id="fileInput" multiple>
               </div>
             </div>
             <div class="form-group col-md-4 mt-2" id="imagePreviewDiv" hidden>
@@ -173,7 +173,7 @@
       <div class="modal-footer">
         <button type="button" onclick="OpenImageModal()" class="btn btn-secondary">Resim Ekle</button>
         <button type="button" onclick="closeRequestModal()" class="btn btn-dark">Kapat</button>
-        <button type="button" onclick="SaveRequestModal()" class="btn btn-primary">Kaydet</button>
+        <button type="button" id="addSaveBtn" onclick="SaveRequestModal()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
   </div>
@@ -254,7 +254,7 @@
                   </div>
                 </div>
                 <div class="form-group col-md-12 mt-3">
-                  <input class="form-control" type="file" id="fileInputEdit" multiple>
+                  <input class="form-control" onchange="CheckFileSize('fileInputEdit')" type="file" id="fileInputEdit" multiple>
                 </div>
                 <div class="col-12 mt-3" id="editFilesDiv" hidden>
                   <label style="font-weight:bold;">Dosyalar:</label>
@@ -268,7 +268,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" onclick="closeEditRequestModal()" class="btn btn-dark">Kapat</button>
-        <button type="button" onclick="SaveRequestEditModal()" class="btn btn-primary">Kaydet</button>
+        <button type="button" id="editSaveBtn" onclick="SaveRequestEditModal()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
   </div>
