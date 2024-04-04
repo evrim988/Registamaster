@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
@@ -8,6 +10,8 @@ using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
+using RegistPackets.FileService.Interfaces;
+using RegistPackets.FileService.Models;
 using Action = RegistaMaster.Domain.Entities.Action;
 using Version = RegistaMaster.Domain.Entities.Version;
 
@@ -18,23 +22,29 @@ public class RequestRepository : Repository, IRequestRepository
   private readonly RegistaMasterContext context;
   private readonly UnitOfWork uow;
   private readonly SessionModel session;
-  public RequestRepository(RegistaMasterContext _context, SessionModel _session, UnitOfWork _uow) : base(_context, _session)
+  private readonly IConfiguration config;
+  private readonly IFileService fileService;
+
+  public RequestRepository(RegistaMasterContext _context, SessionModel _session, UnitOfWork _uow, IConfiguration _config, IFileService fileService) : base(_context, _session)
   {
     context = _context;
     uow = _uow;
     session = _session;
+    config = _config;
+    this.fileService = fileService;
   }
 
-  public async Task<string> RequestAdd(Request model)
+  public async Task<Request> RequestAdd(Request model)
   {
     try
     {
-      model.StartDate = DateTime.Now;
-      model.PlanedEndDate = model.StartDate.AddDays(7);
+      var time = DateTime.Now;
+      model.StartDate = time;
+      model.PlanedEndDate = time.AddDays(7);
       model.RequestStatus = RequestStatus.Open;
-      await uow.Repository.Add(model);
+      var request = await uow.Repository.Add(model);
       await uow.SaveChanges();
-      return "";
+      return request;
     }
     catch (Exception e)
     {
@@ -43,11 +53,22 @@ public class RequestRepository : Repository, IRequestRepository
     }
 
   }
-  public async Task<string> Update(Request model)
+  public async Task<Request> UpdateRequest(RequestGridDTO model)
   {
-    Update(model);
+    var request = await GetById<Request>(model.ID);
+    request.NotificationTypeID = model.NotificationTypeID;
+    request.CategoryID = model.CategoryID;
+    request.ProjectID = model.ProjectID;
+    request.ModuleID = model.ModuleID;
+    request.VersionID = model.VersionID;
+    request.Subject = model.Subject;
+    request.Description = model.Description;
+    request.PageURL = model.PageURL;
+    request.PictureURL = model.PictureURL;
+
+    Update(request);
     await uow.SaveChanges();
-    return "";
+    return request;
   }
   public void Delete(int id)
   {
@@ -56,9 +77,9 @@ public class RequestRepository : Repository, IRequestRepository
 
     Delete<Request>(id);
   }
-  public async Task<List<RequesGridDTO>> GetList()
+  public async Task<List<RequestGridDTO>> GetList()
   {
-    var model = GetNonDeletedAndActive<Request>(t => t.ObjectStatus == ObjectStatus.NonDeleted).OrderByDescending(s => s.ID).Select(t => new RequesGridDTO()
+    var model = GetNonDeletedAndActive<Request>(t => t.ObjectStatus == ObjectStatus.NonDeleted).OrderByDescending(s => s.ID).Select(t => new RequestGridDTO()
     {
       ID = t.ID,
       CreatedBy = t.CreatedBy,
@@ -80,6 +101,33 @@ public class RequestRepository : Repository, IRequestRepository
 
     return model;
   }
+
+  public async Task<List<RequestGridDTO>> GetListWithFiles()
+  {
+    var requests = await context.Requests.Where(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active).OrderByDescending(s => s.ID).Include(x => x.Files).Select(t => new RequestGridDTO()
+    {
+      ID = t.ID,
+      CreatedBy = t.CreatedBy,
+      Subject = t.Subject,
+      CategoryID = t.CategoryID,
+      NotificationTypeID = t.NotificationTypeID,
+      PageURL = t.PageURL,
+      PictureURL = t.PictureURL,
+      StartDate = t.StartDate,
+      CreatedOn = t.CreatedOn,
+      PlanedEndDate = t.PlanedEndDate,
+      RequestStatus = t.RequestStatus,
+      NotificationID = t.NotificationID,
+      VersionID = t.VersionID,
+      ModuleID = t.ModuleID,
+      ProjectID = t.ProjectID,
+      Description = t.Description,
+      Files = t.Files.Where(a => a.ObjectStatus == ObjectStatus.NonDeleted && a.Status == Status.Active).OrderByDescending(s => s.ID).ToList(),
+    }).ToListAsync();
+
+    return requests;
+  }
+
   public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
   {
     try
@@ -278,7 +326,6 @@ public class RequestRepository : Repository, IRequestRepository
     }
   }
 
-
   public async Task<List<SelectListItem>> GetModuleList(int ID)
   {
     return GetNonDeletedAndActive<Module>(t => t.ProjectID == ID && t.ObjectStatus == ObjectStatus.NonDeleted)
@@ -300,5 +347,115 @@ public class RequestRepository : Repository, IRequestRepository
   {
     return GetNonDeletedAndActive<Version>(t => t.ProjectID == ID && t.ObjectStatus == ObjectStatus.NonDeleted)
             .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
+  }
+
+  public async Task<string> CompleteRequest(int ID)
+  {
+    try
+    {
+      var request = await uow.Repository.GetById<Request>(ID);
+      request.RequestStatus = RequestStatus.Closed;
+      request.PlanedEndDate = DateTime.Now;
+      Update<Request>(request);
+      await uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> AddRequestFiles(List<IFormFile> files, int ID)
+  {
+    try
+    {
+      var filesResponces = new List<FileResponseModel>();
+      foreach (IFormFile file in files)
+      {
+        var fileRespose = fileService.SaveFile(file, "/Documents/RequestDocs");
+        FileResponseModel model = new();
+        model.FileName = fileRespose.FileName;
+        model.Extension = fileRespose.Extension;
+        model.FilePath = config["BasePaths:BaseUri"] + config["BasePaths:ServiceUri"] + "/" + fileRespose.FileName;
+        filesResponces.Add(model);
+      }
+      foreach (var file in filesResponces)
+      {
+        await uow.Repository.Add<RequestFile>(new RequestFile()
+        {
+          RequestID = ID,
+          FileName = file.FileName,
+          FileURL = file.FilePath
+        });
+      }
+      await uow.SaveChanges();
+      return "filesResponces";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> DeleteRequestFiles(List<string> fileIDs)
+  {
+    try
+    {
+      List<RequestFile> files = new();
+      foreach (string fileID in fileIDs)
+      {
+        files.Add(await GetById<RequestFile>(Convert.ToInt32(fileID)));
+      }
+      await DeleteRange<RequestFile>(files);
+      await uow.SaveChanges();
+      return "";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> DeleteFilesWithRequestID(int ID)
+  {
+    try
+    {
+      var files = GetNonDeletedAndActive<RequestFile>(t => t.RequestID == ID).ToList();
+      if (files.Count > 0)
+        await DeleteRange<RequestFile>(files);
+      return "";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> RequestDeleteWithActions(int ID)
+  {
+    try
+    {
+      var actions = GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).ToList();
+      foreach (var action in actions)
+      {
+        await Delete<Action>(action.ID);
+        var actionNotes = GetNonDeletedAndActive<ActionNote>(t => t.ActionID == action.ID).ToList();
+        await DeleteRange<ActionNote>(actionNotes);
+      }
+
+      var files = GetNonDeletedAndActive<RequestFile>(t => t.RequestID == ID).ToList();
+      if (files.Count > 0)
+        await DeleteRange<RequestFile>(files);
+
+      await Delete<Request>(ID);
+      await uow.SaveChanges();
+      return "1";
+    }
+
+    catch (Exception ex)
+    {
+      throw ex;
+    }
   }
 }

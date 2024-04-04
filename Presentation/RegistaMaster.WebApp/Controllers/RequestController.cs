@@ -1,20 +1,19 @@
 ﻿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Win32;
+using Microsoft.JSInterop.Implementation;
 using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
-using RegistaMaster.Domain.Enums;
-using Request = RegistaMaster.Domain.Entities.Request;
-using Action = RegistaMaster.Domain.Entities.Action;
-using DevExtreme.AspNet.Mvc;
-using NuGet.Protocol.Plugins;
-using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
-using RegistaMaster.Persistance.RegistaMasterContextes;
 using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
-using RegistaMaster.Domain.DTOModels.SecurityModels;
-using RegistaMaster.Domain.DTOModels.Entities.ActionNoteModels;
+using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
+using RegistaMaster.Persistance.RegistaMasterContextes;
+using RegistPackets.FileService.Interfaces;
+using RegistPackets.FileService.Models;
+using Action = RegistaMaster.Domain.Entities.Action;
+using Request = RegistaMaster.Domain.Entities.Request;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -52,7 +51,7 @@ public class RequestController : Controller
   }
 
   [HttpPost]
-  public async Task<string> Create(RequestDTO model, string base64)
+  public async Task<Request> Create(Request model, string base64)
   {
     try
     {
@@ -62,7 +61,7 @@ public class RequestController : Controller
         var ımageString = base64.Split(',');
         Guid guidFile = Guid.NewGuid();
         string fileName = "RequestImage" + guidFile + ".jpg";
-        var path = Path.Combine(webRootPath + "\\Modernize\\Img\\RequestFile\\", fileName);
+        var path = Path.Combine(webRootPath + "\\Documents\\RequestDocs\\", fileName);
         var bytes = Convert.FromBase64String(ımageString[1]);
         using (var imageFile = new FileStream(path, FileMode.Create))
         {
@@ -71,130 +70,53 @@ public class RequestController : Controller
         }
 
         var Extantion = Path.GetExtension(fileName);
-        var request = new Request()
-        {
-          PictureURL = fileName,
-          NotificationTypeID = model.NotificationTypeID,
-          CategoryID = model.CategoryID,
-          ProjectID = model.ProjectID,
-          ModuleID = model.ModuleID,
-          VersionID = model.VersionID,
-          Subject = model.Subject,
-          Description = model.Description,
-          PageURL = model.PageUrl
+        model.PictureURL = fileName;
 
-        };
-        await uow.RequestRepository.RequestAdd(request);
-        await uow.SaveChanges();
-        return "";
+        return await uow.RequestRepository.RequestAdd(model);
       }
       else
-      {
-        var request = new Request()
-        {
-          NotificationTypeID = model.NotificationTypeID,
-          CategoryID = model.CategoryID,
-          ProjectID = model.ProjectID,
-          ModuleID = model.ModuleID,
-          VersionID = model.VersionID,
-          Subject = model.Subject,
-          Description = model.Description,
-          PageURL = model.PageUrl
-
-        };
-        await uow.RequestRepository.RequestAdd(request);
-        await uow.SaveChanges();
-      }
-      return "1";
+        return await uow.RequestRepository.RequestAdd(model);
     }
     catch (Exception ex)
     {
       throw ex;
     }
-
   }
-  [HttpPost]
-  public async Task<string> RequestUpdate(RequestDTO model)
+
+  public Task<string> SaveRequestDoc(List<IFormFile> files, int ID)
   {
     try
     {
-      var req = await uow.Repository.GetById<Request>(model.ID);
-
-      req.NotificationTypeID = model.NotificationTypeID;
-      req.CategoryID = model.CategoryID;
-      req.ProjectID = model.ProjectID;
-      req.ModuleID = model.ModuleID;
-      req.VersionID = model.VersionID;
-      req.Subject = model.Subject;
-      req.Description = model.Description;
-      req.PageURL = model.PageUrl;
-      req.PictureURL = model.PictureURL;
-
-      //var request = new Request()
-      //{
-      //  ID = model.ID,
-      //  NotificationTypeID = model.NotificationTypeID,
-      //  CategoryID = model.CategoryID,
-      //  ProjectID = model.ProjectID,
-      //  ModuleID = model.ModuleID,
-      //  VersionID = model.VersionID,
-      //  RequestSubject = model.RequestSubject,
-      //  Description = model.Description,
-      //  PageURL = model.PageUrl,
-      //  PictureURL = model.PictureURL,
-      //  LastModifiedBy = model.LastModifiedBy,
-      //  LastModifiedOn = DateTime.Now,
-      //  CreatedOn = model.CreatedOn,
-      //  ObjectStatus = ObjectStatus.NonDeleted,
-      //  Status = Status.Active,
-      //  StartDate = DateTime.Now,
-      //  PlanedEndDate = DateTime.Now.AddDays(7),
-      //};
-      context.Update(req);
-      await context.SaveChangesAsync();
-      return "1";
+      return uow.RequestRepository.AddRequestFiles(files, ID);
     }
     catch (Exception ex)
     {
       throw ex;
     }
+  }
 
+  [HttpPost]
+  public async Task<Request> RequestUpdate(RequestGridDTO model)
+  {
+    try
+    {
+      return await uow.RequestRepository.UpdateRequest(model);
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
   }
   public async Task<object> GetList(DataSourceLoadOptions options)
   {
-    var models = await uow.RequestRepository.GetList();
+    //var models = await uow.RequestRepository.GetList();
+    var models = await uow.RequestRepository.GetListWithFiles();
     return DataSourceLoader.Load(models, options);
   }
 
   public async Task<string> GetRequestDetail(int ID)
   {
-    var model = uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).OrderByDescending(t => t.ID);
-
-    List<ActionDTO> actionList = new List<ActionDTO>();
-
-    foreach (var item in model)
-    {
-      ActionDTO actions = new ActionDTO()
-      {
-        ID = item.ID,
-        Description = item.Description,
-        EndDate = item.EndDate,
-        OpeningDate = item.OpeningDate,
-        ResponsibleID = item.ResponsibleID,
-        ActionStatus = item.ActionStatus,
-        ActionPriorityStatus = item.ActionPriorityStatus,
-        Subject = item.Subject,
-        LastModifiedBy = item.LastModifiedBy,
-        RequestID = ID,
-        CreatedOn = item.CreatedOn,
-        CreatedBy = item.CreatedBy,
-        StartDate = item.StartDate,
-        CompleteDate = item.CompleteDate,
-      };
-
-      actionList.Add(actions);
-    }
-    return JsonConvert.SerializeObject(actionList);
+    return JsonConvert.SerializeObject(uow.ActionRepository.GetActionsByRequestID(ID));
   }
 
   [HttpPost]
@@ -206,6 +128,7 @@ public class RequestController : Controller
       if (model.Count > 0)
         return "-1";
       await uow.Repository.Delete<Request>(ID);
+      await uow.RequestRepository.DeleteFilesWithRequestID(ID);
       await uow.SaveChanges();
       return "1";
 
@@ -249,8 +172,6 @@ public class RequestController : Controller
 
   }
 
-
-
   public async Task<string> DeleteActionItem(int key)
   {
     try
@@ -264,8 +185,6 @@ public class RequestController : Controller
       throw ex;
     }
   }
-
-
 
   public async Task<IActionResult> GetRequestStatus()
   {
@@ -374,19 +293,8 @@ public class RequestController : Controller
   {
     try
     {
-      var actions = uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).ToList();
-      foreach (var action in actions)
-      {
-        await uow.Repository.Delete<Action>(action.ID);
-        var actionNotes = uow.Repository.GetNonDeletedAndActive<ActionNote>(t => t.ActionID == action.ID).ToList();
-        await uow.Repository.DeleteRange<ActionNote>(actionNotes);
-      }
-
-      await uow.Repository.Delete<Request>(ID);
-      await uow.SaveChanges();
-      return "1";
+      return await uow.RequestRepository.RequestDeleteWithActions(ID);
     }
-
     catch (Exception ex)
     {
       throw ex;
@@ -397,12 +305,19 @@ public class RequestController : Controller
   {
     try
     {
-      var request = await uow.Repository.GetById<Request>(ID);
-      request.RequestStatus = RequestStatus.Closed;
-      request.PlanedEndDate = DateTime.Now;
-      uow.Repository.Update<Request>(request);
-      await uow.SaveChanges();
-      return "1";
+      return await uow.RequestRepository.CompleteRequest(ID);
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> DeleteFile([FromBody] List<string> files)
+  {
+    try
+    {
+      return await uow.RequestRepository.DeleteRequestFiles(files);
     }
     catch (Exception ex)
     {

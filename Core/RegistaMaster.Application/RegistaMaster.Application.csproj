@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="RegistaPackets.Responder" Version="1.0.5" />
+    <PackageReference Include="RegistPackets.FileService" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,8 +2,8 @@
 {
   public class RequestFile : BaseEntitiy
   {
+    public string FileName { get; set; }
     public string FileURL { get; set; }
     public int RequestID { get; set; }
-    public Request Request { get; set; }
   }
 }

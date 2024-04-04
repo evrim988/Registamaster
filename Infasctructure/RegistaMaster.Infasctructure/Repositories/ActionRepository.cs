@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MySqlX.XDevAPI.Relational;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
@@ -164,4 +165,42 @@ public class ActionRepository : Repository, IActionRepository
          throw ex;
       }
    }
+
+  public List<ActionDTO> GetActionsByRequestID(int ID)
+  {
+    try
+    {
+      var model = GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).OrderByDescending(t => t.ID);
+
+      List<ActionDTO> actionList = new List<ActionDTO>();
+
+      foreach (var item in model)
+      {
+        ActionDTO actions = new ActionDTO()
+        {
+          ID = item.ID,
+          Description = item.Description,
+          EndDate = item.EndDate,
+          OpeningDate = item.OpeningDate,
+          ResponsibleID = item.ResponsibleID,
+          ActionStatus = item.ActionStatus,
+          ActionPriorityStatus = item.ActionPriorityStatus,
+          Subject = item.Subject,
+          LastModifiedBy = item.LastModifiedBy,
+          RequestID = ID,
+          CreatedOn = item.CreatedOn,
+          CreatedBy = item.CreatedBy,
+          StartDate = item.StartDate,
+          CompleteDate = item.CompleteDate,
+        };
+
+        actionList.Add(actions);
+      }
+      return actionList;
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 }

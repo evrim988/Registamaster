@@ -557,6 +557,10 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FileURL")
                         .IsRequired()
                         .HasColumnType("text");
@@ -845,13 +849,11 @@ namespace RegistaMaster.Persistance.Migrations
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.RequestFile", b =>
                 {
-                    b.HasOne("RegistaMaster.Domain.Entities.Request", "Request")
+                    b.HasOne("RegistaMaster.Domain.Entities.Request", null)
                         .WithMany("Files")
                         .HasForeignKey("RequestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.User", b =>

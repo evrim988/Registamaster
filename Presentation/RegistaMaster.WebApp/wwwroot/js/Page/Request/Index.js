@@ -266,8 +266,8 @@ function GetList() {
 
             $('<div>')
               .append($('<img>', {
-                src: '/Modernize/Img/RequestFile/' + options.value, class: "rounded-circle", width: "35", height: "35", click: function () {
-                  OpenPartImage('/Modernize/Img/RequestFile/' + options.value);
+                src: '/Documents/RequestDocs/' + options.value, class: "rounded-circle", width: "35", height: "35", click: function () {
+                  OpenPartImage('/Documents/RequestDocs/' + options.value);
                 }
               }))
               .appendTo(container);
@@ -783,7 +783,7 @@ function closeImageModal() {
 function closeEditRequestModal() {
   $('#RequestEditModal').modal('hide');
 }
-//talep ekle modal
+//talep ekle
 function SaveRequestModal() {
 
   const swalWithBootstrapButtons = swal.mixin({
@@ -819,10 +819,15 @@ function SaveRequestModal() {
     cache: false,
     processData: false,
     contentType: false,
-    success: function (data) {
-      //console.log(data);
-      closeRequestModal();
-      gridRefresh();
+    success: function (response) {
+      //console.log(response);
+      if ($('#fileInput')[0].files.length > 0) {
+        UploadFile(response.id);
+      }
+      else {
+        closeRequestModal();
+        gridRefresh();
+      }
     },
     error: function (e) {
       console.log(e);
@@ -832,6 +837,35 @@ function SaveRequestModal() {
   });
 }
 
+
+function UploadFile(ID) {
+  var input = $('#fileInput')[0];
+
+  var formData = new FormData();
+  var files = input.files;
+
+  for (var i = 0; i < files.length; i++) {
+    formData.append('files', files[i]);
+  }
+
+  formData.append('ID', ID);
+
+  $.ajax({
+    url: '/Request/SaveRequestDoc',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log('Success:');
+      closeRequestModal();
+      gridRefresh();
+    },
+    error: function (xhr, status, error) {
+      console.error('Error:', error);
+    }
+  });
+}
 
 //talep ekle proje seçiminden sonra select list içeriklerinin hazırlanması
 function GetSelectList() {
@@ -1036,8 +1070,28 @@ function RequestDetail(data) {
   $("#detailRequestImage").val(data.pictureURL);
 
 
-  var imagePath = data.pictureURL ? "/Modernize/Img/RequestFile/" + data.pictureURL : "/Modernize/Img/yok.png";
+  var imagePath = data.pictureURL ? "/Documents/RequestDocs/" + data.pictureURL : "/Modernize/Img/yok.png";
   $("#detailRequestImage").attr("src", imagePath);
+
+  if (data.files.length > 0) {
+    $('#detailFiles a').remove();
+    data.files.forEach(addLink);
+    $("#detailFilesDiv").removeAttr("hidden");
+  }
+  else {
+    $("#detailFilesDiv").attr("hidden", "hidden");
+  }
+  function addLink(item) {
+    var hyperlink = $('<a>', {
+      href: item.fileURL,
+      text: item.fileName,
+      class: 'list-group-item group-list-item-action',
+      target: '_blank'
+    });
+    console.log("fileURL");
+    console.log(item.fileURL);
+    $('#detailFiles').append(hyperlink);
+  }
 
   var projectID = new FormData();
 
@@ -1140,49 +1194,82 @@ function openEditModals(data, ID) {
   $("#PageEditUrl").val(data.pageURL);
   $("#RequestImage").val(data.pictureURL);
   $("#ID").val(ID);
-  $("#LastModifiedBy").val(data.lastModifiedBy);
-  $("#CustomerID").val(data.customerID);
-  $("#CreatedOn").val(data.createdOn);
 
-
-  var imagePath = data.pictureURL ? "/Modernize/Img/RequestFile/" + data.pictureURL : "/Modernize/Img/yok.png";
+  var imagePath = data.pictureURL ? "/Documents/RequestDocs/" + data.pictureURL : "/Modernize/Img/yok.png";
   $("#RequestImage").attr("src", imagePath);
+
+  if (data.files.length > 0) {
+    $('#editFiles li').remove();
+    data.files.forEach(addLi);
+    $("#editFilesDiv").removeAttr("hidden");
+  }
+  else {
+    $("#editFilesDiv").attr("hidden", "hidden");
+  }
+  function addLi(item) {
+    var newLi = $('<li>', {
+      class: 'list-group-item'
+    });
+    
+    var checkbox = $('<input>', {
+      class: 'form-check-input me-1',
+      id: item.id,
+      type: 'checkbox',
+      value: '',
+      'data-toggle': 'tooltip',
+      title: 'Silmek için işaretleyiniz'
+    }).appendTo(newLi);
+
+    $('<a>', {
+      class: 'form-check-label',
+      href: item.fileURL,
+      text: item.fileName,
+      target: '_blank'
+    }).appendTo(newLi);
+
+    $('#editFiles').append(newLi);
+  }
 
   var projectID = new FormData();
 
   projectID.append('id', data.projectID);
 
   //module select list
-  $.ajax({
-    url: "/Request/GetModuleList",
-    type: 'POST',
-    async: false,
-    data: projectID,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
-      //console.log(data);
-      if (!data || data === "1") {
-        return;
-      }
-      $("#ModuleEditID").empty();
-      var object = JSON.parse(data);
-      if (object.length != 0) {
-        /*            var s = '<option selected="selected" disabled value="-1">Lütfen Seçiniz</option>';*/
-        var s;
-        for (var i = 0; i < object.length; i++) {
-          s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+  if (data.moduleID != null) {
+    $.ajax({
+      url: "/Request/GetModuleList",
+      type: 'POST',
+      async: false,
+      data: projectID,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        //console.log(data);
+        if (!data || data === "1") {
+          return;
         }
-
+        $("#ModuleEditID").empty();
+        var object = JSON.parse(data);
+        var s;
+        if (object.length != 0) {
+          for (var i = 0; i < object.length; i++) {
+            s += '<option value="' + object[i].Value + '">' + object[i].Text + '</option>';
+          }
+        }
         $("#ModuleEditID").html(s);
+      },
+      complete: function () {
+        $("#ModuleEditID").val(data.moduleID);
       }
+    });
+  }
+  else {
+    var s = '<option selected="selected" disabled value="-1">Bu Projenin Modülü Bulunmamaktadır.</option > ';
+    $("#ModuleEditID").html(s);
+    $("#ModuleEditID").val(-1);
+  }
 
-    },
-    complete: function () {
-      $("#ModuleEditID").val(data.moduleID);
-    }
-  });
 
   //versiyon select list
   $.ajax({
@@ -1299,6 +1386,16 @@ function SaveRequestEditModal() {
 
   //console.log(formData);
 
+  var files = [];
+
+  var boxes = $("#editFiles").find("li input");
+  boxes.each(function (index, element) {
+    if (element.checked) {
+      var id = $(element).attr("id");
+      files.push(id);
+    }
+  });
+
   $.ajax({
     url: "/Request/RequestUpdate",
     type: 'POST',
@@ -1307,18 +1404,73 @@ function SaveRequestEditModal() {
     processData: false,
     contentType: false,
     success: function (data) {
-
       //console.log(data);
-      $("#RequestEditModal").modal("toggle");
-      gridRefresh();
-
+      if (files.length == 0 && $('#fileInputEdit')[0].files.length == 0) {
+        $("#RequestEditModal").modal("toggle");
+        gridRefresh();
+      }
+      else if ($('#fileInputEdit')[0].files.length > 0) {
+        UploadFileEdit($("#ID").val());
+      }
     },
     error: function (e) {
       console.log(e);
     }
   });
 
+ 
+  if (files.length != 0) {
+    $.ajax({
+      url: "/Request/DeleteFile",
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(files),
+
+      success: function (data) {
+        if ($('#fileInputEdit')[0].files.length == 0) {
+          $("#RequestEditModal").modal("toggle");
+          gridRefresh();
+        }
+        //console.log(data);
+      },
+      error: function (e) {
+        console.log(e);
+      }
+    });
+  }
 }
+
+function UploadFileEdit(ID) {
+  var input = $('#fileInputEdit')[0];
+
+  var formData = new FormData();
+  var files = input.files;
+
+  for (var i = 0; i < files.length; i++) {
+    formData.append('files', files[i]);
+  }
+
+  formData.append('ID', ID);
+
+  $.ajax({
+    url: '/Request/SaveRequestDoc',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      console.log('Success:');
+      $("#RequestEditModal").modal("toggle");
+      $('#fileInputEdit').val('');
+      gridRefresh();
+    },
+    error: function (xhr, status, error) {
+      console.error('Error:', error);
+    }
+  });
+}
+
+
 //aksiyon ekle popup
 function openPopup(data) {
   var ID = data.id;
@@ -2083,7 +2235,7 @@ function ChangeActionStatusModal(data) {
   selectButtonByStatus(actionStatus);
   $("#changeActionStatus").modal("toggle");
 }
-
+//aksiyon notları grid
 function GetActionNoteList(ID) {
   //console.log(ID);
   var grid = $(actionNotesGridContainer).dxDataGrid({
@@ -2273,7 +2425,7 @@ function toggleButtons() {
     }
   });
 }
-
+//aksiyon notu sil
 function DeleteActionNote(ID) {
   //console.log(ID);
   const swalWithBootstrapButtons = swal.mixin({
@@ -2330,6 +2482,7 @@ function DeleteActionNote(ID) {
     }
   })
 }
+//aksiyon notu kaydet
 function ActionNoteSave() {
   if ($('#actionNoteID').val() == 0) {
     var model = {};
@@ -2383,6 +2536,7 @@ function ActionNoteSave() {
   }
 }
 
+//aksiyon not ekle modal kapat
 function closeModalActionNote() {
   $("#actionNoteTitle").val("");
   $("#actionNoteDescription").val("");
@@ -2391,6 +2545,7 @@ function closeModalActionNote() {
   $("#changeActionStatus").modal("show");
 }
 
+//aksiyon note detay modal
 function ActionNoteDetail(data) {
   //console.log(data);
 
@@ -2409,6 +2564,7 @@ function ActionNoteDetail(data) {
   $("#actionNoteDetail").modal("toggle");
 }
 
+//aksiyon not düzenle
 function ActionNoteEdit(data) {
   //console.log(data);
 
@@ -2423,6 +2579,7 @@ function ActionNoteEdit(data) {
   $("#changeActionStatus").modal("hide");
 }
 
+//aksiyon note detay modal kapat
 function closeModalActionDetailNote() {
   $("#actionNoteDetail").modal("toggle");
   if ($("#detail").val() == 1)
@@ -2545,6 +2702,7 @@ function CheckButtonStatus(data) {
   }
 }
 
+//talebe fotoğraf ekleme sırasında fotografı tekrar görebilmek için fotoğraf popup
 function OpenImage() {
   var imgSrc = $(imagePreview).attr('src');
   $.fancybox.open({

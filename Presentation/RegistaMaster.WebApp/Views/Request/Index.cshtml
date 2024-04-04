@@ -51,6 +51,10 @@
   .actives {
     box-shadow: 0px 0px 10px 10px rgba(0,0,255,.4);
   }
+
+  .customWidth {
+    max-width: 1300px !important;
+  }
 </style>
 
 <div class="main-content">
@@ -122,7 +126,7 @@
               </select>
               <h1></h1>
             </div>
-            <div class="form-group col-md-6 mt-1">
+            <div class="form-group col-md-6">
               <label style="font-weight:bold;">Proje:<span class="text-danger">*</span></label>
               <select asp-for="ProjectID" onchange="GetSelectList()" asp-items="@Model.Project" id="ProjectID" class="form-control select2 mt-1" name="ProjectID">
                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
@@ -130,29 +134,34 @@
               <h1></h1>
 
             </div>
-            <div class="form-group col-md-6 mt-1">
-              <label style="font-weight:bold;">Modül<span class="text-danger">*</span></label>
-              <select asp-for="ModuleID" id="ModuleID" class="form-control select2 mt-1" name="ModuleID"></select>
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6 mt-1">
+            <div class="form-group col-md-6">
               <label style="font-weight:bold;">Versiyon:<span class="text-danger">*</span></label>
               <select asp-for="VersionID" id="VersionID" class="form-control select2 mt-1" name="VersionID"></select>
               <h1></h1>
             </div>
-            <div class="form-group col-md-6 mt-1">
+            <div class="form-group col-md-6">
+              <label style="font-weight:bold;">Modül<span class="text-danger">*</span></label>
+              <select asp-for="ModuleID" id="ModuleID" class="form-control select2 mt-1" name="ModuleID"></select>
+              <h1></h1>
+            </div>
+            <div class="form-group col-md-6">
               <label style="font-weight:bold;">Sayfa Linki:</label>
               <input asp-for="PageUrl" type="text" required class="form-control mt-1" name="PageUrl" />
             </div>
-            <div class="form-group col-md-12 mt-1">
+            <div class="form-group col-md-12">
               <label style="font-weight:bold;">Konu:<span class="text-danger">*</span></label>
               <input asp-for="Subject" type="text" required class="form-control mt-1" name="Subject" />
               <h1></h1>
             </div>
-            <div class="form-group col-md-12 mt-1">
+            <div class="form-group col-md-12">
               <label style="font-weight:bold;">Açıklama:<span class="text-danger">*</span></label>
               <textarea asp-for="Description" type="text" required class="form-control mt-1" name="Description" rows="3"></textarea>
               <h1></h1>
+            </div>
+            <div>
+              <div class="mb-3">
+                <input class="form-control" type="file" id="fileInput" multiple>
+              </div>
             </div>
             <div class="form-group col-md-4 mt-2" id="imagePreviewDiv" hidden>
               <label class="mb-1 me-2" style="font-weight:bold;">Eklenen Resim:</label>
@@ -182,68 +191,79 @@
       <div class="modal-body">
         <form>
           <div class="row">
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Bildirim Türü:</label>
-              <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="NotificationEditTypeID" class="form-control select2" name="NotificationTypeID">
-                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
+            <div class="col-md-8">
+              <div class="row">
+                <div id="ID" hidden></div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Bildirim Türü:</label>
+                  <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="NotificationEditTypeID" class="form-control select2 mt-1" name="NotificationTypeID">
+                    <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+                  </select>
+                  <h1></h1>
+                </div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Kategori:</label>
+                  <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryEditID" class="form-control select2 mt-1" name="CategoryID">
+                    <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                  </select>
+                  <h1></h1>
+                </div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Proje:</label>
+                  <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="ProjectEditID" class="form-control select2 mt-1" name="ProjectID">
+                    <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                  </select>
+                  <h1></h1>
+                </div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Versiyon:</label>
+                  <select asp-for="VersionID" id="VersionEditID" class="form-control select2 mt-1" name="VersionID">
+                    <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                  </select>
+                  <h1></h1>
+                </div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Modül:</label>
+                  <select asp-for="ModuleID" id="ModuleEditID" class="form-control select2 mt-1" name="ModuleID">
+                    <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                  </select>
+                  <h1></h1>
+                </div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Sayfa Linki:</label>
+                  <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control mt-1" name="PageUrl" />
+                </div>
+                <div class="form-group col-md-12">
+                  <label style="font-weight:bold;">Konu:</label>
+                  <input asp-for="Subject" type="text" id="RequestEditSubject" required class="form-control mt-1" name="Subject" />
+                  <h1></h1>
+                </div>
+                <div class="form-group col-md-12">
+                  <label style="font-weight:bold;">Açıklama:</label>
+                  <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control mt-1" name="Description"></textarea>
+                  <h1></h1>
+                </div>
+                <div class="form-group col-md-12 mt-2">
+                  <input class="form-control" type="file" id="fileInputEdit" multiple>
+                </div>
+              </div>
             </div>
-
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Kategori:</label>
-              <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryEditID" class="form-control select2" name="CategoryID">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Proje:</label>
-              <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="ProjectEditID" class="form-control select2" name="ProjectID">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
-
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Modül:</label>
-              <select asp-for="ModuleID" id="ModuleEditID" class="form-control select2" name="ModuleID">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Versiyon:</label>
-              <select asp-for="VersionID" id="VersionEditID" class="form-control select2" name="VersionID">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
-              </select>
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Konu:</label>
-              <input asp-for="Subject" type="text" id="RequestEditSubject" required class="form-control" name="Subject" />
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Sayfa Linki:</label>
-              <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control" name="PageUrl" />
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Açıklama:</label>
-              <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control" name="Description"></textarea>
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Görüntü:</label>
-              <div class="card-img-container">
-                <img id="RequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
+            <div class="col-md-4">
+              <div class="row align-items-center">
+                <div class="col-12" style="justify-content: center">
+                  <label style="font-weight:bold;">Görüntü:</label>
+                  <div class="d-flex justify-content-center me-1">
+                    <img id="RequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
+                  </div>
+                </div>
+                <div class="col-12 mt-3" id="editFilesDiv" hidden>
+                  <label style="font-weight:bold;">Dosyalar:</label>
+                  <div class="list-group list-group-flush mt-1" id="editFiles">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div id="ID" hidden></div>
-          <div id="LastModifiedBy" hidden></div>
-          <div id="CustomerID" hidden></div>
-          <div id="CreatedOn" hidden></div>
         </form>
       </div>
       <div class="modal-footer">
@@ -256,7 +276,7 @@
 
 @* Talep Detay Modalı *@
 <div class="modal fade" id="RequestDetailModal" tabindex="-1" role="dialog" aria-labelledby="RequestDetailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-xl customWidth" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title" id="RequestDetailModalLabel">Talep Detayı</h3>
@@ -266,50 +286,63 @@
       <div class="modal-body">
         <form>
           <div class="row">
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Bildirim Türü:</label>
-              <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="detailNotificationTypeID" class="form-control mt-2" disabled name="NotificationTypeID"></select>
+            <div class="form-group col-md-8">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Bildirim Türü:</label>
+                  <select asp-for="NotificationTypeID" asp-items="@Model.NotificationType" id="detailNotificationTypeID" class="form-control mt-1" disabled name="NotificationTypeID"></select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Kategori:</label>
+                  <select asp-for="CategoryID" asp-items="@Model.Category" id="detailCategoryID" class="form-control mt-1" disabled name="CategoryID"></select>
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Proje:</label>
+                  <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="detailProjectID" class="form-control mt-1" disabled name="ProjectID"></select>
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Versiyon:</label>
+                  <select asp-for="VersionID" id="detailVersionID" class="form-control mt-1" disabled name="VersionID"></select>
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Modül:</label>
+                  <select asp-for="ModuleID" id="detailModuleID" class="form-control mt-1" disabled name="ModuleID"></select>
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Sayfa Linki:</label>
+                  <input asp-for="PageUrl" type="text" id="detailPageUrl" readonly class="form-control mt-1" name="PageUrl" />
+                </div>
+                <div class="col-6 mt-2">
+                  <label style="font-weight:bold;">Açılma Tarihi:</label>
+                  <input class="form-control mt-2" readonly id="detailOpeningDate" />
+                </div>
+                <div class="col-6 mt-2">
+                  <label style="font-weight:bold;">Tamamlanma Tarihi:</label>
+                  <input class="form-control mt-1" readonly id="detailEndDate" />
+                </div>
+                <div class="form-group col-md-12 mt-2">
+                  <label style="font-weight:bold;">Konu:</label>
+                  <input asp-for="Subject" type="text" id="detailSubject" readonly class="form-control mt-1" name="Subject" />
+                </div>
+                <div class="form-group col-md-12 mt-2">
+                  <label style="font-weight:bold;">Açıklama:</label>
+                  <textarea asp-for="Description" type="text" id="detailDescription" readonly class="form-control mt-1" rows="3" name="Description"></textarea>
+                </div>
+              </div>
             </div>
-            <div class="form-group col-md-6">
-              <label style="font-weight:bold;">Kategori:</label>
-              <select asp-for="CategoryID" asp-items="@Model.Category" id="detailCategoryID" class="form-control mt-2" disabled name="CategoryID"></select>
-            </div>
-            <div class="form-group col-md-6 mt-3">
-              <label style="font-weight:bold;">Proje:</label>
-              <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="detailProjectID" class="form-control mt-2" disabled name="ProjectID"></select>
-            </div>
-            <div class="form-group col-md-6 mt-3">
-              <label style="font-weight:bold;">Modül:</label>
-              <select asp-for="ModuleID" id="detailModuleID" class="form-control mt-2" disabled name="ModuleID"></select>
-            </div>
-            <div class="form-group col-md-6 mt-3">
-              <label style="font-weight:bold;">Versiyon:</label>
-              <select asp-for="VersionID" id="detailVersionID" class="form-control mt-2" disabled name="VersionID"></select>
-            </div>
-            <div class="form-group col-md-6 mt-3">
-              <label style="font-weight:bold;">Sayfa Linki:</label>
-              <input asp-for="PageUrl" type="text" id="detailPageUrl" readonly class="form-control mt-2" name="PageUrl" />
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Açılma Tarihi:</label>
-              <input class="form-control mt-2" readonly id="detailOpeningDate" />
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Tamamlanma Tarihi:</label>
-              <input class="form-control mt-2" readonly id="detailEndDate" />
-            </div>
-            <div class="form-group col-md-12 mt-3">
-              <label style="font-weight:bold;">Konu:</label>
-              <input asp-for="Subject" type="text" id="detailSubject" readonly class="form-control mt-2" name="Subject" />
-            </div>
-            <div class="form-group col-md-12 mt-3">
-              <label style="font-weight:bold;">Açıklama:</label>
-              <textarea asp-for="Description" type="text" id="detailDescription" readonly class="form-control mt-2" rows="5" name="Description"></textarea>
-            </div>
-            <div class="form-group col-md-6 mt-3">
-              <label style="font-weight:bold;">Görüntü:</label>
-              <div class="card-img-container mt-2">
-                <img id="detailRequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
+            <div class="col-md-4">
+              <div class="row align-items-center">
+                <div class="col-12" style="justify-content: center">
+                  <label style="font-weight:bold;">Görüntü:</label>
+                  <div class="d-flex justify-content-center">
+                    <img id="detailRequestImage" class="image-popup mt-1" style="height:250px; width:250px;" src="@Model.PictureURL">
+                  </div>
+                </div>
+                <div class="col-12 mt-3" id="detailFilesDiv" hidden>
+                  <label style="font-weight:bold;">Dosyalar:</label>
+                  <div class="list-group list-group-flush list-group-numbered mt-1" id="detailFiles">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -323,7 +356,7 @@
 </div>
 @* Aksiyon Durumu Güncelleme *@
 <div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h3 class="modal-title" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h3>
@@ -379,7 +412,7 @@
 
 @* Aksiyon Notu Ekleme/Düzenleme Modal *@
 <div class="modal fade" id="actionNoteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="actionNoteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h5 class="modal-title h3" id="actionNoteModalLabel"></h5>
@@ -413,7 +446,7 @@
 
 @* Aksiyon Notu Görüntüleme *@
 <div class="modal fade" id="actionNoteDetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h3 class="modal-title" id="exampleModalLabel">Not Detayı</h3>
@@ -493,7 +526,7 @@
 
 <!--Aksiyon İptal/Reddedildi  modal-->
 <div class="modal fade" id="CancelModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h3 class="modal-title" id="exampleModalLabel">İptal/Reddedildi</h3>
@@ -531,46 +564,50 @@
       <div class="modal-body">
         <form>
           <div class="row">
-            <div class="col-6">
-              <label style="font-weight:bold;">Öncelik Durumu</label>
-              <select class="form-control mt-2" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionDetailActionPriority"></select>
+            <div class="col-8">
+              <div class="row">
+                <div class="col-6">
+                  <label style="font-weight:bold;">Öncelik Durumu</label>
+                  <select class="form-control mt-1" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionDetailActionPriority"></select>
+                </div>
+                <div class="col-6">
+                  <label style="font-weight:bold;">Durum</label>
+                  <select id="actionDetailStatus" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control mt-1"></select>
+                </div>
+                <div class="col-6 mt-1">
+                  <label style="font-weight:bold;">Sorumlu Kişi</label>
+                  <select class="form-control mt-1" disabled asp-items="@Model.Responsible" id="actionDetailResponsible"></select>
+                </div>
+                <div class="col-6 mt-1">
+                  <label style="font-weight:bold;">Konu</label>
+                  <input class="form-control mt-1" readonly id="actionDetailSubject" />
+                </div>
+                <div class="col-6 mt-1">
+                  <label style="font-weight:bold;">Açılma Tarihi</label>
+                  <input class="form-control mt-1" readonly id="actionDetailOpeningDate" />
+                </div>
+                <div class="col-6 mt-1">
+                  <label style="font-weight:bold;">Son Tarih</label>
+                  <input class="form-control mt-1" readonly id="actionDetailEndDate" />
+                </div>
+                <div class="col-6 mt-1">
+                  <label style="font-weight:bold;">Başlangıç Tarihi</label>
+                  <input class="form-control mt-1" readonly id="actionDetailStartDate" />
+                </div>
+                <div class="col-6 mt-1">
+                  <label style="font-weight:bold;">Bitiş Tarihi</label>
+                  <input class="form-control mt-1" readonly id="actionDetailCompleteDate" />
+                </div>
+              </div>
             </div>
-            <div class="col-6">
-              <label style="font-weight:bold;">Durum</label>
-              <select id="actionDetailStatus" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control mt-2"></select>
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Sorumlu Kişi</label>
-              <select class="form-control mt-2" disabled asp-items="@Model.Responsible" id="actionDetailResponsible"></select>
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Konu</label>
-              <input class="form-control mt-2" readonly id="actionDetailSubject" />
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Açılma Tarihi</label>
-              <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Son Tarih</label>
-              <input class="form-control mt-2" readonly id="actionDetailEndDate" />
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Başlangıç Tarihi</label>
-              <input class="form-control mt-2" readonly id="actionDetailStartDate" />
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Bitiş Tarihi</label>
-              <input class="form-control mt-2" readonly id="actionDetailCompleteDate" />
-            </div>
-            <div class="col-12 mt-3">
+            <div class="col-4">
               <label style="font-weight:bold;">Açıklama</label>
-              <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
+              <textarea class="form-control mt-1" readonly id="actionDetailDescription" rows="10"></textarea>
             </div>
           </div>
         </form>
         <div class="row" style="padding-left:10px;padding-right:10px">
-          <h3 class="modal-title mt-5" style="padding-left:20px">Notlar</h3>
+          <h5 class="modal-title mt-2" style="padding-left:20px">Notlar</h5>
           <hr />
           <div class="col-12">
             <div id="actionNotesGridContainer"></div>

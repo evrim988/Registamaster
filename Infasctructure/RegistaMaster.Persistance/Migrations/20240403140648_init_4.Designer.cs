@@ -12,8 +12,8 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 namespace RegistaMaster.Persistance.Migrations
 {
     [DbContext(typeof(RegistaMasterContext))]
-    [Migration("20240401142040_init_3")]
-    partial class init_3
+    [Migration("20240403140648_init_4")]
+    partial class init_4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -559,6 +559,10 @@ namespace RegistaMaster.Persistance.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FileURL")
                         .IsRequired()
                         .HasColumnType("text");
@@ -847,13 +851,11 @@ namespace RegistaMaster.Persistance.Migrations
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.RequestFile", b =>
                 {
-                    b.HasOne("RegistaMaster.Domain.Entities.Request", "Request")
+                    b.HasOne("RegistaMaster.Domain.Entities.Request", null)
                         .WithMany("Files")
                         .HasForeignKey("RequestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("RegistaMaster.Domain.Entities.User", b =>

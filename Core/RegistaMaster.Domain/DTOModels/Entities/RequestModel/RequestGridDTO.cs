@@ -1,9 +1,9 @@
-﻿using RegistaMaster.Domain.Enums;
-using System.ComponentModel;
+﻿using RegistaMaster.Domain.Entities;
+using RegistaMaster.Domain.Enums;
 
 namespace RegistaMaster.Domain.DTOModels.Entities.RequestModel
 {
-  public class RequesGridDTO
+  public class RequestGridDTO
   {
     public int ID { get; set; }
     public int CreatedBy { get; set; }
@@ -22,5 +22,6 @@ namespace RegistaMaster.Domain.DTOModels.Entities.RequestModel
     public int? ModuleID { get; set; }
     public int ProjectID { get; set; }
     public string Color { get; set; }
+    public ICollection<RequestFile> Files { get; set; }
   }
 }
