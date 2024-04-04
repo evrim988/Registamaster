@@ -29,7 +29,7 @@ public class ProjectController : Controller
     var models = await uow.ProjectRepository.GetList();
     return DataSourceLoader.Load(models, options);
   }
-  public async Task<IActionResult> AddProject(Project model)
+  public async Task<object> AddProject(Project model)
   {
     try
     {
@@ -88,16 +88,14 @@ public class ProjectController : Controller
   //PROJE NOTLARI İŞLEMLERİ
   public async Task<string> GetProjectNotes(int ID)
   {
-    var notes = uow.Repository.GetNonDeletedAndActive<ProjectNote>(t => t.ProjectID == ID).Select(p => new ProjectNoteDTO
+    try
     {
-      Date = p.CreatedOn,
-      Description = p.Description,
-      ID = p.ID,
-      NoteType = p.NoteType,
-      CreatedBy = p.CreatedBy,
-    });
-
-    return JsonConvert.SerializeObject(notes);
+      return await uow.ProjectNoteRepository.GetProjectNotes(ID);
+    }
+    catch (Exception)
+    {
+      throw;
+    }
   }
 
   public async Task<string> AddProjectNote(ProjectNote model)
@@ -180,14 +178,14 @@ public class ProjectController : Controller
   }
   public async Task<string> GetModules(int ID)
   {
-    var module = uow.Repository.GetNonDeletedAndActive<Module>(t => t.ProjectID == ID).Select(p => new ModuleDTO
+    try
     {
-      ID = p.ID,
-      Name = p.Name,
-      Description = p.Description,
-      ProjectID = p.ProjectID,
-    });
-    return JsonConvert.SerializeObject(module);
+      return await uow.ModuleRepository.GetModules(ID);
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
   }
   public async Task<string> EditModule(ModuleDTO model)
   {

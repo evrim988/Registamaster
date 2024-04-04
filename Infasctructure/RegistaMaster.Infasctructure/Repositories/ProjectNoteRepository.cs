@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
@@ -111,4 +112,26 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
 
     return list;
   }
+  public async Task<string> GetProjectNotes(int ID)
+  {
+    try
+    {
+      var notes = GetNonDeletedAndActive<ProjectNote>(t => t.ProjectID == ID).Select(p => new ProjectNoteDTO
+      {
+        Date = p.CreatedOn,
+        Description = p.Description,
+        ID = p.ID,
+        NoteType = p.NoteType,
+        CreatedBy = p.CreatedBy,
+      });
+
+      return JsonConvert.SerializeObject(notes);
+    }
+    catch (Exception ex)
+    {
+
+      throw ex;
+    }
+  }
+
 }

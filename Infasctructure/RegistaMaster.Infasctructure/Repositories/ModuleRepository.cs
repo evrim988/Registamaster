@@ -1,4 +1,5 @@
 ﻿using MySqlX.XDevAPI.Relational;
+using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ModuleModel;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel;
@@ -10,103 +11,103 @@ using RegistaMaster.Persistance.RegistaMasterContextes;
 
 namespace RegistaMaster.Infasctructure.Repositories
 {
-   public class ModuleRepository : Repository, IModuleRepository
-   {
-      private readonly IUnitOfWork _unitOfWork;
-      private readonly SessionModel _session;
-      private readonly RegistaMasterContext _context;
-      public ModuleRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
+  public class ModuleRepository : Repository, IModuleRepository
+  {
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly SessionModel _session;
+    private readonly RegistaMasterContext _context;
+    public ModuleRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
+    {
+      _context = context;
+      _session = session;
+      _unitOfWork = uow;
+    }
+
+    public async Task<string> CreateModule(Module model)
+    {
+      try
       {
-         _context = context;
-         _session = session;
-         _unitOfWork = uow;
+        await _unitOfWork.Repository.Add(model);
+        await _unitOfWork.SaveChanges();
+        return "1";
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+    }
+    public string DeleteModule(int ID)
+    {
+      var module = GetNonDeletedAndActive<Module>(t => t.ID == ID);
+      DeleteRange(module.ToList());
+      Delete<Module>(ID);
+      return "1";
+    }
+
+    public async Task<IQueryable<ModuleDTO>> GetModule()
+    {
+      try
+      {
+        return GetNonDeletedAndActive<Module>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ModuleDTO()
+        {
+          ID = s.ID,
+          Name = s.Name,
+          Description = s.Description,
+          ProjectID = s.ProjectID,
+        });
+      }
+      catch (Exception ex)
+      {
+        throw ex;
       }
 
-      public async Task<string> CreateModule(Module model)
-      {
-         try
-         {
-            await _unitOfWork.Repository.Add(model);
-            await _unitOfWork.SaveChanges();
-            return "1";
-         }
-         catch (Exception ex)
-         {
-            throw ex;
-         }
-      }
-      public string DeleteModule(int ID)
-      {
-         var module = GetNonDeletedAndActive<Module>(t => t.ID == ID);
-         DeleteRange(module.ToList());
-         Delete<Module>(ID);
-         return "1";
-      }
 
-      public async Task<IQueryable<ModuleDTO>> GetModule()
+    }
+
+    public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
+    {
+      try
       {
-         try
-         {
-            return GetNonDeletedAndActive<Module>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ModuleDTO()
-            {
-               ID = s.ID,
-               Name = s.Name,
-               Description = s.Description,
-               ProjectID = s.ProjectID,               
-            });
-         }
-         catch (Exception ex)
-         {
-            throw ex;
-         }
-
-
+        List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
+        var model = context.Projects
+            .Where(t => t.Status == Status.Active && t.ObjectStatus == ObjectStatus.NonDeleted);
+        foreach (var item in model)
+        {
+          ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
+          {
+            ID = item.ID,
+            Name = item.ProjectName,
+          };
+          ResponsibleHelpers.Add(helper);
+        }
+        return ResponsibleHelpers;
       }
-
-      public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
+      catch (Exception e)
       {
-         try
-         {
-            List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-            var model = context.Projects
-                .Where(t => t.Status == Status.Active && t.ObjectStatus == ObjectStatus.NonDeleted);
-            foreach (var item in model)
-            {
-               ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
-               {
-                  ID = item.ID,
-                  Name = item.ProjectName,
-               };
-               ResponsibleHelpers.Add(helper);
-            }
-            return ResponsibleHelpers;
-         }
-         catch (Exception e)
-         {
-            throw e;
-         }
+        throw e;
       }
+    }
 
-      public async Task<string> UpdateModule(Module model)
+    public async Task<string> UpdateModule(Module model)
+    {
+      try
       {
-         try
-         {
-            Update(model);
-            await _unitOfWork.SaveChanges();
-            return "1";
-         }
-         catch (Exception ex)
-         {
-            throw ex;
-         }
+        Update(model);
+        await _unitOfWork.SaveChanges();
+        return "1";
       }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+    }
 
-      public async Task<string> DeleteModuleWithProjectID(int ID)
-      {
-         var module = GetNonDeletedAndActive<Module>(t => t.ProjectID == ID);
-         await DeleteRange(module.ToList());
-         return "1";
-      }
+    public async Task<string> DeleteModuleWithProjectID(int ID)
+    {
+      var module = GetNonDeletedAndActive<Module>(t => t.ProjectID == ID);
+      await DeleteRange(module.ToList());
+      return "1";
+    }
 
     public async Task<string> UpdateModule(ModuleDTO model)
     {
@@ -118,7 +119,23 @@ namespace RegistaMaster.Infasctructure.Repositories
       await _unitOfWork.SaveChanges();
       return "1";
     }
-
-
+    public async Task<string> GetModules(int ID)
+    {
+      try
+      {
+        var module = GetNonDeletedAndActive<Module>(t => t.ProjectID == ID).Select(p => new ModuleDTO
+        {
+          ID = p.ID,
+          Name = p.Name,
+          Description = p.Description,
+          ProjectID = p.ProjectID,
+        });
+        return JsonConvert.SerializeObject(module);
+      }
+      catch (Exception e)
+      {
+        throw e;
+      }
+    }
   }
 }
