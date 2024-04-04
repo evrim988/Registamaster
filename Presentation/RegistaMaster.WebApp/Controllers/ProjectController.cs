@@ -21,6 +21,8 @@ public class ProjectController : Controller
   {
     uow = _uow;
   }
+
+  //PROJE
   public async Task<object> GetList(DataSourceLoadOptions options)
 
   {
@@ -228,16 +230,14 @@ public class ProjectController : Controller
   }
   public async Task<string> GetVersion(int ID)
   {
-    var version = uow.Repository.GetNonDeletedAndActive<Version>(t => t.ProjectID == ID).Select(p => new VersionDTO
+    try
     {
-      ID = p.ID,
-      Name = p.Name,
-      Description = p.Description,
-      Date = p.Date,
-      ProjectID = p.ProjectID,
-      DatabaseChange=p.DatabaseChange
-    });
-    return JsonConvert.SerializeObject(version);
+      return await uow.VersionRepository.GetVersion(ID);
+    }
+    catch (Exception)
+    {
+      throw;
+    }
   }
   public async Task<string> EditVersion(VersionDTO model)
   {
@@ -254,14 +254,7 @@ public class ProjectController : Controller
   {
     try
     {
-      var getVersion =await uow.Repository.GetById<Version>(ID);
-      var totalRecord = uow.Repository.GetNonDeletedAndActive<Version>(t => t.ProjectID == getVersion.ProjectID).Count();
-      if (totalRecord <= 1) {
-        return "0";
-      }
-      await uow.Repository.Delete<Version>(ID);
-      await uow.SaveChanges();
-      return "1";
+     return await uow.VersionRepository.DeleteVersion(ID);
     }
     catch (Exception ex)
     {

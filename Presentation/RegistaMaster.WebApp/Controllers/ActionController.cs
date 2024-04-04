@@ -20,7 +20,6 @@ public class ActionController : Controller
   {
     _uow = uow;
   }
-
   public async Task<IActionResult> Index()
   {
     ViewBag.Responsible = await _uow.RequestRepository.ResponsibleSelectList();
@@ -35,7 +34,6 @@ public class ActionController : Controller
     model.EndDate = DateTime.Now;
     return View(model);
   }
-
   public async Task<object> GetList(DataSourceLoadOptions options)
   {
     try
@@ -49,8 +47,6 @@ public class ActionController : Controller
       throw e;
     }
   }
-
-
   public async Task<IActionResult> GetActionStatus()
   {
     try
@@ -64,7 +60,6 @@ public class ActionController : Controller
       throw ex;
     }
   }
-
   public async Task<IActionResult> GetPriortyActionStatus()
   {
     try
@@ -78,7 +73,6 @@ public class ActionController : Controller
       throw ex;
     }
   }
-
   public async Task<object> GetResponsible(DataSourceLoadOptions loadOptions)
   {
     try
@@ -115,23 +109,12 @@ public class ActionController : Controller
       throw ex;
     }
   }
-
-
   [HttpPost]
   public async Task<string> ActionUpdate(ActionDTO model)
   {
     try
     {
-      var action = await _uow.Repository.GetById<Action>(model.ID);
-      action.Subject = model.Subject;
-      action.Description = model.Description;
-      action.ActionPriorityStatus = model.ActionPriorityStatus;
-      action.ResponsibleID = model.ResponsibleID;
-      action.OpeningDate = model.OpeningDate;
-      action.EndDate = model.EndDate;
-      _uow.Repository.Update(action);
-      await _uow.SaveChanges();
-      return "1";
+      return await _uow.ActionRepository.ActionUpdate(model);
     }
     catch (Exception ex)
     {
@@ -144,11 +127,7 @@ public class ActionController : Controller
   {
     try
     {
-      var actionNotes = _uow.Repository.GetNonDeletedAndActive<ActionNote>(t => t.ActionID == ID).ToList();
-      await _uow.Repository.DeleteRange(actionNotes);
-      await _uow.Repository.Delete<Action>(ID);
-      await _uow.SaveChanges();
-      return "1";
+      return await _uow.ActionRepository.ActionDelete(ID);
     }
 
     catch (Exception ex)
@@ -161,53 +140,12 @@ public class ActionController : Controller
   {
     try
     {
-      var action = await _uow.Repository.GetById<Action>(model.ID);
-      action.ActionStatus = model.ActionStatus;
-      action.StartDate = model.StartDate;
-      action.CompleteDate = model.CompleteDate;
-      _uow.Repository.Update(action);
-      await _uow.SaveChanges();
-
-      var request = await _uow.Repository.GetById<Request>(action.RequestID);
-
-      var requestActions = _uow.Repository.GetQueryable<Action>(t => t.RequestID == action.RequestID && t.Status == Status.Active && t.ActionStatus != ActionStatus.Completed);
-
-      var cancelledActions = requestActions.Where(x => x.ActionStatus == ActionStatus.Cancel).Count();
-      var waitingActions = requestActions.Where(x => x.ActionStatus == ActionStatus.Contiuned || x.ActionStatus == ActionStatus.notStarted).Count();
-
-      if (cancelledActions > 0 && waitingActions == 0)
-      {
-        request.RequestStatus = RequestStatus.Waiting;
-        _uow.Repository.Update(request);
-        await _uow.SaveChanges();
-        return "2";
-      }
-
-      var continuedActions = requestActions.Where(x => x.ActionStatus == ActionStatus.Contiuned).Count();
-
-      if (request.RequestStatus != RequestStatus.Start && continuedActions > 0)
-      {
-        request.RequestStatus = RequestStatus.Start;
-        _uow.Repository.Update(request);
-        await _uow.SaveChanges();
-        return "2";
-      }
-
-      if (requestActions.Count() == 0)
-      {
-        request.RequestStatus = RequestStatus.Closed;
-        request.PlanedEndDate = DateTime.Now;
-        _uow.Repository.Update(request);
-        await _uow.SaveChanges();
-        return "2";
-      }
-
-
-      return "1";
+      return await _uow.ActionRepository.ChangeActionStatus(model);
     }
-    catch (Exception ex)
+    catch (Exception e)
     {
-      throw ex;
+
+      throw e;
     }
   }
 
@@ -256,12 +194,7 @@ public class ActionController : Controller
   {
     try
     {
-      var actionNote = await _uow.Repository.GetById<ActionNote>(model.ID);
-      actionNote.Description = model.Description;
-      actionNote.Title = model.Title;
-      _uow.Repository.Update(actionNote);
-      await _uow.SaveChanges();
-      return "1";
+      return await _uow.ActionRepository.ActionNoteUpdate(model);
     }
     catch (Exception e)
     {

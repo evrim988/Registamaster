@@ -6,12 +6,12 @@ namespace RegistaMaster.Application.Repositories;
 
 public interface IModuleRepository : IRepository
 {
-  public Task<IQueryable<ModuleDTO>> GetModule();
-  public Task<string> CreateModule(Module model);
-  public Task<string> UpdateModule(Module model);
+  Task<IQueryable<ModuleDTO>> GetModule();
+  Task<string> CreateModule(Module model);
+  Task<string> UpdateModule(Module model);
   public string DeleteModule(int ID);
   Task<List<ResponsibleDevextremeSelectListHelper>> GetProject();
-  public Task<string> DeleteModuleWithProjectID(int ID);
-  public Task<string> UpdateModule(ModuleDTO model);
+  Task<string> DeleteModuleWithProjectID(int ID);
+  Task<string> UpdateModule(ModuleDTO model);
 
 }
