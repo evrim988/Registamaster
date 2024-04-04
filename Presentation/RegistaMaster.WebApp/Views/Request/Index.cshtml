@@ -101,7 +101,7 @@
 
 @* Yeni Talep Ekleme Modalı *@
 <div class="modal fade" id="RequestCreateModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="büyükModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title" id="büyükModalLabel">Yeni Talep Ekle</h3>
@@ -158,14 +158,14 @@
               <textarea asp-for="Description" type="text" required class="form-control mt-1" name="Description" rows="3"></textarea>
               <h1></h1>
             </div>
-            <div>
+            <div class="col-md-12 mt-3">
               <div class="mb-3">
                 <input class="form-control" type="file" id="fileInput" multiple>
               </div>
             </div>
             <div class="form-group col-md-4 mt-2" id="imagePreviewDiv" hidden>
               <label class="mb-1 me-2" style="font-weight:bold;">Eklenen Resim:</label>
-              <img id="imagePreview" onclick="OpenImage()" src="#" style="width: 200px; height: 100px;" />
+              <img id="imagePreview" onclick="OpenAnyImage('imagePreview')" src="#" style="width: 200px; height: 200px;" />
             </div>
           </div>
         </form>
@@ -181,7 +181,7 @@
 
 @* Talep Düzenleme Modalı *@
 <div class="modal fade" id="RequestEditModal" tabindex="-1" role="dialog" aria-labelledby="büyükModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title" id="büyükModalLabel">Talep Düzenle</h3>
@@ -240,11 +240,8 @@
                 </div>
                 <div class="form-group col-md-12">
                   <label style="font-weight:bold;">Açıklama:</label>
-                  <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control mt-1" name="Description"></textarea>
+                  <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control mt-1" rows="6" name="Description"></textarea>
                   <h1></h1>
-                </div>
-                <div class="form-group col-md-12 mt-2">
-                  <input class="form-control" type="file" id="fileInputEdit" multiple>
                 </div>
               </div>
             </div>
@@ -253,12 +250,15 @@
                 <div class="col-12" style="justify-content: center">
                   <label style="font-weight:bold;">Görüntü:</label>
                   <div class="d-flex justify-content-center me-1">
-                    <img id="RequestImage" class="image-popup" style="height:250px; width:250px;" src="@Model.PictureURL">
+                    <img id="RequestImage" onclick="OpenAnyImage('RequestImage')" src="#" style="height:200px; width:200px;" />
                   </div>
+                </div>
+                <div class="form-group col-md-12 mt-3">
+                  <input class="form-control" type="file" id="fileInputEdit" multiple>
                 </div>
                 <div class="col-12 mt-3" id="editFilesDiv" hidden>
                   <label style="font-weight:bold;">Dosyalar:</label>
-                  <div class="list-group list-group-flush mt-1" id="editFiles">
+                  <div class="list-group list-group-flush mt-1" style="height:150px; overflow:auto;" id="editFiles">
                   </div>
                 </div>
               </div>
@@ -276,7 +276,7 @@
 
 @* Talep Detay Modalı *@
 <div class="modal fade" id="RequestDetailModal" tabindex="-1" role="dialog" aria-labelledby="RequestDetailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl customWidth" role="document">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable customWidth" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title" id="RequestDetailModalLabel">Talep Detayı</h3>
@@ -326,7 +326,7 @@
                 </div>
                 <div class="form-group col-md-12 mt-2">
                   <label style="font-weight:bold;">Açıklama:</label>
-                  <textarea asp-for="Description" type="text" id="detailDescription" readonly class="form-control mt-1" rows="3" name="Description"></textarea>
+                  <textarea asp-for="Description" type="text" id="detailDescription" readonly class="form-control mt-1" rows="5" name="Description"></textarea>
                 </div>
               </div>
             </div>
@@ -335,12 +335,12 @@
                 <div class="col-12" style="justify-content: center">
                   <label style="font-weight:bold;">Görüntü:</label>
                   <div class="d-flex justify-content-center">
-                    <img id="detailRequestImage" class="image-popup mt-1" style="height:250px; width:250px;" src="@Model.PictureURL">
+                    <img id="detailRequestImage" onclick="OpenAnyImage('detailRequestImage')" src="#" style="height:250px; width:250px;" />
                   </div>
                 </div>
                 <div class="col-12 mt-3" id="detailFilesDiv" hidden>
                   <label style="font-weight:bold;">Dosyalar:</label>
-                  <div class="list-group list-group-flush list-group-numbered mt-1" id="detailFiles">
+                  <div class="list-group list-group-flush list-group-numbered mt-1" style="height:200px; overflow:auto;" id="detailFiles">
                   </div>
                 </div>
               </div>
@@ -356,7 +356,7 @@
 </div>
 @* Aksiyon Durumu Güncelleme *@
 <div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h3 class="modal-title" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h3>
@@ -365,26 +365,18 @@
       <hr />
       <div class="modal-body">
         <input hidden id="actionID" />
-        <div class="row mb-3 justify-content-md-center">
+        <div class="d-flex justify-content-around">
           <input type="hidden" id="actionStatusValue" />
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-1" data-value="0" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-2" data-value="1" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-3" data-value="2" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-4" data-value="3" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
-          </div>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-1" data-value="0" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-2" data-value="1" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-3" data-value="2" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-4" data-value="3" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-3">
           <div class="col-md-6">
             <label style="font-weight:bold; font-size:1.2rem;">Aksiyon Başlangıç Tarihi</label>
             <input class="form-control mt-2" type="date" id="actionStartDate" />
@@ -394,9 +386,9 @@
             <input class="form-control mt-2" type="date" id="actionCompleteDate" />
           </div>
         </div>
-        <h5 class="modal-title mt-5" style="font-size:1.4rem;" id="exampleModalLabel">Notlar</h5>
+        <h5 class="modal-title mt-3" id="exampleModalLabel">Notlar</h5>
         <hr />
-        <div class="row mt-3">
+        <div class="row mt-2">
           <div class="demo-container">
             <div id="actionNotesGridContainer"></div>
           </div>
@@ -446,7 +438,7 @@
 
 @* Aksiyon Notu Görüntüleme *@
 <div class="modal fade" id="actionNoteDetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h3 class="modal-title" id="exampleModalLabel">Not Detayı</h3>
@@ -478,7 +470,7 @@
 
 <!--Edit Action Modal-->
 <div class="modal fade" id="EditAction" aria-labelledby="EditActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content" id="clear">
       <div class="modal-header">
         <h3 class="modal-title" id="EditActionLabel">Aksiyon Düzenle</h3>
@@ -511,7 +503,7 @@
             </div>
             <div class="col-12 mt-3">
               <label style="font-weight:bold;">Açıklama</label>
-              <textarea class="form-control mt-2" id="actionEditDescription" rows="3"></textarea>
+              <textarea class="form-control mt-2" id="actionEditDescription" rows="5"></textarea>
             </div>
           </div>
         </form>
@@ -554,7 +546,7 @@
 
 <!--Aksiyon Ayrıntıları Modal-->
 <div class="modal fade" id="DetailAction" aria-labelledby="DetailActionLabel" tabindex="-1" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content" id="clear">
       <div class="modal-header">
         <h3 class="modal-title" id="DetailActionLabel">Aksiyon Detayı</h3>
@@ -602,7 +594,7 @@
             </div>
             <div class="col-4">
               <label style="font-weight:bold;">Açıklama</label>
-              <textarea class="form-control mt-1" readonly id="actionDetailDescription" rows="10"></textarea>
+              <textarea class="form-control mt-1" readonly id="actionDetailDescription" style="height: 240px;"></textarea>
             </div>
           </div>
         </form>

@@ -2702,11 +2702,14 @@ function CheckButtonStatus(data) {
   }
 }
 
-//talebe fotoğraf ekleme sırasında fotografı tekrar görebilmek için fotoğraf popup
-function OpenImage() {
-  var imgSrc = $(imagePreview).attr('src');
+function OpenImage(imgSrc) {
   $.fancybox.open({
-    src: imgSrc, // Açılacak resmin URL'si
-    type: 'image'  // Resmin türü (diğer içerik türlerini de kullanabilirsiniz)
+    src: imgSrc,
+    type: 'image'
   });
+}
+
+function OpenAnyImage(imageElementId) {
+  var imgSrc = $('#' + imageElementId).attr('src');
+  OpenImage(imgSrc);
 }
