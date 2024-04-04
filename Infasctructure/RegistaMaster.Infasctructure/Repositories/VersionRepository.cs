@@ -1,4 +1,6 @@
-﻿using RegistaMaster.Application.Repositories;
+﻿using MySqlX.XDevAPI.Relational;
+using Newtonsoft.Json;
+using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ModuleModel;
 using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
@@ -57,12 +59,24 @@ public class VersionRepository : Repository, IVersionRepository
   }
 
 
-  public string DeleteVersion(int ID)
+  public async Task<string> DeleteVersion(int ID)
   {
-    var version = GetNonDeletedAndActive<Version>(t => t.ID == ID);
-    DeleteRange(version.ToList());
-    Delete<Version>(ID);
-    return "1";
+    try
+    {
+      var getVersion = await GetById<Version>(ID);
+      var totalRecord = GetNonDeletedAndActive<Version>(t => t.ProjectID == getVersion.ProjectID).Count();
+      if (totalRecord <= 1)
+      {
+        return "0";
+      }
+      await Delete<Version>(ID);
+      await _uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
   }
 
   public async Task<IQueryable<VersionDTO>> GetList()
@@ -138,4 +152,27 @@ public class VersionRepository : Repository, IVersionRepository
     }
     
   }
+
+  public async Task<string> GetVersion(int ID)
+  {
+    try
+    {
+      var version = GetNonDeletedAndActive<Version>(t => t.ProjectID == ID).Select(p => new VersionDTO
+      {
+        ID = p.ID,
+        Name = p.Name,
+        Description = p.Description,
+        Date = p.Date,
+        ProjectID = p.ProjectID,
+        DatabaseChange = p.DatabaseChange
+      });
+      return JsonConvert.SerializeObject(version);
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+  }
+
+
 }

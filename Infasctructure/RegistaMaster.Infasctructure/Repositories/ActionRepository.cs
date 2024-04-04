@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI.Relational;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ActionModels;
+using RegistaMaster.Domain.DTOModels.Entities.ActionNoteModels;
 using RegistaMaster.Domain.DTOModels.ResponsibleHelperModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
@@ -25,19 +26,26 @@ public class ActionRepository : Repository, IActionRepository
    }
 
 
-   public async Task<string> ActionsUpdate(Domain.Entities.Action model)
+   public async Task<string> ActionUpdate(ActionDTO model)
    {
-      try
-      {
-         Update(model);
-         await _uow.SaveChanges();
-         return "1";
-      }
-      catch (Exception e)
-      {
-         throw e;
-      }
-   }
+    try
+    {
+      var action = await GetById<Action>(model.ID);
+      action.Subject = model.Subject;
+      action.Description = model.Description;
+      action.ActionPriorityStatus = model.ActionPriorityStatus;
+      action.ResponsibleID = model.ResponsibleID;
+      action.OpeningDate = model.OpeningDate;
+      action.EndDate = model.EndDate;
+      _uow.Repository.Update(action);
+      await _uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 
    public async Task<string> AddActions(Domain.Entities.Action model)
    {
@@ -203,4 +211,91 @@ public class ActionRepository : Repository, IActionRepository
       throw ex;
     }
   }
+  public async Task<string>ChangeActionStatus(ActionPageDTO model)
+  {
+    try
+    {
+      var action = await GetById<Action>(model.ID);
+      action.ActionStatus = model.ActionStatus;
+      action.StartDate = model.StartDate;
+      action.CompleteDate = model.CompleteDate;
+      _uow.Repository.Update(action);
+      await _uow.SaveChanges();
+
+      var request = await GetById<Request>(action.RequestID);
+
+      var requestActions = GetQueryable<Action>(t => t.RequestID == action.RequestID && t.Status == Status.Active && t.ActionStatus != ActionStatus.Completed);
+
+      var cancelledActions = requestActions.Where(x => x.ActionStatus == ActionStatus.Cancel).Count();
+      var waitingActions = requestActions.Where(x => x.ActionStatus == ActionStatus.Contiuned || x.ActionStatus == ActionStatus.notStarted).Count();
+
+      if (cancelledActions > 0 && waitingActions == 0)
+      {
+        request.RequestStatus = RequestStatus.Waiting;
+        _uow.Repository.Update(request);
+        await _uow.SaveChanges();
+        return "2";
+      }
+
+      var continuedActions = requestActions.Where(x => x.ActionStatus == ActionStatus.Contiuned).Count();
+
+      if (request.RequestStatus != RequestStatus.Start && continuedActions > 0)
+      {
+        request.RequestStatus = RequestStatus.Start;
+        _uow.Repository.Update(request);
+        await _uow.SaveChanges();
+        return "2";
+      }
+
+      if (requestActions.Count() == 0)
+      {
+        request.RequestStatus = RequestStatus.Closed;
+        request.PlanedEndDate = DateTime.Now;
+        _uow.Repository.Update(request);
+        await _uow.SaveChanges();
+        return "2";
+      }
+
+
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+  public async Task<string> ActionNoteUpdate(ActionNoteDTO model)
+  {
+    try
+    {
+      var actionNote = await GetById<ActionNote>(model.ID);
+      actionNote.Description = model.Description;
+      actionNote.Title = model.Title;
+      _uow.Repository.Update(actionNote);
+      await _uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+  }
+  public async Task<string> ActionDelete(int ID)
+  {
+    try
+    {
+      var actionNotes = GetNonDeletedAndActive<ActionNote>(t => t.ActionID == ID).ToList();
+      await _uow.Repository.DeleteRange(actionNotes);
+      await _uow.Repository.Delete<Action>(ID);
+      await _uow.SaveChanges();
+      return "1";
+    }
+
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+
 }
