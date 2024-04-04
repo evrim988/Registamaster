@@ -3,11 +3,13 @@ using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.ModuleModel;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectModel;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel;
 using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
+using Version = RegistaMaster.Domain.Entities.Version;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -72,10 +74,12 @@ public class ProjectController : Controller
       throw ex;
     }
   }
-  public IActionResult Index()
+  public async Task<IActionResult> Index()
   {
     ViewBag.CreatedBy = uow.ProjectNoteRepository.CreatedBySelectList();
-    return View();
+    var model = new ProjectDTO();
+    model.Project = await uow.ProjectRepository.GetProjectSelect();
+    return View(model);
   }
 
   //PROJE NOTLARI İŞLEMLERİ
@@ -156,4 +160,107 @@ public class ProjectController : Controller
       throw ex;
     }
   }
+
+
+  //MODULE İŞLEMLERİ
+  public async Task<string> AddModule(Module model)
+  {
+    try
+    {
+      return await uow.ModuleRepository.CreateModule(model);
+    }
+    catch (Exception e)
+    {
+
+      throw e;
+    }
+  }
+  public async Task<string> GetModules(int ID)
+  {
+    var module = uow.Repository.GetNonDeletedAndActive<Module>(t => t.ProjectID == ID).Select(p => new ModuleDTO
+    {
+      ID = p.ID,
+      Name = p.Name,
+      Description = p.Description,
+      ProjectID = p.ProjectID,
+    });
+    return JsonConvert.SerializeObject(module);
+  }
+  public async Task<string> EditModule(ModuleDTO model)
+  {
+    try
+    {
+      return await uow.ModuleRepository.UpdateModule(model);
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+  public async Task<string> DeleteModule(int ID)
+  {
+    try
+    {
+      await uow.Repository.Delete<Module>(ID);
+      await uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+
+  //VERSİYON İŞLEMLERİ
+  public async Task<string> AddVersion(VersionDTO model)
+  {
+    try
+    {
+      return await uow.VersionRepository.AddVersion(model);
+    }
+    catch (Exception e)
+    {
+
+      throw e;
+    }
+  }
+  public async Task<string> GetVersion(int ID)
+  {
+    var version = uow.Repository.GetNonDeletedAndActive<Version>(t => t.ProjectID == ID).Select(p => new VersionDTO
+    {
+      ID = p.ID,
+      Name = p.Name,
+      Description = p.Description,
+      Date = p.Date,
+      ProjectID = p.ProjectID,
+      DatabaseChange=p.DatabaseChange
+    });
+    return JsonConvert.SerializeObject(version);
+  }
+  public async Task<string> EditVersion(VersionDTO model)
+  {
+    try
+    {
+      return await uow.VersionRepository.UpdateVersion(model);
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+  public async Task<string> DeleteVersion(int ID)
+  {
+    try
+    {
+      await uow.Repository.Delete<Version>(ID);
+      await uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
 }

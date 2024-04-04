@@ -11,4 +11,5 @@ public interface IVersionRepository : IRepository
   public string DeleteVersion(int ID);
   public Task<string> DeleteVersionWithProjectID(int ID);
   public double GetVersionName(int ID);
+  public Task<string> UpdateVersion(VersionDTO model);
 }

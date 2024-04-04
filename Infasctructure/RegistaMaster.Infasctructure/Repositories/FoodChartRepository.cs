@@ -1,4 +1,5 @@
 ﻿using ExcelDataReader;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.ChartModels;
@@ -217,7 +218,7 @@ public class FoodChartRepository : Repository, IFoodChartRepository
   {
     try
     {
-      return _uow.Repository.GetNonDeletedAndActive<FoodChart>(t => t.Date == date).Count();
+      return await _uow.Repository.GetNonDeletedAndActive<FoodChart>(t => t.Date.Year == date.Year && t.Date.Month == date.Month && t.Date.Day == date.Day).CountAsync();
     }
     catch (Exception e)
     {

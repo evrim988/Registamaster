@@ -1,4 +1,5 @@
 ﻿using RegistaMaster.Application.Repositories;
+using RegistaMaster.Domain.DTOModels.Entities.ModuleModel;
 using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
@@ -102,5 +103,39 @@ public class VersionRepository : Repository, IVersionRepository
       return Convert.ToDouble(versionName);
     }
     return 0;
+  }
+
+  public async Task<string> UpdateVersion(VersionDTO model)
+  {
+    try
+    {
+      var olderVersion = GetVersionName(model.ProjectID);
+      if (olderVersion != 0)
+      {
+        if (model.IsNewVersion)
+        {
+          model.Name = "V" + (olderVersion + 0.1).ToString(".#").Replace(',', '.');
+          if (!model.Name.Contains('.'))
+            model.Name += ".0";
+        }
+        else
+          model.Name = "V" + olderVersion.ToString(".#").Replace(',', '.');
+      }
+      var version = await GetById<Version>(model.ID);
+      version.Name = model.Name;
+      version.Description = model.Description;
+      version.ProjectID = model.ProjectID;
+      version.Date = model.Date;
+      version.DatabaseChange = model.DatabaseChange;
+      Update(version);
+      await _uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception e)
+    {
+
+      throw e;
+    }
+    
   }
 }

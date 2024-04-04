@@ -1,4 +1,5 @@
-﻿using RegistaMaster.Domain.DTOModels.Entities.ProjectModel;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using RegistaMaster.Domain.DTOModels.Entities.ProjectModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 
@@ -11,4 +12,6 @@ public interface IProjectRepository : IRepository
     public void Delete(int id);
     public Task<IQueryable<ProjectDTO>> GetList();
     ProjectSessionModel GetProjectKey(string key);
+  public Task<List<SelectListItem>> GetProjectSelect();
+
 }

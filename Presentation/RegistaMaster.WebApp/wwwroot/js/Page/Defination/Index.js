@@ -175,9 +175,7 @@ function GetModules() {
         }
       },
     ],
-
   }).dxDataGrid("instance");
-
 }
 
 

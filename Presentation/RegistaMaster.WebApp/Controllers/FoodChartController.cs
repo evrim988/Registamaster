@@ -30,6 +30,11 @@ namespace RegistaMaster.WebApp.Controllers
       try
       {
         var model = JsonConvert.DeserializeObject<FoodChart>(values);
+        int recordCount = await _uow.FoodChartRepository.CheckRecordForDate(model.Date);
+        if (recordCount > 0)
+        {
+          return BadRequest("GİRİLEN TARİH İÇİN KAYIT BULUNMAKTADIR.");
+        }
         await _uow.FoodChartRepository.AddFoodChart(model);
         return Ok();
       }
@@ -107,21 +112,6 @@ namespace RegistaMaster.WebApp.Controllers
         throw e;
       }
     }
-    public async Task<bool> CheckRecordForDate(DateTime date) 
-    {
-      try
-      {
-        var check = await _uow.FoodChartRepository.CheckRecordForDate(date);
-        if (check > 0)
-        {
-          return true;
-        }
-        return false;
-      }
-      catch (Exception e)
-      {
-        throw e;
-      }
-    }
   }
 }
+  
