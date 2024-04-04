@@ -5,7 +5,7 @@
 });
 
 var onchangeData;
-
+var detail;
 
 function GetList() {
   var grid = $(actionsGridContainer).dxDataGrid({
@@ -86,8 +86,10 @@ function GetList() {
     loadPanel: {
       enabled: true,
     },
-
-
+    onRowDblClick: function (e) {
+      GetActionNoteList(e.data.id);
+      OpenActionDetailModal(e.data);
+    },
     onContentReady: function (e) {
 
       var $refreshButton = $('<div id="refreshButton">').dxButton({
@@ -377,7 +379,6 @@ function GetActionNoteList(ID) {
       }
     },
     onToolbarPreparing: function (e) {
-      var detail = $("#detail").val();
       if (detail == 2) {
         let toolbarItems = e.toolbarOptions.items;
         toolbarItems.push({
@@ -489,7 +490,6 @@ function GetActionNoteList(ID) {
             hint: "Düzenle",
             icon: "edit",
             visible: function (e) {
-              var detail = $("#detail").val();
               if (detail == 2)   //aksiyon durum değiştir drumunda not düzenle aktif
                 return true;
             },
@@ -502,7 +502,6 @@ function GetActionNoteList(ID) {
             hint: "Sil",
             icon: "trash",
             visible: function (e) {
-              var detail = $("#detail").val();
               if (detail == 2)   //aksiyon durum değiştir drumunda not sil aktif
                 return true;
             },
@@ -529,11 +528,10 @@ function ActionNoteDetail(data) {
   $("#detailNoteTitle").val(data.title);
   $("#detailNoteDescription").val(data.description);
 
-  if ($("#detail").val() != 2)
-    $("#detail").val(1);
+  if (detail != 2)
+    detail = 1;
 
-
-  if ($("#detail").val() == 1)
+  if (detail == 1)
     $("#DetailAction").modal('hide');
   else
     $("#changeActionStatus").modal('hide');
@@ -545,7 +543,7 @@ function ActionNoteDetail(data) {
 function closActionNoteDetailModal() {
   $("#actionNoteDetailModal").modal('toggle');
 
-  if ($("#detail").val() == 1)
+  if (detail == 1)
     $("#DetailAction").modal('show');
   else
     $("#changeActionStatus").modal('show');
@@ -572,7 +570,7 @@ function toggleButtons() {
 //aksiyon durumu değiştir modal
 function ChangeActionStatusModal(data) {
 
-  $("#detail").val(2);
+  detail = 2;
   $("#actionID").val(data.id);
   $("#actionStatusValue").val(data.actionStatus);
   GetActionNoteList(data.id);
@@ -911,7 +909,8 @@ function CancelModalSave() {
 }
 
 function closeActionStatusModal() {
-  $("#detail").val("");
+  //$("#detail").val("");
+  detail = 0;
 }
 
 

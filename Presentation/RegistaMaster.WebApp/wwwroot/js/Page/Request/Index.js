@@ -27,7 +27,7 @@
 var onchangeData;
 var auth = $("#auth").val();
 var userID = $("#userID").val();
-
+var detail;
 
 function gridRefresh() {
   $("#requestGridContainer").dxDataGrid("instance").refresh();
@@ -101,6 +101,10 @@ function GetList() {
       showPageSizeSelector: true,
       showInfo: true,
       showNavigationButtons: true,
+    },
+    onRowDblClick: function (e) {
+      if (!$(e.event.target).parents(".dx-master-detail-row").length)
+        RowDblClick(e.data, "request");
     },
     onEditingStart: function (e) {
       title = e.data.Date;
@@ -462,6 +466,9 @@ function GetList() {
             allowColumnReordering: true,
             allowColumnResizing: true,
             columnResizingMode: 'widget',
+            onRowDblClick: function (e) {
+              RowDblClick(e.data, "action");
+            },
             onRowPrepared: function (e) {
               if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
 
@@ -741,6 +748,16 @@ function GetList() {
   //if (auth == 2) {
   //  grid.columnOption("İşlemler", "visible", false);
   //}
+}
+
+function RowDblClick(rowData, mode) {
+  if (mode == "request") {
+    RequestDetail(rowData);
+  }
+  else {
+    OpenActionDetailModal(rowData);
+    GetActionNoteList(rowData.ID);
+  }
 }
 
 function closeRequestModal() {
@@ -1203,7 +1220,7 @@ function openEditModals(data, ID) {
     var newLi = $('<li>', {
       class: 'list-group-item'
     });
-    
+
     var checkbox = $('<input>', {
       class: 'form-check-input me-1',
       id: item.id,
@@ -1411,7 +1428,7 @@ function SaveRequestEditModal() {
     }
   });
 
- 
+
   if (files.length != 0) {
     $.ajax({
       url: "/Request/DeleteFile",
@@ -1702,7 +1719,6 @@ function validateForm() {
   if (optionsCount == 1) {
     var requiredFields = [
       "ProjectID",
-      //"ModuleID",
       "Subject",
       "Description",
     ];
@@ -2122,7 +2138,7 @@ function ChangeActionStatus() {
       contentType: false,
       success: function (data) {
         $("#changeActionStatus").modal("hide");
-        $("#detail").val("");
+        detail = 0;
         gridRefresh();
       },
       error: function (e) {
@@ -2162,7 +2178,7 @@ function OpenActionDetailModal(data) {
 
 //aksiyon durum değiştir
 function ChangeActionStatusModal(data) {
-  $("#detail").val(2);
+  detail = 2;
   $("#actionID").val(data.ID);
   GetActionNoteList(data.ID);
   $("#actionStatusValue").val(data.ActionStatus);
@@ -2293,7 +2309,6 @@ function GetActionNoteList(ID) {
       allowDeleting: true,
     },
     onToolbarPreparing: function (e) {
-      var detail = $("#detail").val();
       if (detail == 2) {
         let toolbarItems = e.toolbarOptions.items;
         toolbarItems.push({
@@ -2368,7 +2383,6 @@ function GetActionNoteList(ID) {
             hint: "Düzenle",
             icon: "edit",
             visible: function (e) {
-              var detail = $("#detail").val();
               if (detail == 2)   //aksiyon durum değiştir drumunda not düzenle aktif
                 return true;
             },
@@ -2381,7 +2395,6 @@ function GetActionNoteList(ID) {
             hint: "Sil",
             icon: "trash",
             visible: function (e) {
-              var detail = $("#detail").val();
               if (detail == 2)   //aksiyon durum değiştir drumunda not sil aktif
                 return true;
             },
@@ -2546,10 +2559,10 @@ function ActionNoteDetail(data) {
   $("#actionNoteDetailDescription").val(data.description);
   $("#actionNoteDetailTitle").val(data.title);
 
-  if ($("#detail").val() != 2)
-    $("#detail").val(1);
+  if (detail != 2)
+    detail = 1;
 
-  if ($("#detail").val() == 1)
+  if (detail == 1)
     $("#DetailAction").modal('hide');
   else
     $("#changeActionStatus").modal('hide');
@@ -2575,7 +2588,7 @@ function ActionNoteEdit(data) {
 //aksiyon note detay modal kapat
 function closeModalActionDetailNote() {
   $("#actionNoteDetail").modal("toggle");
-  if ($("#detail").val() == 1)
+  if (detail == 1)
     $("#DetailAction").modal('show');
   else
     $("#changeActionStatus").modal('show');
@@ -2585,7 +2598,7 @@ function refreshGridAfterEdit() {
 }
 
 function CloseChangeStatusModal() {
-  $("#detail").val("");
+  detail = 0;
 }
 
 function CancelModalClose() {
@@ -2604,7 +2617,7 @@ function CancelModalSave() {
     $("#checkText").text("*İptal Nedeni Boş Geçilemez!")
     return;
   }
-  $("#detail").val("");
+  detail = 0;
 
   $.ajax({
     url: '/Action/AddActionNote',
@@ -2695,6 +2708,12 @@ function CheckButtonStatus(data) {
   }
 }
 
+//ekran görüntüsü popup
+function OpenAnyImage(imageElementId) {
+  var imgSrc = $('#' + imageElementId).attr('src');
+  OpenImage(imgSrc);
+}
+
 function OpenImage(imgSrc) {
   $.fancybox.open({
     src: imgSrc,
@@ -2702,11 +2721,7 @@ function OpenImage(imgSrc) {
   });
 }
 
-function OpenAnyImage(imageElementId) {
-  var imgSrc = $('#' + imageElementId).attr('src');
-  OpenImage(imgSrc);
-}
-
+//dosya ekleme sırasında dosya boyut kontrolü
 function CheckFileSize(elementId) {
   const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
@@ -2724,13 +2739,12 @@ function CheckFileSize(elementId) {
     if (item.size > 15000000) {
       bigSized.push(item.name);
       message += item.name + "," + " ";
-    } 
+    }
   }
 
   if (bigSized.length > 0) {
     message = message.slice(0, -1).replace(/.$/, ".")
 
-    toastr["error"](message, "En Fazla 15Mb Dosya Ekleme Yapılabilir!")
     swalWithBootstrapButtons(
       'En Fazla 15Mb Dosya Ekleme Yapılabilir!',
       message,

@@ -1,10 +1,17 @@
-﻿$(document).ready(function () {
+﻿var userID;
+var auth;
+$(document).ready(function () {
   DevExpress.localization.locale('tr');
   GetList();
   //console.log(actionID);
+  userID = $("#userID").val();
+  auth = $("#auth").val();
+
   $('select:disabled').css('background-color', '#ffffff');
 });
 var onchangeData;
+var detail;
+
 function gridRefresh() {
   $("#actionGridContainer").dxDataGrid("instance").refresh();
 }
@@ -90,6 +97,10 @@ function GetList() {
       visible: true,
       width: 240,
       placeholder: 'Ara...',
+    },
+    onRowDblClick: function (e) {
+      GetActionNoteList(e.data.id);
+      OpenActionDetailModal(e.data);
     },
     onEditingStart: function (e) {
       title = e.data.Date;
@@ -325,8 +336,6 @@ function GetList() {
             hint: "Düzenle",
             icon: "edit",
             visible: function (e) {
-              var userID = $("#userID").val();
-              var auth = $("#auth").val();
               if (e.row.data.actionStatus == 0 && (e.row.data.createdBy == userID || auth == 0)) //yalnızca başlanmamış aksiyonları aksiyonu açan veya admin düzenleyebilir
                 return true;
             },
@@ -339,8 +348,6 @@ function GetList() {
             hint: "Sil",
             icon: "trash",
             visible: function (e) {
-              var userID = $("#userID").val();
-              var auth = $("#auth").val();
               if (e.row.data.actionStatus != 1 && (e.row.data.createdBy == userID || auth == 0)) { //devam etmeyen aksiyonları aksiyonu açan kişi veya admin silebilir
                 return true;
               }
@@ -353,7 +360,6 @@ function GetList() {
             hint: "Durum Değiştir",
             icon: "clock",
             visible: function (e) {
-              var userID = $("#userID").val();
               if ((e.row.data.actionStatus == 0 || e.row.data.actionStatus == 1) && e.row.data.responsibleID == userID)   //aksiyon durumu aksiyon başlanmamış veya devam ediyorsa sorumlu kişi tarafından değiştirilebilir
                 return true;
             },
@@ -445,7 +451,6 @@ function GetActionNoteList(ID) {
       allowDeleting: true,
     },
     onToolbarPreparing: function (e) {
-      var detail = $("#detail").val();
       if (detail == 2) {
         let toolbarItems = e.toolbarOptions.items;
         toolbarItems.push({
@@ -520,7 +525,6 @@ function GetActionNoteList(ID) {
             hint: "Düzenle",
             icon: "edit",
             visible: function (e) {
-              var detail = $("#detail").val();
               if (detail == 2)   //aksiyon durum değiştir drumunda not düzenle aktif
                 return true;
             },
@@ -533,7 +537,6 @@ function GetActionNoteList(ID) {
             hint: "Sil",
             icon: "trash",
             visible: function (e) {
-              var detail = $("#detail").val();
               if (detail == 2)   //aksiyon durum değiştir drumunda not sil aktif
                 return true;
             },
@@ -716,7 +719,7 @@ function toggleButtons() {
 
 //aksiyon durumu değiştir modal
 function ChangeActionStatusModal(data) {
-  $("#detail").val(2);
+  detail = 2;
   $("#actionID").val(data.id);
   GetActionNoteList(data.id);
   onchangeData = data;
@@ -841,7 +844,7 @@ function ActionNoteSave() {
 
 function closeModal() {
   $("#changeActionStatus").modal("toggle");
-  $("#detail").val("");
+  detail = 0;
 }
 
 function closeModalActionNote() {
@@ -875,7 +878,7 @@ function ChangeActionStatus() {
       contentType: false,
       success: function (data) {
         $("#changeActionStatus").modal("hide");
-        $("#detail").val("");
+        detail = 0;
         gridRefresh();
       },
       error: function (e) {
@@ -950,10 +953,10 @@ function ActionNoteDetail(data) {
   $("#actionNoteDetailDescription").val(data.description);
   $("#actionNoteDetailTitle").val(data.title);
 
-  if ($("#detail").val() != 2)
-    $("#detail").val(1);
+  if (detail != 2)
+    detail = 1;
 
-  if ($("#detail").val() == 1)
+  if (detail == 1)
     $("#DetailAction").modal('hide');
   else
     $("#changeActionStatus").modal('hide');
@@ -977,7 +980,8 @@ function ActionNoteEdit(data) {
 
 function closeModalActionDetailNote() {
   $("#actionNoteDetail").modal("toggle");
-  if ($("#detail").val() == 1)
+
+  if (detail == 1)
     $("#DetailAction").modal('show');
   else
     $("#changeActionStatus").modal('show');
@@ -1028,7 +1032,7 @@ function CancelModalSave() {
     $("#checkText").text("*İptal Nedeni Boş Geçilemez!")
     return;
   }
-  $("#detail").val("");
+  detail = 0;
 
 
   $.ajax({

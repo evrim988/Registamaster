@@ -9,7 +9,6 @@
 }
 <input type="hidden" id="userID" value="@user.ID" />
 <input type="hidden" id="auth" value="@Convert.ToInt32(user.Authorization)" />
-<input type="hidden" id="detail" />
 
 <h3>Index</h3>
 
@@ -404,7 +403,7 @@
 
 @* Aksiyon Notu Ekleme/Düzenleme Modal *@
 <div class="modal fade" id="actionNoteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="actionNoteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
         <h5 class="modal-title h3" id="actionNoteModalLabel"></h5>
