@@ -41,35 +41,27 @@
 </div>
 @* Aksiyon Durumu Güncelleme *@
 <div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
-        <h5 class="modal-title h3" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h5>
+        <h3 class="modal-title" id="exampleModalLabel">Değiştirmek İstediğiniz Durumu Seçiniz</h3>
         <button type="button" class="btn-close" onclick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <hr />
       <div class="modal-body">
         <input hidden id="actionID" />
-        <div class="row mb-3 justify-content-md-center">
+        <div class="d-flex justify-content-around">
           <input type="hidden" id="actionStatusValue" />
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-1" data-value="0" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-2" data-value="1" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-3" data-value="2" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
-          </div>
-          <div class="col-md-2">
-            <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-4" data-value="3" autocomplete="off">
-            <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
-          </div>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-1" data-value="0" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-1">Başlamadı</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-2" data-value="1" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-2">Devam Ediyor</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-3" data-value="2" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-3">Tamamlandı</label>
+          <input type="checkbox" class="btn-check" onchange="CheckButtonStatus()" id="btn-check-4" data-value="3" autocomplete="off">
+          <label class="btn btn-primary btn-lg" for="btn-check-4">İptal/Reddedildi</label>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-3">
           <div class="col-md-6">
             <label style="font-weight:bold; font-size:1.2rem;">Aksiyon Başlangıç Tarihi</label>
             <input class="form-control mt-2" type="date" id="actionStartDate" />
@@ -79,7 +71,7 @@
             <input class="form-control mt-2" type="date" id="actionCompleteDate" />
           </div>
         </div>
-        <h5 class="modal-title mt-5 h3" id="exampleModalLabel">Notlar</h5>
+        <h5 class="modal-title mt-3 h3" id="exampleModalLabel">Notlar</h5>
         <hr />
         <div class="row mt-3">
           <div class="demo-container">
@@ -97,10 +89,10 @@
 
 @* !--Edit Action Modal--> *@
 <div class="modal fade" id="EditAction" aria-labelledby="EditActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content" id="clear">
       <div class="modal-header">
-        <h1 class="modal-title h3" id="EditActionLabel">Aksiyon Düzenle</h1>
+        <h3 class="modal-title" id="EditActionLabel">Aksiyon Düzenle</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
       </div>
       <hr />
@@ -108,29 +100,29 @@
         <form>
           <div class="row">
             <input class="form-control" type="hidden" id="editActionID" />
-            <div class="col-12">
-              <label style="font-weight:bold;">Konu</label>
-              <input class="form-control" id="editActionSubject" />
+            <div class="col-6">
+              <label style="font-weight:bold;">Açılma Tarihi</label>
+              <input class="form-control mt-2" type="date" id="actionEditOpeningDate" />
             </div>
-            <div class="col-12 mt-2">
-              <label style="font-weight:bold;">Açıklama</label>
-              <textarea class="form-control" id="actionEditDescription" rows="2"></textarea>
+            <div class="col-6">
+              <label style="font-weight:bold;">Hedef Tarih</label>
+              <input class="form-control mt-2" type="date" id="actionEditEndDate" />
             </div>
-            <div class="col-6 mt-2">
-              <label style="font-weight:bold;">Aksiyon Başlangıç Tarihi</label>
-              <input class="form-control" type="date" id="actionEditOpeningDate" />
-            </div>
-            <div class="col-6 mt-2">
-              <label style="font-weight:bold;">Bitiş Tarihi</label>
-              <input class="form-control" type="date" id="actionEditEndDate" />
-            </div>
-            <div class="col-12 mt-2">
+            <div class="col-6 mt-3">
               <label style="font-weight:bold;">Öncelik Durumu</label>
-              <select class="form-select" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority"></select>
+              <select class="form-select mt-2" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority"></select>
             </div>
-            <div class="col-12 mt-2">
+            <div class="col-6 mt-3">
               <label style="font-weight:bold;">Sorumlu Kişi</label>
-              <select class="form-select" asp-items="@ViewBag.Responsible" id="actionEditResponsible"></select>
+              <select class="form-select mt-2" asp-items="@ViewBag.Responsible" id="actionEditResponsible"></select>
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Konu</label>
+              <input class="form-control mt-2" id="editActionSubject" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" id="actionEditDescription" rows="5"></textarea>
             </div>
           </div>
         </form>
@@ -210,7 +202,7 @@
 
 <!--Aksiyon Ayrıntıları Modal-->
 <div class="modal fade" id="DetailAction" aria-labelledby="DetailActionLabel" tabindex="-1" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content" id="clear">
       <div class="modal-header">
         <h5 class="modal-title h3" id="exampleModalLabel">Aksiyon Detayı</h5>
@@ -241,7 +233,7 @@
               <input class="form-control mt-2" readonly id="actionDetailOpeningDate" />
             </div>
             <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Son Tarih</label>
+              <label style="font-weight:bold;">Hedef Tarih</label>
               <input class="form-control mt-2" readonly id="actionDetailEndDate" />
             </div>
             <div class="col-6 mt-3">
@@ -265,9 +257,9 @@
             <div id="actionNotesGridContainer"></div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
       </div>
     </div>
   </div>
