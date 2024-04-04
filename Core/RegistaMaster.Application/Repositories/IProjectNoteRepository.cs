@@ -7,11 +7,13 @@ namespace RegistaMaster.Application.Repositories;
 
 public interface IProjectNoteRepository : IRepository
 {
-  public Task<string> ProjectNoteAdd(ProjectNote projectNote);
-  public Task<string> UpdateProjectNote(ProjectNoteDTO model);
-  public void Delete(int id);
-  public Task<IQueryable<ProjectNoteDTO>> GetList();
+  Task<string> ProjectNoteAdd(ProjectNote projectNote);
+  Task<string> UpdateProjectNote(ProjectNoteDTO model);
+  void Delete(int id);
+  Task<IQueryable<ProjectNoteDTO>> GetList();
   Task<List<ResponsibleDevextremeSelectListHelper>> GetProject();
-  public Task<string> DeleteNoteWithProjectID(int ID);
-  public List<SelectListItem> CreatedBySelectList();
+  Task<string> DeleteNoteWithProjectID(int ID);
+  List<SelectListItem> CreatedBySelectList();
+  Task<string> GetProjectNotes(int ID);
+
 }
