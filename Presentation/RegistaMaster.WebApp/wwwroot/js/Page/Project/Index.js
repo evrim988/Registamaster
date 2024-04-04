@@ -210,6 +210,8 @@ function gridRefresh() {
 function ClearModal() {
   $('#clear input').val("");
   $('#clear textarea').val("");
+  $('#clear input[type="checkbox"]').prop('checked', false);
+
 }
 
 //proje ekle
@@ -894,6 +896,7 @@ function DeleteProjectVersion(ID) {
     buttonsStyling: false,
   })
 
+ 
   swalWithBootstrapButtons({
     title: "Uyarı",
     text: "Silme İşlemini Onaylıyor Musunuz?",
@@ -916,13 +919,22 @@ function DeleteProjectVersion(ID) {
         cache: false,
         processData: false,
         contentType: false,
-        success: function (data) {
-          swalWithBootstrapButtons(
-            'Bilgi',
-            'Silme İşlemi Başarılı',
-            'success'
-          );
-          gridRefresh();
+        success: function (response) {
+          if (response == '0') {
+            swalWithBootstrapButtons(
+              'Hata',
+              'Projenin Yalnızca Bir Versiyonu Olduğu İçin Silemezsiniz, Silme İşlemi Başarız.',
+              'error'
+            )
+          }
+          else {
+            swalWithBootstrapButtons(
+              'Bilgi',
+              'Silme İşlemi Başarılı',
+              'success'
+            );
+            gridRefresh();
+          }
         },
         error: function (textStatus) {
           console.log('ERRORS:23 ');
