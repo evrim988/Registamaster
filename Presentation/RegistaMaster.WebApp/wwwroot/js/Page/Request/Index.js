@@ -850,7 +850,7 @@ function UploadFile(ID) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log('Success:');
+      //console.log('Success:');
       closeRequestModal();
       gridRefresh();
     },
@@ -1081,8 +1081,7 @@ function RequestDetail(data) {
       class: 'list-group-item group-list-item-action',
       target: '_blank'
     });
-    console.log("fileURL");
-    console.log(item.fileURL);
+
     $('#detailFiles').append(hyperlink);
   }
 
@@ -1177,6 +1176,7 @@ function RequestDetail(data) {
 function openEditModals(data, ID) {
   //console.log(data);
   //console.log(ID);
+  $("#fileInputEdit").val('');
   // Modal form alanlarını seçilen satırdan gelen veri ile doldurun
   $("#NotificationEditTypeID").val(data.notificationTypeID);
   $("#CategoryEditID").val(data.categoryID);
@@ -2705,4 +2705,46 @@ function OpenImage(imgSrc) {
 function OpenAnyImage(imageElementId) {
   var imgSrc = $('#' + imageElementId).attr('src');
   OpenImage(imgSrc);
+}
+
+function CheckFileSize(elementId) {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    cancelButtonClass: 'btn btn-danger',
+    buttonsStyling: false,
+  })
+  var input = $('#' + elementId)[0];
+  var bigSized = [];
+  var message = "15Mb Sınırını Aşan Dosyalar; ";
+
+  if ($(input).length > 0) {
+    input.files.forEach(checkFile);
+  }
+  function checkFile(item) {
+    if (item.size > 15000000) {
+      bigSized.push(item.name);
+      message += item.name + "," + " ";
+    } 
+  }
+
+  if (bigSized.length > 0) {
+    message = message.slice(0, -1).replace(/.$/, ".")
+
+    toastr["error"](message, "En Fazla 15Mb Dosya Ekleme Yapılabilir!")
+    swalWithBootstrapButtons(
+      'En Fazla 15Mb Dosya Ekleme Yapılabilir!',
+      message,
+      'error'
+    );
+    if (elementId == "fileInputEdit")
+      $("#editSaveBtn").prop("disabled", true);
+    else
+      $("#addSaveBtn").prop("disabled", true);
+  }
+  else {
+    if (elementId == "fileInputEdit")
+      $("#editSaveBtn").prop("disabled", false);
+    else
+      $("#addSaveBtn").prop("disabled", false);
+  }
 }
