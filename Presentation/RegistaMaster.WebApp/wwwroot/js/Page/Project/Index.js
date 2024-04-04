@@ -554,6 +554,15 @@ function GetProjectNoteTabTemplate(masterDetailData) {
       rowAlternationEnabled: true,
       allowColumnReordering: true,
       allowColumnResizing: true,
+      paging: { enabled: true },
+      height: "100%",
+      pager: {
+        visible: true,
+        allowedPageSizes: [10, 20, 50],
+        showPageSizeSelector: true,
+        showInfo: true,
+        showNavigationButtons: true,
+      },
       columnResizingMode: 'widget',
       onRowPrepared: function (e) {
         if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
@@ -665,6 +674,15 @@ function GetModuleTabTemplate(masterDetailData) {
         rowAlternationEnabled: true,
         allowColumnReordering: true,
         allowColumnResizing: true,
+        paging: { enabled: true },
+        height: "100%",
+        pager: {
+          visible: true,
+          allowedPageSizes: [10, 20, 50],
+          showPageSizeSelector: true,
+          showInfo: true,
+          showNavigationButtons: true,
+        },
         columnResizingMode: 'widget',
         onRowPrepared: function (e) {
           if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
@@ -767,6 +785,15 @@ function GetVersionTabTemplate(masterDetailData) {
         rowAlternationEnabled: true,
         allowColumnReordering: true,
         allowColumnResizing: true,
+        paging: { enabled: true },
+        height: "100%",
+        pager: {
+          visible: true,
+          allowedPageSizes: [10, 20, 50],
+          showPageSizeSelector: true,
+          showInfo: true,
+          showNavigationButtons: true,
+        },
         columnResizingMode: 'widget',
         onRowPrepared: function (e) {
           if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };

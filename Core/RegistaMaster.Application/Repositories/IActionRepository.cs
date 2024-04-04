@@ -10,7 +10,6 @@ namespace RegistaMaster.Application.Repositories;
 public interface IActionRepository : IRepository
 {
   IQueryable<ActionDTO> GetList();
-  Task<string> AddActions(Action model);
   Task<string> ActionUpdate(ActionDTO model);
   string Delete(int ID);
   Task<ActionPageDTO> GetAction(int ID);
@@ -18,9 +17,8 @@ public interface IActionRepository : IRepository
   Task<List<ResponsibleDevextremeSelectListHelper>> GetRequest();
   Task<List<SelectListItem>> ActionProrityStatusList();
   List<ActionDTO> GetActionsByRequestID(int ID);
-  public Task<string> ChangeActionStatus(ActionPageDTO model);
-  public  Task<string> ActionNoteUpdate(ActionNoteDTO model);
-  public Task<string> ActionDelete(int ID);
-
-
+  Task<string> ChangeActionStatus(ActionPageDTO model);
+  Task<string> ActionNoteUpdate(ActionNoteDTO model);
+  Task<string> ActionDelete(int ID);
+  Task<string> AddAction(Action model, int ID);
 }

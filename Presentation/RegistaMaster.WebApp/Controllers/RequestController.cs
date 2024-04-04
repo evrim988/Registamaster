@@ -31,22 +31,13 @@ public class RequestController : Controller
 
   public async Task<IActionResult> Index()
   {
-    var request = uow.Repository.GetNonDeletedAndActive<Request>(t => t.ObjectStatus == ObjectStatus.NonDeleted);
-
-    var model = new RequestDTO();
-    foreach (var item in request)
+    var model = new RequestDTO
     {
-      model.PictureURL = item.PictureURL;
-      model.ID = item.ID;
-      model.LastModifiedBy = item.LastModifiedBy;
-      model.RequestStatus = item.RequestStatus;
-
-    }
-    model.NotificationType = await uow.RequestRepository.NotificationTypeSelectList();
-    model.Category = await uow.RequestRepository.CategorySelectList();
-    model.Project = await uow.RequestRepository.GetProjectSelect();
-
-    model.Responsible = await uow.RequestRepository.ResponsibleSelectList();
+      NotificationType = await uow.RequestRepository.NotificationTypeSelectList(),
+      Category = await uow.RequestRepository.CategorySelectList(),
+      Project = await uow.RequestRepository.GetProjectSelect(),
+      Responsible = await uow.RequestRepository.ResponsibleSelectList()
+    };
     return View(model);
   }
 
@@ -107,9 +98,9 @@ public class RequestController : Controller
       throw ex;
     }
   }
+
   public async Task<object> GetList(DataSourceLoadOptions options)
   {
-    //var models = await uow.RequestRepository.GetList();
     var models = await uow.RequestRepository.GetListWithFiles();
     return DataSourceLoader.Load(models, options);
   }
@@ -132,51 +123,19 @@ public class RequestController : Controller
     }
   }
 
-
-
   [HttpPost]
   public async Task<IActionResult> AddActionItem([FromBody] Action model, int ID)
   {
     try
     {
-      var request = await uow.Repository.GetById<Request>(ID);
-      if (request.RequestStatus == RequestStatus.Waiting)
-      {
-        var cancelledActions = uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.Status == Status.Active && t.ObjectStatus == ObjectStatus.NonDeleted && t.ActionStatus == ActionStatus.Cancel).ToList();
-        foreach (var action in cancelledActions)
-        {
-          action.Status = Status.Passive;
-        }
-        await uow.Repository.UpdateRange(cancelledActions);
-        request.RequestStatus = RequestStatus.Start;
-        uow.Repository.Update(request);
-        await uow.SaveChanges();
-      }
-      model.RequestID = ID;
-      model.ActionStatus = ActionStatus.notStarted;
-      await uow.ActionRepository.AddActions(model);
+      await uow.ActionRepository.AddAction(model, ID);
       return Ok(model);
     }
     catch (Exception ex)
     {
       throw ex;
     }
-
   }
-
-  //public async Task<string> DeleteActionItem(int key)
-  //{
-  //  try
-  //  {
-  //    await uow.Repository.Delete<Action>(key);
-  //    await uow.SaveChanges();
-  //    return "";
-  //  }
-  //  catch (Exception ex)
-  //  {
-  //    throw ex;
-  //  }
-  //}
 
   public async Task<IActionResult> GetRequestStatus()
   {
@@ -231,11 +190,11 @@ public class RequestController : Controller
     }
   }
 
-
   public async Task<List<SelectListItem>> GetNotificationType()
   {
     return await uow.RequestRepository.NotificationTypeSelectList();
   }
+
   public async Task<List<SelectListItem>> GetCategorySelect()
   {
     return await uow.RequestRepository.CategorySelectList();

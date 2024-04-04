@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI.Relational;
 using RegistaMaster.Application.Repositories;
@@ -15,19 +16,19 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class ActionRepository : Repository, IActionRepository
 {
-   private readonly RegistaMasterContext _context;
-   private readonly SessionModel _session;
-   private readonly IUnitOfWork _uow;
-   public ActionRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
-   {
-      _context = context;
-      _session = session;
-      _uow = uow;
-   }
+  private readonly RegistaMasterContext _context;
+  private readonly SessionModel _session;
+  private readonly IUnitOfWork _uow;
+  public ActionRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
+  {
+    _context = context;
+    _session = session;
+    _uow = uow;
+  }
 
 
-   public async Task<string> ActionUpdate(ActionDTO model)
-   {
+  public async Task<string> ActionUpdate(ActionDTO model)
+  {
     try
     {
       var action = await GetById<Action>(model.ID);
@@ -47,132 +48,146 @@ public class ActionRepository : Repository, IActionRepository
     }
   }
 
-   public async Task<string> AddActions(Domain.Entities.Action model)
-   {
-      try
+  public async Task<string> AddAction(Action model, int ID)
+  {
+    try
+    {
+      var request = await GetById<Request>(ID);
+      if (request.RequestStatus == RequestStatus.Waiting)
       {
-         var actions = await GetById<Domain.Entities.Action>(model.RequestID);
-         await _uow.Repository.Add(model);
-         await _uow.SaveChanges();
-         return "1";
+        var cancelledActions = GetQueryable<Action>(t => t.RequestID == ID && t.Status == Status.Active && t.ObjectStatus == ObjectStatus.NonDeleted && t.ActionStatus == ActionStatus.Cancel).ToList();
+        foreach (var action in cancelledActions)
+        {
+          action.Status = Status.Passive;
+        }
+        await UpdateRange(cancelledActions);
+        request.RequestStatus = RequestStatus.Start;
+        Update(request);
+        await _uow.SaveChanges();
       }
-      catch (Exception e)
-      {
-         throw e;
-      }
-   }
-
-   public string Delete(int ID)
-   {
-      var action = GetNonDeletedAndActive((Domain.Entities.Action t) => t.ID == ID);
-      DeleteRange(action.ToList());
-      Delete<Domain.Entities.Action>(ID);
+      model.RequestID = ID;
+      model.ActionStatus = ActionStatus.notStarted;
+      await _uow.Repository.Add(model);
+      await _uow.SaveChanges();
       return "1";
-   }
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 
-   public async Task<ActionPageDTO> GetAction(int ID)
-   {
-      try
-      {
-         return await GetQueryable<Action>(t => t.ID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ActionPageDTO
-         {
-            ID = s.ID,
-            Reponsible = s.Responsible.Fullname,
-            OpeningDate = s.OpeningDate,
-            EndDate = s.EndDate,
-            Description = s.Description,
-            ActionStatus = s.ActionStatus,
-            RequestID = s.RequestID
-         }).FirstOrDefaultAsync();
-      }
-      catch (Exception ex)
-      {
+  public string Delete(int ID)
+  {
+    var action = GetNonDeletedAndActive((Domain.Entities.Action t) => t.ID == ID);
+    DeleteRange(action.ToList());
+    Delete<Domain.Entities.Action>(ID);
+    return "1";
+  }
 
-         throw ex;
-      }
-   }
+  public async Task<ActionPageDTO> GetAction(int ID)
+  {
+    try
+    {
+      return await GetQueryable<Action>(t => t.ID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ActionPageDTO
+      {
+        ID = s.ID,
+        Reponsible = s.Responsible.Fullname,
+        OpeningDate = s.OpeningDate,
+        EndDate = s.EndDate,
+        Description = s.Description,
+        ActionStatus = s.ActionStatus,
+        RequestID = s.RequestID
+      }).FirstOrDefaultAsync();
+    }
+    catch (Exception ex)
+    {
 
-   public IQueryable<ActionDTO> GetList()
-   {
-      try
-      {
-         return GetQueryable<Action>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ActionDTO()
-         {
-            ID = s.ID,
-            Description = s.Description,
-            EndDate = s.EndDate,
-            OpeningDate = s.OpeningDate,
-            ResponsibleID = s.ResponsibleID,
-            ActionStatus = s.ActionStatus,
-            Subject = s.Subject,
-            RequestID = s.RequestID,
-            ActionPriorityStatus = s.ActionPriorityStatus,
-            CreatedBy = s.CreatedBy,
-            StartDate=s.StartDate,
-            CompleteDate=s.CompleteDate
-         });
-      }
-      catch (Exception e)
-      {
-         throw e;
-      }
+      throw ex;
+    }
+  }
 
-   }
+  public IQueryable<ActionDTO> GetList()
+  {
+    try
+    {
+      return GetQueryable<Action>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ActionDTO()
+      {
+        ID = s.ID,
+        Description = s.Description,
+        EndDate = s.EndDate,
+        OpeningDate = s.OpeningDate,
+        ResponsibleID = s.ResponsibleID,
+        ActionStatus = s.ActionStatus,
+        Subject = s.Subject,
+        RequestID = s.RequestID,
+        ActionPriorityStatus = s.ActionPriorityStatus,
+        CreatedBy = s.CreatedBy,
+        StartDate = s.StartDate,
+        CompleteDate = s.CompleteDate
+      });
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
 
-   public async Task<List<ResponsibleDevextremeSelectListHelper>> GetRequest()
-   {
-      try
-      {
-         List<ResponsibleDevextremeSelectListHelper> RequestHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-         var model = context.Requests
-             .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
-         foreach (var item in model)
-         {
-            ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
-            {
-               ID = item.ID,
-               Name = item.Subject,
-            };
-            RequestHelpers.Add(helper);
-         }
-         return RequestHelpers;
-      }
-      catch (Exception ex)
-      {
-         throw ex;
-      }
-   }
+  }
 
-   public async Task<List<SelectListItem>> ResponsiblehelperModelList()
-   {
-      try
+  public async Task<List<ResponsibleDevextremeSelectListHelper>> GetRequest()
+  {
+    try
+    {
+      List<ResponsibleDevextremeSelectListHelper> RequestHelpers = new List<ResponsibleDevextremeSelectListHelper>();
+      var model = context.Requests
+          .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
+      foreach (var item in model)
       {
-         return GetNonDeletedAndActive<User>(t => true)
-             .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name + " " + s.Surname }).ToList();
+        ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
+        {
+          ID = item.ID,
+          Name = item.Subject,
+        };
+        RequestHelpers.Add(helper);
       }
-      catch (Exception ex)
-      {
-         throw ex;
-      }
-   }
+      return RequestHelpers;
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 
-   public async Task<List<SelectListItem>> ActionProrityStatusList()
-   {
-      try
-      {
-         var list = GetEnumSelect<ActionPriorityStatus>().Select(aps => new SelectListItem
-         {
-            Value = aps.Id.ToString(),
-            Text = aps.Text,
-         });
-         return list.ToList();
-      }
-      catch (Exception ex)
-      {
+  public async Task<List<SelectListItem>> ResponsiblehelperModelList()
+  {
+    try
+    {
+      return GetNonDeletedAndActive<User>(t => true)
+          .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name + " " + s.Surname }).ToList();
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 
-         throw ex;
-      }
-   }
+  public async Task<List<SelectListItem>> ActionProrityStatusList()
+  {
+    try
+    {
+      var list = GetEnumSelect<ActionPriorityStatus>().Select(aps => new SelectListItem
+      {
+        Value = aps.Id.ToString(),
+        Text = aps.Text,
+      });
+      return list.ToList();
+    }
+    catch (Exception ex)
+    {
+
+      throw ex;
+    }
+  }
 
   public List<ActionDTO> GetActionsByRequestID(int ID)
   {
@@ -211,7 +226,7 @@ public class ActionRepository : Repository, IActionRepository
       throw ex;
     }
   }
-  public async Task<string>ChangeActionStatus(ActionPageDTO model)
+  public async Task<string> ChangeActionStatus(ActionPageDTO model)
   {
     try
     {
