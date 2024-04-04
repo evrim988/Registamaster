@@ -345,9 +345,15 @@ public class RequestRepository : Repository, IRequestRepository
 
   public async Task<List<SelectListItem>> GetVersionList(int ID)
   {
-    return GetNonDeletedAndActive<Version>(t => t.ProjectID == ID && t.ObjectStatus == ObjectStatus.NonDeleted)
-            .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
+    var versions = await GetNonDeletedAndActive<Version>(t => t.ProjectID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).ToListAsync();
+
+    var uniqueVersions = versions.GroupBy(v => v.Name)
+                                 .Select(g => g.First())
+                                 .ToList();
+
+    return uniqueVersions.Select(s => new SelectListItem { Value = s.ID.ToString(), Text = s.Name }).ToList();
   }
+
 
   public async Task<string> CompleteRequest(int ID)
   {

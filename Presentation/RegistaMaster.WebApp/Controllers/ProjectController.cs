@@ -1,4 +1,5 @@
-﻿using DevExtreme.AspNet.Data;
+﻿using DevExpress.Data.Filtering;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -253,6 +254,11 @@ public class ProjectController : Controller
   {
     try
     {
+      var getVersion =await uow.Repository.GetById<Version>(ID);
+      var totalRecord = uow.Repository.GetNonDeletedAndActive<Version>(t => t.ProjectID == getVersion.ProjectID).Count();
+      if (totalRecord <= 1) {
+        return "0";
+      }
       await uow.Repository.Delete<Version>(ID);
       await uow.SaveChanges();
       return "1";
