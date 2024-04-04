@@ -124,16 +124,8 @@ public class RequestController : Controller
   {
     try
     {
-      var model = uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).ToList();
-      if (model.Count > 0)
-        return "-1";
-      await uow.Repository.Delete<Request>(ID);
-      await uow.RequestRepository.DeleteFilesWithRequestID(ID);
-      await uow.SaveChanges();
-      return "1";
-
+      return await uow.RequestRepository.RequestDelete(ID);
     }
-
     catch (Exception ex)
     {
       throw ex;
@@ -172,19 +164,19 @@ public class RequestController : Controller
 
   }
 
-  public async Task<string> DeleteActionItem(int key)
-  {
-    try
-    {
-      await uow.Repository.Delete<Action>(key);
-      await uow.SaveChanges();
-      return "";
-    }
-    catch (Exception ex)
-    {
-      throw ex;
-    }
-  }
+  //public async Task<string> DeleteActionItem(int key)
+  //{
+  //  try
+  //  {
+  //    await uow.Repository.Delete<Action>(key);
+  //    await uow.SaveChanges();
+  //    return "";
+  //  }
+  //  catch (Exception ex)
+  //  {
+  //    throw ex;
+  //  }
+  //}
 
   public async Task<IActionResult> GetRequestStatus()
   {
@@ -281,8 +273,7 @@ public class RequestController : Controller
   public async Task<string> CheckActionsForDeleteRequest(int ID)
   {
     //Talebe bağlı aksiyon kontrolü
-    var actions = uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).ToList();
-    if (actions.Count() != 0)
+    if (uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).Any())
       return "2";
     return "1";
   }

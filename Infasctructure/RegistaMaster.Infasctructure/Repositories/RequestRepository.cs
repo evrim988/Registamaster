@@ -464,4 +464,19 @@ public class RequestRepository : Repository, IRequestRepository
       throw ex;
     }
   }
+
+  public async Task<string> RequestDelete(int ID)
+  {
+    try
+    {
+      await DeleteFilesWithRequestID(ID);
+      await Delete<Request>(ID);
+      await uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 }

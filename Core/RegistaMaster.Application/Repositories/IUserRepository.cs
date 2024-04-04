@@ -7,13 +7,14 @@ namespace RegistaMaster.Application.Repositories;
 
 public interface IUserRepository : IRepository
 {
-   Task<string> AddUser(User user);
-   Task<IQueryable<UserDTO>> GetList();
-   Task<List<ResponsibleDevextremeSelectListHelper>> GetResponsible();
-   Task<UserDetailDto> UserDetails(int ID);
-   Task<string> UpdateUser(UserDetailDto user);
-   Task<string> DeleteUser(int ID);
+  Task<string> AddUser(User user);
+  Task<IQueryable<UserDTO>> GetList();
+  Task<List<ResponsibleDevextremeSelectListHelper>> GetResponsible();
+  Task<UserDetailDto> UserDetails(int ID);
+  Task<string> UpdateUser(UserDetailDto user);
+  Task<string> DeleteUser(int ID);
 
-   Task<string> ChangeAuthorization(UserDetailDto user);
-   Task<List<UserCreatedByDTO>> GetCreatedBy();
+  Task<string> ChangeAuthorization(UserDetailDto user);
+  Task<List<UserCreatedByDTO>> GetCreatedBy();
+  Task<UserDTO> UserSessionDetail();
 }

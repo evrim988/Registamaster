@@ -12,138 +12,123 @@ namespace RegistaMaster.WebApp.Controllers;
 
 public class UserController : Controller
 {
-    private readonly IUnitOfWork uow;
-    private readonly SessionModel session;
-    public UserController(IUnitOfWork _uow)
+  private readonly IUnitOfWork uow;
+  private readonly SessionModel session;
+  public UserController(IUnitOfWork _uow)
+  {
+    uow = _uow;
+    session = _uow.GetSession();
+  }
+  public async Task<object> GetList(DataSourceLoadOptions options)
+
+  {
+    var models = await uow.UserRepository.GetList();
+    return DataSourceLoader.Load(models, options);
+  }
+  public IActionResult Index()
+  {
+    return View();
+  }
+
+  [HttpGet]
+  public async Task<IActionResult> UserDetail()
+  {
+    try
     {
-        uow = _uow;
-        session = _uow.GetSession();
+      return View(await uow.UserRepository.UserSessionDetail());
     }
-    public async Task<object> GetList(DataSourceLoadOptions options)
-
+    catch (Exception ex)
     {
-        var models = await uow.UserRepository.GetList();
-        return DataSourceLoader.Load(models, options);
+      throw ex;
     }
-    public IActionResult Index()
+  }
+
+  public async Task<string> FileUpload(IFormFile FileUrl)
+  {
+    try
     {
-        return View();
-    }
-  
-  
-
-   [HttpGet]
-    public async Task<IActionResult> UserDetail()
-    {
-        try
-        {
-            var model = await uow.UserRepository.GetById<User>(uow.GetSession().ID);
-
-            var userdetail = new UserDTO()
-            {
-                UserName = model.Username,
-                Name = model.Name,
-                Surname = model.Surname,
-                Password = model.Password,
-                Email = model.Email,
-                AuthorizationStatus=model.AuthorizationStatus,
-            };
-
-            return View(userdetail);
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-
-   
-    public async Task<string> FileUpload(IFormFile FileUrl)
-    {
-        try
-        {
-            string fileName = "";
-            if (FileUrl != null)
-            {
-                string extension = Path.GetExtension(FileUrl.FileName);
-                Guid guidFile = Guid.NewGuid();
-                fileName = "user" + guidFile + extension;
-                var path = Path.Combine("wwwroot/Modernize/Img/ProfilePhotos/", fileName);
-
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    FileUrl.CopyTo(stream);
-                }
-            }
-            return fileName;
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-    public async Task<IActionResult> GetAuthStatus()
-    {
-        try
-        {
-            var models = uow.Repository.GetEnumSelect<AuthorizationStatus>();
-            var resultJson = JsonConvert.SerializeObject(models);
-            return Content(resultJson, "application/json");
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-
-   [HttpPost]
-   public async Task<string> AddUser(User model)
-   {
-      try
+      string fileName = "";
+      if (FileUrl != null)
       {
-         await uow.UserRepository.AddUser(model);
-         return "1";
+        string extension = Path.GetExtension(FileUrl.FileName);
+        Guid guidFile = Guid.NewGuid();
+        fileName = "user" + guidFile + extension;
+        var path = Path.Combine("wwwroot/Modernize/Img/ProfilePhotos/", fileName);
+
+        using (var stream = new FileStream(path, FileMode.Create))
+        {
+          FileUrl.CopyTo(stream);
+        }
       }
-      catch (Exception ex)
-      {
-         throw ex;
-      }
-   }
-
-   public async Task<string> UpdateUser(UserDetailDto model)
-    {
-        try
-        {
-            return await uow.UserRepository.UpdateUser(model);
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+      return fileName;
     }
-
-    public async Task<string> ChangeAuthorization(UserDetailDto model)
+    catch (Exception ex)
     {
-        try
-        {
-            return await uow.UserRepository.ChangeAuthorization(model);
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+      throw ex;
     }
-
-    public async Task<string> DeleteUser(int ID)
+  }
+  public async Task<IActionResult> GetAuthStatus()
+  {
+    try
     {
-        try
-        {
-            await uow.UserRepository.DeleteUser(ID);
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+      var models = uow.Repository.GetEnumSelect<AuthorizationStatus>();
+      var resultJson = JsonConvert.SerializeObject(models);
+      return Content(resultJson, "application/json");
     }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  [HttpPost]
+  public async Task<string> AddUser(User model)
+  {
+    try
+    {
+      await uow.UserRepository.AddUser(model);
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> UpdateUser(UserDetailDto model)
+  {
+    try
+    {
+      return await uow.UserRepository.UpdateUser(model);
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> ChangeAuthorization(UserDetailDto model)
+  {
+    try
+    {
+      return await uow.UserRepository.ChangeAuthorization(model);
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> DeleteUser(int ID)
+  {
+    try
+    {
+      await uow.UserRepository.DeleteUser(ID);
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 }

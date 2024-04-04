@@ -10,162 +10,186 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class UserRepository : Repository, IUserRepository
 {
-    private readonly RegistaMasterContext context;
+  private readonly RegistaMasterContext context;
 
-    private readonly IUnitOfWork uow;
-    private readonly SessionModel session;
+  private readonly IUnitOfWork uow;
+  private readonly SessionModel session;
 
-    public UserRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  public UserRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  {
+    context = _context;
+    uow = _uow;
+    session = _session;
+  }
+  public async Task<string> AddUser(User model)
+  {
+    try
     {
-        context = _context;
-        uow = _uow;
-        session = _session;
+      model.CustomerID = session.CustomerID;
+      await uow.Repository.Add(model);
+      await uow.SaveChanges();
+      return "";
     }
-    public async Task<string> AddUser(User model)
+    catch (Exception e)
     {
-        try
-        {
-            model.CustomerID = session.CustomerID;
-            await uow.Repository.Add(model);
-            await uow.SaveChanges();
-            return "";
-        }
-        catch (Exception e)
-        {
 
-            throw e;
-        }
+      throw e;
     }
-    public async Task<string> UpdateUser(UserDetailDto model)
+  }
+  public async Task<string> UpdateUser(UserDetailDto model)
+  {
+    try
     {
-        try
-        {
-            var user = await GetById<User>(model.ID);
-            user.Name = model.Name;
-            user.Surname = model.Surname;
-            user.Email = model.Email;
-            user.Password = model.Password;
-            user.Username = model.Username;
-            Update(user);
-            await uow.SaveChanges();
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+      var user = await GetById<User>(model.ID);
+      user.Name = model.Name;
+      user.Surname = model.Surname;
+      user.Email = model.Email;
+      user.Password = model.Password;
+      user.Username = model.Username;
+      Update(user);
+      await uow.SaveChanges();
+      return "1";
     }
-    public async Task<string> DeleteUser(int ID)
+    catch (Exception ex)
     {
-        try
-        {
-            var user = await GetById<User>(ID);
-            user.ObjectStatus = ObjectStatus.Deleted;
-            user.Status = Status.Passive;
-            Update(user);
-            await uow.SaveChanges();
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+      throw ex;
     }
-    public async Task<IQueryable<UserDTO>> GetList()
+  }
+  public async Task<string> DeleteUser(int ID)
+  {
+    try
     {
-        try
-        {
-            return GetNonDeletedAndActive<User>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new UserDTO()
-            {
-                ID = s.ID,
-                AuthorizationStatus = s.AuthorizationStatus,
-                Name = s.Name,
-                Surname = s.Surname,
-                Email = s.Email,
-                Password = s.Password,
-                UserName = s.Username,
-            });
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-       
+      var user = await GetById<User>(ID);
+      user.ObjectStatus = ObjectStatus.Deleted;
+      user.Status = Status.Passive;
+      Update(user);
+      await uow.SaveChanges();
+      return "1";
     }
-
-    public async Task<List<ResponsibleDevextremeSelectListHelper>> GetResponsible()
+    catch (Exception ex)
     {
-        try
-        {
-            List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-            var model = context.Users
-                .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.AuthorizationStatus != AuthorizationStatus.Admin);
-            foreach (var item in model)
-            {
-                ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
-                {
-                    ID = item.ID,
-                    Name = item.Name + " " + item.Surname,
-                };
-                ResponsibleHelpers.Add(helper);
-            }
-            return ResponsibleHelpers;
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
+      throw ex;
     }
-
-   public async Task<List<UserCreatedByDTO>> GetCreatedBy()
-   {
-      try
+  }
+  public async Task<IQueryable<UserDTO>> GetList()
+  {
+    try
+    {
+      return GetNonDeletedAndActive<User>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new UserDTO()
       {
-         var users = GetNonDeletedAndActive<User>(t => true).Select(u => new UserCreatedByDTO()
-         {
-            ID = u.ID,
-            Name = u.Name,
-            Surname = u.Surname
-         }).ToList();
+        ID = s.ID,
+        AuthorizationStatus = s.AuthorizationStatus,
+        Name = s.Name,
+        Surname = s.Surname,
+        Email = s.Email,
+        Password = s.Password,
+        UserName = s.Username,
+      });
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
 
-         return users;
-      }
-      catch (Exception e)
+  }
+
+  public async Task<List<ResponsibleDevextremeSelectListHelper>> GetResponsible()
+  {
+    try
+    {
+      List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
+      var model = context.Users
+          .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.AuthorizationStatus != AuthorizationStatus.Admin);
+      foreach (var item in model)
       {
-         throw e;
+        ResponsibleDevextremeSelectListHelper helper = new ResponsibleDevextremeSelectListHelper()
+        {
+          ID = item.ID,
+          Name = item.Name + " " + item.Surname,
+        };
+        ResponsibleHelpers.Add(helper);
       }
-   }
-
-
-   public async Task<UserDetailDto> UserDetails(int ID)
-    {
-       return GetNonDeletedAndActive<User>(t => t.ID == ID).Select(s=>new UserDetailDto
-       {
-           Name=s.Name,
-           Surname=s.Surname,
-           Username=s.Username,
-           Email=s.Email,
-           Password=s.Password,
-           AuthorizationStatus=s.AuthorizationStatus
-
-       }).FirstOrDefault();
+      return ResponsibleHelpers;
     }
-
-    public async Task<string> ChangeAuthorization(UserDetailDto model)
+    catch (Exception e)
     {
-        try
-        {
-            var user = await GetById<User>(model.ID);
-            user.AuthorizationStatus = model.AuthorizationStatus;
-            Update(user);
-            await uow.SaveChanges();
-            return "1";
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+      throw e;
     }
+  }
 
-   
+  public async Task<List<UserCreatedByDTO>> GetCreatedBy()
+  {
+    try
+    {
+      var users = GetNonDeletedAndActive<User>(t => true).Select(u => new UserCreatedByDTO()
+      {
+        ID = u.ID,
+        Name = u.Name,
+        Surname = u.Surname
+      }).ToList();
+
+      return users;
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+  }
+
+
+  public async Task<UserDetailDto> UserDetails(int ID)
+  {
+    var user = await GetById<User>(ID);
+    return new UserDetailDto()
+    {
+      Name = user.Name,
+      Surname = user.Surname,
+      Username = user.Username,
+      Email = user.Email,
+      Password = user.Password,
+      AuthorizationStatus = user.AuthorizationStatus
+
+    };
+  }
+
+  public async Task<UserDTO> UserSessionDetail()
+  {
+    try
+    {
+      var model = await uow.UserRepository.GetById<User>(uow.GetSession().ID);
+
+      var userdetail = new UserDTO()
+      {
+        UserName = model.Username,
+        Name = model.Name,
+        Surname = model.Surname,
+        Password = model.Password,
+        Email = model.Email,
+        AuthorizationStatus = model.AuthorizationStatus,
+      };
+      return userdetail;
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+  public async Task<string> ChangeAuthorization(UserDetailDto model)
+  {
+    try
+    {
+      var user = await GetById<User>(model.ID);
+      user.AuthorizationStatus = model.AuthorizationStatus;
+      Update(user);
+      await uow.SaveChanges();
+      return "1";
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+
 }
