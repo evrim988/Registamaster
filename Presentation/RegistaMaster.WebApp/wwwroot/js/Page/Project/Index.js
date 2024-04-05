@@ -1305,6 +1305,9 @@ function openPopupEditModuleSave() {
     contentType: false,
     success: function (data) {
       $("#saveButtonModule").addClass("invisible");
+      $("#DetailModuleName").prop("readonly", true);
+      $("#DetailModuleDescription").prop("readonly", true);
+      $("#DetailModuleProjectName").prop("disabled", true);
       gridRefresh();
     },
     error: function (e) {
@@ -1383,7 +1386,12 @@ function openPopupEditVersionSave() {
     processData: false,
     contentType: false,
     success: function (data) {
-      $("#saveButtonModule").addClass("invisible");
+      $("#saveButtonVersion").addClass("invisible");
+      $("#DetailVersionDescription").prop("readonly", true);
+      $("#DetailVersionProjectName").prop("disabled", true);
+      $("#DetailVersionDatabaseChange").prop("disabled", true);
+      $("#DetailVersionNewVersion").addClass("invisible");
+      $("#DetailVersionNewVersionLabel").addClass("invisible");
       gridRefresh();
     },
     error: function (e) {
