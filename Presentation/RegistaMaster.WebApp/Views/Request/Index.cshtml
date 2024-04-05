@@ -432,7 +432,6 @@
   </div>
 </div>
 
-
 @* Aksiyon Notu Görüntüleme *@
 <div class="modal fade" id="actionNoteDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
@@ -465,7 +464,7 @@
 </div>
 
 
-<!--Aksiyon Ekle Modal-->
+<!--Aksiyon Ekle/Düzenle Modal-->
 <div class="modal fade" id="ActionModal" aria-labelledby="ActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content" id="clear">
@@ -517,56 +516,6 @@
     </div>
   </div>
 </div>
-@* <div class="modal fade" id="EditAction" aria-labelledby="EditActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content" id="clear">
-      <div class="modal-header">
-        <h3 class="modal-title" id="EditActionLabel">Aksiyon Düzenle</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
-      </div>
-      <hr />
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <input class="form-control" type="hidden" id="editActionID" />
-            <div class="col-6">
-              <label style="font-weight:bold;">Açılma Tarihi</label>
-              <input class="form-control mt-2" type="date" id="actionEditOpeningDate" />
-            </div>
-            <div class="col-6">
-              <label style="font-weight:bold;">Hedef Tarihi</label>
-              <input class="form-control mt-2" type="date" id="actionEditEndDate" />
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Öncelik Durumu</label>
-              <select class="form-select mt-2" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority">
-                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
-              </select>
-            </div>
-            <div class="col-6 mt-3">
-              <label style="font-weight:bold;">Sorumlu Kişi</label>
-              <select class="form-select mt-2" asp-items="@Model.Responsible" id="actionEditResponsible">
-                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
-              </select>
-            </div>
-            <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Konu<span class="text-danger"> *</span></label>
-              <input class="form-control mt-2" id="editActionSubject" />
-            </div>
-            <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Açıklama<span class="text-danger"> *</span></label>
-              <textarea class="form-control mt-2" id="actionEditDescription" rows="5"></textarea>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
-        <button type="button" onclick="SaveActionUpdate()" class="btn btn-primary">Kaydet</button>
-      </div>
-    </div>
-  </div>
-</div> *@
 
 <!--Aksiyon İptal/Reddedildi  modal-->
 <div class="modal fade" id="CancelModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

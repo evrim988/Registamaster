@@ -35,7 +35,7 @@ function GetList() {
             e.data.color = "#CDEFFE";
             break;
           case 2:
-            e.data.color = "#E1FFE2";
+            e.data.color = "#D6FFD7";
             break;
           case 3:
             e.data.color = "#FDEBD0";
