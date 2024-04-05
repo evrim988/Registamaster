@@ -1227,18 +1227,6 @@ function openPopupAddVersionModal(ID) {
 
 //Versiyon ekle
 function SaveVersion() {
-  const swalWithBootstrapButtons = swal.mixin({
-    confirmButtonClass: 'btn btn-success',
-    buttonsStyling: false,
-  })
-  if (!validateFormVersion()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
-    return;
-  }
   var formData = new FormData();
   formData.append('ProjectID', $('#addVersionProjectID').val());
   formData.append('Description', $('#addVersionDescription').val());
@@ -1357,18 +1345,6 @@ function openPopupEditVersionModal() {
 }
 //Versiyon düzenle kaydet
 function openPopupEditVersionSave() {
-  const swalWithBootstrapButtons = swal.mixin({
-    confirmButtonClass: 'btn btn-success',
-    buttonsStyling: false,
-  })
-  if (!validateFormVersionEdit()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
-    return;
-  }
   var formData = new FormData();
   formData.append('ID', $('#DetailVersionID').val());
   formData.append('ProjectID', $('#DetailVersionProjectName').val());
@@ -1507,34 +1483,6 @@ function validateFormProjectNoteEdit() {
   return true;
 } 
 
-// Versiyon Ekle Modal boş alan kontrolü
-function validateFormVersion() {
-
-  var requiredFields = [
-    "addVersionDescription",
-  ];
-
-  for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
-    if (!fieldValue)
-      return false;
-  }
-  return true;
-}
-// Versiyon Düzenle Modal boş alan kontrolü
-function validateFormVersionEdit() {
-
-  var requiredFields = [
-    "DetailVersionProjectName",
-  ];
-
-  for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
-    if (!fieldValue)
-      return false;
-  }
-  return true;
-}
 
 
 
