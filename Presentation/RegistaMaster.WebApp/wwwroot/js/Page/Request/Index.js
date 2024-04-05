@@ -2686,6 +2686,8 @@ function CheckButtonStatus(data) {
 //ekran görüntüsü popup
 function OpenAnyImage(imageElementId) {
   var imgSrc = $('#' + imageElementId).attr('src');
+  if (imgSrc == "/Modernize/Img/yok.png")
+    return;
   OpenImage(imgSrc);
 }
 
