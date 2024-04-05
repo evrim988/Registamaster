@@ -109,18 +109,22 @@
             </div>
             <div class="col-6 mt-3">
               <label style="font-weight:bold;">Öncelik Durumu</label>
-              <select class="form-select mt-2" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority"></select>
+              <select class="form-select mt-2" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority">
+                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+              </select>
             </div>
             <div class="col-6 mt-3">
               <label style="font-weight:bold;">Sorumlu Kişi</label>
-              <select class="form-select mt-2" asp-items="@ViewBag.Responsible" id="actionEditResponsible"></select>
+              <select class="form-select mt-2" asp-items="@ViewBag.Responsible" id="actionEditResponsible">
+                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+              </select>
             </div>
             <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Konu</label>
+              <label style="font-weight:bold;">Konu<span class="text-danger"> *</span></label>
               <input class="form-control mt-2" id="editActionSubject" />
             </div>
             <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Açıklama</label>
+              <label style="font-weight:bold;">Açıklama<span class="text-danger"> *</span></label>
               <textarea class="form-control mt-2" id="actionEditDescription" rows="5"></textarea>
             </div>
           </div>
