@@ -34,21 +34,6 @@ function GetList() {
       if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
 
       if (e.data != undefined) {
-        //switch (e.data.actionStatus) {
-        //  case 0:
-        //    if (new Date(e.data.endDate) <= new Date())
-        //      e.data.color = "#F1948A";
-        //    break;
-        //  case 1:
-        //    e.data.color = "#D6EAF8";
-        //    break;
-        //  case 2:
-        //    e.data.color = "#D5F5E3";
-        //    break;
-        //  case 3:
-        //    e.data.color = "#FDEBD0";
-        //    break;
-        //}
         switch (e.data.actionStatus) {
           case 0:
             if (new Date(e.data.endDate) <= new Date())
@@ -610,6 +595,18 @@ function OpenActionEditModals(data) {
 
 //aksiyon güncelle
 function SaveActionUpdate() {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateActionForm()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
   var formData = new FormData();
 
   formData.append("ID", $("#editActionID").val());
@@ -641,6 +638,27 @@ function SaveActionUpdate() {
     }
   });
 }
+
+//aksiyon ekle düzenle validation
+function validateActionForm() {
+  var requiredFields = [
+    "editActionSubject",
+    "actionEditDescription",
+  ];
+
+
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+
+    if (!fieldValue) {
+
+      return false;
+    }
+  }
+
+  return true;
+}
+
 
 //aksiyon sil
 function DeleteActionDialog(ID) {

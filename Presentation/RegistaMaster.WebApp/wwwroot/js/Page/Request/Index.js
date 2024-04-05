@@ -390,7 +390,7 @@ function GetList() {
                         hint: "Aksiyon Ekle",
                         stylingMode: "text",
                         onClick: function (e) {
-                          openPopup(options.data);
+                          AddActionModal(options.data);
                         }
                       })
                       .appendTo(container);
@@ -406,7 +406,7 @@ function GetList() {
                     hint: "Aksiyon Ekle",
                     stylingMode: "text",
                     onClick: function (e) {
-                      openPopup(options.data);
+                      AddActionModal(options.data);
                     }
                   })
                   .appendTo(container);
@@ -1024,7 +1024,7 @@ function handleItemClick(item, options) {
 
   switch (items) {
     case "Aksiyon Ekle":
-      openPopup(data);
+      AddActionModal(data);
       break;
     //case "Talebi Reddet":
     //   CancelRequest(ID);
@@ -1379,6 +1379,19 @@ function GetSelectListEdit() {
 }
 //talep güncelle
 function SaveRequestEditModal() {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateRequestEditForm()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
+
   var formData = new FormData();
 
   formData.append("notificationTypeID", $("#NotificationEditTypeID").val());
@@ -1451,6 +1464,39 @@ function SaveRequestEditModal() {
   }
 }
 
+function validateRequestEditForm() {
+  var optionsCount = $("#ModuleEditID option").length;
+  if (optionsCount == 1) {
+    var requiredFields = [
+      "ProjectEditID",
+      "VersionEditID",
+      "RequestEditSubject",
+      "DescriptionEdit",
+    ];
+  }
+  else {
+    var requiredFields = [
+      "ProjectEditID",
+      "ModuleEditID",
+      "VersionEditID",
+      "RequestEditSubject",
+      "DescriptionEdit",
+    ];
+  }
+
+
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+
+    if (!fieldValue) {
+
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function UploadFileEdit(ID) {
   var input = $('#fileInputEdit')[0];
 
@@ -1477,182 +1523,6 @@ function UploadFileEdit(ID) {
     },
     error: function (xhr, status, error) {
       console.error('Error:', error);
-    }
-  });
-}
-
-
-//aksiyon ekle popup
-function openPopup(data) {
-  var ID = data.id;
-  var today = new Date();
-  var endDate = new Date();
-  endDate.setDate(endDate.getDate() + 2);
-  var formItems = [
-    {
-      dataField: "Subject",
-      label: {
-        text: "Aksiyon Konusu"
-      },
-      validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-      editorOptions: {
-        value: data.subject
-      }
-    },
-
-    {
-      dataField: "responsibleID",
-      editorType: "dxSelectBox",
-      validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-      editorOptions: {
-        dataSource: DevExpress.data.AspNet.createStore({
-          loadUrl: "/Action/GetResponsible/",
-        }),
-        valueExpr: "id",
-        displayExpr: "name"
-      },
-      label: {
-        text: "Aksiyon Sorumlusu"
-      },
-    },
-    {
-      dataField: "openingDate",
-      caption: "Başlangıç Tarihi",
-      alignment: 'center',
-      dataType: 'date',
-      editorType: "dxDateBox",
-      editorOptions: {
-        format: 'dd/MM/yyyy',
-        value: today,
-        min: today,
-      },
-      label: {
-        text: "Aksiyon Başlangıç Tarihi"
-      },
-
-    },
-    {
-      dataField: "endDate",
-      caption: "Hedef Tarih",
-      alignment: 'center',
-      dataType: 'date',
-      editorType: "dxDateBox",
-      editorOptions: {
-        format: 'dd/MM/yyyy',
-        value: endDate,
-        min: today,
-
-      },
-      label: {
-        text: "Aksiyon Hedef Tarihi"
-      },
-    },
-
-    {
-      dataField: "actionPriorityStatus",
-      editorType: "dxSelectBox",
-      label: {
-        text: "Aksiyon Öncelik Durumu"
-      },
-      editorOptions: {
-        dataSource: DevExpress.data.AspNet.createStore({
-          key: "Id",
-          loadUrl: "/Action/GetPriortyActionStatus",
-          onBeforeSend: function (method, ajaxoptions) {
-            ajaxoptions.xhrFields = { withCredentials: true };
-          },
-        }),
-        valueExpr: "Id",
-        displayExpr: "Text",
-        value: 0
-      }
-    },
-    {
-      dataField: "description",
-      validationRules: [{ type: "required", message: "Bu alan zorunludur." }],
-      label: {
-        text: "Aksiyon Açıklaması"
-      },
-      editorType: "dxTextArea",
-      editorOptions: {
-        height: 70,
-        width: 415,
-        value: data.description
-      },
-    },
-
-  ];
-
-
-
-
-  var form = $("<div>")
-    .dxForm({
-      colCount: 2,
-      items: formItems,
-      labelLocation: "top",
-    })
-    .appendTo("body")
-    .dxForm("instance");
-
-  $("<hr>").appendTo(form.element());
-
-  var buttonContainer = $("<div>")
-    .addClass("dx-form-field")
-    .css("text-align", "right")
-    .appendTo(form.element());
-
-
-  var saveButton = $("<div>")
-    .dxButton({
-      text: "Kaydet",
-      onClick: function () {
-        saveData(form, popup, ID);
-      },
-      elementAttr: {
-        style: "background-color: #4CAF50; color: white;"
-      }
-    })
-    .appendTo(buttonContainer);
-
-  var popup = $("<div>")
-    .dxPopup({
-      title: "Aksiyon Ekle",
-      width: 900,
-      height: 380,
-      contentTemplate: function (contentContainer) {
-
-        contentContainer.append(form.element());
-      },
-
-    })
-    .appendTo("body")
-    .dxPopup("instance");
-
-
-  popup.show();
-}
-
-//aksiyon ekle kayıt
-function saveData(form, popup, ID) {
-  var formData = form.option("formData");
-  //console.log(formData);
-
-  $.ajax({
-    url: "/Request/AddActionItem/" + ID,
-    type: "POST",
-    contentType: "application/json", // contentType'ı ayarla
-    data: JSON.stringify(formData),
-
-    success: function (result) {
-      //console.log("Veri başarıyla kaydedildi:", result);
-    },
-    error: function (error) {
-      console.error("AJAX isteği sırasında bir hata oluştu:", error);
-    },
-    complete: function () {
-      popup.hide();
-      gridRefresh();
     }
   });
 }
@@ -1720,6 +1590,7 @@ function validateForm() {
   if (optionsCount == 1) {
     var requiredFields = [
       "ProjectID",
+      "VersionID",
       "Subject",
       "Description",
     ];
@@ -1728,6 +1599,7 @@ function validateForm() {
     var requiredFields = [
       "ProjectID",
       "ModuleID",
+      "VersionID",
       "Subject",
       "Description",
     ];
@@ -1980,32 +1852,58 @@ function DeleteRequestWithActions(ID) {
   })
 }
 
+//aksiyon ekle modal
+function AddActionModal(data) {
+  CloseActionModal();
+  $("#ActionLabel").text("Aksiyon Ekle");
+  $("#actionSubject").val(data.subject);
+  $("#actionDescription").val(data.description);
+  $("#requestID").val(data.id);
+
+  let openingDate = new Date();
+  var opDay = ("0" + openingDate.getDate()).slice(-2);
+  var opMonth = ("0" + (openingDate.getMonth() + 1)).slice(-2);
+  var opFullDate = openingDate.getFullYear() + "-" + (opMonth) + "-" + (opDay);
+  $("#actionOpeningDate").val(opFullDate);
+  $("#actionOpeningDate").attr('min', opFullDate);
+
+  let endDate = new Date();
+  endDate.setDate(endDate.getDate() + 2);
+  var endDay = ("0" + endDate.getDate()).slice(-2);
+  var endMonth = ("0" + (endDate.getMonth() + 1)).slice(-2);
+  var endFullDate = endDate.getFullYear() + "-" + (endMonth) + "-" + (endDay);
+  $("#actionEndDate").val(endFullDate);
+  $("#actionEndDate").attr('min', endFullDate);
+
+  $("#ActionModal").modal("toggle");
+}
 
 //Aksiyon düzenle modal
 function OpenActionEditModals(data) {
   //console.log(data);
-
-  $("#editActionID").val(data.ID);
-  $("#editActionSubject").val(data.Subject);
-  $("#actionEditDescription").val(data.Description);
-  $("#actionEditActionPriority").val(data.ActionPriorityStatus);
-  $("#actionEditResponsible").val(data.ResponsibleID);
+  CloseActionModal();
+  $("#ActionLabel").text("Aksiyon Düzenle");
+  $("#actionID").val(data.ID);
+  $("#actionSubject").val(data.Subject);
+  $("#actionDescription").val(data.Description);
+  $("#actionActionPriority").val(data.ActionPriorityStatus);
+  $("#actionResponsible").val(data.ResponsibleID);
 
   if (new Date(data.OpeningDate) < new Date()) {
     let minDate = new Date();
     var day = ("0" + minDate.getDate()).slice(-2);
     var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
     var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
-    $("#actionEditOpeningDate").val(fullDate);
-    $("#actionEditOpeningDate").attr('min', fullDate);
+    $("#actionOpeningDate").val(fullDate);
+    $("#actionOpeningDate").attr('min', fullDate);
   }
   else {
     let openingDate = new Date(data.OpeningDate);
     var opDay = ("0" + openingDate.getDate()).slice(-2);
     var opMonth = ("0" + (openingDate.getMonth() + 1)).slice(-2);
     var opFullDate = openingDate.getFullYear() + "-" + (opMonth) + "-" + (opDay);
-    $("#actionEditOpeningDate").val(opFullDate);
-    $("#actionEditOpeningDate").attr('min', opFullDate);
+    $("#actionOpeningDate").val(opFullDate);
+    $("#actionOpeningDate").attr('min', opFullDate);
   }
 
   if (new Date(data.EndDate) < new Date()) {
@@ -2013,52 +1911,128 @@ function OpenActionEditModals(data) {
     var day = ("0" + minDate.getDate()).slice(-2);
     var month = ("0" + (minDate.getMonth() + 1)).slice(-2);
     var fullDate = minDate.getFullYear() + "-" + (month) + "-" + (day);
-    $("#actionEditEndDate").val(fullDate);
-    $("#actionEditEndDate").attr('min', fullDate);
+    $("#actionEndDate").val(fullDate);
+    $("#actionEndDate").attr('min', fullDate);
   }
   else {
     let endDate = new Date(data.EndDate);
     var endDay = ("0" + endDate.getDate()).slice(-2);
     var endMonth = ("0" + (endDate.getMonth() + 1)).slice(-2);
     var endFullDate = endDate.getFullYear() + "-" + (endMonth) + "-" + (endDay);
-    $("#actionEditEndDate").val(endFullDate);
-    $("#actionEditEndDate").attr('min', endFullDate);
+    $("#actionEndDate").val(endFullDate);
+    $("#actionEndDate").attr('min', endFullDate);
   }
 
 
-  $("#EditAction").modal("toggle");
+  $("#ActionModal").modal("toggle");
 }
 
-//aksiyon update
-function SaveActionUpdate() {
-  var formData = new FormData();
+//aksiyon ekle ve düzenle kayıt
+function SaveAction() {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateActionForm()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
 
-  formData.append("ID", $("#editActionID").val());
-  formData.append("subject", $("#editActionSubject").val());
-  formData.append("description", $("#actionEditDescription").val());
-  formData.append("actionPriorityStatus", $("#actionEditActionPriority").val());
-  formData.append("openingDate", $("#actionEditOpeningDate").val());
-  formData.append("endDate", $("#actionEditEndDate").val());
-  formData.append("responsibleID", $("#actionEditResponsible").val());
+  if ($("#actionID").val() > 0) {
+    var formData = new FormData();
+    formData.append("ID", $("#actionID").val());
+    formData.append("Subject", $("#actionSubject").val());
+    formData.append("Description", $("#actionDescription").val());
+    formData.append("ActionPriorityStatus", $("#actionActionPriority").val());
+    formData.append("OpeningDate", $("#actionOpeningDate").val());
+    formData.append("EndDate", $("#actionEndDate").val());
+    formData.append("ResponsibleID", $("#actionResponsible").val());
 
-  //console.log(formData);
+    $.ajax({
+      url: "/Action/ActionUpdate",
+      type: 'POST',
+      async: false,
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        $("#ActionModal").modal("toggle");
+        gridRefresh();
+      },
+      error: function (e) {
+        console.log(e);
+      }
+    });
+  }
+  else {
 
-  $.ajax({
-    url: "/Action/ActionUpdate",
-    type: 'POST',
-    data: formData,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
-      $("#EditAction").modal("toggle");
-      gridRefresh();
-    },
-    error: function (e) {
-      console.log(e);
+    var formData = new FormData();
+    formData.append("RequestID", $("#requestID").val());
+    formData.append("Subject", $("#actionSubject").val());
+    formData.append("Description", $("#actionDescription").val());
+    formData.append("ActionPriorityStatus", $("#actionActionPriority").val());
+    formData.append("OpeningDate", $("#actionOpeningDate").val());
+    formData.append("EndDate", $("#actionEndDate").val());
+    formData.append("ResponsibleID", $("#actionResponsible").val());
+
+    $.ajax({
+      url: "/Request/AddAction",
+      type: 'POST',
+      async: false,
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        $("#ActionModal").modal("toggle");
+        gridRefresh();
+      },
+      error: function (e) {
+        console.log(e);
+      }
+    });
+  }
+
+  CloseActionModal();
+}
+
+function CloseActionModal() {
+  $("#ActionLabel").text("");
+  $("#actionSubject").val("");
+  $("#actionDescription").val("");
+  $("#requestID").val("");
+  $("#actionID").val("");
+  $("#actionActionPriority").val(-1);
+  $("#actionResponsible").val(-1);
+}
+
+//aksiyon ekle düzenle validation
+function validateActionForm() {
+  var requiredFields = [
+    "actionSubject",
+    "actionDescription",
+    "actionResponsible",
+    "actionActionPriority",
+  ];
+
+
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+
+    if (!fieldValue) {
+
+      return false;
     }
-  });
+  }
+
+  return true;
 }
+
 //aksiyon sil
 function DeleteActionDialog(ID) {
   //console.log(ID);
@@ -2173,9 +2147,6 @@ function OpenActionDetailModal(data) {
 
   $("#DetailAction").modal('toggle');
 }
-
-
-
 
 //aksiyon durum değiştir
 function ChangeActionStatusModal(data) {

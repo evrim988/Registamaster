@@ -117,7 +117,6 @@
               </select>
               <h1></h1>
             </div>
-
             <div class="form-group col-md-6">
               <label style="font-weight:bold;">Kategori:</label>
               <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryID" class="form-control select2 mt-1" name="CategoryID">
@@ -131,7 +130,6 @@
                 <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
               </select>
               <h1></h1>
-
             </div>
             <div class="form-group col-md-6">
               <label style="font-weight:bold;">Versiyon:<span class="text-danger">*</span></label>
@@ -208,21 +206,21 @@
                   <h1></h1>
                 </div>
                 <div class="form-group col-md-6">
-                  <label style="font-weight:bold;">Proje:</label>
+                  <label style="font-weight:bold;">Proje:<span class="text-danger">*</span></label>
                   <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="ProjectEditID" class="form-control select2 mt-1" name="ProjectID">
                     <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                   </select>
                   <h1></h1>
                 </div>
                 <div class="form-group col-md-6">
-                  <label style="font-weight:bold;">Versiyon:</label>
+                  <label style="font-weight:bold;">Versiyon:<span class="text-danger">*</span></label>
                   <select asp-for="VersionID" id="VersionEditID" class="form-control select2 mt-1" name="VersionID">
                     <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                   </select>
                   <h1></h1>
                 </div>
                 <div class="form-group col-md-6">
-                  <label style="font-weight:bold;">Modül:</label>
+                  <label style="font-weight:bold;">Modül:<span class="text-danger">*</span></label>
                   <select asp-for="ModuleID" id="ModuleEditID" class="form-control select2 mt-1" name="ModuleID">
                     <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
                   </select>
@@ -233,12 +231,12 @@
                   <input asp-for="PageUrl" type="text" id="PageEditUrl" required class="form-control mt-1" name="PageUrl" />
                 </div>
                 <div class="form-group col-md-12">
-                  <label style="font-weight:bold;">Konu:</label>
+                  <label style="font-weight:bold;">Konu:<span class="text-danger">*</span></label>
                   <input asp-for="Subject" type="text" id="RequestEditSubject" required class="form-control mt-1" name="Subject" />
                   <h1></h1>
                 </div>
                 <div class="form-group col-md-12">
-                  <label style="font-weight:bold;">Açıklama:</label>
+                  <label style="font-weight:bold;">Açıklama:<span class="text-danger">*</span></label>
                   <textarea asp-for="Description" type="text" id="DescriptionEdit" required class="form-control mt-1" rows="6" name="Description"></textarea>
                   <h1></h1>
                 </div>
@@ -436,7 +434,7 @@
 
 
 @* Aksiyon Notu Görüntüleme *@
-<div class="modal fade" id="actionNoteDetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="actionNoteDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header mt-3">
@@ -467,8 +465,59 @@
 </div>
 
 
-<!--Edit Action Modal-->
-<div class="modal fade" id="EditAction" aria-labelledby="EditActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
+<!--Aksiyon Ekle Modal-->
+<div class="modal fade" id="ActionModal" aria-labelledby="ActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content" id="clear">
+      <div class="modal-header">
+        <h3 class="modal-title" id="ActionLabel"></h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
+      </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <input class="form-control" type="hidden" id="actionID" />
+            <input class="form-control" type="hidden" id="requestID" />
+            <div class="col-6">
+              <label style="font-weight:bold;">Açılma Tarihi</label>
+              <input class="form-control mt-2" type="date" id="actionOpeningDate" />
+            </div>
+            <div class="col-6">
+              <label style="font-weight:bold;">Hedef Tarihi</label>
+              <input class="form-control mt-2" type="date" id="actionEndDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Öncelik Durumu<span class="text-danger"> *</span></label>
+              <select class="form-select mt-2" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionActionPriority">
+                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+              </select>
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Sorumlu Kişi<span class="text-danger"> *</span></label>
+              <select class="form-select mt-2" asp-items="@Model.Responsible" id="actionResponsible">
+                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+              </select>
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Konu<span class="text-danger"> *</span></label>
+              <input class="form-control mt-2" id="actionSubject" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama<span class="text-danger"> *</span></label>
+              <textarea class="form-control mt-2" id="actionDescription" rows="5"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+        <button type="button" onclick="SaveAction()" class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>
+@* <div class="modal fade" id="EditAction" aria-labelledby="EditActionLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content" id="clear">
       <div class="modal-header">
@@ -490,18 +539,22 @@
             </div>
             <div class="col-6 mt-3">
               <label style="font-weight:bold;">Öncelik Durumu</label>
-              <select class="form-select mt-2" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority"></select>
+              <select class="form-select mt-2" asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionEditActionPriority">
+                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+              </select>
             </div>
             <div class="col-6 mt-3">
               <label style="font-weight:bold;">Sorumlu Kişi</label>
-              <select class="form-select mt-2" asp-items="@Model.Responsible" id="actionEditResponsible"></select>
+              <select class="form-select mt-2" asp-items="@Model.Responsible" id="actionEditResponsible">
+                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
+              </select>
             </div>
             <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Konu</label>
+              <label style="font-weight:bold;">Konu<span class="text-danger"> *</span></label>
               <input class="form-control mt-2" id="editActionSubject" />
             </div>
             <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Açıklama</label>
+              <label style="font-weight:bold;">Açıklama<span class="text-danger"> *</span></label>
               <textarea class="form-control mt-2" id="actionEditDescription" rows="5"></textarea>
             </div>
           </div>
@@ -513,7 +566,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> *@
 
 <!--Aksiyon İptal/Reddedildi  modal-->
 <div class="modal fade" id="CancelModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

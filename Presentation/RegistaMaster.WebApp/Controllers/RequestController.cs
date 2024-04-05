@@ -129,7 +129,21 @@ public class RequestController : Controller
     try
     {
       await uow.ActionRepository.AddAction(model, ID);
-      return Ok(model);
+      return Ok();
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
+
+
+  public async Task<IActionResult> AddAction(Action model)
+  {
+    try
+    {
+      await uow.ActionRepository.AddAction(model, model.RequestID);
+      return Ok();
     }
     catch (Exception ex)
     {
