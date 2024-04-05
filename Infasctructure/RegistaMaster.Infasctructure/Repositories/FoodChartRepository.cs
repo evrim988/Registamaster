@@ -1,5 +1,9 @@
 ﻿using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.ChartModels;
@@ -9,6 +13,7 @@ using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
 using System.Data;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace RegistaMaster.Infasctructure.Repositories;
 
@@ -25,11 +30,16 @@ public class FoodChartRepository : Repository, IFoodChartRepository
     _uow = uow;
   }
 
-  public async Task<string> AddFoodChart(FoodChart model)
+  public async Task<string> AddFoodChart(string values)
   {
     try
     {
-      await _uow.Repository.Add(model);
+      var model = JsonConvert.DeserializeObject<FoodChart>(values);
+      int recordCount = await _uow.FoodChartRepository.CheckRecordForDate(model.Date);
+      if (recordCount > 0)
+        return "GİRİLEN TARİH İÇİN KAYIT BULUNMAKTADIR.";
+
+      await Add(model);
       await _uow.SaveChanges();
       return "1";
     }
@@ -39,17 +49,16 @@ public class FoodChartRepository : Repository, IFoodChartRepository
     }
   }
 
-  public void Delete(int ID)
+  public async Task<string> DeleteFoodChart(int ID)
   {
     try
     {
-      var foodChart = GetNonDeletedAndActive<FoodChart>(t => t.ID == ID);
-      DeleteRange(foodChart.ToList());
-      Delete<FoodChart>(ID);
+      await Delete<FoodChart>(ID);
+      await _uow.SaveChanges();
+      return "1";
     }
     catch (Exception e)
     {
-
       throw e;
     }
   }
@@ -71,10 +80,12 @@ public class FoodChartRepository : Repository, IFoodChartRepository
     }
   }
 
-  public async Task<string> UpdateFoodChart(FoodChart model)
+  public async Task<string> UpdateFoodChart(int key, string values)
   {
     try
     {
+      var model = await GetById<FoodChart>(key);
+      JsonConvert.PopulateObject(values, model);
       Update(model);
       await _uow.SaveChanges();
       return "1";
@@ -177,8 +188,6 @@ public class FoodChartRepository : Repository, IFoodChartRepository
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
       ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
-
-
       int rowCount = worksheet.Dimension.Rows;
       int columnCount = worksheet.Dimension.Columns;
       for (int row = 2; row <= rowCount; row++)
@@ -201,8 +210,8 @@ public class FoodChartRepository : Repository, IFoodChartRepository
         // Tüm hücreler boş değilse foodChart'ı ekle
         if (foodChart.Date != default || foodChart.PersonNumber != default)
         {
-          await _uow.FoodChartRepository.AddFoodChart(foodChart);
-          await _uow.SaveChanges();
+          string foodChartJson = JsonConvert.SerializeObject(foodChart); // FoodChart nesnesini JSON'a dönüştür
+          await AddFoodChart(foodChartJson); // AddFoodChart metodunu string parametre ile çağırın
         }
       }
 
@@ -219,6 +228,28 @@ public class FoodChartRepository : Repository, IFoodChartRepository
     try
     {
       return await _uow.Repository.GetNonDeletedAndActive<FoodChart>(t => t.Date.Year == date.Year && t.Date.Month == date.Month && t.Date.Day == date.Day).CountAsync();
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+  }
+
+  public async Task<string> UploadExcel(IFormFile file)
+  {
+    try
+    {
+      if (file == null || file.Length <= 0)
+      {
+        return "Excel Dosyası Yüklenemedi";
+      }
+      using (var stream = new MemoryStream())
+      {
+        await file.CopyToAsync(stream);
+        stream.Position = 0;
+        await AddFoodChartsFromExcel(stream);
+      }
+      return "1";
     }
     catch (Exception e)
     {

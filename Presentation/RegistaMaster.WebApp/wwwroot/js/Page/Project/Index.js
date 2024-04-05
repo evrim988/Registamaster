@@ -38,13 +38,15 @@ function GetList() {
     groupPanel: {
       visible: true
     },
-
     columnAutoWidth: true,
     remoteOperations: true,
     allowColumnReordering: true,
     showBorders: true,
     allowColumnResizing: true,
     columnResizingMode: 'widget',
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
     searchPanel: {
       visible: true,
       width: 240,
@@ -526,6 +528,7 @@ function DeleteProjectNote(ID) {
 //MasterDetail Tabs
 function masterDetailTemplate(_, masterDetailOptions) {
   return $('<div>').dxTabPanel({
+    
     items: [
       {
         title: 'Modüller',
@@ -538,15 +541,19 @@ function masterDetailTemplate(_, masterDetailOptions) {
       {
         title: 'Proje Notları',
         template: GetProjectNoteTabTemplate(masterDetailOptions.data),
-      }
+      },
     ],
+      onSelectionChanged: function (e) {
+        $("#projectGridContainer").dxDataGrid("instance").updateDimensions();
+      }
   });
 }
 
 //MasterDetail ProjectNote Tabs
 function GetProjectNoteTabTemplate(masterDetailData) {
   return function () {
-    var $projectNoteGrid = $("<div>").dxDataGrid({
+    return $("<div>")
+      .dxDataGrid({
       columnAutoWidth: true,
       showBorders: true,
       showColumnLines: true,
@@ -566,7 +573,13 @@ function GetProjectNoteTabTemplate(masterDetailData) {
       columnResizingMode: 'widget',
       onRowPrepared: function (e) {
         if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
-      },
+        },
+        grouping: {
+          autoExpandAll: true,
+        },
+        groupPanel: {
+          visible: false
+        },
       onEditingStart(e) {
         title = e.data.ElementDescription;
       },
@@ -654,11 +667,6 @@ function GetProjectNoteTabTemplate(masterDetailData) {
         }
       })
     });
-
-    var $container = $("<div>");
-
-    $container.append($projectNoteGrid);
-    return $container;
   }
 }
 
@@ -686,6 +694,12 @@ function GetModuleTabTemplate(masterDetailData) {
         columnResizingMode: 'widget',
         onRowPrepared: function (e) {
           if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+        },
+        grouping: {
+          autoExpandAll: true,
+        },
+        groupPanel: {
+          visible: false
         },
         onEditingStart(e) {
           title = e.data.ElementDescription;
@@ -797,6 +811,12 @@ function GetVersionTabTemplate(masterDetailData) {
         columnResizingMode: 'widget',
         onRowPrepared: function (e) {
           if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+        },
+        grouping: {
+          autoExpandAll: true,
+        },
+        groupPanel: {
+          visible: false
         },
         onEditingStart(e) {
           title = e.data.ElementDescription;

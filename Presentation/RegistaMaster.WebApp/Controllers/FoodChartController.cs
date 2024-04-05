@@ -29,14 +29,8 @@ namespace RegistaMaster.WebApp.Controllers
     {
       try
       {
-        var model = JsonConvert.DeserializeObject<FoodChart>(values);
-        int recordCount = await _uow.FoodChartRepository.CheckRecordForDate(model.Date);
-        if (recordCount > 0)
-        {
-          return BadRequest("GİRİLEN TARİH İÇİN KAYIT BULUNMAKTADIR.");
-        }
-        await _uow.FoodChartRepository.AddFoodChart(model);
-        return Ok();
+        var result = await _uow.FoodChartRepository.AddFoodChart(values);
+        return result == "1" ? Ok() : BadRequest(result);
       }
       catch (Exception e)
       {
@@ -47,11 +41,7 @@ namespace RegistaMaster.WebApp.Controllers
     {
       try
       {
-        var model = await _uow.FoodChartRepository.GetById<FoodChart>(key);
-        JsonConvert.PopulateObject(values, model);
-        _uow.FoodChartRepository.Update(model);
-        await _uow.SaveChanges();
-        return "1";
+        return await _uow.FoodChartRepository.UpdateFoodChart(key,values);
       }
       catch (Exception e)
       {
@@ -62,13 +52,10 @@ namespace RegistaMaster.WebApp.Controllers
     {
       try
       {
-        await _uow.FoodChartRepository.Delete<FoodChart>(key);
-        await _uow.SaveChanges();
-        return "1";
+       return await _uow.FoodChartRepository.DeleteFoodChart(key);
       }
       catch (Exception e)
       {
-
         throw e;
       }
     }
@@ -91,21 +78,10 @@ namespace RegistaMaster.WebApp.Controllers
     [HttpPost]
     public async Task<IActionResult> UploadExcel(IFormFile file)
     {
-      if (file == null || file.Length <= 0)
-      {
-        return BadRequest("Excel Dosyası Yüklenemedi");
-      }
-
       try
       {
-        using (var stream = new MemoryStream())
-        {
-          await file.CopyToAsync(stream);
-          stream.Position = 0;
-          await _uow.FoodChartRepository.AddFoodChartsFromExcel(stream);
-        }
-
-        return RedirectToAction("Index", "FoodChart");
+        var result = await _uow.FoodChartRepository.UploadExcel(file);
+        return result == "1" ? RedirectToAction(nameof(Index)) : BadRequest(result);
       }
       catch (Exception e)
       {

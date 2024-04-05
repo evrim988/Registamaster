@@ -10,7 +10,7 @@ public interface IModuleRepository : IRepository
   Task<string> GetModules(int ID);
   Task<string> CreateModule(Module model);
   Task<string> UpdateModule(Module model);
-  public string DeleteModule(int ID);
+  Task<string> DeleteModule(int ID);
   Task<List<ResponsibleDevextremeSelectListHelper>> GetProject();
   Task<string> DeleteModuleWithProjectID(int ID);
   Task<string> UpdateModule(ModuleDTO model);

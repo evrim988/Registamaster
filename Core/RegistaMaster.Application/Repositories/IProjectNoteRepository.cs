@@ -15,5 +15,7 @@ public interface IProjectNoteRepository : IRepository
   Task<string> DeleteNoteWithProjectID(int ID);
   List<SelectListItem> CreatedBySelectList();
   Task<string> GetProjectNotes(int ID);
+  Task<string> CheckRequest(int ID);
+
 
 }
