@@ -121,7 +121,7 @@
             <div class="form-group col-md-6">
               <label style="font-weight:bold;">Kategori:</label>
               <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryID" class="form-control select2 mt-1" name="CategoryID">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
               </select>
               <h1></h1>
             </div>
@@ -203,7 +203,7 @@
                 <div class="form-group col-md-6">
                   <label style="font-weight:bold;">Kategori:</label>
                   <select asp-for="CategoryID" asp-items="@Model.Category" id="CategoryEditID" class="form-control select2 mt-1" name="CategoryID">
-                    <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                    <option selected="selected" disabled value="-1">Lütfen Seçiniz</option>
                   </select>
                   <h1></h1>
                 </div>
