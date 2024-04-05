@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.ProjectModel;
+using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
@@ -10,73 +11,98 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class ProjectRepository : Repository, IProjectRepository
 {
-    private readonly RegistaMasterContext context;
-    private readonly IUnitOfWork uow;
-    private readonly SessionModel session;
-    public ProjectRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  private readonly RegistaMasterContext context;
+  private readonly IUnitOfWork uow;
+  private readonly SessionModel session;
+  public ProjectRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  {
+    this.context = _context;
+    this.uow = _uow;
+    this.session = _session;
+  }
+  public async Task<string> AddProject(Project model)
+  {
+    try
     {
-        this.context = _context;
-        this.uow = _uow;
-        this.session = _session;
+      await uow.Repository.Add(model);
+      await uow.SaveChanges();
+      var version = new VersionDTO()
+      {
+        ProjectID = model.ID,
+        DatabaseChange = true,
+        Name = "V1.0",
+      };
+      await uow.VersionRepository.AddVersion(version);
+      return "1";
     }
-    public async Task<int> AddProject(Project model)
+    catch (Exception e)
     {
-        try
-        {
-            await uow.Repository.Add(model);
-            await uow.SaveChanges();
-            return model.ID ;
-        }
-        catch (Exception e)
-        {
 
-            throw e;
-        }
+      throw e;
     }
+  }
 
-    public void Delete(int id)
+  public void Delete(int id)
+  {
+    var project = GetNonDeletedAndActive<Project>(t => t.ID == id);
+    DeleteRange(project.ToList());
+
+    Delete<Project>(id);
+  }
+
+  public async Task<string> DeleteProject(int ID)
+  {
+    try
     {
-        var project = GetNonDeletedAndActive<Project>(t => t.ID == id);
-        DeleteRange(project.ToList());
-
-        Delete<Project>(id);
+      await uow.VersionRepository.DeleteVersionWithProjectID(ID);
+      await uow.ModuleRepository.DeleteModuleWithProjectID(ID);
+      await uow.ProjectNoteRepository.DeleteNoteWithProjectID(ID);
+      await uow.Repository.Delete<Project>(ID);
+      await uow.SaveChanges();
+      return "1";
     }
-
-    public async Task<IQueryable<ProjectDTO>> GetList()
+    catch (Exception)
     {
-        try
-        {
-            return GetNonDeletedAndActive<Project>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ProjectDTO()
-            {
-                ID = s.ID,
-                ProjectName = s.ProjectName,
-                ProjectDescription = s.ProjectDescription
-            });
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
 
+      throw;
     }
+  }
 
-    public ProjectSessionModel GetProjectKey(string key)
+  public async Task<IQueryable<ProjectDTO>> GetList()
+  {
+    try
     {
-        try
-        {
-            return GetNonDeletedAndActive<Project>(t => t.ProjectGuid.ToString() == key).Select(s => new ProjectSessionModel()
-            {
-                ID = s.ID,
-                Name = s.ProjectName,
-
-            }).FirstOrDefault();
-        }
-        catch (Exception ex)
-        {
-
-            throw ex;
-        }
+      return GetNonDeletedAndActive<Project>(t => t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ProjectDTO()
+      {
+        ID = s.ID,
+        ProjectName = s.ProjectName,
+        ProjectDescription = s.ProjectDescription
+      });
     }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+
+  }
+
+  public ProjectSessionModel GetProjectKey(string key)
+  {
+    try
+    {
+      return GetNonDeletedAndActive<Project>(t => t.ProjectGuid.ToString() == key).Select(s => new ProjectSessionModel()
+      {
+        ID = s.ID,
+        Name = s.ProjectName,
+
+      }).FirstOrDefault();
+    }
+    catch (Exception ex)
+    {
+
+      throw ex;
+    }
+  }
 
   public async Task<List<SelectListItem>> GetProjectSelect()
   {
@@ -92,14 +118,15 @@ public class ProjectRepository : Repository, IProjectRepository
   }
 
   public async Task<string> UpdateProject(ProjectDTO model)
-    {
-      var project = await GetById<Project>(model.ID);
-      project.ProjectDescription = model.ProjectDescription;
-      project.ProjectName = model.ProjectName;
-        Update(project);
-        await uow.SaveChanges();
-        return "1";
-    }
+  {
+    var project = await GetById<Project>(model.ID);
+    project.ProjectDescription = model.ProjectDescription;
+    project.ProjectName = model.ProjectName;
+    Update(project);
+    await uow.SaveChanges();
+    return "1";
+  }
+  
 }
 
 

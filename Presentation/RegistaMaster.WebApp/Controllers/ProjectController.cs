@@ -29,26 +29,16 @@ public class ProjectController : Controller
     var models = await uow.ProjectRepository.GetList();
     return DataSourceLoader.Load(models, options);
   }
-  public async Task<object> AddProject(Project model)
+  public async Task<string> AddProject(Project model)
   {
     try
     {
-      var projectID = await uow.ProjectRepository.AddProject(model);
-      var version = new VersionDTO()
-      {
-        ProjectID = projectID,
-        DatabaseChange = true,
-        Name = "V1.0",
-      };
-      await uow.VersionRepository.AddVersion(version);
-      return Ok();
+      return await uow.ProjectRepository.AddProject(model);
     }
     catch (Exception e)
     {
-
       throw e;
     }
-
   }
   public async Task<string> ProjectEdit(ProjectDTO model)
   {
@@ -65,12 +55,7 @@ public class ProjectController : Controller
   {
     try
     {
-      await uow.VersionRepository.DeleteVersionWithProjectID(ID);
-      await uow.ModuleRepository.DeleteModuleWithProjectID(ID);
-      await uow.ProjectNoteRepository.DeleteNoteWithProjectID(ID);
-      await uow.Repository.Delete<Project>(ID);
-      await uow.SaveChanges();
-      return "1";
+     return await uow.ProjectRepository.DeleteProject(ID);
     }
     catch (Exception ex)
     {
@@ -92,9 +77,9 @@ public class ProjectController : Controller
     {
       return await uow.ProjectNoteRepository.GetProjectNotes(ID);
     }
-    catch (Exception)
+    catch (Exception e)
     {
-      throw;
+      throw e;
     }
   }
 
@@ -139,9 +124,7 @@ public class ProjectController : Controller
   {
     try
     {
-      if (uow.Repository.GetNonDeletedAndActive<Request>(t => t.ProjectID == ID && t.RequestStatus != RequestStatus.Closed).Count() != 0)
-        return "-1";
-      return "1";
+      return await uow.ProjectNoteRepository.CheckRequest(ID);
     }
     catch (Exception ex)
     {
@@ -202,9 +185,7 @@ public class ProjectController : Controller
   {
     try
     {
-      await uow.Repository.Delete<Module>(ID);
-      await uow.SaveChanges();
-      return "1";
+      return await uow.ModuleRepository.DeleteModule(ID);
     }
     catch (Exception ex)
     {

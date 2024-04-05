@@ -36,11 +36,11 @@ namespace RegistaMaster.Infasctructure.Repositories
         throw ex;
       }
     }
-    public string DeleteModule(int ID)
+    public async Task<string> DeleteModule(int ID)
     {
-      var module = GetNonDeletedAndActive<Module>(t => t.ID == ID);
-      DeleteRange(module.ToList());
-      Delete<Module>(ID);
+      
+      await Delete<Module>(ID);
+      await _unitOfWork.SaveChanges();
       return "1";
     }
 

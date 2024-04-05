@@ -133,5 +133,17 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
       throw ex;
     }
   }
-
+  public async Task<string> CheckRequest(int ID)
+  {
+    try
+    {
+      if (uow.Repository.GetNonDeletedAndActive<Request>(t => t.ProjectID == ID && t.RequestStatus != RequestStatus.Closed).Count() != 0)
+        return "-1";
+      return "1";
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+  }
 }

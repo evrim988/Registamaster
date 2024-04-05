@@ -38,13 +38,15 @@ function GetList() {
     groupPanel: {
       visible: true
     },
-
     columnAutoWidth: true,
     remoteOperations: true,
     allowColumnReordering: true,
     showBorders: true,
     allowColumnResizing: true,
     columnResizingMode: 'widget',
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
     searchPanel: {
       visible: true,
       width: 240,
@@ -216,6 +218,20 @@ function ClearModal() {
 
 //proje ekle
 function SaveProject() {
+
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateFormProject()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
+
   if ($('#ProjectID').val() == 0) {
     var formData = new FormData();
     formData.append('ProjectName', $('#ProjectName').val());
@@ -377,8 +393,19 @@ function AddProjectNoteModal(ID) {
 
 //proje notu ekle
 function SaveProjectNote() {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateFormProjectNote()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
   var formData = new FormData();
-
   formData.append('ProjectID', $('#addProjectNoteProjectID').val());
   formData.append('NoteType', $('#addNoteType').val());
   formData.append('Description', $('#addDescription').val());
@@ -526,6 +553,7 @@ function DeleteProjectNote(ID) {
 //MasterDetail Tabs
 function masterDetailTemplate(_, masterDetailOptions) {
   return $('<div>').dxTabPanel({
+    
     items: [
       {
         title: 'Modüller',
@@ -538,15 +566,19 @@ function masterDetailTemplate(_, masterDetailOptions) {
       {
         title: 'Proje Notları',
         template: GetProjectNoteTabTemplate(masterDetailOptions.data),
-      }
+      },
     ],
+      onSelectionChanged: function (e) {
+        $("#projectGridContainer").dxDataGrid("instance").updateDimensions();
+      }
   });
 }
 
 //MasterDetail ProjectNote Tabs
 function GetProjectNoteTabTemplate(masterDetailData) {
   return function () {
-    var $projectNoteGrid = $("<div>").dxDataGrid({
+    return $("<div>")
+      .dxDataGrid({
       columnAutoWidth: true,
       showBorders: true,
       showColumnLines: true,
@@ -566,7 +598,13 @@ function GetProjectNoteTabTemplate(masterDetailData) {
       columnResizingMode: 'widget',
       onRowPrepared: function (e) {
         if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
-      },
+        },
+        grouping: {
+          autoExpandAll: true,
+        },
+        groupPanel: {
+          visible: false
+        },
       onEditingStart(e) {
         title = e.data.ElementDescription;
       },
@@ -654,11 +692,6 @@ function GetProjectNoteTabTemplate(masterDetailData) {
         }
       })
     });
-
-    var $container = $("<div>");
-
-    $container.append($projectNoteGrid);
-    return $container;
   }
 }
 
@@ -686,6 +719,12 @@ function GetModuleTabTemplate(masterDetailData) {
         columnResizingMode: 'widget',
         onRowPrepared: function (e) {
           if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+        },
+        grouping: {
+          autoExpandAll: true,
+        },
+        groupPanel: {
+          visible: false
         },
         onEditingStart(e) {
           title = e.data.ElementDescription;
@@ -797,6 +836,12 @@ function GetVersionTabTemplate(masterDetailData) {
         columnResizingMode: 'widget',
         onRowPrepared: function (e) {
           if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+        },
+        grouping: {
+          autoExpandAll: true,
+        },
+        groupPanel: {
+          visible: false
         },
         onEditingStart(e) {
           title = e.data.ElementDescription;
@@ -1122,8 +1167,21 @@ function openPopupAddModuleModal(ID) {
 
 //Modül ekle
 function SaveModul() {
-  var formData = new FormData();
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateFormModule()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
 
+
+  var formData = new FormData();
   formData.append('ProjectID', $('#addModuleProjectID').val());
   formData.append('Name', $('#addModuleName').val());
   formData.append('Description', $('#addModuleDescription').val());
@@ -1157,8 +1215,19 @@ function openPopupAddVersionModal(ID) {
 
 //Versiyon ekle
 function SaveVersion() {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateFormVersion()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
   var formData = new FormData();
-
   formData.append('ProjectID', $('#addVersionProjectID').val());
   formData.append('Description', $('#addVersionDescription').val());
   formData.append('DatabaseChange', $("#addVersionDatabaseChange").prop("checked") ? "true" : "false");
@@ -1259,7 +1328,6 @@ function openPopupEditVersionModal() {
   $("#DetailVersionNewVersionLabel").removeClass("invisible");
 
 }
-
 //Versiyon düzenle kaydet
 function openPopupEditVersionSave() {
   var formData = new FormData();
@@ -1289,7 +1357,6 @@ function openPopupEditVersionSave() {
     }
   });
 }
-
 //Versiyon detay modal
 function VersionDetailModal(row) {
   $("#saveButtonVersion").addClass("invisible");
@@ -1321,3 +1388,63 @@ function VersionDetailModal(row) {
 
   $('#DetailVersion').modal('toggle');
 }
+//Proje Ekle Modal boş alan kontrolü
+function validateFormProject() {
+  
+    var requiredFields = [
+      "ProjectName",
+    ];
+ 
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+    if (!fieldValue)
+      return false;
+  }
+  return true;
+}
+//Modül Ekle Modal boş alan kontrolü
+function validateFormModule() {
+
+  var requiredFields = [
+    "addModuleName",
+  ];
+
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+    if (!fieldValue)
+      return false;
+  }
+  return true;
+} 
+// Proje Not Ekle Modal boş alan kontrolü
+function validateFormProjectNote() {
+
+  var requiredFields = [
+    "addNoteType",
+    "addDescription",
+  ];
+
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+    if (!fieldValue)
+      return false;
+  }
+  return true;
+}
+// Versiyon Ekle Modal boş alan kontrolü
+function validateFormVersion() {
+
+  var requiredFields = [
+    "addVersionDescription",
+  ];
+
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+    if (!fieldValue)
+      return false;
+  }
+  return true;
+}
+
+
+
