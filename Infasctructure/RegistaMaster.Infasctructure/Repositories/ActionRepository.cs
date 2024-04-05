@@ -48,14 +48,14 @@ public class ActionRepository : Repository, IActionRepository
     }
   }
 
-  public async Task<string> AddAction(Action model, int ID)
+  public async Task<string> AddAction(Action model)
   {
     try
     {
-      var request = await GetById<Request>(ID);
+      var request = await GetById<Request>(model.RequestID);
       if (request.RequestStatus == RequestStatus.Waiting)
       {
-        var cancelledActions = GetQueryable<Action>(t => t.RequestID == ID && t.Status == Status.Active && t.ObjectStatus == ObjectStatus.NonDeleted && t.ActionStatus == ActionStatus.Cancel).ToList();
+        var cancelledActions = GetQueryable<Action>(t => t.RequestID == model.RequestID && t.Status == Status.Active && t.ObjectStatus == ObjectStatus.NonDeleted && t.ActionStatus == ActionStatus.Cancel).ToList();
         foreach (var action in cancelledActions)
         {
           action.Status = Status.Passive;
@@ -65,7 +65,6 @@ public class ActionRepository : Repository, IActionRepository
         Update(request);
         await _uow.SaveChanges();
       }
-      model.RequestID = ID;
       model.ActionStatus = ActionStatus.notStarted;
       await _uow.Repository.Add(model);
       await _uow.SaveChanges();

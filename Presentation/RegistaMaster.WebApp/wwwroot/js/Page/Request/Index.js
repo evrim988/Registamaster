@@ -28,6 +28,7 @@ var onchangeData;
 var auth = $("#auth").val();
 var userID = $("#userID").val();
 var detail;
+var mode = 0;
 
 function gridRefresh() {
   $("#requestGridContainer").dxDataGrid("instance").refresh();
@@ -1855,6 +1856,7 @@ function DeleteRequestWithActions(ID) {
 //aksiyon ekle modal
 function AddActionModal(data) {
   CloseActionModal();
+  mode = 1;
   $("#ActionLabel").text("Aksiyon Ekle");
   $("#actionSubject").val(data.subject);
   $("#actionDescription").val(data.description);
@@ -1882,6 +1884,7 @@ function AddActionModal(data) {
 function OpenActionEditModals(data) {
   //console.log(data);
   CloseActionModal();
+  mode = 2;
   $("#ActionLabel").text("Aksiyon Düzenle");
   $("#actionID").val(data.ID);
   $("#actionSubject").val(data.Subject);
@@ -1942,9 +1945,9 @@ function SaveAction() {
     return;
   }
 
-  if ($("#actionID").val() > 0) {
+  if (mode == 1) {
     var formData = new FormData();
-    formData.append("ID", $("#actionID").val());
+    formData.append("RequestID", $("#requestID").val());
     formData.append("Subject", $("#actionSubject").val());
     formData.append("Description", $("#actionDescription").val());
     formData.append("ActionPriorityStatus", $("#actionActionPriority").val());
@@ -1953,7 +1956,7 @@ function SaveAction() {
     formData.append("ResponsibleID", $("#actionResponsible").val());
 
     $.ajax({
-      url: "/Action/ActionUpdate",
+      url: "/Request/AddAction",
       type: 'POST',
       async: false,
       data: formData,
@@ -1970,9 +1973,8 @@ function SaveAction() {
     });
   }
   else {
-
     var formData = new FormData();
-    formData.append("RequestID", $("#requestID").val());
+    formData.append("ID", $("#actionID").val());
     formData.append("Subject", $("#actionSubject").val());
     formData.append("Description", $("#actionDescription").val());
     formData.append("ActionPriorityStatus", $("#actionActionPriority").val());
@@ -1981,7 +1983,7 @@ function SaveAction() {
     formData.append("ResponsibleID", $("#actionResponsible").val());
 
     $.ajax({
-      url: "/Request/AddAction",
+      url: "/Action/ActionUpdate",
       type: 'POST',
       async: false,
       data: formData,
@@ -2009,6 +2011,7 @@ function CloseActionModal() {
   $("#actionID").val("");
   $("#actionActionPriority").val(-1);
   $("#actionResponsible").val(-1);
+  mode = 0;
 }
 
 //aksiyon ekle düzenle validation

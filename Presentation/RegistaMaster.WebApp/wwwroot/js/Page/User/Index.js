@@ -3,6 +3,8 @@
   GetList();
 });
 
+var mode;
+
 function GetList() {
   var grid = $(userGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
@@ -30,7 +32,7 @@ function GetList() {
           widget: "dxButton",
           options: {
             icon: "plus", text: "Kullanıcı Ekle", onClick: function (e) {
-              $('#addUser').modal('toggle');
+              AddUserModal();
             }
           },
           location: "after",
@@ -169,7 +171,7 @@ function GetList() {
 
             onClick: function (e) {
               data = e.row.data;
-              OpenEditModals(data);
+              OpenEditModal(data);
             }
           },
           {
@@ -215,83 +217,154 @@ function gridRefresh() {
   $("#userGridContainer").dxDataGrid("instance").refresh();
 }
 
-//kullanıcı ekle
-function AddUser() {
-  var formData = new FormData();
+//kullanıcı ekle modal
+function AddUserModal() {
+  ClearModal();
+  $("#UserModalLabel").text("Kullanıcı Ekle");
+  $("#UserModal").modal("toggle");
+  mode = 1;
+}
 
-  formData.append("name", $("#addName").val());
-  formData.append("surname", $("#addSurname").val());
-  formData.append("username", $("#addUsername").val());
-  formData.append("email", $("#addEmail").val());
-  formData.append("password", $("#addPassword").val());
-  formData.append("authorizationStatus", $("#addAuthStatus").val());
+//kullanıcı ekle/düzenle
+function SaveUser() {
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    buttonsStyling: false,
+  })
+  if (!validateForm()) {
+    swalWithBootstrapButtons(
+      'Uyarı',
+      'Lütfen Zorunlu Alanları Doldurunuz...',
+      'info'
+    )
+    return;
+  }
+  if (mode == 1) {
+    var formData = new FormData();
 
-  //console.log(formData);
+    formData.append("name", $("#Name").val());
+    formData.append("surname", $("#Surname").val());
+    formData.append("username", $("#Username").val());
+    formData.append("email", $("#Email").val());
+    formData.append("password", $("#Password").val());
+    formData.append("authorizationStatus", $("#AuthorizationStatus").val());
 
-  $.ajax({
-    url: "/User/AddUser",
-    type: 'POST',
-    data: formData,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
-      //console.log(data);
-      CloseAddUser();
-      gridRefresh();
-    },
-    error: function (e) {
-      console.log(e);
-    },
-    complete: function () {
+    //console.log(formData);
+
+    $.ajax({
+      url: "/User/AddUser",
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        //console.log(data);
+        $("#UserModal").modal("toggle");
+        gridRefresh();
+      },
+      error: function (e) {
+        console.log(e);
+      },
+      complete: function () {
+      }
+    });
+  }
+  else {
+    var formData = new FormData();
+
+    formData.append("id", $("#ID").val());
+    formData.append("name", $("#Name").val());
+    formData.append("surname", $("#Surname").val());
+    formData.append("username", $("#Username").val());
+    formData.append("email", $("#Email").val());
+    formData.append("password", $("#Password").val());
+
+    //console.log(formData);
+
+    $.ajax({
+      url: "/User/UpdateUser",
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        //console.log(data);
+        $("#UserModal").modal("toggle");
+        gridRefresh();
+      },
+      error: function (e) {
+        console.log(e);
+      },
+      complete: function () {
+      }
+    });
+  }
+}
+
+function ClearModal() {
+  $("#UserModalLabel").text("");
+  $("#ID").val("");
+  $("#Name").val("");
+  $("#Surname").val("");
+  $("#Username").val("");
+  $("#Email").val("");
+  $("#Password").val("");
+  $("#hideAuth").removeAttr("hidden");
+  mode = 0;
+}
+
+function validateForm() {
+  var requiredFields;
+  if (mode == 1) {
+    requiredFields = [
+      "Name",
+      "Surname",
+      "Username",
+      "Email",
+      "Password",
+      "AuthorizationStatus",
+    ];
+  }
+  else {
+    requiredFields = [
+      "Name",
+      "Surname",
+      "Username",
+      "Email",
+      "Password",
+    ];
+  }
+
+
+  for (var i = 0; i < requiredFields.length; i++) {
+    var fieldValue = $("#" + requiredFields[i]).val();
+
+    if (!fieldValue) {
+
+      return false;
     }
-  });
+  }
+
+  return true;
 }
 
 //kullanıcı düzenle modal
-function OpenEditModals(data) {
+function OpenEditModal(data) {
+  ClearModal();
+  mode = 2;
+  $("#UserModalLabel").text("Kullanıcı Düzenle");
+  $("#hideAuth").attr("hidden", "hidden");
 
-  $("#editID").val(data.id);
-  $("#editName").val(data.name);
-  $("#editSurname").val(data.surname);
-  $("#editUsername").val(data.userName);
-  $("#editEmail").val(data.email);
-  $("#editPassword").val(data.password);
+  $("#ID").val(data.id);
+  $("#Name").val(data.name);
+  $("#Surname").val(data.surname);
+  $("#Username").val(data.userName);
+  $("#Email").val(data.email);
+  $("#Password").val(data.password);
 
-  $('#editUser').modal('toggle');
-}
-
-//kullanıcı güncelle
-function UpdateUser() {
-  var formData = new FormData();
-
-  formData.append("id", $("#editID").val());
-  formData.append("name", $("#editName").val());
-  formData.append("surname", $("#editSurname").val());
-  formData.append("username", $("#editUsername").val());
-  formData.append("email", $("#editEmail").val());
-  formData.append("password", $("#editPassword").val());
-
-  //console.log(formData);
-
-  $.ajax({
-    url: "/User/UpdateUser",
-    type: 'POST',
-    data: formData,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
-      //console.log(data);
-      $('#editUser').modal('toggle');
-      gridRefresh();
-    },
-    error: function (e) {
-      console.log(e);
-    },
-    complete: function () {
-    }
-  });
+  $('#UserModal').modal('toggle');
 }
 
 //kullanıcı yetkisi değiştir modal
@@ -385,13 +458,4 @@ function DeleteUser(ID) {
       )
     }
   })
-}
-
-function CloseAddUser() {
-  $('#addUser').modal('toggle');
-  $("#clear input").val("");
-  $("#clear select").val(0);
-}
-function CloseEditUser() {
-  $('#editUser').modal('toggle');
 }

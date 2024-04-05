@@ -36,100 +36,58 @@
   </section>
 </div>
 
-<!--Add User Modal-->
-<div class="modal fade" id="addUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+<!--Kullanıcı ekle/düzenle modal-->
+<div class="modal fade" id="UserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title h3" id="addUserLabel">Kullanıcı Ekle</h1>
-        <button type="button" class="btn-close" onclick="CloseAddUser()" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title h3" id="UserModalLabel"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <hr />
       <div class="modal-body" id="clear">
         <form>
           <div class="row">
+            <input type="hidden" asp-for="ID" />
             <div class="form-group col-md-12">
               <label style="font-weight:bold;padding-bottom:2px">Ad:<span class="text-danger">*</span></label>
-              <input asp-for="Name" type="text" required class="form-control" id="addName" name="Name" />
+              <input asp-for="Name" type="text" required class="form-control" name="Name" />
               <h1></h1>
             </div>
             <div class="form-group col-md-12 mt-2">
               <label style="font-weight:bold;padding-bottom:2px">Soyad:<span class="text-danger">*</span></label>
-              <input asp-for="Surname" type="text" required class="form-control" id="addSurname" name="Surname" />
+              <input asp-for="Surname" type="text" required class="form-control" name="Surname" />
             </div>
-            <div class="form-group col-md-12 mt-2">
-              <label style="font-weight:bold;padding-bottom:2px">Yetki:<span class="text-danger">*</span></label>
-              <select asp-for="AuthorizationStatus" asp-items="@Html.GetEnumSelectList<RegistaMaster.Domain.Enums.AuthorizationStatus>()" id="addAuthStatus" class="form-control select2" name="AuthorizationStatus">
-                <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
-              </select>
-            </div>
-            <div class="form-group col-md-12 mt-2">
-              <label style="font-weight:bold;padding-bottom:2px">Email:<span class="text-danger">*</span></label>
-              <input asp-for="Email" type="email" required class="form-control" id="addEmail" name="Email" />
-            </div>
-            <div class="form-group col-md-6 mt-2">
-              <label style="font-weight:bold;padding-bottom:2px">Kullanıcı Adı:<span class="text-danger">*</span></label>
-              <input asp-for="Username" type="text" required class="form-control" id="addUsername" name="Username" />
-            </div>
-            <div class="form-group col-md-6 mt-2">
-              <label style="font-weight:bold;padding-bottom:2px">Parola:<span class="text-danger">*</span></label>
-              <input asp-for="Password" type="password" required class="form-control" id="addPassword" name="Password" />
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="CloseAddUser()" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" onclick="AddUser()" class="btn btn-primary">Kaydet</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!--Edit User Modal-->
-<div class="modal fade" id="editUser" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title h3" id="editUserLabel">Kullanıcı Düzenle</h1>
-        <button type="button" class="btn-close" onclick="CloseEditUser()" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <input type="hidden" asp-for="ID" id="editID" />
-            <div class="form-group col-md-12">
-              <label style="font-weight:bold;padding-bottom:2px">Ad:<span class="text-danger">*</span></label>
-              <input asp-for="Name" type="text" required class="form-control" id="editName" name="Name" />
-              <h1></h1>
-            </div>
-            <div class="form-group col-md-12 mt-2">
-              <label style="font-weight:bold;padding-bottom:2px">Soyad:<span class="text-danger">*</span></label>
-              <input asp-for="Surname" type="text" required class="form-control" id="editSurname" name="Surname" />
+            <div id="hideAuth">
+              <div class="form-group col-md-12 mt-2">
+                <label style="font-weight:bold;padding-bottom:2px">Yetki:<span class="text-danger">*</span></label>
+                <select asp-for="AuthorizationStatus" asp-items="@Html.GetEnumSelectList<RegistaMaster.Domain.Enums.AuthorizationStatus>()" class="form-control select2" name="AuthorizationStatus">
+                  <option selected="selected" disabled value="0">Lütfen Seçiniz</option>
+                </select>
+              </div>
             </div>
             <div class="form-group col-md-12 mt-2">
               <label style="font-weight:bold;padding-bottom:2px">Email:<span class="text-danger">*</span></label>
-              <input asp-for="Email" type="email" required class="form-control" id="editEmail" name="Email" />
+              <input asp-for="Email" type="email" required class="form-control" name="Email" />
             </div>
             <div class="form-group col-md-6 mt-2">
               <label style="font-weight:bold;padding-bottom:2px">Kullanıcı Adı:<span class="text-danger">*</span></label>
-              <input asp-for="Username" type="text" required class="form-control" id="editUsername" name="Username" />
+              <input asp-for="Username" type="text" required class="form-control" name="Username" />
             </div>
             <div class="form-group col-md-6 mt-2">
               <label style="font-weight:bold;padding-bottom:2px">Parola:<span class="text-danger">*</span></label>
-              <input asp-for="Password" type="password" required class="form-control" id="editPassword" name="Password" />
+              <input asp-for="Password" type="password" required class="form-control" name="Password" />
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-        <button type="button" onclick="UpdateUser()" class="btn btn-primary">Kaydet</button>
+        <button type="button" onclick="SaveUser()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
   </div>
 </div>
-
 
 <!--Change Authorization Modal-->
 <div class="modal fade" id="changeAuthorization" tabindex="-1" aria-labelledby="changeAuthorizationLabel" aria-hidden="true">

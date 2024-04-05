@@ -123,26 +123,11 @@ public class RequestController : Controller
     }
   }
 
-  [HttpPost]
-  public async Task<IActionResult> AddActionItem([FromBody] Action model, int ID)
-  {
-    try
-    {
-      await uow.ActionRepository.AddAction(model, ID);
-      return Ok();
-    }
-    catch (Exception ex)
-    {
-      throw ex;
-    }
-  }
-
-
   public async Task<IActionResult> AddAction(Action model)
   {
     try
     {
-      await uow.ActionRepository.AddAction(model, model.RequestID);
+      await uow.ActionRepository.AddAction(model);
       return Ok();
     }
     catch (Exception ex)

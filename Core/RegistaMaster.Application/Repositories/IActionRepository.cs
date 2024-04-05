@@ -20,5 +20,5 @@ public interface IActionRepository : IRepository
   Task<string> ChangeActionStatus(ActionPageDTO model);
   Task<string> ActionNoteUpdate(ActionNoteDTO model);
   Task<string> ActionDelete(int ID);
-  Task<string> AddAction(Action model, int ID);
+  Task<string> AddAction(Action model);
 }
