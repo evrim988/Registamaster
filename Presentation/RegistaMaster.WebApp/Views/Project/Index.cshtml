@@ -122,11 +122,11 @@
               <input class="form-control mt-2" readonly id="detailDate" />
             </div>
             <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Konu</label>
+              <label style="font-weight:bold;">Konu:<span class="text-danger">*</span></label>
               <input class="form-control mt-2" readonly id="detailNoteType" />
             </div>
             <div class="col-12 mt-3">
-              <label style="font-weight:bold;">Açıklama</label>
+              <label style="font-weight:bold;">Açıklama:<span class="text-danger">*</span></label>
               <textarea class="form-control mt-2" readonly id="detailDescription" rows="4"></textarea>
             </div>
           </div>
@@ -232,13 +232,13 @@
             <input class="form-control" type="hidden" id="DetailModuleID" />
             <input class="form-control" type="hidden" id="DetailModuleProjectID" />
             <div class="col-12">
-              <label class="mb-2" style="font-weight:bold;">Proje</label>
+              <label class="mb-2" style="font-weight:bold;">Proje:<span class="text-danger">*</span></label>
               <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="DetailModuleProjectName" class="form-control select2" name="ProjectID">
-                <option selected="selected" value="0">Lütfen Seçiniz</option>
+                <option selected="selected" value="0" disabled>Lütfen Seçiniz</option>
               </select>
             </div>
             <div class="col-12">
-              <label style="font-weight:bold;">Adı</label>
+              <label style="font-weight:bold;">Adı:<span class="text-danger">*</span></label>
               <input class="form-control mt-2" id="DetailModuleName" />
             </div>
             <div class="col-12 mt-3">
@@ -273,8 +273,9 @@
             <input class="form-control" type="hidden" id="DetailVersionDate" />
             <input class="form-control" type="hidden" id="DetailVersionProjectID" />
             <div class="col-12">
+              <label style="font-weight:bold;">Projeler:<span class="text-danger">*</span></label>
               <select asp-for="ProjectID" onchange="GetSelectListEdit()" asp-items="@Model.Project" id="DetailVersionProjectName" class="form-control select2" name="ProjectID">
-                <option selected="selected" value="0">Lütfen Seçiniz</option>
+                <option selected="selected" value="0" disabled>Lütfen Seçiniz</option>
               </select>
             </div>
             <div class="col-12 mt-3">
