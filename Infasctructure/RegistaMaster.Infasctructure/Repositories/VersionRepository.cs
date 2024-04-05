@@ -38,7 +38,11 @@ public class VersionRepository : Repository, IVersionRepository
             model.Name += ".0";
         }
         else
+        {
           model.Name = "V" + olderVersion.ToString(".#").Replace(',', '.');
+          if (!model.Name.Contains('.'))
+            model.Name += ".0";
+        }
       }
       
       await _uow.Repository.Add(new Version()
