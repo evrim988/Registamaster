@@ -1513,6 +1513,7 @@ function validateFormVersion() {
   }
   return true;
 }
+// Versiyon Düzenle Modal boş alan kontrolü
 function validateFormVersionEdit() {
 
   var requiredFields = [
