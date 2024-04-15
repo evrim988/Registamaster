@@ -311,6 +311,7 @@ function ClearModal() {
   $("#Username").val("");
   $("#Email").val("");
   $("#Password").val("");
+  $("#AuthorizationStatus").val(0);
   $("#hideAuth").removeAttr("hidden");
   mode = 0;
 }
