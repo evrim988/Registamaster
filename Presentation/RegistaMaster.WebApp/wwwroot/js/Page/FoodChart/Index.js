@@ -103,13 +103,49 @@ function GetList() {
 
 
     },
+    export: {
+      enabled: true,
+    },
+    onExporting(e) {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Yemek_Cizegelsi');
+
+      // Grid'deki sütun başlıklarını alın
+      const columns = e.component.getVisibleColumns();
+
+      // Sütun başlıklarını ekle
+      const headerRow = [];
+      columns.forEach(column => {
+        headerRow.push({ header: column.caption || column.dataField, key: column.dataField });
+      });
+      worksheet.columns = headerRow;
+
+      // DataSource'tan tüm verileri al
+      const dataSource = e.component.option("dataSource");
+      dataSource.load().done(data => {
+        // Verileri ekle
+        data.forEach(rowData => {
+          const dataRow = {};
+          columns.forEach(column => {
+            const value = rowData[column.dataField];
+            dataRow[column.dataField] = value !== undefined ? value : '';
+          });
+          worksheet.addRow(dataRow);
+        });
+
+        // Dosyayı indirme işlemi
+        workbook.xlsx.writeBuffer().then(buffer => {
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Yemek_Cizegelsi.xlsx');
+        });
+      });
+    },
     columns: [
       {
         dataField: "date",
         caption: "Tarih",
         alignment: 'center',
         dataType: 'date',
-        format: 'dd/MM/yyyy',
+        format: 'dd.MM.yyyy'
       },
       {
         dataField: "personNumber",
