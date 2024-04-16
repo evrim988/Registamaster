@@ -54,6 +54,13 @@
   .customWidth {
     max-width: 1300px !important;
   }
+
+  .custom-outline-btn {
+    --bs-btn-color: #7a879d;
+    --bs-btn-bg: #f6f9fc;
+    --bs-btn-border-color: #e9eef5;
+    --bs-btn-hover-bg: #eaeff4;
+  }
 </style>
 
 <div class="main-content">
@@ -156,8 +163,9 @@
               <h1></h1>
             </div>
             <div class="col-md-12 mt-3">
-              <div class="mb-3">
+              <div class="input-group mb-3">
                 <input class="form-control" onchange="CheckFileSize('fileInput')" type="file" id="fileInput" multiple>
+                <button class="btn custom-outline-btn" onclick="ClearFileInput()" type="button" data-toggle="tooltip" title="Dosyaları Temizle">Temizle</button>
               </div>
             </div>
             <div class="form-group col-md-4 mt-2" id="imagePreviewDiv" hidden>
@@ -250,8 +258,9 @@
                     <img id="RequestImage" onclick="OpenAnyImage('RequestImage')" src="#" style="height:200px; width:200px;" />
                   </div>
                 </div>
-                <div class="form-group col-md-12 mt-3">
+                <div class="form-group input-group col-md-12 mt-3">
                   <input class="form-control" onchange="CheckFileSize('fileInputEdit')" type="file" id="fileInputEdit" multiple>
+                  <button class="btn custom-outline-btn" onclick="ClearFileInput()" type="button" title="Dosyaları Temizle">Temizle</button>
                 </div>
                 <div class="col-12 mt-3" id="editFilesDiv" hidden>
                   <label style="font-weight:bold;">Dosyalar:</label>

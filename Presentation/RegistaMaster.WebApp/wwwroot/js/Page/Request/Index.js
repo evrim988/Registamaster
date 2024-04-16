@@ -2670,3 +2670,8 @@ function CheckFileSize(elementId) {
       $("#addSaveBtn").prop("disabled", false);
   }
 }
+
+function ClearFileInput() {
+  $("#fileInput").val("");
+  $("#fileInputEdit").val("");
+}
