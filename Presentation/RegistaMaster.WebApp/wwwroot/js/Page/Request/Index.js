@@ -103,6 +103,10 @@ function GetList() {
       showInfo: true,
       showNavigationButtons: true,
     },
+    selection: {
+      mode: 'single',
+    },
+    hoverStateEnabled: true,
     onRowDblClick: function (e) {
       if (!$(e.event.target).parents(".dx-master-detail-row").length)
         RowDblClick(e.data, "request");
@@ -468,6 +472,10 @@ function GetList() {
             allowColumnReordering: true,
             allowColumnResizing: true,
             columnResizingMode: 'widget',
+            selection: {
+              mode: 'single',
+            },
+            hoverStateEnabled: true,
             onRowDblClick: function (e) {
               RowDblClick(e.data, "action");
             },

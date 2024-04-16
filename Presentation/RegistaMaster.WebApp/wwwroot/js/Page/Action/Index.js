@@ -83,6 +83,10 @@ function GetList() {
       width: 240,
       placeholder: 'Ara...',
     },
+    selection: {
+      mode: 'single',
+    },
+    hoverStateEnabled: true,
     onRowDblClick: function (e) {
       GetActionNoteList(e.data.id);
       OpenActionDetailModal(e.data);

@@ -76,6 +76,10 @@ function GetList() {
       showInfo: true,
       showNavigationButtons: true,
     },
+    selection: {
+      mode: 'single',
+    },
+    hoverStateEnabled: true,
     onEditingStart: function (e) {
       title = e.data.Date;
     },
