@@ -357,54 +357,58 @@ function GetList() {
         fixedPosition: "right",
         alignment: 'center',
         cellTemplate: function (container, options) {
+          var dropDownButtonOptions = {
+            icon: "preferences",
+            hint: "İşlemler",
+            dropDownOptions: {
+              width: 150,
+            },
+            showArrowIcon: false,
+            onItemClick: function (e) {
+              var item = e.itemData;
+              handleItemClick(item, options);
+            }
+          };
           switch (options.data.requestStatus) {
-            case 0:
-              if (options.data.createdBy == userID) {   //talep başlanmamış durumdaysa talebi oluşturan kişi için contextmenu
-                $("<div>")
-                  .dxButton({
-                    icon: "preferences",
-                    hint: "İşlemler",
-                    stylingMode: "text",
-                    onClick: function (e) {
-                      if (auth == 2)
-                        showContextMenuDeveloper(options, e);
-                      else
-                        showContextMenu(options, e);
-                    }
-                  })
-                  .appendTo(container);
+            case 0://talep açık durumdaysa
+              if (options.data.createdBy == userID) {//talebi oluşturan kişiyse
+                if (auth == 2) { //talebi oluşturan developersa
+                  dropDownButtonOptions.items = [
+                    { text: "Düzenle", icon: "edit" },
+                    { text: "Sil", icon: "trash" },
+                  ];
+                }
+                else { //dev hariç kişiler için
+                  dropDownButtonOptions.items = [
+                    { text: "Aksiyon Ekle", icon: "plus" },
+                    { text: "Düzenle", icon: "edit" },
+                    { text: "Sil", icon: "trash" },
+                  ];
+                }
               }
-              else {
-                if (auth == 0) {     //talep başlanmamış durumdaysa admin için contextmenu
+              else {//talebi oluşturan kişi değilse
+                if (auth == 0) {//adminse
+                  dropDownButtonOptions.items = [
+                    { text: "Aksiyon Ekle", icon: "plus" },
+                    { text: "Sil", icon: "trash" },
+                  ];
+                }
+                else if (auth != 2) {//dev hariç kişiler
                   $("<div>")
                     .dxButton({
-                      icon: "preferences",
-                      hint: "İşlemler",
+                      icon: "add",
+                      hint: "Aksiyon Ekle",
                       stylingMode: "text",
                       onClick: function (e) {
-                        showContextMenuAdmin(options, e);
+                        AddActionModal(options.data);
                       }
                     })
                     .appendTo(container);
                 }
-                else {      //talep başlanmamış durumdaysa ekip lideri için yalnızca aksiyon ekleyebilir
-                  if (auth != 2) {
-                    $("<div>")
-                      .dxButton({
-                        icon: "add",
-                        hint: "Aksiyon Ekle",
-                        stylingMode: "text",
-                        onClick: function (e) {
-                          AddActionModal(options.data);
-                        }
-                      })
-                      .appendTo(container);
-                  }
-                }
               }
               break;
-            case 1://talep başlandı durumundaysa yalnızca talebe aksiyon ekleme işlemi yapılabilir
-              if (auth != 2) {
+            case 1://talep durumu başlanmış ise
+              if (auth != 2) {//kişi dev değilse
                 $("<div>")
                   .dxButton({
                     icon: "add",
@@ -417,8 +421,8 @@ function GetList() {
                   .appendTo(container);
               }
               break;
-            case 2:  //talep tamamlanmış durumdaysa
-              if (options.data.createdBy == userID || auth == 0) { //yalnızca talebi açan kişi veya admin tarafından silinebilir
+            case 2://talep tamamlanmış durumda ise
+              if (options.data.createdBy == userID || auth == 0) {//kişi talebi oluşturan veya admin
                 $("<div>")
                   .dxButton({
                     icon: "trash",
@@ -432,21 +436,18 @@ function GetList() {
                   .appendTo(container);
               }
               break;
-            case 3:  //talep bekleme durumundaysa
-              if (auth != 2) {
-                $("<div>")
-                  .dxButton({
-                    icon: "preferences",
-                    hint: "İşlemler",
-                    stylingMode: "text",
-                    onClick: function (e) {
-                      showContextMenuWaiting(options, e);
-                    }
-                  })
-                  .appendTo(container);
+            case 3://talep bekleme durumunda ise
+              if (auth != 2) {//kişi developer değilse
+                dropDownButtonOptions.items = [
+                  { text: "Aksiyon Ekle", icon: "plus" },
+                  { text: "Tamamla", icon: "check" },
+                ];
               }
               break;
           };
+          if (dropDownButtonOptions.items) {
+            $("<div>").dxDropDownButton(dropDownButtonOptions).appendTo(container);
+          }
           $("<div>")
             .dxButton({
               icon: "textdocument",
@@ -948,86 +949,8 @@ function GetSelectList() {
     }
   });
 }
-
-//default contextmenu
-function showContextMenu(options, e) {
-  var contextMenu = $("<div>")
-    .dxContextMenu({
-      dataSource: [
-        { text: "Aksiyon Ekle", icon: "plus" },
-        { text: "Düzenle", icon: "edit" },
-        { text: "Sil", icon: "trash" },
-      ],
-      onItemClick: function (item) {
-        handleItemClick(item, options);
-      }
-    })
-    .appendTo("body")
-    .dxContextMenu("instance");
-
-  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
-  contextMenu.show();
-}
-
-//default contextmenu developer
-function showContextMenuDeveloper(options, e) {
-  var contextMenu = $("<div>")
-    .dxContextMenu({
-      dataSource: [
-        { text: "Düzenle", icon: "edit" },
-        { text: "Sil", icon: "trash" },
-      ],
-      onItemClick: function (item) {
-        handleItemClick(item, options);
-      }
-    })
-    .appendTo("body")
-    .dxContextMenu("instance");
-
-  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
-  contextMenu.show();
-}
-
-//admin contextmenu
-function showContextMenuAdmin(options, e) {
-  var contextMenu = $("<div>")
-    .dxContextMenu({
-      dataSource: [
-        { text: "Aksiyon Ekle", icon: "plus" },
-        { text: "Sil", icon: "trash" },
-      ],
-      onItemClick: function (item) {
-        handleItemClick(item, options);
-      }
-    })
-    .appendTo("body")
-    .dxContextMenu("instance");
-
-  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
-  contextMenu.show();
-}
-
-//bekleme contextmenu
-function showContextMenuWaiting(options, e) {
-  var contextMenu = $("<div>")
-    .dxContextMenu({
-      dataSource: [
-        { text: "Aksiyon Ekle", icon: "plus" },
-        { text: "Tamamla", icon: "check" },
-      ],
-      onItemClick: function (item) {
-        handleItemClick(item, options);
-      }
-    })
-    .appendTo("body")
-    .dxContextMenu("instance");
-
-  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
-  contextMenu.show();
-}
-
 function handleItemClick(item, options) {
-  var items = item.itemData.text;
+  var items = item.text;
   var ID = options.data.id;
   var data = options.data;
 

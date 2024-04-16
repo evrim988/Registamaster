@@ -173,26 +173,57 @@ function GetList() {
         fixedPosition: "right",
         alignment: 'center',
         cellTemplate: function (container, options) {
-          $("<div>")
-            .dxButton({
+          if (auth != 2) {
+            var items;
+            switch (auth) {
+              case '0':
+                items = [
+                  { text: "Proje Not Ekle", icon: "plus" },
+                  { text: "Modül Ekle", icon: "plus" },
+                  { text: "Versiyon Ekle", icon: "plus" },
+                  { text: "Proje Düzenle", icon: "edit" },
+                  { text: "Proje Sil", icon: "trash" },
+                ];
+                break;
+              case '1':
+                items = [
+                  { text: "Proje Not Ekle", icon: "plus" },
+                  { text: "Modül Ekle", icon: "plus" },
+                  { text: "Versiyon Ekle", icon: "plus" },
+                ];
+                break;
+              //case '2':
+              //  items = [
+              //    { text: "", icon: "plus" },
+              //  ];
+              //  break;
+            }
+            $("<div>").dxDropDownButton({
               icon: "preferences",
               hint: "İşlemler",
-              stylingMode: "text",
-              onClick: function (e) {
-                switch (auth) {
-                  case '0':
-                    showContextMenuAdmin(options, e);
-                    break;
-                  case '1':
-                    showContextMenuLeader(options, e);
-                    break;
-                  case '2':
-                    showContextMenuDeveloper(options, e);
-                    break;
+              dropDownOptions: {
+                width: 150,
+              },
+              showArrowIcon: false,
+              onItemClick: function (e) {
+                var item = e.itemData;
+                handleItemClick(item, options);
+              },
+              items: items,
+            }).appendTo(container);
+          }
+          else {
+            $("<div>")
+              .dxButton({
+                icon: "add",
+                hint: "Proje Not Ekle",
+                stylingMode: "text",
+                onClick: function (e) {
+                  AddProjectNoteModal(options.data.id);
                 }
-              }
-            })
-            .appendTo(container);
+              })
+              .appendTo(container);
+          }
         }
       }
     ],
@@ -1089,65 +1120,9 @@ function DeleteProjectModule(ID) {
     }
   })
 }
-//ContextMenu Admin
-function showContextMenuAdmin(options, e) {
-  var contextMenu = $("<div>")
-    .dxContextMenu({
-      dataSource: [
-        { text: "Proje Not Ekle", icon: "plus" },
-        { text: "Modül Ekle", icon: "plus" },
-        { text: "Versiyon Ekle", icon: "plus" },
-        { text: "Proje Düzenle", icon: "edit" },
-        { text: "Proje Sil", icon: "trash" },
-      ],
-      onItemClick: function (item) {
-        handleItemClick(item, options);
-      }
-    })
-    .appendTo("body")
-    .dxContextMenu("instance");
-
-  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
-  contextMenu.show();
-}
-//ContextMenu Leader
-function showContextMenuLeader(options, e) {
-  var contextMenu = $("<div>")
-    .dxContextMenu({
-      dataSource: [
-        { text: "Proje Not Ekle", icon: "plus" },
-        { text: "Modül Ekle", icon: "plus" },
-        { text: "Versiyon Ekle", icon: "plus" },
-      ],
-      onItemClick: function (item) {
-        handleItemClick(item, options);
-      }
-    })
-    .appendTo("body")
-    .dxContextMenu("instance");
-
-  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
-  contextMenu.show();
-}
-//ContextMenu Developer 
-function showContextMenuDeveloper(options, e) {
-  var contextMenu = $("<div>")
-    .dxContextMenu({
-      dataSource: [
-        { text: "Proje Not Ekle", icon: "plus" },
-      ],
-      onItemClick: function (item) {
-        handleItemClick(item, options);
-      }
-    })
-    .appendTo("body")
-    .dxContextMenu("instance");
-  contextMenu.option("position", { my: "top right", at: "bottom right", of: e.element });
-  contextMenu.show();
-}
 
 function handleItemClick(item, options) {
-  var items = item.itemData.text;
+  var items = item.text;
   var ID = options.data.id;
   var data = options.data;
   switch (items) {
