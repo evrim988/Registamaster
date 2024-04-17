@@ -196,6 +196,14 @@ function GetList() {
           valueExpr: "id",
           displayExpr: "name",
         },
+        cellTemplate: function (container, options) {
+          if (options.data.moduleID == null) {
+            container.append("-");
+          }
+          else {
+            container.append(options.displayValue);
+          }
+        }
       },
       {
         dataField: "notificationTypeID",
@@ -230,7 +238,15 @@ function GetList() {
         dataField: "pageURL",
         caption: "Sayfa Linki",
         alignment: 'center',
-        width: 150
+        width: 150,
+        cellTemplate: function (container, options) {
+          if (options.data.pageURL == null) {
+            container.append("-");
+          }
+          else {
+            container.append(options.displayValue);
+          }
+        }
       },
       {
         dataField: "categoryID",
