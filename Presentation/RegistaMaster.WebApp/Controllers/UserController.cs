@@ -3,10 +3,12 @@ using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
+using RegistaMaster.Application.Services.SecurityService;
 using RegistaMaster.Domain.DTOModels.Entities.UserModel;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
+using RegistaMaster.Infasctructure.Services.SecurityServices;
 
 namespace RegistaMaster.WebApp.Controllers;
 
@@ -14,10 +16,12 @@ public class UserController : Controller
 {
   private readonly IUnitOfWork uow;
   private readonly SessionModel session;
-  public UserController(IUnitOfWork _uow)
+  private readonly ISessionService _sessionService;
+  public UserController(IUnitOfWork _uow, ISessionService sessionService)
   {
     uow = _uow;
     session = _uow.GetSession();
+    _sessionService = sessionService;
   }
   public async Task<object> GetList(DataSourceLoadOptions options)
 
@@ -99,7 +103,10 @@ public class UserController : Controller
   {
     try
     {
-      return await uow.UserRepository.UpdateUser(model);
+      var user = await uow.UserRepository.UpdateUser(model);
+      _sessionService.CleanSession();
+      _sessionService.SetUser(user);
+      return "1";
     }
     catch (Exception ex)
     {

@@ -36,7 +36,7 @@ public class UserRepository : Repository, IUserRepository
       throw e;
     }
   }
-  public async Task<string> UpdateUser(UserDetailDto model)
+  public async Task<User> UpdateUser(UserDetailDto model)
   {
     try
     {
@@ -46,9 +46,9 @@ public class UserRepository : Repository, IUserRepository
       user.Email = model.Email;
       user.Password = model.Password;
       user.Username = model.Username;
-      Update(user);
+      var user2 = Update(user);
       await uow.SaveChanges();
-      return "1";
+      return user2;
     }
     catch (Exception ex)
     {

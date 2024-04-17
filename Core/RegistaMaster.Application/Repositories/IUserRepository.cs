@@ -11,7 +11,7 @@ public interface IUserRepository : IRepository
   Task<IQueryable<UserDTO>> GetList();
   Task<List<ResponsibleDevextremeSelectListHelper>> GetResponsible();
   Task<UserDetailDto> UserDetails(int ID);
-  Task<string> UpdateUser(UserDetailDto user);
+  Task<User> UpdateUser(UserDetailDto user);
   Task<string> DeleteUser(int ID);
 
   Task<string> ChangeAuthorization(UserDetailDto user);
