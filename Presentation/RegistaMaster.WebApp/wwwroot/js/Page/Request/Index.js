@@ -109,7 +109,7 @@ function GetList() {
     hoverStateEnabled: true,
     onRowDblClick: function (e) {
       if (!$(e.event.target).parents(".dx-master-detail-row").length)
-        RowDblClick(e.data, "request");
+        RequestDetail(e.data);
     },
     onEditingStart: function (e) {
       title = e.data.Date;
@@ -478,7 +478,8 @@ function GetList() {
             },
             hoverStateEnabled: true,
             onRowDblClick: function (e) {
-              RowDblClick(e.data, "action");
+              OpenActionDetailModal(e.data);
+              GetActionNoteList(e.data.ID);
             },
             onRowPrepared: function (e) {
               if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
@@ -759,37 +760,6 @@ function GetList() {
   //if (auth == 2) {
   //  grid.columnOption("İşlemler", "visible", false);
   //}
-}
-
-function RequiredToastr() {
-  toastr.options = {
-    "closeButton": false,
-    "debug": false,
-    "newestOnTop": true,
-    "progressBar": true,
-    "positionClass": "toast-top-center",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-  }
-  toastr["error"]("Lütfen Zorunlu Alanları Doldurunuz...", "Hata!")
-}
-
-function RowDblClick(rowData, mode) {
-  if (mode == "request") {
-    RequestDetail(rowData);
-  }
-  else {
-    OpenActionDetailModal(rowData);
-    GetActionNoteList(rowData.ID);
-  }
 }
 
 function closeRequestModal() {

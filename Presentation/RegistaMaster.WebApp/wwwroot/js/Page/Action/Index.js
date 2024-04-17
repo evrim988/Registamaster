@@ -641,16 +641,13 @@ function validateActionForm() {
     "actionEditDescription",
   ];
 
-
   for (var i = 0; i < requiredFields.length; i++) {
     var fieldValue = $("#" + requiredFields[i]).val();
 
     if (!fieldValue) {
-
       return false;
     }
   }
-
   return true;
 }
 
