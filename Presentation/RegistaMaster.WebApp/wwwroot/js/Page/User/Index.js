@@ -232,11 +232,7 @@ function SaveUser() {
     buttonsStyling: false,
   })
   if (!validateForm()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
   if (mode == 1) {
