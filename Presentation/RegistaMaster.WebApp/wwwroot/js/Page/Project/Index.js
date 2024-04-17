@@ -1387,7 +1387,7 @@ function validateFormProject() {
     ];
  
   for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
+    var fieldValue = $("#" + requiredFields[i]).val().trim();
     if (!fieldValue)
       return false;
   }
@@ -1401,7 +1401,7 @@ function validateFormModule() {
   ];
 
   for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
+    var fieldValue = $("#" + requiredFields[i]).val().trim();
     if (!fieldValue)
       return false;
   }
@@ -1416,7 +1416,7 @@ function validateFormModuleEdit() {
   ];
 
   for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
+    var fieldValue = $("#" + requiredFields[i]).val().trim();
     if (!fieldValue)
       return false;
   }
@@ -1432,7 +1432,7 @@ function validateFormProjectNote() {
   ];
 
   for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
+    var fieldValue = $("#" + requiredFields[i]).val().trim();
     if (!fieldValue)
       return false;
   }
@@ -1447,7 +1447,7 @@ function validateFormProjectNoteEdit() {
   ];
 
   for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
+    var fieldValue = $("#" + requiredFields[i]).val().trim();
     if (!fieldValue)
       return false;
   }

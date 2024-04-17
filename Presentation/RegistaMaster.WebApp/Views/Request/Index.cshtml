@@ -410,7 +410,7 @@
   </div>
 </div>
 
-@* Aksiyon Notu Ekleme/Düzenleme Modal *@
+@* Aksiyon Notu Ekle/Düzenle/Detay Modal *@
 <div class="modal fade" id="actionNoteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="actionNoteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -435,40 +435,16 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" id="noteFooter">
         <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
         <button type="button" onclick="ActionNoteSave()" class="btn btn-primary">Kaydet</button>
       </div>
-    </div>
-  </div>
-</div>
-
-@* Aksiyon Notu Görüntüleme *@
-<div class="modal fade" id="actionNoteDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header mt-3">
-        <h3 class="modal-title" id="exampleModalLabel">Not Detayı</h3>
-        <button type="button" class="btn-close" onclick="closeModalActionDetailNote()" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-footer" id="cancelFooter">
+        <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary">Kapat</button>
+        <button type="button" onclick="CancelModalSave()" class="btn btn-primary">Kaydet</button>
       </div>
-      <hr />
-      <div class="modal-body">
-        <input hidden id="DetailactionID">
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
-            <label for="actionNoteDetailTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
-            <input type="text" style="font-size:1rem;" readonly class="form-control" id="actionNoteDetailTitle">
-          </div>
-        </div>
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
-            <label for="actionNoteDetailDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
-            <textarea style="font-size:1rem;" readonly class="form-control" id="actionNoteDetailDescription" rows="10"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="closeModalActionDetailNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+      <div class="modal-footer" id="detailFooter">
+        <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary">Kapat</button>
       </div>
     </div>
   </div>
@@ -528,33 +504,6 @@
   </div>
 </div>
 
-<!--Aksiyon İptal/Reddedildi  modal-->
-<div class="modal fade" id="CancelModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header mt-3">
-        <h3 class="modal-title" id="exampleModalLabel">İptal/Reddedildi</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CancelModalClose()" aria-label="Close"></button>
-      </div>
-      <hr />
-      <div class="modal-body">
-        <input hidden id="actionID">
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
-            <label for="actionNoteDescription" style="font-size:1.2rem;" class="form-label">İptal/Reddedildi Nedeni</label>
-            <textarea style="font-size:1rem;" class="form-control mb-2" id="CancelNoteDescription" rows="10"></textarea>
-            <span id="checkText" class="text-danger h5"></span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="CancelModalClose()" class="btn btn-secondary">Kapat</button>
-        <button type="button" onclick="CancelModalSave()" class="btn btn-primary">Kaydet</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!--Aksiyon Ayrıntıları Modal-->
 <div class="modal fade" id="DetailAction" aria-labelledby="DetailActionLabel" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -568,43 +517,43 @@
       <div class="modal-body">
         <form>
           <div class="row" style="padding-left:10px;padding-right:10px">
-                <div class="col-6">
-                  <label style="font-weight:bold;">Öncelik Durumu</label>
-                  <select class="form-control mt-1" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionDetailActionPriority"></select>
-                </div>
-                <div class="col-6">
-                  <label style="font-weight:bold;">Durum</label>
-                  <select id="actionDetailStatus" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control mt-1"></select>
-                </div>
-                <div class="col-6 mt-3">
-                  <label style="font-weight:bold;">Sorumlu Kişi</label>
-                  <select class="form-control mt-1" disabled asp-items="@Model.Responsible" id="actionDetailResponsible"></select>
-                </div>
-                <div class="col-6 mt-3">
-                  <label style="font-weight:bold;">Konu</label>
-                  <input class="form-control mt-1" readonly id="actionDetailSubject" />
-                </div>
-                <div class="col-6 mt-3">
-                  <label style="font-weight:bold;">Açılma Tarihi</label>
-                  <input class="form-control mt-1" readonly id="actionDetailOpeningDate" />
-                </div>
-                <div class="col-6 mt-3">
-                  <label style="font-weight:bold;">Hedef Tarih</label>
-                  <input class="form-control mt-1" readonly id="actionDetailEndDate" />
-                </div>
-                <div class="col-6 mt-3">
-                  <label style="font-weight:bold;">Başlangıç Tarihi</label>
-                  <input class="form-control mt-1" readonly id="actionDetailStartDate" />
-                </div>
-                <div class="col-6 mt-3">
-                  <label style="font-weight:bold;">Bitiş Tarihi</label>
-                  <input class="form-control mt-1" readonly id="actionDetailCompleteDate" />
-                </div>
-                <div class="col-12 mt-3">
-                  <label style="font-weight:bold;">Açıklama</label>
-                  <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
-                </div>
-              </div>
+            <div class="col-6">
+              <label style="font-weight:bold;">Öncelik Durumu</label>
+              <select class="form-control mt-1" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionPriorityStatus>()" id="actionDetailActionPriority"></select>
+            </div>
+            <div class="col-6">
+              <label style="font-weight:bold;">Durum</label>
+              <select id="actionDetailStatus" disabled asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.ActionStatus>()" class="form-control mt-1"></select>
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Sorumlu Kişi</label>
+              <select class="form-control mt-1" disabled asp-items="@Model.Responsible" id="actionDetailResponsible"></select>
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Konu</label>
+              <input class="form-control mt-1" readonly id="actionDetailSubject" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Açılma Tarihi</label>
+              <input class="form-control mt-1" readonly id="actionDetailOpeningDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Hedef Tarih</label>
+              <input class="form-control mt-1" readonly id="actionDetailEndDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Başlangıç Tarihi</label>
+              <input class="form-control mt-1" readonly id="actionDetailStartDate" />
+            </div>
+            <div class="col-6 mt-3">
+              <label style="font-weight:bold;">Bitiş Tarihi</label>
+              <input class="form-control mt-1" readonly id="actionDetailCompleteDate" />
+            </div>
+            <div class="col-12 mt-3">
+              <label style="font-weight:bold;">Açıklama</label>
+              <textarea class="form-control mt-2" readonly id="actionDetailDescription" rows="6"></textarea>
+            </div>
+          </div>
         </form>
         <div class="row">
           <h5 class="modal-title mt-5 h3">Notlar</h5>

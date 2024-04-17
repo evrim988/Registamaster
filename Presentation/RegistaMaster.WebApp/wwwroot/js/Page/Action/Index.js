@@ -447,6 +447,9 @@ function GetActionNoteList(ID) {
           options: {
             icon: "plus", text: "Not Ekle", onClick: function (e) {
               $('#actionNoteModalLabel').text('Not Ekle');
+              $('#cancelFooter').hide();
+              $("#detailFooter").hide();
+              $('#noteFooter').show();
               $('#actionNoteModal').modal('toggle');
               $('#changeActionStatus').modal('hide');
             }
@@ -642,7 +645,7 @@ function validateActionForm() {
   ];
 
   for (var i = 0; i < requiredFields.length; i++) {
-    var fieldValue = $("#" + requiredFields[i]).val();
+    var fieldValue = $("#" + requiredFields[i]).val().trim();
 
     if (!fieldValue) {
       return false;
@@ -803,7 +806,26 @@ function ActionNoteSave() {
     model.ActionID = $('#actionID').val();
     model.Title = $('#actionNoteTitle').val();
     model.Description = $('#actionNoteDescription').val();
-
+    if (model.Description.trim() == '' && model.Title.trim() == "") {
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "hideMethod": "fadeOut"
+      }
+      toastr["error"]("Boş Not Kaydedilemez!")
+      return;
+    }
 
     $.ajax({
       url: '/Action/AddActionNote',
@@ -827,7 +849,26 @@ function ActionNoteSave() {
     model.ID = $('#actionNoteID').val();
     model.Title = $('#actionNoteTitle').val();
     model.Description = $('#actionNoteDescription').val();
-
+    if (model.Description.trim() == '' && model.Title.trim() == "") {
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "hideMethod": "fadeOut"
+      }
+      toastr["error"]("Boş Not Kaydedilemez!")
+      return;
+    }
 
     $.ajax({
       url: '/Action/ActionNoteUpdate',
@@ -857,12 +898,25 @@ function closeModal() {
   detail = 0;
 }
 
-function closeModalActionNote() {
+//aksiyon not modal temizle
+function clearModalActionNote() {
   $("#actionNoteTitle").val("");
+  $("#actionNoteTitle").attr("readonly", false);
+  $("#actionNoteDescription").attr("readonly", false);
   $("#actionNoteDescription").val("");
+  $("#detailFooter").hide();
+  $("#cancelFooter").hide();
+  $("#noteFooter").show();
+}
 
+//aksiyon not modal kapat
+function closeModalActionNote() {
+  if (detail == 1)
+    $("#DetailAction").modal('show');
+  else if (detail == 2)
+    $("#changeActionStatus").modal('show');
   $("#actionNoteModal").modal("toggle");
-  $("#changeActionStatus").modal("show");
+  clearModalActionNote();
 }
 
 //aksiyon durumu değiştir
@@ -870,7 +924,14 @@ function ChangeActionStatus() {
 
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
-    $("#CancelModal").modal("toggle");
+    //$("#CancelModal").modal("toggle");
+    $("#actionNoteModalLabel").text("İptal/Reddedlidi");
+    $("#actionNoteTitle").attr("readonly", true);
+    $("#actionNoteTitle").val("İptal/Ret Nedeni");
+    $("#noteFooter").hide();
+    $("#detailFooter").hide();
+    $("#cancelFooter").show();
+    $("#actionNoteModal").modal("toggle");
   }
   else {
     var formData = new FormData();
@@ -959,9 +1020,14 @@ function DeleteActionNote(ID) {
 
 function ActionNoteDetail(data) {
   //console.log(data);
-  $("#DetailactionID").val(data.id);
-  $("#actionNoteDetailDescription").val(data.description);
-  $("#actionNoteDetailTitle").val(data.title);
+  $("#actionNoteModalLabel").text("Not Detay");
+  $("#actionNoteTitle").val(data.title);
+  $("#actionNoteTitle").attr("readonly", true);
+  $("#actionNoteDescription").val(data.description);
+  $("#actionNoteDescription").attr("readonly", true);
+  $("#cancelFooter").hide();
+  $("#noteFooter").hide();
+  $("#detailFooter").show();
 
   if (detail != 2)
     detail = 1;
@@ -971,7 +1037,7 @@ function ActionNoteDetail(data) {
   else
     $("#changeActionStatus").modal('hide');
 
-  $("#actionNoteDetail").modal("toggle");;
+  $("#actionNoteModal").modal("toggle");
 }
 
 function ActionNoteEdit(data) {
@@ -987,16 +1053,6 @@ function ActionNoteEdit(data) {
   //$("#actionNoteEditModal").modal("toggle");
   $("#changeActionStatus").modal("hide");
 }
-
-function closeModalActionDetailNote() {
-  $("#actionNoteDetail").modal("toggle");
-
-  if (detail == 1)
-    $("#DetailAction").modal('show');
-  else
-    $("#changeActionStatus").modal('show');
-}
-
 
 function gridRefresh() {
   $("#actionGridContainer").dxDataGrid("instance").refresh();
@@ -1025,19 +1081,11 @@ function OpenActionDetailModal(data) {
   $("#DetailAction").modal('toggle');
 }
 
-
-function CancelModalClose() {
-  $('#CancelModal').modal('toggle');
-  $("#CancelNoteDescription").val("");
-  $('#changeActionStatus').modal('show');
-  $("#checkText").val("");
-}
-
 function CancelModalSave() {
   var model = {};
   model.ActionID = $('#actionID').val();
-  model.Title = "İptal/Reddedildi Nedeni"
-  model.Description = $('#CancelNoteDescription').val();
+  model.Title = $('#actionNoteTitle').val();
+  model.Description = $('#actionNoteDescription').val();
   if (model.Description == '') {
     $("#checkText").text("*İptal Nedeni Boş Geçilemez!")
     return;
@@ -1053,7 +1101,9 @@ function CancelModalSave() {
     success: function (response) {
       //console.log(response);
       $("#checkText").val("");
-      $('#CancelModal').modal('toggle');
+      clearModalActionNote();
+
+      $("#actionNoteModal").modal("toggle");
       refreshGridAfterEdit();
     },
     error: function (xhr, status, error) {

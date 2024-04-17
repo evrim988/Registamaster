@@ -1,12 +1,14 @@
 ﻿var auth;
 $(document).ready(function () {
   DevExpress.localization.locale('tr');
-  GetModules();
+  //GetModules();
   GetVersion();
   auth = $("#auth").val();
 });
 
 function GetModules() {
+  $("#nav-module-tab").css("color", "#5d87ff");
+  $("#nav-version-tab").css("color", "black");
   var grid = $(modulesGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: "id",
@@ -180,6 +182,8 @@ function GetModules() {
 
 
 function GetVersion() {
+  $("#nav-module-tab").css("color", "black");
+  $("#nav-version-tab").css("color", "#5d87ff");
   var grid = $(versionGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: "id",

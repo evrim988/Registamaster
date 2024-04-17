@@ -390,6 +390,9 @@ function GetActionNoteList(ID) {
           options: {
             icon: "plus", text: "Not Ekle", onClick: function (e) {
               $('#actionNoteModalLabel').text('Not Ekle');
+              $('#cancelFooter').hide();
+              $("#detailFooter").hide();
+              $('#noteFooter').show();
               $('#actionNoteModal').modal('toggle');
               $('#changeActionStatus').modal('hide');
             }
@@ -529,8 +532,14 @@ function GetActionNoteList(ID) {
 
 //aksiyon not detay modal aç
 function ActionNoteDetail(data) {
-  $("#detailNoteTitle").val(data.title);
-  $("#detailNoteDescription").val(data.description);
+  $("#actionNoteModalLabel").text("Not Detay");
+  $("#actionNoteTitle").val(data.title);
+  $("#actionNoteTitle").attr("readonly", true);
+  $("#actionNoteDescription").val(data.description);
+  $("#actionNoteDescription").attr("readonly", true);
+  $("#cancelFooter").hide();
+  $("#noteFooter").hide();
+  $("#detailFooter").show();
 
   if (detail != 2)
     detail = 1;
@@ -540,17 +549,7 @@ function ActionNoteDetail(data) {
   else
     $("#changeActionStatus").modal('hide');
 
-  $("#actionNoteDetailModal").modal('toggle');
-}
-
-//aksiyon not detay modal kapat
-function closActionNoteDetailModal() {
-  $("#actionNoteDetailModal").modal('toggle');
-
-  if (detail == 1)
-    $("#DetailAction").modal('show');
-  else
-    $("#changeActionStatus").modal('show');
+  $("#actionNoteModal").modal("toggle");
 }
 
 //aksiyon durum işlemleri
@@ -652,7 +651,26 @@ function ActionNoteSave() {
     model.ActionID = $('#actionID').val();
     model.Title = $('#actionNoteTitle').val();
     model.Description = $('#actionNoteDescription').val();
-
+    if (model.Description.trim() == '' && model.Title.trim() == "") {
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "hideMethod": "fadeOut"
+      }
+      toastr["error"]("Boş Not Kaydedilemez!")
+      return;
+    }
     $.ajax({
       url: '/Action/AddActionNote',
       type: 'POST',
@@ -676,6 +694,26 @@ function ActionNoteSave() {
     model.Title = $('#actionNoteTitle').val();
     model.Description = $('#actionNoteDescription').val();
 
+    if (model.Description.trim() == '' && model.Title.trim() == "") {
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "hideMethod": "fadeOut"
+      }
+      toastr["error"]("Boş Not Kaydedilemez!")
+      return;
+    }
 
     $.ajax({
       url: '/Action/ActionNoteUpdate',
@@ -698,14 +736,25 @@ function ActionNoteSave() {
   }
 }
 
-
-//aksiyon not ekle modal kapat
-function closeModalActionNote() {
+//aksiyon not modal temizle
+function clearModalActionNote() {
   $("#actionNoteTitle").val("");
+  $("#actionNoteTitle").attr("readonly", false);
+  $("#actionNoteDescription").attr("readonly", false);
   $("#actionNoteDescription").val("");
+  $("#detailFooter").hide();
+  $("#cancelFooter").hide();
+  $("#noteFooter").show();
+}
 
+//aksiyon not modal kapat
+function closeModalActionNote() {
+  if (detail == 1)
+    $("#DetailAction").modal('show');
+  else if (detail == 2)
+    $("#changeActionStatus").modal('show');
   $("#actionNoteModal").modal("toggle");
-  $("#changeActionStatus").modal("show");
+  clearModalActionNote();
 }
 
 //aksiyon durumu değiştir
@@ -718,7 +767,14 @@ function ChangeActionStatus() {
 
   if ($("#actionStatusValue").val() == "3") {
     $("#changeActionStatus").modal("hide");
-    $("#CancelModal").modal("toggle");
+    //$("#CancelModal").modal("toggle");
+    $("#actionNoteModalLabel").text("İptal/Reddedlidi");
+    $("#actionNoteTitle").attr("readonly", true);
+    $("#actionNoteTitle").val("İptal/Ret Nedeni");
+    $("#noteFooter").hide();
+    $("#detailFooter").hide();
+    $("#cancelFooter").show();
+    $("#actionNoteModal").modal("toggle");
   }
   else {
     $.ajax({
@@ -813,55 +869,15 @@ function ActionNoteEdit(data) {
   //$("#actionNoteEditModal").modal("toggle");
   $("#changeActionStatus").modal("hide");
 }
-
-//function ActionNoteEditSave() {
-//  var model = {};
-//  model.ActionID = $('#EditactionID').val();
-//  model.Title = $('#actionNoteEditTitle').val();
-//  model.Description = $('#actionNoteEditDescription').val();
-
-
-//  $.ajax({
-//    url: '/Action/ActionNoteUpdate',
-//    type: 'POST',
-//    contentType: 'application/json',
-//    data: JSON.stringify(model),
-//    success: function (response) {
-//      //console.log(response);
-//      $('#actionNoteEditModal').modal('toggle');
-//      $('#changeActionStatus').modal('show');
-//      refreshGridAfterEdit();
-//    },
-//    error: function (xhr, status, error) {
-//      console.error(xhr.responseText);
-//    },
-//    complete: function () {
-//      //console.log("complete");
-//    }
-//  });
-//}
-
-//function closeModalActionEditNote() {
-//  $("#changeActionStatus").modal("show");
-//  $("#actionNoteEditModal").modal("toggle");
-//}
-
 function refreshGridAfterEdit() {
   $("#actionNotesGridContainer").dxDataGrid("instance").refresh();
-}
-
-function CancelModalClose() {
-  $('#CancelModal').modal('toggle');
-  $("#CancelNoteDescription").val("");
-  $('#changeActionStatus').modal('show');
-  $("#checkText").val("");
 }
 
 function CancelModalSave() {
   var model = {};
   model.ActionID = $('#actionID').val();
-  model.Title = "İptal/Reddedildi Nedeni"
-  model.Description = $('#CancelNoteDescription').val();
+  model.Title = $('#actionNoteTitle').val();
+  model.Description = $('#actionNoteDescription').val();
   if (model.Description == '') {
     $("#checkText").text("*İptal Nedeni Boş Geçilemez!")
     return;
@@ -875,7 +891,9 @@ function CancelModalSave() {
     success: function (response) {
       //console.log(response);
       $("#checkText").val("");
-      $('#CancelModal').modal('toggle');
+      clearModalActionNote();
+
+      $("#actionNoteModal").modal("toggle");
       refreshGridAfterEdit();
     },
     error: function (xhr, status, error) {

@@ -19,13 +19,6 @@
   <div class="row">
     <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
       <div class="card card-primary">
-        <div class="card-content collapse show">
-          <div class="heading-elements">
-            @*<div class="row col-md-2" style="position:absolute; right:15px; margin:15px;">
-            <a asp-action="Create" asp-controller="Action" class="btn btn-primary"><i class="ion ion-android-add"></i>Yeni Aksiyon Ekle</a>
-            </div>*@
-          </div>
-        </div>
         <div class="card-body card-dashboard">
           <h3>Aksiyonlar</h3>
 
@@ -138,7 +131,7 @@
   </div>
 </div>
 
-@* Aksiyon Notu Ekleme/Düzenleme Modal *@
+@* Aksiyon Notu Ekle/Düzenle/Detay Modal *@
 <div class="modal fade" id="actionNoteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="actionNoteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -163,41 +156,16 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" id="noteFooter">
         <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
         <button type="button" onclick="ActionNoteSave()" class="btn btn-primary">Kaydet</button>
       </div>
-    </div>
-  </div>
-</div>
-
-
-@* Aksiyon Notu Görüntüleme *@
-<div class="modal fade" id="actionNoteDetail" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header mt-3">
-        <h5 class="modal-title h3" id="exampleModalLabel">Not Detayı</h5>
-        <button type="button" class="btn-close" onclick="closeModalActionDetailNote()" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-footer" id="cancelFooter">
+        <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary">Kapat</button>
+        <button type="button" onclick="CancelModalSave()" class="btn btn-primary">Kaydet</button>
       </div>
-      <hr />
-      <div class="modal-body">
-        <input hidden id="DetailactionID">
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-10">
-            <label for="actionNoteDetailTitle" style="font-size:1.2rem;" class="form-label">Başlık</label>
-            <input type="text" style="font-size:1rem;" readonly class="form-control" id="actionNoteDetailTitle">
-          </div>
-        </div>
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-10">
-            <label for="actionNoteDetailDescription" style="font-size:1.2rem;" class="form-label">İçerik</label>
-            <textarea style="font-size:1rem;" readonly class="form-control" id="actionNoteDetailDescription" rows="10"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="closeModalActionDetailNote()" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+      <div class="modal-footer" id="detailFooter">
+        <button type="button" onclick="closeModalActionNote()" class="btn btn-secondary">Kapat</button>
       </div>
     </div>
   </div>
@@ -268,32 +236,6 @@
   </div>
 </div>
 
-<!--Aksiyon İptal/Reddedildi  modal-->
-<div class="modal fade" id="CancelModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header mt-3">
-        <h5 class="modal-title h3" id="exampleModalLabel">İptal/Reddedildi</h5>
-        <button type="button" class="btn-close" onclick="CancelModalClose()" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <hr />
-      <div class="modal-body">
-        <input hidden id="actionID">
-        <div class="row mt-3 justify-content-md-center">
-          <div class="col-md-11">
-            <label for="actionNoteDescription" style="font-size:1.2rem;" class="form-label">İptal/Reddedildi Nedeni</label>
-            <textarea class="form-control mb-2" id="CancelNoteDescription" rows="10"></textarea>
-            <span id="checkText" class="text-danger h5"></span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="CancelModalClose()" class="btn btn-secondary">Kapat</button>
-        <button type="button" onclick="CancelModalSave()" class="btn btn-primary">Kaydet</button>
-      </div>
-    </div>
-  </div>
-</div>
 @section Scripts
 {
 

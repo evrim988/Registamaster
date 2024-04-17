@@ -10,7 +10,7 @@
 <link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
 <link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
 
-<div class="main-content">
+@* <div class="main-content">
   <section class="section">
     <div class="row">
       <div class="col-md-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
@@ -39,7 +39,39 @@
       </div>
     </div>
   </section>
+</div> *@
+
+<div style="padding-top: 100px; padding-right: 40px; padding-left: 40px;">
+  <nav>
+    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+      <a class="nav-link active" id="nav-version-tab" data-bs-toggle="tab" onclick="GetVersion()" href="#nav-version" role="tab" aria-controls="nav-version" aria-selected="true" style="font-size: 1.3rem;color: #5d87ff;">Versiyonlar</a>
+      <a class="nav-link" id="nav-module-tab" data-bs-toggle="tab" onclick="GetModules()" href="#nav-module" role="tab" aria-controls="nav-module" aria-selected="false" style="font-size: 1.3rem;color: black;">Modüller/Süreçler</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-version" role="tabpanel" aria-labelledby="nav-version-tab">
+      <div class="card card-primary">
+        <div class="card-content collapse show">
+          <div class="card-body card-dashboard">
+            <div id="versionGridContainer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="nav-module" role="tabpanel" aria-labelledby="nav-module-tab">
+      <div class="tab-pane fade show active" id="nav-module" role="tabpanel" aria-labelledby="nav-module-tab">
+        <div class="card card-primary">
+          <div class="card-content collapse show">
+            <div class="card-body card-dashboard">
+              <div id="modulesGridContainer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 @section Scripts
 {
