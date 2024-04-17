@@ -166,6 +166,14 @@ function GetList() {
         dataField: "projectDescription",
         caption: "Proje Açıklaması",
         alignment: 'center',
+        cellTemplate: function (container, options) {
+          if (options.data.projectDescription == null) {
+            container.append("-");
+          }
+          else {
+            container.append(options.displayValue);
+          }
+        }
       },
       {
         caption: "İşlemler",
@@ -782,6 +790,14 @@ function GetModuleTabTemplate(masterDetailData) {
             dataField: "Description",
             caption: "Açıklama",
             alignment: 'center',
+            cellTemplate: function (container, options) {
+              if (options.data.Description == null) {
+                container.append("-");
+              }
+              else {
+                container.append(options.displayValue);
+              }
+            }
           },
           {
             dataField: "ProjectID",
