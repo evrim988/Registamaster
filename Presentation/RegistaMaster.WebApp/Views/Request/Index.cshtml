@@ -61,6 +61,10 @@
     --bs-btn-border-color: #e9eef5;
     --bs-btn-hover-bg: #eaeff4;
   }
+
+  .toast {
+    opacity: 0.95 !important;
+  }
 </style>
 
 <div class="main-content">
@@ -98,7 +102,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" onclick="closeImageModal()" data-dismiss="modal">İptal</button>
+        <button type="button" class="btn btn-secondary" onclick="closeImageModal()" data-dismiss="modal">İptal</button>
         <button type="button" onclick="SuccessRequestImage()" class="btn btn-success">Tamam</button>
       </div>
     </div>
@@ -176,8 +180,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" onclick="OpenImageModal()" class="btn btn-secondary">Resim Ekle</button>
-        <button type="button" onclick="closeRequestModal()" class="btn btn-dark">Kapat</button>
+        <button type="button" onclick="OpenImageModal()" class="btn btn-success">Resim Ekle</button>
+        <button type="button" onclick="closeRequestModal()" class="btn btn-secondary">Kapat</button>
         <button type="button" id="addSaveBtn" onclick="SaveRequestModal()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
@@ -273,7 +277,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" onclick="closeEditRequestModal()" class="btn btn-dark">Kapat</button>
+        <button type="button" onclick="closeEditRequestModal()" class="btn btn-secondary">Kapat</button>
         <button type="button" id="editSaveBtn" onclick="SaveRequestEditModal()" class="btn btn-primary">Kaydet</button>
       </div>
     </div>
@@ -355,11 +359,12 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" data-bs-dismiss="modal" class="btn btn-dark">Kapat</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
       </div>
     </div>
   </div>
 </div>
+
 @* Aksiyon Durumu Güncelleme *@
 <div class="modal fade" id="changeActionStatus" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">

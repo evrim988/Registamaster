@@ -761,6 +761,27 @@ function GetList() {
   //}
 }
 
+function RequiredToastr() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-center",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+  toastr["error"]("Lütfen Zorunlu Alanları Doldurunuz...", "Hata!")
+}
+
 function RowDblClick(rowData, mode) {
   if (mode == "request") {
     RequestDetail(rowData);
@@ -783,6 +804,7 @@ function closeRequestModal() {
   $('#VersionID').empty();
   $('#clearModal input').val("");
   $('#clearModal textarea').val("");
+  $("#addSaveBtn").prop("disabled", false);
 }
 function SuccessRequestImage() {
   $('#m_modal_Image_Paste').modal('hide');
@@ -802,24 +824,15 @@ function closeImageModal() {
   $('#screenshot').css('background', 'none');
 }
 function closeEditRequestModal() {
+  $("#editSaveBtn").prop("disabled", false);
   $('#RequestEditModal').modal('hide');
 }
 //talep ekle
 function SaveRequestModal() {
-
-  const swalWithBootstrapButtons = swal.mixin({
-    confirmButtonClass: 'btn btn-success',
-    buttonsStyling: false,
-  })
   if (!validateForm()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
-
 
   var data = new FormData();
   data.append('NotificationTypeID', $('#NotificationTypeID').val());
@@ -1311,16 +1324,8 @@ function GetSelectListEdit() {
 }
 //talep güncelle
 function SaveRequestEditModal() {
-  const swalWithBootstrapButtons = swal.mixin({
-    confirmButtonClass: 'btn btn-success',
-    buttonsStyling: false,
-  })
   if (!validateRequestEditForm()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
 
@@ -1863,16 +1868,8 @@ function OpenActionEditModals(data) {
 
 //aksiyon ekle ve düzenle kayıt
 function SaveAction() {
-  const swalWithBootstrapButtons = swal.mixin({
-    confirmButtonClass: 'btn btn-success',
-    buttonsStyling: false,
-  })
   if (!validateActionForm()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
 
@@ -2638,7 +2635,7 @@ function CheckFileSize(elementId) {
   })
   var input = $('#' + elementId)[0];
   var bigSized = [];
-  var message = "15Mb Sınırını Aşan Dosyalar; ";
+  var message = "Sınırı Aşan Dosyalar; ";
 
   if ($(input).length > 0) {
     input.files.forEach(checkFile);
@@ -2653,11 +2650,25 @@ function CheckFileSize(elementId) {
   if (bigSized.length > 0) {
     message = message.slice(0, -1).replace(/.$/, ".")
 
-    swalWithBootstrapButtons(
-      'En Fazla 15Mb Dosya Ekleme Yapılabilir!',
-      message,
-      'error'
-    );
+    toastr.options = {
+      "closeButton": false,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-full-width",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+    toastr["warning"](message, "En Fazla 15Mb Dosya Ekleme Yapılabilir!")
+
     if (elementId == "fileInputEdit")
       $("#editSaveBtn").prop("disabled", true);
     else
@@ -2674,4 +2685,6 @@ function CheckFileSize(elementId) {
 function ClearFileInput() {
   $("#fileInput").val("");
   $("#fileInputEdit").val("");
+  $("#addSaveBtn").prop("disabled", false);
+  $("#editSaveBtn").prop("disabled", false);
 }
