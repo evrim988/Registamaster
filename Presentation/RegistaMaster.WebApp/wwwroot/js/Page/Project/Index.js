@@ -255,11 +255,7 @@ function SaveProject() {
     buttonsStyling: false,
   })
   if (!validateFormProject()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
 
@@ -429,11 +425,7 @@ function SaveProjectNote() {
     buttonsStyling: false,
   })
   if (!validateFormProjectNote()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
   var formData = new FormData();
@@ -505,11 +497,7 @@ function SaveEdit() {
     buttonsStyling: false,
   })
   if (!validateFormProjectNoteEdit()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
   var formData = new FormData();
@@ -1159,11 +1147,7 @@ function SaveModul() {
     buttonsStyling: false,
   })
   if (!validateFormModule()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
 
@@ -1246,11 +1230,7 @@ function openPopupEditModuleSave() {
     buttonsStyling: false,
   })
   if (!validateFormModuleEdit()) {
-    swalWithBootstrapButtons(
-      'Uyarı',
-      'Lütfen Zorunlu Alanları Doldurunuz...',
-      'info'
-    )
+    RequiredToastr();
     return;
   }
   var formData = new FormData();
