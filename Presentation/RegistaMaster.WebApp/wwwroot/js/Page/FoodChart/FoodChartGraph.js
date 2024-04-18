@@ -99,7 +99,7 @@
     method: "POST",
     data: { year: currentYear }, // Varsayılan olarak mevcut yılı kullan
     success: function (response) {
-      console.log("Ajax isteği başarılı:", response);
+      
 
       var data = JSON.parse(response);
 
@@ -120,7 +120,7 @@
       method: "POST",
       data: { year: selectedYear },
       success: function (response) {
-        console.log("Ajax isteği başarılı:", response);
+        
 
         var data = JSON.parse(response);
 
