@@ -202,4 +202,9 @@ public class ActionController : Controller
     }
   }
 
+  public async Task<object> GetRequestDetail(int ID)
+  {
+    return await _uow.RequestRepository.RequestDetail(ID);
+  }
+
 }

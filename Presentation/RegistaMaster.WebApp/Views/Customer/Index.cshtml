@@ -1,6 +1,6 @@
 ﻿@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+  ViewData["Title"] = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Müşteriler</h1>
@@ -12,29 +12,23 @@
 <link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
 
 <div class="main-content">
-    <div class="row">
-        <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
-            <div class="card card-primary">
-                <div class="card-content collapse show">
-                    <div class="card-body card-dashboard">
-                        <h3>Müşteriler</h3>
-
-                        <div class="demo-container">
-                            <div id="customersGridContainer"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+  <div class="row">
+    <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
+      <h3>Müşteriler</h3>
+      <hr />
+      <div class="demo-container">
+        <div id="customersGridContainer"></div>
+      </div>
     </div>
+  </div>
 </div>
 
 
 
+
 @section scripts
-    {
-    <script src="~/js/Page/Customer/Index.js"></script>
+{
+  <script src="~/js/Page/Customer/Index.js"></script>
 }
 
 
