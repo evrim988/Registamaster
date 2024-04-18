@@ -93,7 +93,7 @@ function GetList() {
     },
     onRowDblClick: function (e) {
       if ($(e.event.target).attr('aria-describedby') == "dx-col-2") {
-        RequestDetail(e.data);
+        RequestDetail(e.data.requestID);
         return;
       }
       GetActionNoteList(e.data.id);
@@ -1003,12 +1003,11 @@ function CheckButtonStatus(data) {
 }
 
 
-function RequestDetail(data) {//requestID
-  var id = data.requestID;
+function RequestDetail(data) {
   $.ajax({
     url: "/Action/GetRequestDetail",
     type: 'POST',
-    data: { ID: id },
+    data: { ID: data },
     cache: false,
     success: function (response) {
       RequestDetailModal(response);
@@ -1022,7 +1021,7 @@ function RequestDetail(data) {//requestID
 }
 
 function RequestDetailModal(data) {
-  console.log(data);
+  //console.log(data);
   $("#requestNotificationType").val(data.notificationType);
   $("#requestCategory").val(data.category);
   $("#requestProject").val(data.project);
