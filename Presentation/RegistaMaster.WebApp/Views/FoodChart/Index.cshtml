@@ -5,36 +5,37 @@
 <h1>Yemek Çizelgesi</h1>
 <link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
 <link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
+<style>
+  .custom-outline-btn {
+    --btn-disabled-border-color: #e9eef5;
+    --btn-disabled-bg: #e9eef5;
+    --bs-btn-color: #7a879d;
+    --bs-btn-bg: #f6f9fc;
+  }
+</style>
 <div class="main-content">
   <div class="row">
     <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
-      <div class="card card-primary">
-        <div class="card-content collapse show">
-          <div class="card-body card-dashboard">
-            <h3>Yemek Çizelgesi</h3>
-            <hr />
-            <div class="row mb-3">
-              <form asp-controller="FoodChart" asp-action="UploadExcel" method="post" enctype="multipart/form-data">
-                <div class="input-group">
-                  <input type="file"
-                         class="form-control"
-                         id="fileInput"
-                         name="file"
-                         aria-describedby="fileInput"
-                         aria-label="Upload" />
-                  <button id="submitButton" type="submit" class="btn btn-outline-secondary">Aktar ve Kaydet</button>
-                </div>
-              </form>
-            </div>
-            <hr />
-
-            <div class="demo-container">
-              <div id="foodChartGridContainer"></div>
-            </div>
+      <h3>Yemek Çizelgesi</h3>
+      <hr />
+      <div class="row mb-3">
+        <form asp-controller="FoodChart" asp-action="UploadExcel" method="post" enctype="multipart/form-data">
+          <div class="input-group">
+            <input type="file"
+                   class="form-control"
+                   id="fileInput"
+                   name="file"
+                   aria-describedby="fileInput"
+                   aria-label="Upload" />
+            <button id="submitButton" type="submit" class="btn custom-outline-btn">Aktar ve Kaydet</button>
           </div>
-        </div>
+        </form>
       </div>
+      <hr />
 
+      <div class="demo-container">
+        <div id="foodChartGridContainer"></div>
+      </div>
     </div>
   </div>
 </div>

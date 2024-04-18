@@ -1,11 +1,10 @@
-﻿var auth;
-$(document).ready(function () {
+﻿$(document).ready(function () {
   DevExpress.localization.locale('tr');
   //GetModules();
   GetVersion();
-  auth = $("#auth").val();
 });
 
+var auth = $("#auth").val();
 function GetModules() {
   $("#nav-module-tab").css("color", "#5d87ff");
   $("#nav-version-tab").css("color", "black");
@@ -178,6 +177,11 @@ function GetModules() {
       },
     ],
   }).dxDataGrid("instance");
+  if (auth == 2) {
+    grid.option("editing.allowAdding", false);
+    grid.option("editing.allowUpdating", false);
+    grid.option("editing.allowDeleting", false);
+  }
 }
 
 
@@ -404,5 +408,9 @@ function GetVersion() {
     ],
 
   }).dxDataGrid("instance");
-
+  if (auth == 2) {
+    grid.option("editing.allowAdding", false);
+    grid.option("editing.allowUpdating", false);
+    grid.option("editing.allowDeleting", false);
+  }
 }

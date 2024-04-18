@@ -6,6 +6,7 @@
 
 var onchangeData;
 var detail;
+var userID = $("#userID").val();
 
 function GetList() {
   var grid = $(actionsGridContainer).dxDataGrid({
@@ -91,6 +92,10 @@ function GetList() {
       enabled: true,
     },
     onRowDblClick: function (e) {
+      if ($(e.event.target).attr('aria-describedby') == "dx-col-2") {
+        RequestDetail(e.data);
+        return;
+      }
       GetActionNoteList(e.data.id);
       OpenActionDetailModal(e.data);
     },
@@ -126,6 +131,19 @@ function GetList() {
         caption: "Aksiyon No",
         alignment: 'center',
         visible: false
+      },
+      {
+        dataField: "requestID",
+        caption: "Talep Konusu",
+        alignment: 'center',
+        width: 200,
+        lookup: {
+          dataSource: DevExpress.data.AspNet.createStore({
+            loadUrl: "/Action/GetRequest/",
+          }),
+          valueExpr: "id",
+          displayExpr: "name"
+        }
       },
       {
         dataField: "subject",
@@ -258,12 +276,18 @@ function GetList() {
         cellTemplate: function (container, info) {
           if (info.data.actionStatus == 0) {
             $('<div id="NotStarted">')
-              .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+              .append($('<a>', { class: "btn btn-sm btn-dark", text: "Başlamadı" }).click(function () {
+                if (info.data.responsibleID == userID)
+                  ChangeActionStatusModal(info.data)
+              }))
               .appendTo(container);
           }
           else if (info.data.actionStatus == 1) {
             $('<div id="Start">')
-              .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+              .append($('<a>', { class: "btn btn-sm btn-primary", text: "Devam Ediyor" }).click(function () {
+                if (info.data.responsibleID == userID)
+                  ChangeActionStatusModal(info.data)
+              }))
               .appendTo(container);
           }
           else if (info.data.actionStatus == 2) {
@@ -301,7 +325,6 @@ function GetList() {
             hint: "Durum Değiştir",
             icon: "clock",
             visible: function (e) {
-              var userID = $("#userID").val();
               if ((e.row.data.actionStatus == 0 || e.row.data.actionStatus == 1) && e.row.data.responsibleID == userID)   //aksiyon durumu başlanmamış veya devam ediyorsa sorumlu kişi tarafından değiştirilebilir
                 return true;
             },
@@ -977,4 +1000,74 @@ function CheckButtonStatus(data) {
       break;
     default:
   }
+}
+
+
+function RequestDetail(data) {//requestID
+  var id = data.requestID;
+  $.ajax({
+    url: "/Action/GetRequestDetail",
+    type: 'POST',
+    data: { ID: id },
+    cache: false,
+    success: function (response) {
+      RequestDetailModal(response);
+    },
+    error: function (e) {
+      console.log(e);
+    },
+    complete: function () {
+    }
+  });
+}
+
+function RequestDetailModal(data) {
+  console.log(data);
+  $("#requestNotificationType").val(data.notificationType);
+  $("#requestCategory").val(data.category);
+  $("#requestProject").val(data.project);
+  $("#requestVersion").val(data.version);
+  $("#requestModule").val(data.module);
+  $("#requestPageURL").val(data.pageURL);
+  $("#requestStartDate").val(data.startDate);
+  $("#requestPlanedEndDate").val(data.planedEndDate);
+  $("#requestSubject").val(data.subject);
+  $("#requestDescription").val(data.description);
+
+  var imagePath = data.pictureURL ? "/Documents/RequestDocs/" + data.pictureURL : "/Modernize/Img/yok.png";
+  $("#requestImage").attr("src", imagePath);
+
+  if (data.files.length > 0) {
+    $('#detailFiles a').remove();
+    data.files.forEach(addLink);
+    $("#requestFilesDiv").removeAttr("hidden");
+  }
+  else {
+    $("#requestFilesDiv").attr("hidden", "hidden");
+  }
+  function addLink(item) {
+    var hyperlink = $('<a>', {
+      href: item.fileURL,
+      text: item.fileName,
+      class: 'list-group-item group-list-item-action',
+      target: '_blank'
+    });
+
+    $('#requestFiles').append(hyperlink);
+  }
+  $("#RequestModal").modal("toggle");
+}
+
+function OpenImage() {
+  var imgSrc = $('#requestImage').attr('src');
+  if (imgSrc == "/Modernize/Img/yok.png")
+    return;
+  OpenPopup(imgSrc);
+}
+
+function OpenPopup(imgSrc) {
+  $.fancybox.open({
+    src: imgSrc,
+    type: 'image'
+  });
 }

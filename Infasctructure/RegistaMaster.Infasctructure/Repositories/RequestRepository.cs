@@ -479,4 +479,53 @@ public class RequestRepository : Repository, IRequestRepository
       throw ex;
     }
   }
+
+  public async Task<RequestWithIncludeDTO> RequestDetail(int ID)
+  {
+    try
+    {
+      var request = context.Requests.Where(t => t.ID == ID).Include(x => x.Project).Include(y => y.Version).Include(z => z.Files).First();
+      request.Files = request.Files.Where(t => t.ObjectStatus == ObjectStatus.NonDeleted).ToList();
+      var requestInc = new RequestWithIncludeDTO()
+      {
+        StartDate = request.StartDate.ToShortDateString(),
+        PlanedEndDate = request.PlanedEndDate.ToShortDateString(),
+        Description = request.Description,
+        Subject = request.Subject,
+        Files = request.Files,
+        Project = request.Project.ProjectName,
+        Version = request.Version.Name,
+        PageURL = request.PageURL == null ? "-" : request.PageURL,
+        PictureURL = request.PictureURL,
+        RequestStatus = request.RequestStatus.ToString(),
+      };
+
+      switch (request.CategoryID)
+      {
+        case 0: requestInc.Category = "Hata"; break;
+        case 1: requestInc.Category = "Öneri"; break;
+        default: requestInc.Category = "-"; break;
+      }
+
+      switch (request.NotificationTypeID)
+      {
+        case 0: requestInc.NotificationType = "Sınıflandırılmamış"; break;
+        case 1: requestInc.NotificationType = "Yeni Fonksiyon"; break;
+        case 2: requestInc.NotificationType = "Hata Giderme"; break;
+        case 3: requestInc.NotificationType = "Veri Düzeltme"; break;
+        case 4: requestInc.NotificationType = "Uyumluluk"; break;
+        default: requestInc.NotificationType = "-"; break;
+      }
+
+      if (request.ModuleID != null)
+        requestInc.Module = context.Modules.Find(ID).Name;
+      else
+        requestInc.Module = "-";
+      return requestInc;
+    }
+    catch (Exception ex)
+    {
+      throw ex;
+    }
+  }
 }

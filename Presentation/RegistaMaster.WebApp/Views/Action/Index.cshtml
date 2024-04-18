@@ -14,21 +14,17 @@
 
 <link href="~/Modernize/DevextremeCss/css/dx.common.css" rel="stylesheet" />
 <link href="~/Modernize/DevextremeCss/css/dx.light.css" rel="stylesheet" />
-
+<link href="~/Modernize/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet" />
+<link href="~/lib/fancybox/jquery.fancybox.min.css" rel="stylesheet" />
 <div class="main-content">
   <div class="row">
     <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
-      <div class="card card-primary">
-        <div class="card-body card-dashboard">
-          <h3>Aksiyonlar</h3>
-
-          <div class="demo-container">
-            <div id="actionGridContainer"></div>
-          </div>
-        </div>
+      <h3>Aksiyonlar</h3>
+      <hr />
+      <div class="demo-container">
+        <div id="actionGridContainer"></div>
       </div>
     </div>
-
   </div>
 </div>
 @* Aksiyon Durumu Güncelleme *@
@@ -236,8 +232,91 @@
   </div>
 </div>
 
+@* Talep Detay Modalı *@
+<div class="modal fade" id="RequestModal" tabindex="-1" role="dialog" aria-labelledby="RequestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable customWidth" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="RequestModalLabel">Talep Detayı</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" id="CloseModal" aria-label="Close"></button>
+      </div>
+      <hr />
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="form-group col-md-8">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Bildirim Türü:</label>
+                  <input type="text" id="requestNotificationType" readonly class="form-control mt-1" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label style="font-weight:bold;">Kategori:</label>
+                  <input type="text" id="requestCategory" readonly class="form-control mt-1"  />
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Proje:</label>
+                  <input type="text" id="requestProject" readonly class="form-control mt-1"  />
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Versiyon:</label>
+                  <input type="text" id="requestVersion" readonly class="form-control mt-1"  />
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Modül:</label>
+                  <input type="text" id="requestModule" readonly class="form-control mt-1"  />
+                </div>
+                <div class="form-group col-md-6 mt-2">
+                  <label style="font-weight:bold;">Sayfa Linki:</label>
+                  <input type="text" id="requestPageURL" readonly class="form-control mt-1"  />
+                </div>
+                <div class="col-6 mt-2">
+                  <label style="font-weight:bold;">Açılma Tarihi:</label>
+                  <input class="form-control mt-2" readonly id="requestStartDate" />
+                </div>
+                <div class="col-6 mt-2">
+                  <label style="font-weight:bold;">Tamamlanma Tarihi:</label>
+                  <input class="form-control mt-1" readonly id="requestPlanedEndDate" />
+                </div>
+                <div class="form-group col-md-12 mt-2">
+                  <label style="font-weight:bold;">Konu:</label>
+                  <input type="text" id="requestSubject" readonly class="form-control mt-1" />
+                </div>
+                <div class="form-group col-md-12 mt-2">
+                  <label style="font-weight:bold;">Açıklama:</label>
+                  <textarea type="text" id="requestDescription" readonly class="form-control mt-1" rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="row align-items-center">
+                <div class="col-12" style="justify-content: center">
+                  <label style="font-weight:bold;">Görüntü:</label>
+                  <div class="d-flex justify-content-center">
+                    <img id="requestImage" onclick="OpenImage()" src="#" style="height:250px; width:250px;" />
+                  </div>
+                </div>
+                <div class="col-12 mt-3" id="requestFilesDiv" hidden>
+                  <label style="font-weight:bold;">Dosyalar:</label>
+                  <div class="list-group list-group-flush list-group-numbered mt-1" style="height:200px; overflow:auto;" id="requestFiles">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @section Scripts
 {
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
   <script src="~/js/Page/Action/Index.js"></script>
 

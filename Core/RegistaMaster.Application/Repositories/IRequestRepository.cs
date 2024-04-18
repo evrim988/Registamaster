@@ -37,4 +37,5 @@ public interface IRequestRepository : IRepository
   Task<string> DeleteFilesWithRequestID(int ID);
   Task<string> RequestDeleteWithActions(int ID);
   Task<string> RequestDelete(int ID);
+  Task<RequestWithIncludeDTO> RequestDetail(int ID);
 }

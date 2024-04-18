@@ -220,6 +220,14 @@ function GetList() {
           }),
           valueExpr: "value",
           displayExpr: "text",
+        },
+        cellTemplate: function (container, options) {
+          if (options.data.notificationTypeID == null) {
+            container.append("-");
+          }
+          else {
+            container.append(options.displayValue);
+          }
         }
       },
       {
@@ -262,6 +270,14 @@ function GetList() {
           }),
           valueExpr: "value",
           displayExpr: "text",
+        },
+        cellTemplate: function (container, options) {
+          if (options.data.categoryID == null) {
+            container.append("-");
+          }
+          else {
+            container.append(options.displayValue);
+          }
         }
       },
       {
@@ -319,22 +335,22 @@ function GetList() {
         cellTemplate: function (container, info) {
           if (info.data.requestStatus == 0) {
             $('<div>')
-              .append($('<a>', { class: "btn btn-sm btn-light", }).append("Açık"))
+              .append($('<button>', { class: "btn btn-sm btn-light" ,text:"Açık"}))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 1) {
             $('<div>')
-              .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Başladı"))
+              .append($('<button>', { class: "btn btn-sm btn-primary",text:"Başladı" }))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 2) {
             $('<div>')
-              .append($('<a>', { class: "btn btn-sm btn-success" }).append("Kapandı"))
+              .append($('<button>', { class: "btn btn-sm btn-success",text:"Kapandı" }))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 3) {
             $('<div id="Closed">')
-              .append($('<a>', { class: "btn btn-sm btn-warning" }).append("Beklemede"))
+              .append($('<button>', { class: "btn btn-sm btn-warning",text:"Beklemede" }))
               .appendTo(container);
           }
         }
@@ -631,22 +647,28 @@ function GetList() {
                 cellTemplate: function (container, info) {
                   if (info.data.ActionStatus == 0) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-dark", }).append("Başlamadı"))
+                      .append($('<a>', { class: "btn btn-sm btn-dark", text: "Başlamadı" }).click(function () {
+                        if (info.data.ResponsibleID == userID) 
+                          ChangeActionStatusModal(info.data)
+                      }))
                       .appendTo(container);
                   }
                   else if (info.data.ActionStatus == 1) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Devam Ediyor"))
+                      .append($('<a>', { class: "btn btn-sm btn-primary" ,text:"Devam Ediyor"}).click(function () {
+                        if (info.data.ResponsibleID == userID)
+                          ChangeActionStatusModal(info.data)
+                      }))
                       .appendTo(container);
                   }
                   else if (info.data.ActionStatus == 2) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-success" }).append("Tamamlandı"))
+                      .append($('<a>', { class: "btn btn-sm btn-success",text:"Tamamlandı" }))
                       .appendTo(container);
                   }
                   else if (info.data.ActionStatus == 3) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-danger" }).append("İptal/Reddedildi"))
+                      .append($('<a>', { class: "btn btn-sm btn-danger", text:"İptal/Reddedildi" }))
                       .appendTo(container);
                   }
                 }
@@ -667,22 +689,22 @@ function GetList() {
                 cellTemplate: function (container, info) {
                   if (info.data.ActionPriorityStatus == 0) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-primary", }).append("Öncelik Belirtilmedi"))
+                      .append($('<a>', { class: "btn btn-sm btn-primary" }).append("Öncelik Belirtilmedi"))
                       .appendTo(container);
                   }
                   else if (info.data.ActionPriorityStatus == 1) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-dark", }).append("1"))
+                      .append($('<a>', { class: "btn btn-sm btn-dark" }).append("1"))
                       .appendTo(container);
                   }
                   else if (info.data.ActionPriorityStatus == 2) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-secondary", }).append("2"))
+                      .append($('<a>', { class: "btn btn-sm btn-secondary" }).append("2"))
                       .appendTo(container);
                   }
                   else if (info.data.ActionPriorityStatus == 3) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-warning", }).append("3"))
+                      .append($('<a>', { class: "btn btn-sm btn-warning" }).append("3"))
                       .appendTo(container);
                   }
                 }
@@ -770,6 +792,8 @@ function GetList() {
     }
 
   }).dxDataGrid("instance");
+
+  grid.RowHeight = 20;
 
   //kullanıcı developer ise talepler işlemler kolonunu kapat
   //var auth = $("#auth").val();
