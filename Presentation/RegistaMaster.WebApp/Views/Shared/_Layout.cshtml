@@ -15,6 +15,9 @@
   <link href="~/lib/dropzone-5.7.0/dist/basic.css" rel="stylesheet" />
   <link href="~/Modernize/sweetalert2.css" rel="stylesheet" />
   <link href="~/lib/toastr-2.1.4/build/toastr.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+
   <style>
     .toast {
       opacity: 0.95 !important;
@@ -206,15 +209,18 @@
 
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a asp-action="UserDetail" asp-controller="User" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">Profilim</p>
+                    <a asp-action="UserDetail" asp-controller="User" class="btn btn-outline-primary mx-3 d-block">
+                      <i class="fa-regular fa-user" style="display: inline-block;"></i>
+                      <p class="mb-0 fs-3" style="display: inline-block; margin-left: 5px;">Profilim</p>
                     </a>
                     @* <a asp-action="MyTask" asp-controller="Task" class="d-flex align-items-center gap-2 dropdown-item">
                     <i class="ti ti-list-check fs-6"></i>
                     <p class="mb-0 fs-3">Görevler</p>
                     </a>*@
-                    <a asp-action="Logout" asp-controller="Security" class="btn btn-outline-primary mx-3 mt-2 d-block">Çıkış Yap</a>
+                    <a asp-action="Logout" asp-controller="Security" class="btn btn-outline-primary mx-3 mt-2 d-block">
+                      <i class="fa-solid fa-arrow-right-from-bracket" style="display: inline-block;"></i>
+                      <p class="mb-0 fs-3" style="display: inline-block; margin-left: 5px;">Çıkış Yap</p>
+                    </a>
                   </div>
                 </div>
               </li>

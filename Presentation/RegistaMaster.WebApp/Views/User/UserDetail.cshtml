@@ -19,10 +19,10 @@
         </div>
         <div class="card-content collapse show">
           <div class="heading-elements">
-            
           </div>
           <div class="card-body card-dashboard">
             <h3>Kullanıcı Bilgileri</h3>
+            <hr />
             <div class="card-body">
               <div class="row">
                 <div class="col-md-6 mt-3">
@@ -69,13 +69,23 @@
                       <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                   </div>
-                <div class="row col-md-2 mb-5" style="position:absolute; right:110px; margin-right:15px">
-                  <button type="submit" onclick="FormSave()" style="margin-right:5px;" id="btnSave" class="btn btn-success">Kaydet</button>
                 </div>
-                  <div class="row col-md-2 mb-5" style="position:absolute; right:395px; margin-right:15px;">
-                    <button type="submit" onclick="EditUserDetail()" style="margin-right:5px;" class="btn btn-info">Düzenle</button>
+                <div class="col-md-6 mt-3">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <button type="submit" onclick="EditUserDetail()" class="btn btn-info btn-md btn-block w-100">Düzenle</button>
+                      </div>
+                    </div>
+                    <div class="col-md-5 offset-1">
+                      <div class="form-group">
+                        <button type="submit" onclick="FormSave()" id="btnSave" class="btn btn-success btn-md btn-block w-100 ">Kaydet</button>
+                      </div>
+                    </div>
                   </div>
-                </div> 
+                </div>
+
+
                 @* <div class="col-md-6">
                 <div class="form-group row">
                 <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Türü:<span class="text-danger"></span></label>
@@ -87,6 +97,7 @@
                 </div>
                 </div>
                 </div> *@
+
               </div>
             </div>
           </div>
@@ -94,8 +105,7 @@
       </div>
     </div>
   </div>
-</div>
-@section scripts {
+  @section scripts {
 
-  <script src="~/js/Page/User/UserDetail.js"></script>
-}
+    <script src="~/js/Page/User/UserDetail.js"></script>
+  }
