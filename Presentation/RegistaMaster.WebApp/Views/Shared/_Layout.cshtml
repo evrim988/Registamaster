@@ -15,7 +15,7 @@
   <link href="~/lib/dropzone-5.7.0/dist/basic.css" rel="stylesheet" />
   <link href="~/Modernize/sweetalert2.css" rel="stylesheet" />
   <link href="~/lib/toastr-2.1.4/build/toastr.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
 
   <style>
@@ -30,7 +30,7 @@
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
        data-sidebar-position="fixed" data-header-position="fixed">
     <!-- Sidebar Start -->
-    <aside class="left-sidebar">
+    <aside id="left-sidebar" class="left-sidebar">
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -174,6 +174,8 @@
     <!--  Main wrapper -->
     <div class="body-wrapper">
       <!--  Header Start -->
+
+
       <header class="app-header">
         <nav class="navbar navbar-expand-lg navbar-light">
           <ul class="navbar-nav">
@@ -182,8 +184,19 @@
                 <i class="ti ti-menu-2"></i>
               </a>
             </li>
+            <li class="nav-item">
+              <a class="
+                    nav-link
+                    sidebartoggler
+                    hidden-sm-down
+                    waves-effect waves-dark
+                  " href="javascript:void(0)">
+                <i class="fa-solid fa-bars"></i>
+              </a>
+            </li>
 
           </ul>
+
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
 
@@ -227,7 +240,6 @@
             </ul>
           </div>
         </nav>
-
 
 
       </header>
@@ -348,6 +360,42 @@
       }
       toastr["error"]("Lütfen Zorunlu Alanları Doldurunuz...", "Hata!")
     }
+
+  </script>
+  <script>
+
+  $(document).ready(function () {
+  $('.sidebartoggler').click(function () {
+    // sidebar'ı gizle veya göster
+    $('aside.left-sidebar').toggleClass('hidden-sidebar');
+    $('.page-wrapper').toggleClass('expanded');
+
+    // Menüyü açarken ve kapatırken animasyon ekleyelim
+    // Eğer menü açılıyorsa, sağdan sola doğru açılsın
+    if (!$('aside.left-sidebar').hasClass('hidden-sidebar')) {
+      $('aside.left-sidebar').css({
+        'transition': 'transform 0.3s ease',
+        'transform': 'translateX(0)'
+      });
+      $('.page-wrapper').css({
+        'transition': 'transform 0.3s ease',
+        'transform': 'translateX(0px)'
+      });
+    } else {
+      // Eğer menü kapanıyorsa, sağdan sola doğru kapanış animasyonu olsun
+      $('aside.left-sidebar').css({
+        'transition': 'transform 0.3s ease',
+        'transform': 'translateX(-100%)' // Sağa kaymasını önlemek için 'translateX(-100%)' kullanıyoruz
+      });
+      $('.page-wrapper').css({
+        'transition': 'transform 0.3s ease',
+        'transform': 'translateX(0)'
+      });
+    }
+  });
+});
+
+
 
   </script>
 
