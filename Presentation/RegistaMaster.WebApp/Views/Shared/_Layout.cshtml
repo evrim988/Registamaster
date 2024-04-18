@@ -22,6 +22,10 @@
     .toast {
       opacity: 0.95 !important;
     }
+
+    .hidden-sidebar {
+      display: none;
+    }
   </style>
 </head>
 
@@ -242,6 +246,7 @@
         </nav>
 
 
+
       </header>
       <!--  Header End -->
       @RenderBody()
@@ -364,38 +369,13 @@
   </script>
   <script>
 
-  $(document).ready(function () {
-  $('.sidebartoggler').click(function () {
-    // sidebar'ı gizle veya göster
-    $('aside.left-sidebar').toggleClass('hidden-sidebar');
-    $('.page-wrapper').toggleClass('expanded');
-
-    // Menüyü açarken ve kapatırken animasyon ekleyelim
-    // Eğer menü açılıyorsa, sağdan sola doğru açılsın
-    if (!$('aside.left-sidebar').hasClass('hidden-sidebar')) {
-      $('aside.left-sidebar').css({
-        'transition': 'transform 0.3s ease',
-        'transform': 'translateX(0)'
+    $(document).ready(function () {
+      $('.sidebartoggler').click(function () {
+        // sidebar'ı gizle veya göster
+        $('aside.left-sidebar').toggleClass('hidden-sidebar');
+        $('.page-wrapper').toggleClass('expanded');
       });
-      $('.page-wrapper').css({
-        'transition': 'transform 0.3s ease',
-        'transform': 'translateX(0px)'
-      });
-    } else {
-      // Eğer menü kapanıyorsa, sağdan sola doğru kapanış animasyonu olsun
-      $('aside.left-sidebar').css({
-        'transition': 'transform 0.3s ease',
-        'transform': 'translateX(-100%)' // Sağa kaymasını önlemek için 'translateX(-100%)' kullanıyoruz
-      });
-      $('.page-wrapper').css({
-        'transition': 'transform 0.3s ease',
-        'transform': 'translateX(0)'
-      });
-    }
-  });
-});
-
-
+    });
 
   </script>
 
