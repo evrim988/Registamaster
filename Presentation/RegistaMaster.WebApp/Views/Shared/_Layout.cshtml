@@ -41,10 +41,6 @@
           <a asp-action="Index" asp-controller="Home" class="text-nowrap logo-img">
             <img src="/Modernize/Img/logomaster.png" width="200" alt="" />
           </a>
-          <a href="javascript:void(0)"
-             class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
-            <i class="ti ti-x"></i>
-          </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>
           </div>
@@ -189,7 +185,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="
+              <a id="denemetoggler" class="
                     nav-link
                     sidebartoggler
                     hidden-sm-down
@@ -370,7 +366,17 @@
   <script>
 
     $(document).ready(function () {
-      $('.sidebartoggler').click(function () {
+      $(window).resize(function () {
+        if ($(window).width() <= 1182) { // Eğer ekran genişliği 768 pikselden küçükse
+          $('#denemetoggler').hide(); // Butonu gizle
+        } else {
+          $('#denemetoggler').show(); // Aksi takdirde butonu göster
+        }
+      });
+      if ($(window).width() <= 1182) {
+        $('#denemetoggler').hide(); // Eğer ekran genişliği 768 pikselden küçükse butonu gizle
+      }
+      $('#denemetoggler').click(function () {
         // sidebar'ı gizle veya göster
         $('aside.left-sidebar').toggleClass('hidden-sidebar');
         $('.page-wrapper').toggleClass('expanded');
