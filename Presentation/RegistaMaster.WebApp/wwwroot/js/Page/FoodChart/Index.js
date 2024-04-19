@@ -85,6 +85,7 @@ function GetList() {
           grid.refresh();
         }
       });
+
       if (e.element.find('#refreshButton').length == 0)
         e.element
           .find('.dx-toolbar-after')
@@ -96,11 +97,25 @@ function GetList() {
           grid.clearFilter();
         }
       });
+      $filterButton.css("margin-right", "5px");
+
       if (e.element.find('#filterButton').length == 0)
         e.element
           .find('.dx-toolbar-after')
           .prepend($filterButton);
 
+      var $importButton = $('<div id="importButton">').dxButton({
+        icon: 'import',
+        hint:"Dosya Yükle",
+        onClick: function () {
+          $("#importDiv").attr("hidden", false);
+        }
+      });
+      
+      $importButton.css("margin-right", "5px");
+        e.element
+          .find('.dx-toolbar-after')
+          .prepend($importButton);
 
     },
     export: {

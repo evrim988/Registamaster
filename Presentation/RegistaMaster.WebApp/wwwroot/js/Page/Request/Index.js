@@ -158,6 +158,7 @@ function GetList() {
           grid.clearFilter();
         }
       });
+      $filterButton.css("margin-right", "5px");
       if (e.element.find('#filterButton').length == 0)
         e.element
           .find('.dx-toolbar-after')
@@ -2337,6 +2338,7 @@ function GetActionNoteList(ID) {
           grid.clearFilter();
         }
       });
+      $filterButton.css("margin-right", "5px");
       if (e.element.find('#filterButton').length == 0)
         e.element
           .find('.dx-toolbar-after')

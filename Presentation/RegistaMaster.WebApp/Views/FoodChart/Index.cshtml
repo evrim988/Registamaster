@@ -11,6 +11,8 @@
     --btn-disabled-bg: #e9eef5;
     --bs-btn-color: #7a879d;
     --bs-btn-bg: #f6f9fc;
+    --bs-btn-border-color: #e9eef5;
+    --bs-btn-hover-bg: #eaeff4;
   }
 </style>
 <div class="main-content">
@@ -18,9 +20,9 @@
     <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
       <h3>Yemek Çizelgesi</h3>
       <hr />
-      <div class="row mb-3">
+      <div class="row mb-3" id="importDiv" hidden>
         <form asp-controller="FoodChart" asp-action="UploadExcel" method="post" enctype="multipart/form-data">
-          <div class="input-group">
+          <div class="input-group mb-3">
             <input type="file"
                    class="form-control"
                    id="fileInput"
@@ -30,8 +32,8 @@
             <button id="submitButton" type="submit" class="btn custom-outline-btn">Aktar ve Kaydet</button>
           </div>
         </form>
+        <hr />
       </div>
-      <hr />
 
       <div class="demo-container">
         <div id="foodChartGridContainer"></div>

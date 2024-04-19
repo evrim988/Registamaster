@@ -140,6 +140,7 @@ function GetList() {
           grid.clearFilter();
         }
       });
+      $filterButton.css("margin-right", "5px");
       if (e.element.find('#filterButton').length == 0)
         e.element
           .find('.dx-toolbar-after')
@@ -490,6 +491,17 @@ function GetActionNoteList(ID) {
     },
 
     onContentReady: function (e) {
+      var $filterButton = $('<div id="filterButton">').dxButton({
+        icon: 'clearformat',
+        onClick: function () {
+          grid.clearFilter();
+        }
+      });
+      $filterButton.css("margin-right", "5px");
+      if (e.element.find('#filterButton').length == 0)
+        e.element
+          .find('.dx-toolbar-after')
+          .prepend($filterButton);
 
       var $refreshButton = $('<div id="refreshButton">').dxButton({
         icon: 'refresh',
@@ -501,19 +513,6 @@ function GetActionNoteList(ID) {
         e.element
           .find('.dx-toolbar-after')
           .prepend($refreshButton);
-
-      var $filterButton = $('<div id="filterButton">').dxButton({
-        icon: 'clearformat',
-        onClick: function () {
-          grid.clearFilter();
-        }
-      });
-      if (e.element.find('#filterButton').length == 0)
-        e.element
-          .find('.dx-toolbar-after')
-          .prepend($filterButton);
-
-
     },
 
     columns: [

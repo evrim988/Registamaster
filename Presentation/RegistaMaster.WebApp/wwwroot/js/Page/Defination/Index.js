@@ -126,16 +126,6 @@ function GetModules() {
 
     onContentReady: function (e) {
 
-      var $filterButton = $('<div id="filterButton">').dxButton({
-        icon: 'clearformat',
-        onClick: function () {
-          grid.clearFilter();
-        }
-      });
-      if (e.element.find('#filterButton').length == 0)
-        e.element
-          .find('.dx-toolbar-after')
-          .prepend($filterButton);
       var $refreshButton = $('<div id="refreshButton">').dxButton({
         icon: 'refresh',
         onClick: function () {
@@ -146,6 +136,19 @@ function GetModules() {
         e.element
           .find('.dx-toolbar-after')
           .prepend($refreshButton);
+
+      var $filterButton = $('<div id="filterButton">').dxButton({
+        icon: 'clearformat',
+        onClick: function () {
+          grid.clearFilter();
+        }
+      });
+      if (e.element.find('#filterButton').length == 0)
+        e.element
+          .find('.dx-toolbar-after')
+          .prepend($filterButton);
+      $filterButton.css("margin-right", "5px");
+
     },
 
     columns: [
@@ -317,17 +320,6 @@ function GetVersion() {
 
     onContentReady: function (e) {
 
-      var $filterButton = $('<div id="filterButton">').dxButton({
-        icon: 'clearformat',
-        onClick: function () {
-          grid.clearFilter();
-        }
-      });
-      if (e.element.find('#filterButton').length == 0)
-        e.element
-          .find('.dx-toolbar-after')
-          .prepend($filterButton);
-
       var $refreshButton = $('<div id="refreshButton">').dxButton({
         icon: 'refresh',
         onClick: function () {
@@ -338,6 +330,18 @@ function GetVersion() {
         e.element
           .find('.dx-toolbar-after')
           .prepend($refreshButton);
+
+      var $filterButton = $('<div id="filterButton">').dxButton({
+        icon: 'clearformat',
+        onClick: function () {
+          grid.clearFilter();
+        }
+      });
+      $filterButton.css("margin-right", "5px");
+      if (e.element.find('#filterButton').length == 0)
+        e.element
+          .find('.dx-toolbar-after')
+          .prepend($filterButton);     
     },
 
     columns: [
