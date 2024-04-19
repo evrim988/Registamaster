@@ -1,68 +1,68 @@
 ﻿@using RegistaMaster.WebApp.Models.SecurityModels
 @model LoginModel
 @{
-    Layout = null;
+  Layout = null;
 }
 
 <!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Regista Master</title>
-    <link rel="shortcut icon" type="image/png" href="/Modernize/Img/regista.png" />
-    <link rel="stylesheet" href="/Modernize/src/assets/css/styles.min.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regista Master</title>
+  <link rel="shortcut icon" type="image/png" href="/Modernize/Img/regista.png" />
+  <link rel="stylesheet" href="/Modernize/src/assets/css/styles.min.css" />
 </head>
 
 <body>
-    <!--  Body Wrapper -->
-    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-         data-sidebar-position="fixed" data-header-position="fixed">
-        <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center" >
-            <div class="d-flex align-items-center justify-content-center w-100">
-                <div class="row justify-content-center w-100">
-                    <div class="col-md-4 col-10 box-shadow-2 p-0">
-                        <div class="card mb-0">
-                            <div class="card-body">
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+       data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-4 col-10 box-shadow-2 p-0">
+            <div class="card mb-0 shadow">
+              <div class="card-body">
 
-                                <a asp-action="Index" asp-controller="Home" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                                    <img src="/Modernize/Img/logomaster.png" width="200" alt="">
-                                </a>
+                <a asp-action="Index" asp-controller="Home" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                  <img src="/Modernize/Img/logomaster.png" width="200" alt="">
+                </a>
 
-                                <form asp-action="Login" method="post" style="padding:20px;">
-                                    <div style="color:blue" asp-validation-summary="All"></div>
-                                    <input asp-for="uri" hidden />
-                                    <fieldset class="form-group position-relative has-icon-left mb-0">
-                                        <input asp-for="UserName" class="form-control form-control-lg input-lg" placeholder="Kullanıcı Adı" required>
-                                        <div class="form-control-position">
-                                            <i class="ft-user"></i>
-                                        </div>
-                                        <span asp-validation-for="UserName"></span>
-                                    </fieldset>
-                                    <br />
-                                    <fieldset class="form-group position-relative has-icon-left">
-                                        <input asp-for="Password" type="password" class="form-control form-control-lg input-lg" placeholder="Parola" required>
-                                        <div class="form-control-position">
-                                            <i class="la la-key"></i>
-                                        </div>
-                                        <span style="color:blue" asp-validation-for="Password"></span>
-                                    </fieldset>
-                                    <span asp-validation-for="Password"></span>
-
-                                    <button type="submit" class="btn btn-primary  w-100 py-3 fs-5 mb-3 rounded-pill" style="margin-top:15px;">Giriş Yap</button>
-                                </form>
-
-                            </div>
-                        </div>
+                <form asp-action="Login" method="post" style="padding:20px;">
+                  <div style="color:blue" asp-validation-summary="All"></div>
+                  <input asp-for="uri" hidden />
+                  <fieldset class="form-group position-relative has-icon-left mb-0">
+                    <input asp-for="UserName" class="form-control form-control-lg input-lg" placeholder="Kullanıcı Adı" required>
+                    <div class="form-control-position">
+                      <i class="ft-user"></i>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <span asp-validation-for="UserName"></span>
+                  </fieldset>
+                  <br />
+                  <fieldset class="form-group position-relative has-icon-left">
+                    <input asp-for="Password" type="password" class="form-control form-control-lg input-lg" placeholder="Parola" required>
+                    <div class="form-control-position">
+                      <i class="la la-key"></i>
+                    </div>
+                    <span style="color:blue" asp-validation-for="Password"></span>
+                  </fieldset>
+                  <span asp-validation-for="Password"></span>
 
-    <script src="/Modernize/src/assets/libs/jquery/dist/jquery.min.js"></script>
-    <script src="/Modernize/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                  <button type="submit" class="btn btn-primary  w-100 py-3 fs-5 mb-3 rounded-pill" style="margin-top:15px;">Giriş Yap</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/Modernize/src/assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="/Modernize/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
