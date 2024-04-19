@@ -185,13 +185,13 @@
               </a>
             </li>
             <li class="nav-item">
-              <a id="denemetoggler" class="
-                    nav-link
-                    sidebartoggler
-                    hidden-sm-down
-                    waves-effect waves-dark
-                  " href="javascript:void(0)">
-                <i class="fa-solid fa-bars"></i>
+              <a id="togglerButton" class="
+        nav-link
+        sidebartoggler
+        hidden-sm-down
+        waves-effect waves-dark
+      " href="javascript:void(0)" hidden>
+                <i class="ti ti-menu-2"></i>
               </a>
             </li>
 
@@ -366,22 +366,22 @@
   <script>
 
     $(document).ready(function () {
-      $(window).resize(function () {
-        if ($(window).width() <= 1182) { // Eğer ekran genişliği 768 pikselden küçükse
-          $('#denemetoggler').hide(); // Butonu gizle
+      function toggleButtonVisibility() {
+        if ($(window).width() <= 1182) {
+          $('#togglerButton').attr('hidden', true);
         } else {
-          $('#denemetoggler').show(); // Aksi takdirde butonu göster
+          $('#togglerButton').attr('hidden', false);
         }
-      });
-      if ($(window).width() <= 1182) {
-        $('#denemetoggler').hide(); // Eğer ekran genişliği 768 pikselden küçükse butonu gizle
       }
-      $('#denemetoggler').click(function () {
+      $('#togglerButton').click(function () {
         // sidebar'ı gizle veya göster
         $('aside.left-sidebar').toggleClass('hidden-sidebar');
         $('.page-wrapper').toggleClass('expanded');
       });
+      toggleButtonVisibility(); // Butonun görünürlüğünü kontrol etmek için fonksiyonu çağırın
+      $(window).resize(toggleButtonVisibility);
     });
+
 
   </script>
 
