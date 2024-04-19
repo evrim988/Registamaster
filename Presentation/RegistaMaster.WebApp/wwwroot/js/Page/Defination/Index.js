@@ -309,13 +309,10 @@ function GetVersion() {
               caption: "Veritabanı Değişiliği Var Mı?",
               dataType: "boolean",
               editorType: "dxCheckBox",
-            },
-            
+            },            
           ],
         }],
-
       },
-
     },
 
     onContentReady: function (e) {
@@ -388,7 +385,7 @@ function GetVersion() {
           ],
           valueExpr: "id",
           displayExpr: "text"
-        }
+        },
       },
       {
         dataField: "isNewVersion",

@@ -180,6 +180,7 @@ function GetList() {
         fixed: true,
         fixedPosition: "right",
         alignment: 'center',
+        width:100,
         cellTemplate: function (container, options) {
           if (auth != 2) {
             var items;
@@ -634,9 +635,17 @@ function GetProjectNoteTabTemplate(masterDetailData) {
         showInfo: true,
         showNavigationButtons: true,
       },
-      columnResizingMode: 'widget',
+        columnResizingMode: 'widget',
+        onCellClick: function (e) {
+          lastClickedCellNote = e.column.dataField;
+        },
+        onRowDblClick: function (e) {
+          if (lastClickedCellNote !== "buttonsNote") {
+            ProjectNoteDetailModal(e);
+          }
+        },
       onRowPrepared: function (e) {
-        if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+        if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); e.rowElement.addClass('fw-semibold'); };
         },
         grouping: {
           autoExpandAll: true,
@@ -691,6 +700,7 @@ function GetProjectNoteTabTemplate(masterDetailData) {
           format: 'dd/MM/yyyy',
         },
         {
+          dataField:"buttonsNote",
           caption: "İşlemler",
           type: "buttons",
           fixed: true,
@@ -756,8 +766,16 @@ function GetModuleTabTemplate(masterDetailData) {
           showNavigationButtons: true,
         },
         columnResizingMode: 'widget',
+        onCellClick: function (e) {
+          lastClickedCellModule = e.column.dataField;
+        },
+        onRowDblClick: function (e) {
+          if (lastClickedCellModule !== "buttonsModule") {
+            ModuleDetailModal(e);
+          }
+        },
         onRowPrepared: function (e) {
-          if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+          if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); e.rowElement.addClass('fw-semibold'); };
         },
         grouping: {
           autoExpandAll: true,
@@ -816,6 +834,7 @@ function GetModuleTabTemplate(masterDetailData) {
             }
           },
           {
+            dataField:"buttonsModule",
             caption: "İşlemler",
             type: "buttons",
             fixed: true,
@@ -881,8 +900,16 @@ function GetVersionTabTemplate(masterDetailData) {
           showNavigationButtons: true,
         },
         columnResizingMode: 'widget',
+        onCellClick: function (e) {
+          lastClickedCellVersion = e.column.dataField;
+        },
+        onRowDblClick: function (e) {
+          if (lastClickedCellVersion !== "buttonsVersion") {
+            VersionDetailModal(e);
+          }
+        },
         onRowPrepared: function (e) {
-          if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+          if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); e.rowElement.addClass('fw-semibold'); };
         },
         grouping: {
           autoExpandAll: true,
@@ -939,6 +966,7 @@ function GetVersionTabTemplate(masterDetailData) {
             caption: "Veritabanı Değişikliği",
             alignment: 'center',
             dataType: "boolean",
+            with: 220,
             lookup: {
               dataSource: [
                 { id: true, text: "Evet" },
@@ -964,6 +992,7 @@ function GetVersionTabTemplate(masterDetailData) {
             }
           },
           {
+            dataField:"buttonsVersion",
             caption: "İşlemler",
             type: "buttons",
             fixed: true,

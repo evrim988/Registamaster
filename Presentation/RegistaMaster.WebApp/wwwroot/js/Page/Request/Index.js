@@ -50,6 +50,9 @@ function GetList() {
       if (e.rowType == "header") {
         e.cellElement.css("text-align", "center");
       }
+      if ((e.rowType === "data" && e.column.dataField !== "buttons")) {
+        $(e.cellElement).attr("title", "Talep Detayı İçin Çift Tıklayınız");
+      }
     },
     onRowPrepared: function (e) {
       if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
@@ -107,8 +110,11 @@ function GetList() {
       mode: 'single',
     },
     hoverStateEnabled: true,
+    onCellClick: function (e) {
+      lastClickedCell = e.column.dataField;
+    },
     onRowDblClick: function (e) {
-      if (!$(e.event.target).parents(".dx-master-detail-row").length)
+      if (!$(e.event.target).parents(".dx-master-detail-row").length && lastClickedCell !== "buttons")
         RequestDetail(e.data);
     },
     onEditingStart: function (e) {
@@ -308,7 +314,7 @@ function GetList() {
 
             $('<div>')
               .append($('<img>', {
-                src: '/Documents/RequestDocs/' + options.value, class: "rounded-circle", width: "35", height: "35", click: function () {
+                src: '/Documents/RequestDocs/' + options.value, class: "rounded-circle object-fit-cover", width: "35", height: "35", click: function () {
                   OpenPartImage('/Documents/RequestDocs/' + options.value);
                 }
               }))
@@ -335,22 +341,22 @@ function GetList() {
         cellTemplate: function (container, info) {
           if (info.data.requestStatus == 0) {
             $('<div>')
-              .append($('<button>', { class: "btn btn-sm btn-light" ,text:"Açık"}))
+              .append($('<button>', { class: "btn btn-sm btn-light", text: "Açık" }))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 1) {
             $('<div>')
-              .append($('<button>', { class: "btn btn-sm btn-primary",text:"Başladı" }))
+              .append($('<button>', { class: "btn btn-sm btn-primary", text: "Başladı" }))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 2) {
             $('<div>')
-              .append($('<button>', { class: "btn btn-sm btn-success",text:"Kapandı" }))
+              .append($('<button>', { class: "btn btn-sm btn-success", text: "Kapandı" }))
               .appendTo(container);
           }
           else if (info.data.requestStatus == 3) {
             $('<div id="Closed">')
-              .append($('<button>', { class: "btn btn-sm btn-warning",text:"Beklemede" }))
+              .append($('<button>', { class: "btn btn-sm btn-warning", text: "Beklemede" }))
               .appendTo(container);
           }
         }
@@ -384,6 +390,7 @@ function GetList() {
         }
       },
       {
+        dataField: "buttons",
         caption: "İşlemler",
         fixed: true,
         fixedPosition: "right",
@@ -509,12 +516,25 @@ function GetList() {
               mode: 'single',
             },
             hoverStateEnabled: true,
+            onCellClick: function (e) {
+              lastClickedCellDetail = e.column.dataField;
+            },
             onRowDblClick: function (e) {
-              OpenActionDetailModal(e.data);
-              GetActionNoteList(e.data.ID);
+              if (lastClickedCellDetail !== "buttons") {
+                OpenActionDetailModal(e.data);
+                GetActionNoteList(e.data.ID);
+              }
+            },
+            onCellPrepared(e) {
+              if (e.rowType == "header") {
+                e.cellElement.css("text-align", "center");
+              };
+              if ((e.rowType === "data" && e.column.dataField !== "buttons")) {
+                $(e.cellElement).attr("title", "Aksiyon Detayı İçin Çift Tıklayınız");
+              }
             },
             onRowPrepared: function (e) {
-              if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); };
+              if (e.rowType == "header") { e.rowElement.css("background-color", "#fcfae3"); e.rowElement.css('color', '#4f5052'); e.rowElement.addClass('fw-semibold'); };
 
               if (e.data != undefined) {
                 switch (e.data.ActionStatus) {
@@ -648,14 +668,14 @@ function GetList() {
                   if (info.data.ActionStatus == 0) {
                     $('<div>')
                       .append($('<a>', { class: "btn btn-sm btn-dark", text: "Başlamadı" }).click(function () {
-                        if (info.data.ResponsibleID == userID) 
+                        if (info.data.ResponsibleID == userID)
                           ChangeActionStatusModal(info.data)
                       }))
                       .appendTo(container);
                   }
                   else if (info.data.ActionStatus == 1) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-primary" ,text:"Devam Ediyor"}).click(function () {
+                      .append($('<a>', { class: "btn btn-sm btn-primary", text: "Devam Ediyor" }).click(function () {
                         if (info.data.ResponsibleID == userID)
                           ChangeActionStatusModal(info.data)
                       }))
@@ -663,12 +683,12 @@ function GetList() {
                   }
                   else if (info.data.ActionStatus == 2) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-success",text:"Tamamlandı" }))
+                      .append($('<a>', { class: "btn btn-sm btn-success", text: "Tamamlandı" }))
                       .appendTo(container);
                   }
                   else if (info.data.ActionStatus == 3) {
                     $('<div>')
-                      .append($('<a>', { class: "btn btn-sm btn-danger", text:"İptal/Reddedildi" }))
+                      .append($('<a>', { class: "btn btn-sm btn-danger", text: "İptal/Reddedildi" }))
                       .appendTo(container);
                   }
                 }
@@ -722,6 +742,7 @@ function GetList() {
                 }
               },
               {
+                dataField: "buttons",
                 caption: "İşlemler",
                 type: "buttons",
                 fixed: true,
@@ -804,7 +825,7 @@ function GetList() {
 
 function closeRequestModal() {
   $('#RequestCreateModal').modal('hide');
-  $('#screenshot').css('background', 'none');
+  $('#screenshot').empty();
   $('#imagePreviewDiv').attr("hidden", "hidden");
   $('#imagePreview').attr('src', '');
   $('#ProjectID').val(0);
@@ -831,7 +852,7 @@ function closeImageModal() {
   $('#RequestCreateModal').modal('toggle');
   $('#base64').val('');
   $('#imagePreviewDiv').attr("hidden", "hidden");
-  $('#screenshot').css('background', 'none');
+  $('#screenshot').empty();
 }
 function closeEditRequestModal() {
   $("#editSaveBtn").prop("disabled", false);
@@ -1635,28 +1656,30 @@ $("html").pasteImageReader(function (results) {
   $data.text(dataURL);
   $size.val(results.file.size);
   $type.val(results.file.type);
-  var img = document.createElement("img");
-  img.src = dataURL;
-  var w = img.width;
-  var h = img.height;
-  $width.val(w);
-  $height.val(h);
+  //var img = document.createElement("img");
+  //img.src = dataURL;
+  var img = $("<img>"); 
+  img.css({
+    width: "450px",
+    height: "200px"
+  });
+  img.addClass("object-fit-scale");
+  img.attr('src', dataURL)
+  img.attr('id', "screenshotImg")
+  img.attr("onclick", 'OpenAnyImage("screenshotImg")');
+  $("#screenshot").empty();
+  $("#screenshot").append(img);
+  //var w = img.width;
+  //var h = img.height;
+  //$width.val(w);
+  //$height.val(h);
   $("#imagePreview").attr('src', dataURL);
-  var img2 = $("#imagePreview");
-  var currentWidth = img2.width();
-  var currentHeight = img2.height();
-
-  if (currentWidth > 500 || currentHeight > 500) {
-    var ratio = Math.min(500 / currentWidth, 500 / currentHeight);
-    img2.width(currentWidth * ratio);
-    img2.height(currentHeight * ratio);
-  }
   $('#imagePreviewDiv').removeAttr("hidden");
-  return $(".actives")
-    .css({
-      backgroundImage: "url(" + dataURL + ")"
-    })
-    .data({ width: w, height: h });
+  //return $(".actives")
+  //  .css({
+  //    backgroundImage: "url(" + dataURL + ")"
+  //  })
+  //  .data({ width: w, height: h });
 });
 
 var $data, $size, $type, $width, $height;
@@ -2223,6 +2246,14 @@ function GetActionNoteList(ID) {
       allowUpdating: true,
       allowDeleting: true,
     },
+    onCellClick: function (e) {
+      lastClickedCellDetail = e.column.dataField;
+    },
+    onRowDblClick: function (e) {
+      if (lastClickedCellDetail !== "buttons") {
+        ActionNoteDetail(e.data);
+      }
+    },
     onToolbarPreparing: function (e) {
       if (detail == 2) {
         let toolbarItems = e.toolbarOptions.items;
@@ -2290,6 +2321,7 @@ function GetActionNoteList(ID) {
         width: '60%'
       },
       {
+        dataField:"buttons",
         caption: "İşlemler",
         type: "buttons",
         fixed: true,

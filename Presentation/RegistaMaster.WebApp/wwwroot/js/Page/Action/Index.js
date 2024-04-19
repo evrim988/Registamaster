@@ -28,6 +28,12 @@ function GetList() {
     onCellPrepared(e) {
       if (e.rowType == "header") {
         e.cellElement.css("text-align", "center");
+      };
+      if (e.rowType === "data" && e.column.dataField === "requestID") {
+        $(e.cellElement).attr("title", "Talep Detayı İçin Çift Tıklayınız");
+      };
+      if ((e.rowType === "data" && e.column.dataField !== "requestID" && e.column.dataField !== "buttons")) {
+        $(e.cellElement).attr("title", "Aksiyon Detayı İçin Çift Tıklayınız");
       }
     },
     onRowPrepared: function (e) {
@@ -87,13 +93,18 @@ function GetList() {
       mode: 'single',
     },
     hoverStateEnabled: true,
+    onCellClick: function (e) {
+      lastClickedCell = e.column.dataField;
+    },
     onRowDblClick: function (e) {
-      if ($(e.event.target).attr('aria-describedby') == "dx-col-2") {
+      if (lastClickedCell === "requestID") {
         RequestDetail(e.data.requestID);
         return;
       }
-      GetActionNoteList(e.data.id);
-      OpenActionDetailModal(e.data);
+      if (lastClickedCell !== "buttons") {
+        GetActionNoteList(e.data.id);
+        OpenActionDetailModal(e.data);
+      }
     },
     onEditingStart: function (e) {
       title = e.data.Date;
@@ -145,7 +156,7 @@ function GetList() {
       },
       {
         dataField: "requestID",
-        caption: "Talep Konusu",
+        caption: "Talep",
         alignment: 'center',
         width: 200,
         lookup: {
@@ -325,6 +336,7 @@ function GetList() {
         }
       },
       {
+        dataField:"buttons",
         caption: "İşlemler",
         type: "buttons",
         fixed: true,
@@ -435,6 +447,14 @@ function GetActionNoteList(ID) {
       width: 240,
       placeholder: 'Ara...',
     },
+    onCellClick: function (e) {
+      lastClickedCellDetail = e.column.dataField;
+    },
+    onRowDblClick: function (e) {
+      if (lastClickedCellDetail !== "buttons") {
+        ActionNoteDetail(e.data);
+      }
+    },
     onEditingStart: function (e) {
       title = e.data.Date;
     },
@@ -516,6 +536,7 @@ function GetActionNoteList(ID) {
         width: '60%'
       },
       {
+        dataField:"buttons",
         caption: "İşlemler",
         type: "buttons",
         fixed: true,

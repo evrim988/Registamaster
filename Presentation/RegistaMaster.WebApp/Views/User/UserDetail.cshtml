@@ -13,91 +13,67 @@
 
 <div class="main-content">
   <div class="row">
-    <div class="col-12">
-      <div class="card card-primary">
-        <div class="card-header">
-        </div>
-        <div class="card-content collapse show">
-          <div class="heading-elements">
+    <div class="col-12" style="padding-top: 40px; padding-right: 40px; padding-left: 40px;">
+
+      <h3>Kullanıcı Bilgileri</h3>
+      <hr />
+
+      <div class="row">
+        <div class="col-md-6 mt-3">
+          <div class="form-group row">
+            <label style="font-weight:bold;" class="col-md-2 col-form-label">Adı:<span class="text-danger"></span></label>
+            <div class="col-md-9">
+              <input id="Name" asp-for="Name" readonly type="text" required class="form-control" name="title" />
+              <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
           </div>
-          <div class="card-body card-dashboard">
-            <h3>Kullanıcı Bilgileri</h3>
-            <hr />
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6 mt-3">
-                  <div class="form-group row">
-                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Adı:<span class="text-danger"></span></label>
-                    <div class="col-md-9">
-                      <input readonly id="Name" asp-for="Name" readonly type="text" required class="form-control" name="title" />
-                      <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mt-3">
-                  <div class="form-group row">
-                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Soyadı:<span class="text-danger"></span></label>
-                    <div class="col-md-9">
-                      <input asp-for="Surname" type="text" required readonly class="form-control" name="Surname" />
-                      <span asp-validation-for="Surname" class="text-danger"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mt-3">
-                  <div class="form-group row">
-                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Adı:<span class="text-danger"></span></label>
-                    <div class="col-md-9">
-                      <input asp-for="UserName" type="text" required readonly class="form-control" name="UserName" />
-                      <span asp-validation-for="UserName" class="text-danger"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mt-3">
-                  <div class="form-group row">
-                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Parola:<span class="text-danger"></span></label>
-                    <div class="col-md-9">
-                      <input asp-for="Password" type="text" readonly required class="form-control" name="Password" />
-                      <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mt-3">
-                  <div class="form-group row">
-                    <label style="font-weight:bold;" class="col-md-2 col-form-label">Email:<span class="text-danger"></span></label>
-                    <div class="col-md-9">
-                      <input asp-for="Email" type="text" required readonly class="form-control" name="Email" />
-                      <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mt-3">
-                  <div class="row">
-                    <div class="col-md-5">
-                      <div class="form-group">
-                        <button type="submit" onclick="EditUserDetail()" class="btn btn-info btn-md btn-block w-100">Düzenle</button>
-                      </div>
-                    </div>
-                    <div class="col-md-5 offset-1">
-                      <div class="form-group">
-                        <button type="submit" onclick="FormSave()" id="btnSave" class="btn btn-success btn-md btn-block w-100 ">Kaydet</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-
-                @* <div class="col-md-6">
-                <div class="form-group row">
-                <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Türü:<span class="text-danger"></span></label>
-                <div class="col-md-9">
-                <select asp-for="AuthorizationStatus" required asp-items="Html.GetEnumSelectList<RegistaMaster.Domain.Enums.AuthorizationStatus>()" class="form-control select2">
-                <option selected="selected" value="-1">Lütfen Seçiniz</option>
-                </select>
-                <span asp-validation-for="AuthorizationStatus" class="text-danger" />
-                </div>
-                </div>
-                </div> *@
-
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="form-group row">
+            <label style="font-weight:bold;" class="col-md-2 col-form-label">Soyadı:<span class="text-danger"></span></label>
+            <div class="col-md-9">
+              <input asp-for="Surname" type="text" required readonly class="form-control" name="Surname" />
+              <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="form-group row">
+            <label style="font-weight:bold;" class="col-md-2 col-form-label">Kullanıcı Adı:<span class="text-danger"></span></label>
+            <div class="col-md-9">
+              <input asp-for="UserName" type="text" required readonly class="form-control" name="UserName" />
+              <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="form-group row">
+            <label style="font-weight:bold;" class="col-md-2 col-form-label">Parola:<span class="text-danger"></span></label>
+            <div class="col-md-9">
+              <input asp-for="Password" type="text" readonly required class="form-control" name="Password" />
+              <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="form-group row">
+            <label style="font-weight:bold;" class="col-md-2 col-form-label">Email:<span class="text-danger"></span></label>
+            <div class="col-md-9">
+              <input asp-for="Email" type="text" required readonly class="form-control" name="Email" />
+              <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <button type="submit" onclick="EditUserDetail()" class="btn btn-info btn-md btn-block w-100">Düzenle</button>
+              </div>
+            </div>
+            <div class="col-md-5 offset-1">
+              <div class="form-group">
+                <button type="submit" onclick="FormSave()" id="btnSave" class="btn btn-success btn-md btn-block w-100 ">Kaydet</button>
               </div>
             </div>
           </div>
@@ -105,7 +81,9 @@
       </div>
     </div>
   </div>
-  @section scripts {
+</div>
 
-    <script src="~/js/Page/User/UserDetail.js"></script>
-  }
+@section scripts {
+
+  <script src="~/js/Page/User/UserDetail.js"></script>
+}
