@@ -601,6 +601,7 @@ function RequestDetail(data) {
 
 function RequestDetailModal(data) {
   //console.log(data);
+  $('#requestFiles').empty();
   $("#requestNotificationType").val(data.notificationType);
   $("#requestCategory").val(data.category);
   $("#requestProject").val(data.project);
@@ -623,7 +624,30 @@ function RequestDetailModal(data) {
   else {
     $("#requestFilesDiv").attr("hidden", "hidden");
   }
+
+  $("#RequestModal").modal("toggle");
+
   function addLink(item) {
+    if (item.fileName.includes(".pdf")) {
+      var hyperlink = $('<a data-fancybox data-type="iframe">');
+      hyperlink.attr('href', item.fileURL);
+      hyperlink.text(item.fileName);
+      hyperlink.addClass('list-group-item group-list-item-action');
+      $('#requestFiles').append(hyperlink);
+      return;
+    }
+
+    var imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+    var regex = new RegExp('\\.(' + imageExtensions.join('|') + ')$');
+
+    if (regex.test(item.fileName)) {
+      var hyperlink = $('<a data-fancybox="gallery">');
+      hyperlink.attr('href', item.fileURL);
+      hyperlink.text(item.fileName);
+      hyperlink.addClass('list-group-item group-list-item-action');
+      $('#requestFiles').append(hyperlink);
+      return;
+    }
     var hyperlink = $('<a>', {
       href: item.fileURL,
       text: item.fileName,
@@ -633,7 +657,6 @@ function RequestDetailModal(data) {
 
     $('#requestFiles').append(hyperlink);
   }
-  $("#RequestModal").modal("toggle");
 }
 
 function OpenImage() {

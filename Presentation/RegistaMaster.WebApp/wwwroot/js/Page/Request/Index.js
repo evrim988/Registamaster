@@ -1069,6 +1069,27 @@ function RequestDetail(data) {
     $("#detailFilesDiv").attr("hidden", "hidden");
   }
   function addLink(item) {
+    if (item.fileName.includes(".pdf")) {
+      var hyperlink = $('<a data-fancybox data-type="iframe">');
+      hyperlink.attr('href', item.fileURL);
+      hyperlink.text(item.fileName);
+      hyperlink.addClass('list-group-item group-list-item-action');
+      $('#detailFiles').append(hyperlink);
+      return;
+    }
+
+    var imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+    var regex = new RegExp('\\.(' + imageExtensions.join('|') + ')$');
+
+    if (regex.test(item.fileName)) {
+      var hyperlink = $('<a data-fancybox="gallery">');
+      hyperlink.attr('href', item.fileURL);
+      hyperlink.text(item.fileName);
+      hyperlink.addClass('list-group-item group-list-item-action');
+      $('#detailFiles').append(hyperlink);
+      return;
+    }
+
     var hyperlink = $('<a>', {
       href: item.fileURL,
       text: item.fileName,
@@ -1206,6 +1227,29 @@ function openEditModals(data, ID) {
       'data-toggle': 'tooltip',
       title: 'Silmek için işaretleyiniz'
     }).appendTo(newLi);
+
+    if (item.fileName.includes(".pdf")) {
+      var hyperlink = $('<a data-fancybox data-type="iframe">');
+      hyperlink.attr('href', item.fileURL);
+      hyperlink.text(item.fileName);
+      hyperlink.addClass('form-check-label');
+      hyperlink.appendTo(newLi);
+      $('#editFiles').append(newLi);
+      return;
+    }
+
+    var imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+    var regex = new RegExp('\\.(' + imageExtensions.join('|') + ')$');
+
+    if (regex.test(item.fileName)) {
+      var hyperlink = $('<a data-fancybox>');
+      hyperlink.attr('href', item.fileURL);
+      hyperlink.text(item.fileName);
+      hyperlink.addClass('form-check-label');
+      hyperlink.appendTo(newLi);
+      $('#editFiles').append(newLi);
+      return;
+    }
 
     $('<a>', {
       class: 'form-check-label',
@@ -1658,7 +1702,7 @@ $("html").pasteImageReader(function (results) {
   $type.val(results.file.type);
   //var img = document.createElement("img");
   //img.src = dataURL;
-  var img = $("<img>"); 
+  var img = $("<img>");
   img.css({
     width: "450px",
     height: "200px"
@@ -2321,7 +2365,7 @@ function GetActionNoteList(ID) {
         width: '60%'
       },
       {
-        dataField:"buttons",
+        dataField: "buttons",
         caption: "İşlemler",
         type: "buttons",
         fixed: true,
