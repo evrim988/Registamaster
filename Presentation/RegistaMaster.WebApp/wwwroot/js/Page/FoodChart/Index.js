@@ -27,7 +27,45 @@ function GetList() {
       }
     },
     onRowPrepared: function (e) {
-      if (e.rowType == "header") { e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold'); };
+      if (e.rowType == "header") {
+        e.rowElement.css("background-color", "#b9ceff"); e.rowElement.css('color', '#4f5052'); e.rowElement.css('font-weight', 'bold');
+
+        var $refreshButton = $('<div id="refreshButton">').dxButton({
+          icon: 'refresh',
+          onClick: function () {
+            grid.refresh();
+          }
+        });
+
+        e.element
+          .find('.dx-toolbar-after')
+          .prepend($refreshButton);
+
+        var $filterButton = $('<div id="filterButton">').dxButton({
+          icon: 'clearformat',
+          onClick: function () {
+            grid.clearFilter();
+          }
+        });
+        $filterButton.css("margin-right", "5px");
+
+        e.element
+          .find('.dx-toolbar-after')
+          .prepend($filterButton);
+
+        var $importButton = $('<div id="importButton">').dxButton({
+          icon: 'import',
+          hint: "Dosya Yükle",
+          onClick: function () {
+            $("#importDiv").attr("hidden", false);
+          }
+        });
+
+        $importButton.css("margin-right", "5px");
+        e.element
+          .find('.dx-toolbar-after')
+          .prepend($importButton);
+      };
     },
 
     rowAlternationEnabled: true,
@@ -78,44 +116,6 @@ function GetList() {
       allowAdding: true,
     },
     onContentReady: function (e) {
-
-      var $refreshButton = $('<div id="refreshButton">').dxButton({
-        icon: 'refresh',
-        onClick: function () {
-          grid.refresh();
-        }
-      });
-
-      if (e.element.find('#refreshButton').length == 0)
-        e.element
-          .find('.dx-toolbar-after')
-          .prepend($refreshButton);
-
-      var $filterButton = $('<div id="filterButton">').dxButton({
-        icon: 'clearformat',
-        onClick: function () {
-          grid.clearFilter();
-        }
-      });
-      $filterButton.css("margin-right", "5px");
-
-      if (e.element.find('#filterButton').length == 0)
-        e.element
-          .find('.dx-toolbar-after')
-          .prepend($filterButton);
-
-      var $importButton = $('<div id="importButton">').dxButton({
-        icon: 'import',
-        hint:"Dosya Yükle",
-        onClick: function () {
-          $("#importDiv").attr("hidden", false);
-        }
-      });
-      
-      $importButton.css("margin-right", "5px");
-        e.element
-          .find('.dx-toolbar-after')
-          .prepend($importButton);
 
     },
     export: {
