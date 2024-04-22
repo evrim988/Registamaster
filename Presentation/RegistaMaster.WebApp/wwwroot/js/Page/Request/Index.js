@@ -404,6 +404,7 @@ function GetList() {
               width: 150,
             },
             showArrowIcon: false,
+            stylingMode: "text",
             onItemClick: function (e) {
               var item = e.itemData;
               handleItemClick(item, options);
