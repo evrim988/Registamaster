@@ -11,6 +11,6 @@ namespace RegistaMaster.Application.Repositories;
     public interface IUserLogRepository : IRepository
     {
         IQueryable<UserLogDTO> GetList();
-        public Task<string> AddUserLog(UserLog model);
+        Task<string> AddUserLog(UserLog model);
     }
 

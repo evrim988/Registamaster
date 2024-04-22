@@ -14,17 +14,17 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class Repository : IRepository
 {
-  public readonly RegistaMasterContext context;
 
-  public readonly SessionModel session;
-  public Repository(RegistaMasterContext _context, SessionModel _session)
+  public readonly SessionModel _session;
+  public readonly RegistaMasterContext _context;
+  public Repository(RegistaMasterContext context, SessionModel session)
   {
-    context = _context;
-    session = _session;
+    _context = context;
+    _session = session;
   }
   private DbSet<T> GetTable<T>() where T : BaseEntitiy
   {
-    return context.Set<T>();
+    return _context.Set<T>();
   }
   public async Task<T> Find<T>(Expression<Func<T, bool>> where) where T : BaseEntitiy
   {
@@ -43,7 +43,7 @@ public class Repository : IRepository
     {
       foreach (var item in _objectList)
       {
-        item.LastModifiedBy = session.ID;
+        item.LastModifiedBy = _session.ID;
         item.LastModifiedOn = DateTime.Now;
       }
       GetTable<T>().UpdateRange(_objectList);
@@ -61,7 +61,7 @@ public class Repository : IRepository
     {
       foreach (var item in _objectList)
       {
-        item.LastModifiedBy = session.ID;
+        item.LastModifiedBy = _session.ID;
         item.LastModifiedOn = DateTime.Now;
         item.ObjectStatus = ObjectStatus.Deleted;
         item.Status = Status.Passive;
@@ -88,8 +88,8 @@ public class Repository : IRepository
   }
   public async Task<T> Add<T>(T _object) where T : BaseEntitiy
   {
-    _object.CreatedBy = session.ID;
-    _object.LastModifiedBy = session.ID;
+    _object.CreatedBy = _session.ID;
+    _object.LastModifiedBy = _session.ID;
     _object.LastModifiedOn = DateTime.Now;
     _object.CreatedOn = DateTime.Now;
     _object.Status = Status.Active;
@@ -127,7 +127,7 @@ public class Repository : IRepository
   public T Update<T>(T _object) where T : BaseEntitiy
   {
     _object.LastModifiedOn = DateTime.Now;
-    _object.LastModifiedBy = session.ID;
+    _object.LastModifiedBy = _session.ID;
     GetTable<T>().Update(_object);
     return _object;
   }

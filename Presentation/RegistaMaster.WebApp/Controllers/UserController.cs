@@ -15,19 +15,19 @@ namespace RegistaMaster.WebApp.Controllers;
 [Auth]
 public class UserController : Controller
 {
-  private readonly IUnitOfWork uow;
-  private readonly SessionModel session;
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
   private readonly ISessionService _sessionService;
-  public UserController(IUnitOfWork _uow, ISessionService sessionService)
+  public UserController(IUnitOfWork uow, ISessionService sessionService)
   {
-    uow = _uow;
-    session = _uow.GetSession();
+    _uow = uow;
+    _session = uow.GetSession();
     _sessionService = sessionService;
   }
   public async Task<object> GetList(DataSourceLoadOptions options)
 
   {
-    var models = await uow.UserRepository.GetList();
+    var models = await _uow.UserRepository.GetList();
     return DataSourceLoader.Load(models, options);
   }
   public IActionResult Index()
@@ -40,7 +40,7 @@ public class UserController : Controller
   {
     try
     {
-      return View(await uow.UserRepository.UserSessionDetail());
+      return View(await _uow.UserRepository.UserSessionDetail());
     }
     catch (Exception ex)
     {
@@ -76,7 +76,7 @@ public class UserController : Controller
   {
     try
     {
-      var models = uow.Repository.GetEnumSelect<AuthorizationStatus>();
+      var models = _uow.Repository.GetEnumSelect<AuthorizationStatus>();
       var resultJson = JsonConvert.SerializeObject(models);
       return Content(resultJson, "application/json");
     }
@@ -91,7 +91,7 @@ public class UserController : Controller
   {
     try
     {
-      await uow.UserRepository.AddUser(model);
+      await _uow.UserRepository.AddUser(model);
       return "1";
     }
     catch (Exception ex)
@@ -104,7 +104,7 @@ public class UserController : Controller
   {
     try
     {
-      var user = await uow.UserRepository.UpdateUser(model);
+      var user = await _uow.UserRepository.UpdateUser(model);
       _sessionService.CleanSession();
       _sessionService.SetUser(user);
       return "1";
@@ -119,7 +119,7 @@ public class UserController : Controller
   {
     try
     {
-      return await uow.UserRepository.ChangeAuthorization(model);
+      return await _uow.UserRepository.ChangeAuthorization(model);
     }
     catch (Exception ex)
     {
@@ -131,7 +131,7 @@ public class UserController : Controller
   {
     try
     {
-      await uow.UserRepository.DeleteUser(ID);
+      await _uow.UserRepository.DeleteUser(ID);
       return "1";
     }
     catch (Exception ex)

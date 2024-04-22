@@ -11,7 +11,7 @@ namespace RegistaMaster.Application.Repositories
     public interface IHealthCheckRepository : IRepository
     {
         IQueryable<HealthCheckDTO> GetList();
-        public Task<string> AddHealthCheck(HealthCheck model);
+        Task<string> AddHealthCheck(HealthCheck model);
 
     }
 }

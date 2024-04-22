@@ -17,24 +17,24 @@ namespace RegistaMaster.WebApp.Controllers;
 [Auth]
 public class ProjectController : Controller
 {
-  private readonly IUnitOfWork uow;
-  public ProjectController(IUnitOfWork _uow)
+  private readonly IUnitOfWork _uow;
+  public ProjectController(IUnitOfWork uow)
   {
-    uow = _uow;
+    _uow = uow;
   }
 
   //PROJE
   public async Task<object> GetList(DataSourceLoadOptions options)
 
   {
-    var models = await uow.ProjectRepository.GetList();
+    var models = await _uow.ProjectRepository.GetList();
     return DataSourceLoader.Load(models, options);
   }
   public async Task<string> AddProject(Project model)
   {
     try
     {
-      return await uow.ProjectRepository.AddProject(model);
+      return await _uow.ProjectRepository.AddProject(model);
     }
     catch (Exception e)
     {
@@ -45,7 +45,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ProjectRepository.UpdateProject(model);
+      return await _uow.ProjectRepository.UpdateProject(model);
     }
     catch (Exception ex)
     {
@@ -56,7 +56,7 @@ public class ProjectController : Controller
   {
     try
     {
-     return await uow.ProjectRepository.DeleteProject(ID);
+     return await _uow.ProjectRepository.DeleteProject(ID);
     }
     catch (Exception ex)
     {
@@ -65,9 +65,9 @@ public class ProjectController : Controller
   }
   public async Task<IActionResult> Index()
   {
-    ViewBag.CreatedBy = uow.ProjectNoteRepository.CreatedBySelectList();
+    ViewBag.CreatedBy = _uow.ProjectNoteRepository.CreatedBySelectList();
     var model = new ProjectDTO();
-    model.Project = await uow.ProjectRepository.GetProjectSelect();
+    model.Project = await _uow.ProjectRepository.GetProjectSelect();
     return View(model);
   }
 
@@ -76,7 +76,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ProjectNoteRepository.GetProjectNotes(ID);
+      return await _uow.ProjectNoteRepository.GetProjectNotes(ID);
     }
     catch (Exception e)
     {
@@ -88,7 +88,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ProjectNoteRepository.ProjectNoteAdd(model);
+      return await _uow.ProjectNoteRepository.ProjectNoteAdd(model);
     }
     catch (Exception ex)
     {
@@ -100,7 +100,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ProjectNoteRepository.UpdateProjectNote(model);
+      return await _uow.ProjectNoteRepository.UpdateProjectNote(model);
     }
     catch (Exception ex)
     {
@@ -111,8 +111,8 @@ public class ProjectController : Controller
   {
     try
     {
-      await uow.Repository.Delete<ProjectNote>(ID);
-      await uow.SaveChanges();
+      await _uow.Repository.Delete<ProjectNote>(ID);
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception ex)
@@ -125,7 +125,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ProjectNoteRepository.CheckRequest(ID);
+      return await _uow.ProjectNoteRepository.CheckRequest(ID);
     }
     catch (Exception ex)
     {
@@ -137,7 +137,7 @@ public class ProjectController : Controller
   {
     try
     {
-      var model = await uow.UserRepository.GetCreatedBy();
+      var model = await _uow.UserRepository.GetCreatedBy();
       return DataSourceLoader.Load(model, loadOptions);
     }
     catch (Exception ex)
@@ -152,7 +152,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ModuleRepository.CreateModule(model);
+      return await _uow.ModuleRepository.CreateModule(model);
     }
     catch (Exception e)
     {
@@ -164,7 +164,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ModuleRepository.GetModules(ID);
+      return await _uow.ModuleRepository.GetModules(ID);
     }
     catch (Exception e)
     {
@@ -175,7 +175,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ModuleRepository.UpdateModule(model);
+      return await _uow.ModuleRepository.UpdateModule(model);
     }
     catch (Exception ex)
     {
@@ -186,7 +186,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.ModuleRepository.DeleteModule(ID);
+      return await _uow.ModuleRepository.DeleteModule(ID);
     }
     catch (Exception ex)
     {
@@ -200,7 +200,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.VersionRepository.AddVersion(model);
+      return await _uow.VersionRepository.AddVersion(model);
     }
     catch (Exception e)
     {
@@ -212,7 +212,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.VersionRepository.GetVersion(ID);
+      return await _uow.VersionRepository.GetVersion(ID);
     }
     catch (Exception)
     {
@@ -223,7 +223,7 @@ public class ProjectController : Controller
   {
     try
     {
-      return await uow.VersionRepository.UpdateVersion(model);
+      return await _uow.VersionRepository.UpdateVersion(model);
     }
     catch (Exception ex)
     {
@@ -234,7 +234,7 @@ public class ProjectController : Controller
   {
     try
     {
-     return await uow.VersionRepository.DeleteVersion(ID);
+     return await _uow.VersionRepository.DeleteVersion(ID);
     }
     catch (Exception ex)
     {

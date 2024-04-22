@@ -7,15 +7,15 @@ namespace RegistaMaster.WebApp.Controllers;
 
 public class SecurityController : Controller
 {
-    private readonly IUnitOfWork uow;
-    private readonly ISecurityRepository securityRepository;
-    private readonly ISessionService sessionService;
+    private readonly IUnitOfWork _uow;
+    private readonly ISecurityRepository _securityRepository;
+    private readonly ISessionService _sessionService;
 
-    public SecurityController(IUnitOfWork _uow, ISecurityRepository _securityRepository, ISessionService _sessionService)
+    public SecurityController(IUnitOfWork uow, ISecurityRepository securityRepository, ISessionService sessionService)
     {
-        uow = _uow;
-        securityRepository = _securityRepository;
-        sessionService = _sessionService;
+        _uow = uow;
+        _securityRepository = securityRepository;
+        _sessionService = sessionService;
     }
 
     public IActionResult Index()
@@ -27,17 +27,17 @@ public class SecurityController : Controller
     public IActionResult Login(PathString uri)
     {
         var model = new LoginModel { uri = uri };
-        var user = sessionService.GetUser();
+        var user = _sessionService.GetUser();
         return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> Login(LoginModel model)
     {
-        var user = await securityRepository.Login(model.UserName, model.Password);
+        var user = await _securityRepository.Login(model.UserName, model.Password);
         if (user != null)
         {
-            sessionService.SetUser(user);
+            _sessionService.SetUser(user);
             if (model.uri != null && model.uri != "/")
                 return Redirect(model.uri);
             else
@@ -51,7 +51,7 @@ public class SecurityController : Controller
     }
     public IActionResult Logout()
     {
-        sessionService.CleanSession();
+        _sessionService.CleanSession();
         return RedirectToAction("Login");
     }
 }

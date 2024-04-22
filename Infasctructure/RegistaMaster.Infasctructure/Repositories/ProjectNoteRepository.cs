@@ -12,14 +12,14 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class ProjectNoteRepository : Repository, IProjectNoteRepository
 {
-  private readonly RegistaMasterContext registaContext;
-  private readonly UnitOfWork uow;
-  private readonly SessionModel session;
-  public ProjectNoteRepository(RegistaMasterContext _registaContext, SessionModel _session, UnitOfWork _uow) : base(_registaContext, _session)
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
+  private readonly RegistaMasterContext _context;
+  public ProjectNoteRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
   {
-    this.registaContext = _registaContext;
-    this.uow = _uow;
-    this.session = _session;
+    _context = context;
+    _uow = uow;
+    _session = session;
   }
 
   public async Task<string> ProjectNoteAdd(ProjectNote model)
@@ -27,8 +27,8 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
     try
     {
       model.Date = DateTime.Now;
-      await uow.Repository.Add(model);
-      await uow.SaveChanges();
+      await _uow.Repository.Add(model);
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception e)
@@ -68,7 +68,7 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
     note.NoteType = model.NoteType;
     note.Description = model.Description;
     Update(note);
-    await uow.SaveChanges();
+    await _uow.SaveChanges();
     return "1";
   }
   public async Task<List<ResponsibleDevextremeSelectListHelper>> GetProject()
@@ -76,7 +76,7 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
     try
     {
       List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-      var model = context.Projects
+      var model = _context.Projects
           .Where(t => true);
       foreach (var item in model)
       {
@@ -137,7 +137,7 @@ public class ProjectNoteRepository : Repository, IProjectNoteRepository
   {
     try
     {
-      if (uow.Repository.GetNonDeletedAndActive<Request>(t => t.ProjectID == ID && t.RequestStatus != RequestStatus.Closed).Count() != 0)
+      if (_uow.Repository.GetNonDeletedAndActive<Request>(t => t.ProjectID == ID && t.RequestStatus != RequestStatus.Closed).Count() != 0)
         return "-1";
       return "1";
     }

@@ -11,14 +11,14 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class HomeRepository : Repository, IHomeRepository
 {
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
   private readonly RegistaMasterContext _context;
-  private readonly SessionModel session;
-  private readonly IUnitOfWork uow;
-  public HomeRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  public HomeRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
   {
+    _uow = uow;
     _context = context;
-    session = _session;
-    uow = _uow;
+    _session = session;
   }
 
 
@@ -26,7 +26,7 @@ public class HomeRepository : Repository, IHomeRepository
   {
     try
     {
-      var model = GetQueryable<Action>(t => (t.ResponsibleID == session.ID || t.CreatedBy == session.ID) && t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ActionDTO()
+      var model = GetQueryable<Action>(t => (t.ResponsibleID == _session.ID || t.CreatedBy == _session.ID) && t.ObjectStatus == ObjectStatus.NonDeleted).Select(s => new ActionDTO()
       {
         ID = s.ID,
         Description = s.Description,

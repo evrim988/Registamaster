@@ -138,7 +138,7 @@ public class ActionRepository : Repository, IActionRepository
     try
     {
       List<ResponsibleDevextremeSelectListHelper> RequestHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-      var model = context.Requests
+      var model = _context.Requests
           .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
       foreach (var item in model)
       {

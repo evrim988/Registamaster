@@ -11,28 +11,28 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class ProjectRepository : Repository, IProjectRepository
 {
-  private readonly RegistaMasterContext context;
-  private readonly IUnitOfWork uow;
-  private readonly SessionModel session;
-  public ProjectRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
+  private readonly RegistaMasterContext _context;
+  public ProjectRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
   {
-    this.context = _context;
-    this.uow = _uow;
-    this.session = _session;
+    _context = context;
+    _uow = uow;
+    _session = session;
   }
   public async Task<string> AddProject(Project model)
   {
     try
     {
-      await uow.Repository.Add(model);
-      await uow.SaveChanges();
+      await _uow.Repository.Add(model);
+      await _uow.SaveChanges();
       var version = new VersionDTO()
       {
         ProjectID = model.ID,
         DatabaseChange = true,
         Name = "V1.0",
       };
-      await uow.VersionRepository.AddVersion(version);
+      await _uow.VersionRepository.AddVersion(version);
       return "1";
     }
     catch (Exception e)
@@ -54,11 +54,11 @@ public class ProjectRepository : Repository, IProjectRepository
   {
     try
     {
-      await uow.VersionRepository.DeleteVersionWithProjectID(ID);
-      await uow.ModuleRepository.DeleteModuleWithProjectID(ID);
-      await uow.ProjectNoteRepository.DeleteNoteWithProjectID(ID);
-      await uow.Repository.Delete<Project>(ID);
-      await uow.SaveChanges();
+      await _uow.VersionRepository.DeleteVersionWithProjectID(ID);
+      await _uow.ModuleRepository.DeleteModuleWithProjectID(ID);
+      await _uow.ProjectNoteRepository.DeleteNoteWithProjectID(ID);
+      await _uow.Repository.Delete<Project>(ID);
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception)
@@ -123,7 +123,7 @@ public class ProjectRepository : Repository, IProjectRepository
     project.ProjectDescription = model.ProjectDescription;
     project.ProjectName = model.ProjectName;
     Update(project);
-    await uow.SaveChanges();
+    await _uow.SaveChanges();
     return "1";
   }
   

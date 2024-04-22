@@ -5,14 +5,14 @@ namespace RegistaMaster.Application.Repositories;
 
 public interface IVersionRepository : IRepository
 {
-  public Task<IQueryable<VersionDTO>> GetList();
-  public Task<string> AddVersion(VersionDTO model);
-  public Task<string> UpdateVersion(Version model);
-  public Task<string> DeleteVersion(int ID);
-  public Task<string> DeleteVersionWithProjectID(int ID);
-  public double GetVersionName(int ID);
-  public Task<string> UpdateVersion(VersionDTO model);
-  public  Task<string> GetVersion(int ID);
+  Task<IQueryable<VersionDTO>> GetList();
+  Task<string> AddVersion(VersionDTO model);
+  Task<string> UpdateVersion(Version model);
+  Task<string> DeleteVersion(int ID);
+  Task<string> DeleteVersionWithProjectID(int ID);
+  double GetVersionName(int ID);
+  Task<string> UpdateVersion(VersionDTO model);
+   Task<string> GetVersion(int ID);
 
 
 }

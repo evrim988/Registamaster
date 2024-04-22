@@ -9,23 +9,22 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class CustomerRepository : Repository, ICustomerRepository
 {
-  private readonly RegistaMasterContext context;
-
-  private readonly IUnitOfWork uow;
-  private readonly SessionModel session;
-  public CustomerRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
+  private readonly RegistaMasterContext _context;
+  public CustomerRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
   {
-    context = _context;
-    uow = _uow;
-    session = _session;
+    _uow = uow;
+    _context = context;
+    _session = session;
   }
 
   public async Task<string> CustomerAdd(Customer model)
   {
     try
     {
-      await uow.Repository.Add(model);
-      await uow.SaveChanges();
+      await _uow.Repository.Add(model);
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception e)
@@ -69,7 +68,7 @@ public class CustomerRepository : Repository, ICustomerRepository
   {
     Update(model);
 
-    await uow.SaveChanges();
+    await _uow.SaveChanges();
     return "1";
   }
 }

@@ -19,19 +19,19 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class RequestRepository : Repository, IRequestRepository
 {
-  private readonly RegistaMasterContext context;
-  private readonly UnitOfWork uow;
-  private readonly SessionModel session;
-  private readonly IConfiguration config;
-  private readonly IFileService fileService;
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
+  private readonly IConfiguration _config;
+  private readonly IFileService _fileService;
+  private readonly RegistaMasterContext _context;
 
-  public RequestRepository(RegistaMasterContext _context, SessionModel _session, UnitOfWork _uow, IConfiguration _config, IFileService fileService) : base(_context, _session)
+  public RequestRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow, IConfiguration config, IFileService fileService) : base(context, session)
   {
-    context = _context;
-    uow = _uow;
-    session = _session;
-    config = _config;
-    this.fileService = fileService;
+    _context = context;
+    _uow = uow;
+    _session = session;
+    _config = config;
+    _fileService = fileService;
   }
 
   public async Task<Request> RequestAdd(Request model)
@@ -42,8 +42,8 @@ public class RequestRepository : Repository, IRequestRepository
       model.StartDate = time;
       model.PlanedEndDate = time.AddDays(7);
       model.RequestStatus = RequestStatus.Open;
-      var request = await uow.Repository.Add(model);
-      await uow.SaveChanges();
+      var request = await _uow.Repository.Add(model);
+      await _uow.SaveChanges();
       return request;
     }
     catch (Exception e)
@@ -67,7 +67,7 @@ public class RequestRepository : Repository, IRequestRepository
     request.PictureURL = model.PictureURL;
 
     Update(request);
-    await uow.SaveChanges();
+    await _uow.SaveChanges();
     return request;
   }
   public void Delete(int id)
@@ -104,7 +104,7 @@ public class RequestRepository : Repository, IRequestRepository
 
   public async Task<List<RequestGridDTO>> GetListWithFiles()
   {
-    var requests = await context.Requests.Where(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active).OrderByDescending(s => s.ID).Include(x => x.Files).Select(t => new RequestGridDTO()
+    var requests = await _context.Requests.Where(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.Status == Status.Active).OrderByDescending(s => s.ID).Include(x => x.Files).Select(t => new RequestGridDTO()
     {
       ID = t.ID,
       CreatedBy = t.CreatedBy,
@@ -133,7 +133,7 @@ public class RequestRepository : Repository, IRequestRepository
     try
     {
       List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-      var model = context.Projects
+      var model = _context.Projects
           .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
       foreach (var item in model)
       {
@@ -156,7 +156,7 @@ public class RequestRepository : Repository, IRequestRepository
     try
     {
       List<ResponsibleDevextremeSelectListHelper> CustomerHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-      var model = context.Customers
+      var model = _context.Customers
           .Where(t => true);
       foreach (var item in model)
       {
@@ -200,7 +200,7 @@ public class RequestRepository : Repository, IRequestRepository
     try
     {
       List<ResponsibleDevextremeSelectListHelper> ModulesHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-      var model = context.Modules
+      var model = _context.Modules
           .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted);
       foreach (var item in model)
       {
@@ -249,7 +249,7 @@ public class RequestRepository : Repository, IRequestRepository
     try
     {
       List<ResponsibleDevextremeSelectListHelper> ModulersHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-      var model = context.Versions
+      var model = _context.Versions
           .Where(t => true);
       foreach (var item in model)
       {
@@ -273,10 +273,10 @@ public class RequestRepository : Repository, IRequestRepository
   {
     try
     {
-      var model = await uow.Repository.GetById<Action>(ID);
+      var model = await _uow.Repository.GetById<Action>(ID);
       model.ActionStatus = actionStatus;
       Update(model);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception e)
@@ -359,11 +359,11 @@ public class RequestRepository : Repository, IRequestRepository
   {
     try
     {
-      var request = await uow.Repository.GetById<Request>(ID);
+      var request = await _uow.Repository.GetById<Request>(ID);
       request.RequestStatus = RequestStatus.Closed;
       request.PlanedEndDate = DateTime.Now;
       Update<Request>(request);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception ex)
@@ -379,23 +379,23 @@ public class RequestRepository : Repository, IRequestRepository
       var filesResponces = new List<FileResponseModel>();
       foreach (IFormFile file in files)
       {
-        var fileRespose = fileService.SaveFile(file, "/Documents/RequestDocs");
+        var fileRespose = _fileService.SaveFile(file, "/Documents/RequestDocs");
         FileResponseModel model = new();
         model.FileName = fileRespose.FileName;
         model.Extension = fileRespose.Extension;
-        model.FilePath = config["BasePaths:BaseUri"] + config["BasePaths:ServiceUri"] + "/" + fileRespose.FileName;
+        model.FilePath = _config["BasePaths:BaseUri"] + _config["BasePaths:ServiceUri"] + "/" + fileRespose.FileName;
         filesResponces.Add(model);
       }
       foreach (var file in filesResponces)
       {
-        await uow.Repository.Add<RequestFile>(new RequestFile()
+        await _uow.Repository.Add<RequestFile>(new RequestFile()
         {
           RequestID = ID,
           FileName = file.FileName,
           FileURL = file.FilePath
         });
       }
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "filesResponces";
     }
     catch (Exception ex)
@@ -414,7 +414,7 @@ public class RequestRepository : Repository, IRequestRepository
         files.Add(await GetById<RequestFile>(Convert.ToInt32(fileID)));
       }
       await DeleteRange<RequestFile>(files);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "";
     }
     catch (Exception ex)
@@ -455,7 +455,7 @@ public class RequestRepository : Repository, IRequestRepository
         await DeleteRange<RequestFile>(files);
 
       await Delete<Request>(ID);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
 
@@ -471,7 +471,7 @@ public class RequestRepository : Repository, IRequestRepository
     {
       await DeleteFilesWithRequestID(ID);
       await Delete<Request>(ID);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception ex)
@@ -484,7 +484,7 @@ public class RequestRepository : Repository, IRequestRepository
   {
     try
     {
-      var request = context.Requests.Where(t => t.ID == ID).Include(x => x.Project).Include(y => y.Version).Include(z => z.Files).First();
+      var request = _context.Requests.Where(t => t.ID == ID).Include(x => x.Project).Include(y => y.Version).Include(z => z.Files).First();
       request.Files = request.Files.Where(t => t.ObjectStatus == ObjectStatus.NonDeleted).ToList();
       var requestInc = new RequestWithIncludeDTO()
       {
@@ -518,7 +518,7 @@ public class RequestRepository : Repository, IRequestRepository
       }
 
       if (request.ModuleID != null)
-        requestInc.Module = context.Modules.Find(ID).Name;
+        requestInc.Module = _context.Modules.Find(ID).Name;
       else
         requestInc.Module = "-";
       return requestInc;

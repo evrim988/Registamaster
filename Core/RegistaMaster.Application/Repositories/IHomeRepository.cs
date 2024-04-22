@@ -8,9 +8,9 @@ namespace RegistaMaster.Application.Repositories;
 
 public interface IHomeRepository : IRepository
 {
-    public Task<List<ActionDTO>> GetActionDtoHome();
-    public Task<ChartDTO> AdminChart();
-    public Task<List<UserChartDTO>> AdminChartUserActions();
-    public Task<ChartDTO> TeamLeaderChart(int ID);
-    public Task<UserChartDTO> DeveloperChart(int ID);
+    Task<List<ActionDTO>> GetActionDtoHome();
+    Task<ChartDTO> AdminChart();
+    Task<List<UserChartDTO>> AdminChartUserActions();
+    Task<ChartDTO> TeamLeaderChart(int ID);
+    Task<UserChartDTO> DeveloperChart(int ID);
 }

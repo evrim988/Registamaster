@@ -11,6 +11,6 @@ namespace RegistaMaster.Application.Repositories
     public interface IErrorLogRepository : IRepository
     {
         IQueryable<ErrorLogDTO> GetList();
-        public Task<string> AddErrorLog(ErrorLog model);
+        Task<string> AddErrorLog(ErrorLog model);
     }
 }

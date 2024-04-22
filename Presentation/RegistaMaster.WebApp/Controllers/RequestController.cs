@@ -20,24 +20,24 @@ namespace RegistaMaster.WebApp.Controllers;
 [Auth]
 public class RequestController : Controller
 {
-  private readonly IUnitOfWork uow;
-  private IWebHostEnvironment env;
-  private readonly RegistaMasterContext context;
-  public RequestController(IUnitOfWork _uow, IWebHostEnvironment _env, RegistaMasterContext _context)
+  private readonly IUnitOfWork _uow;
+  private IWebHostEnvironment _env;
+  private readonly RegistaMasterContext _context;
+  public RequestController(IUnitOfWork uow, IWebHostEnvironment env, RegistaMasterContext context)
   {
-    uow = _uow;
-    env = _env;
-    context = _context;
+    _uow = uow;
+    _env = env;
+    _context = context;
   }
 
   public async Task<IActionResult> Index()
   {
     var model = new RequestDTO
     {
-      NotificationType = await uow.RequestRepository.NotificationTypeSelectList(),
-      Category = await uow.RequestRepository.CategorySelectList(),
-      Project = await uow.RequestRepository.GetProjectSelect(),
-      Responsible = await uow.RequestRepository.ResponsibleSelectList()
+      NotificationType = await _uow.RequestRepository.NotificationTypeSelectList(),
+      Category = await _uow.RequestRepository.CategorySelectList(),
+      Project = await _uow.RequestRepository.GetProjectSelect(),
+      Responsible = await _uow.RequestRepository.ResponsibleSelectList()
     };
     return View(model);
   }
@@ -49,7 +49,7 @@ public class RequestController : Controller
     {
       if (base64 != null)
       {
-        string webRootPath = env.WebRootPath;
+        string webRootPath = _env.WebRootPath;
         var ımageString = base64.Split(',');
         Guid guidFile = Guid.NewGuid();
         string fileName = "RequestImage" + guidFile + ".jpg";
@@ -64,10 +64,10 @@ public class RequestController : Controller
         var Extantion = Path.GetExtension(fileName);
         model.PictureURL = fileName;
 
-        return await uow.RequestRepository.RequestAdd(model);
+        return await _uow.RequestRepository.RequestAdd(model);
       }
       else
-        return await uow.RequestRepository.RequestAdd(model);
+        return await _uow.RequestRepository.RequestAdd(model);
     }
     catch (Exception ex)
     {
@@ -79,7 +79,7 @@ public class RequestController : Controller
   {
     try
     {
-      return uow.RequestRepository.AddRequestFiles(files, ID);
+      return _uow.RequestRepository.AddRequestFiles(files, ID);
     }
     catch (Exception ex)
     {
@@ -92,7 +92,7 @@ public class RequestController : Controller
   {
     try
     {
-      return await uow.RequestRepository.UpdateRequest(model);
+      return await _uow.RequestRepository.UpdateRequest(model);
     }
     catch (Exception ex)
     {
@@ -102,13 +102,13 @@ public class RequestController : Controller
 
   public async Task<object> GetList(DataSourceLoadOptions options)
   {
-    var models = await uow.RequestRepository.GetListWithFiles();
+    var models = await _uow.RequestRepository.GetListWithFiles();
     return DataSourceLoader.Load(models, options);
   }
 
   public async Task<string> GetRequestDetail(int ID)
   {
-    return JsonConvert.SerializeObject(uow.ActionRepository.GetActionsByRequestID(ID));
+    return JsonConvert.SerializeObject(_uow.ActionRepository.GetActionsByRequestID(ID));
   }
 
   [HttpPost]
@@ -116,7 +116,7 @@ public class RequestController : Controller
   {
     try
     {
-      return await uow.RequestRepository.RequestDelete(ID);
+      return await _uow.RequestRepository.RequestDelete(ID);
     }
     catch (Exception ex)
     {
@@ -128,7 +128,7 @@ public class RequestController : Controller
   {
     try
     {
-      await uow.ActionRepository.AddAction(model);
+      await _uow.ActionRepository.AddAction(model);
       return Ok();
     }
     catch (Exception ex)
@@ -141,7 +141,7 @@ public class RequestController : Controller
   {
     try
     {
-      var models = uow.Repository.GetEnumSelect<RequestStatus>();
+      var models = _uow.Repository.GetEnumSelect<RequestStatus>();
       var resultJson = JsonConvert.SerializeObject(models);
       return Content(resultJson, "application/json");
     }
@@ -155,7 +155,7 @@ public class RequestController : Controller
   {
     try
     {
-      var responsibleHelpers = await uow.RequestRepository.GetProject();
+      var responsibleHelpers = await _uow.RequestRepository.GetProject();
       return DataSourceLoader.Load(responsibleHelpers, loadOptions);
     }
     catch (Exception ex)
@@ -168,7 +168,7 @@ public class RequestController : Controller
   {
     try
     {
-      var model = await uow.RequestRepository.GetModuleSelect();
+      var model = await _uow.RequestRepository.GetModuleSelect();
       return DataSourceLoader.Load(model, options);
     }
     catch (Exception ex)
@@ -181,7 +181,7 @@ public class RequestController : Controller
   {
     try
     {
-      var model = await uow.RequestRepository.GetVersionSelect();
+      var model = await _uow.RequestRepository.GetVersionSelect();
       return DataSourceLoader.Load(model, loadOptions);
     }
     catch (Exception ex)
@@ -192,19 +192,19 @@ public class RequestController : Controller
 
   public async Task<List<SelectListItem>> GetNotificationType()
   {
-    return await uow.RequestRepository.NotificationTypeSelectList();
+    return await _uow.RequestRepository.NotificationTypeSelectList();
   }
 
   public async Task<List<SelectListItem>> GetCategorySelect()
   {
-    return await uow.RequestRepository.CategorySelectList();
+    return await _uow.RequestRepository.CategorySelectList();
   }
 
   public async Task<string> GetModuleList(int ID)
   {
     try
     {
-      var model = await uow.RequestRepository.GetModuleList(ID);
+      var model = await _uow.RequestRepository.GetModuleList(ID);
       return JsonConvert.SerializeObject(model);
     }
     catch (Exception ex)
@@ -217,7 +217,7 @@ public class RequestController : Controller
   {
     try
     {
-      var model = await uow.RequestRepository.GetVersionList(ID);
+      var model = await _uow.RequestRepository.GetVersionList(ID);
       if (model.Count == 0)
         return "1";
       return JsonConvert.SerializeObject(model);
@@ -232,7 +232,7 @@ public class RequestController : Controller
   public async Task<string> CheckActionsForDeleteRequest(int ID)
   {
     //Talebe bağlı aksiyon kontrolü
-    if (uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).Any())
+    if (_uow.Repository.GetQueryable<Action>(t => t.RequestID == ID && t.ObjectStatus == ObjectStatus.NonDeleted).Any())
       return "2";
     return "1";
   }
@@ -243,7 +243,7 @@ public class RequestController : Controller
   {
     try
     {
-      return await uow.RequestRepository.RequestDeleteWithActions(ID);
+      return await _uow.RequestRepository.RequestDeleteWithActions(ID);
     }
     catch (Exception ex)
     {
@@ -255,7 +255,7 @@ public class RequestController : Controller
   {
     try
     {
-      return await uow.RequestRepository.CompleteRequest(ID);
+      return await _uow.RequestRepository.CompleteRequest(ID);
     }
     catch (Exception ex)
     {
@@ -267,7 +267,7 @@ public class RequestController : Controller
   {
     try
     {
-      return await uow.RequestRepository.DeleteRequestFiles(files);
+      return await _uow.RequestRepository.DeleteRequestFiles(files);
     }
     catch (Exception ex)
     {

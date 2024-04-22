@@ -13,22 +13,22 @@ namespace RegistaMaster.Infasctructure.Repositories
 {
   public class ModuleRepository : Repository, IModuleRepository
   {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _uow;
     private readonly SessionModel _session;
     private readonly RegistaMasterContext _context;
     public ModuleRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
     {
-      _context = context;
+      _uow = uow;
       _session = session;
-      _unitOfWork = uow;
+      _context = context;
     }
 
     public async Task<string> CreateModule(Module model)
     {
       try
       {
-        await _unitOfWork.Repository.Add(model);
-        await _unitOfWork.SaveChanges();
+        await _uow.Repository.Add(model);
+        await _uow.SaveChanges();
         return "1";
       }
       catch (Exception ex)
@@ -38,9 +38,9 @@ namespace RegistaMaster.Infasctructure.Repositories
     }
     public async Task<string> DeleteModule(int ID)
     {
-      
+
       await Delete<Module>(ID);
-      await _unitOfWork.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
 
@@ -69,7 +69,7 @@ namespace RegistaMaster.Infasctructure.Repositories
       try
       {
         List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-        var model = context.Projects
+        var model = _context.Projects
             .Where(t => t.Status == Status.Active && t.ObjectStatus == ObjectStatus.NonDeleted);
         foreach (var item in model)
         {
@@ -93,7 +93,7 @@ namespace RegistaMaster.Infasctructure.Repositories
       try
       {
         Update(model);
-        await _unitOfWork.SaveChanges();
+        await _uow.SaveChanges();
         return "1";
       }
       catch (Exception ex)
@@ -116,7 +116,7 @@ namespace RegistaMaster.Infasctructure.Repositories
       module.Description = model.Description;
       module.ProjectID = model.ProjectID;
       Update(module);
-      await _unitOfWork.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
     public async Task<string> GetModules(int ID)

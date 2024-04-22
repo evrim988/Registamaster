@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace RegistaMaster.Application.Repositories
 {
-  public interface IActionNoteRepository: IRepository
+  public interface IActionNoteRepository : IRepository
   {
-    IQueryable<ActionNoteDTO>GetList(int ID);
-    public Task<string> AddActionNote(ActionNote model);
-    public Task<string> ActionNoteUpdate(ActionNote model);
-    public string Delete(int ID);
+    IQueryable<ActionNoteDTO> GetList(int ID);
+    Task<string> AddActionNote(ActionNote model);
+    Task<string> ActionNoteUpdate(ActionNote model);
+    string Delete(int ID);
   }
 }

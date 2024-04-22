@@ -10,24 +10,24 @@ namespace RegistaMaster.Infasctructure.Repositories;
 
 public class UserRepository : Repository, IUserRepository
 {
-  private readonly RegistaMasterContext context;
 
-  private readonly IUnitOfWork uow;
-  private readonly SessionModel session;
+  private readonly IUnitOfWork _uow;
+  private readonly SessionModel _session;
+  private readonly RegistaMasterContext _context;
 
-  public UserRepository(RegistaMasterContext _context, SessionModel _session, IUnitOfWork _uow) : base(_context, _session)
+  public UserRepository(RegistaMasterContext context, SessionModel session, IUnitOfWork uow) : base(context, session)
   {
-    context = _context;
-    uow = _uow;
-    session = _session;
+    _uow = uow;
+    _session = session;
+    _context = context;
   }
   public async Task<string> AddUser(User model)
   {
     try
     {
-      model.CustomerID = session.CustomerID;
-      await uow.Repository.Add(model);
-      await uow.SaveChanges();
+      model.CustomerID = _session.CustomerID;
+      await _uow.Repository.Add(model);
+      await _uow.SaveChanges();
       return "";
     }
     catch (Exception e)
@@ -47,7 +47,7 @@ public class UserRepository : Repository, IUserRepository
       user.Password = model.Password;
       user.Username = model.Username;
       var user2 = Update(user);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return user2;
     }
     catch (Exception ex)
@@ -63,7 +63,7 @@ public class UserRepository : Repository, IUserRepository
       user.ObjectStatus = ObjectStatus.Deleted;
       user.Status = Status.Passive;
       Update(user);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception ex)
@@ -98,7 +98,7 @@ public class UserRepository : Repository, IUserRepository
     try
     {
       List<ResponsibleDevextremeSelectListHelper> ResponsibleHelpers = new List<ResponsibleDevextremeSelectListHelper>();
-      var model = context.Users
+      var model = _context.Users
           .Where(t => t.ObjectStatus == ObjectStatus.NonDeleted && t.AuthorizationStatus != AuthorizationStatus.Admin);
       foreach (var item in model)
       {
@@ -156,7 +156,7 @@ public class UserRepository : Repository, IUserRepository
   {
     try
     {
-      var model = await uow.UserRepository.GetById<User>(uow.GetSession().ID);
+      var model = await _uow.UserRepository.GetById<User>(_uow.GetSession().ID);
 
       var userdetail = new UserDTO()
       {
@@ -182,7 +182,7 @@ public class UserRepository : Repository, IUserRepository
       var user = await GetById<User>(model.ID);
       user.AuthorizationStatus = model.AuthorizationStatus;
       Update(user);
-      await uow.SaveChanges();
+      await _uow.SaveChanges();
       return "1";
     }
     catch (Exception ex)

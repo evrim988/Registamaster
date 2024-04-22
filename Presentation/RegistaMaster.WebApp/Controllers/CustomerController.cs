@@ -10,16 +10,16 @@ namespace RegistaMaster.WebApp.Controllers;
 [Auth]
 public class CustomerController : Controller
 {
-  private readonly IUnitOfWork uow;
-  public CustomerController(IUnitOfWork _uow)
+  private readonly IUnitOfWork _uow;
+  public CustomerController(IUnitOfWork uow)
   {
-    this.uow = _uow;
+    _uow = uow;
   }
 
   public async Task<object> GetList(DataSourceLoadOptions options)
 
   {
-    var models = await uow.CustomerRepository.GetList();
+    var models = await _uow.CustomerRepository.GetList();
     return DataSourceLoader.Load(models, options);
   }
   public IActionResult Index()
@@ -33,7 +33,7 @@ public class CustomerController : Controller
     try
     {
       var model = JsonConvert.DeserializeObject<Customer>(values);
-      await uow.CustomerRepository.CustomerAdd(model);
+      await _uow.CustomerRepository.CustomerAdd(model);
       return Ok();
     }
     catch (Exception e)
@@ -48,10 +48,10 @@ public class CustomerController : Controller
   {
     try
     {
-      var customer = await uow.Repository.GetById<Customer>(Key);
+      var customer = await _uow.Repository.GetById<Customer>(Key);
       JsonConvert.PopulateObject(values, customer);
-      uow.CustomerRepository.Update(customer);
-      await uow.SaveChanges();
+      _uow.CustomerRepository.Update(customer);
+      await _uow.SaveChanges();
 
       return "1";
     }
@@ -64,8 +64,8 @@ public class CustomerController : Controller
   {
     try
     {
-      await uow.Repository.Delete<Customer>(Key);
-      await uow.SaveChanges();
+      await _uow.Repository.Delete<Customer>(Key);
+      await _uow.SaveChanges();
 
 
       return "1";
