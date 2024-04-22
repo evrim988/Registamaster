@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 using Action = RegistaMaster.Domain.Entities.Action;
 
 namespace RegistaMaster.WebApp.Controllers;
-
+[Auth]
 public class HomeController : Controller
 {
   private readonly ILogger<HomeController> _logger;
@@ -26,7 +26,6 @@ public class HomeController : Controller
     _uow = uow;
     _session = uow.GetSession();
   }
-  [Auth]
   public async Task<IActionResult> Index()
   {
     switch (_session.Authorization)

@@ -182,10 +182,19 @@ function checkFileInput() {
   var fileName = $('#fileInput').val();
   if (fileName == '') {
     $('#submitButton').prop('disabled', true);
+    return; // Dosya adı boş ise fonksiyondan çık
+  }
+
+  // Dosya uzantısını kontrol et
+  var validExtensions = ['.xlsx', '.xls'];
+  var fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+  if (!validExtensions.includes(fileExtension)) {
+    // Eğer dosya uzantısı geçerli değilse, submit butonunu devre dışı bırak ve toastr mesajı göster
+    $('#submitButton').prop('disabled', true);
+    toastr.error('Geçersiz dosya. Lütfen bir Excel dosyası seçin.');
   } else {
+    // Dosya uzantısı geçerli ise, submit butonunu etkinleştir
     $('#submitButton').prop('disabled', false);
   }
 }
-
-
 

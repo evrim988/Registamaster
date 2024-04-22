@@ -10,10 +10,11 @@ using RegistaMaster.Domain.DTOModels.Entities.ProjectNoteModel;
 using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
+using RegistaMaster.WebApp.Filter;
 using Version = RegistaMaster.Domain.Entities.Version;
 
 namespace RegistaMaster.WebApp.Controllers;
-
+[Auth]
 public class ProjectController : Controller
 {
   private readonly IUnitOfWork uow;

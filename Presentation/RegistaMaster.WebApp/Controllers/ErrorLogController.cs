@@ -2,27 +2,27 @@
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using RegistaMaster.Application.Repositories;
+using RegistaMaster.WebApp.Filter;
 
-namespace RegistaMaster.WebApp.Controllers
-{
-    public class ErrorLogController : Controller
-    {
-        private readonly IUnitOfWork _uow;
+namespace RegistaMaster.WebApp.Controllers;
+[Auth]
+public class ErrorLogController : Controller
+  {
+      private readonly IUnitOfWork _uow;
 
-        public ErrorLogController(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
+      public ErrorLogController(IUnitOfWork uow)
+      {
+          _uow = uow;
+      }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+      public IActionResult Index()
+      {
+          return View();
+      }
 
-        public async Task<object> GetList(DataSourceLoadOptions options)
-        {
-            var model = _uow.errorLogRepository.GetList();
-            return DataSourceLoader.Load(model, options);
-        }
-    }
-}
+      public async Task<object> GetList(DataSourceLoadOptions options)
+      {
+          var model = _uow.errorLogRepository.GetList();
+          return DataSourceLoader.Load(model, options);
+      }
+  }

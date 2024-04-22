@@ -2,26 +2,26 @@
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using RegistaMaster.Application.Repositories;
+using RegistaMaster.WebApp.Filter;
 
-namespace RegistaMaster.WebApp.Controllers
-{
-    public class UserLogController : Controller
-    {
+namespace RegistaMaster.WebApp.Controllers;
+[Auth]
+public class UserLogController : Controller
+  {
 
-        private readonly IUnitOfWork _uow;
-        public UserLogController(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
+      private readonly IUnitOfWork _uow;
+      public UserLogController(IUnitOfWork uow)
+      {
+          _uow = uow;
+      }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-        public async Task<object> GetList(DataSourceLoadOptions options)
-        {
-            var model = _uow.UserLogRepository.GetList();
-            return DataSourceLoader.Load(model, options);
-        }
-    }
-}
+      public IActionResult Index()
+      {
+          return View();
+      }
+      public async Task<object> GetList(DataSourceLoadOptions options)
+      {
+          var model = _uow.UserLogRepository.GetList();
+          return DataSourceLoader.Load(model, options);
+      }
+  }

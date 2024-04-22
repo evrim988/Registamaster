@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.Entities;
+using RegistaMaster.WebApp.Filter;
 
 namespace RegistaMaster.WebApp.Controllers;
-
+[Auth]
 public class CustomerController : Controller
 {
   private readonly IUnitOfWork uow;
@@ -21,7 +22,6 @@ public class CustomerController : Controller
     var models = await uow.CustomerRepository.GetList();
     return DataSourceLoader.Load(models, options);
   }
-
   public IActionResult Index()
   {
     return View();

@@ -6,10 +6,11 @@ using RegistaMaster.Application.Repositories;
 using RegistaMaster.Domain.DTOModels.Entities.VersionModel;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
+using RegistaMaster.WebApp.Filter;
 using Version = RegistaMaster.Domain.Entities.Version;
 
 namespace RegistaMaster.WebApp.Controllers;
-
+[Auth]
 public class DefinationController : Controller
 {
    private readonly IUnitOfWork _uow;

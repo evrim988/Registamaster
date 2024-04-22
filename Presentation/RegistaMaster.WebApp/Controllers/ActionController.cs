@@ -9,10 +9,11 @@ using RegistaMaster.Domain.DTOModels.Entities.ActionNoteModels;
 using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
+using RegistaMaster.WebApp.Filter;
 using Action = RegistaMaster.Domain.Entities.Action;
 
 namespace RegistaMaster.WebApp.Controllers;
-
+[Auth]
 public class ActionController : Controller
 {
   private readonly IUnitOfWork _uow;

@@ -10,13 +10,14 @@ using RegistaMaster.Domain.DTOModels.Entities.RequestModel;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using RegistaMaster.Persistance.RegistaMasterContextes;
+using RegistaMaster.WebApp.Filter;
 using RegistPackets.FileService.Interfaces;
 using RegistPackets.FileService.Models;
 using Action = RegistaMaster.Domain.Entities.Action;
 using Request = RegistaMaster.Domain.Entities.Request;
 
 namespace RegistaMaster.WebApp.Controllers;
-
+[Auth]
 public class RequestController : Controller
 {
   private readonly IUnitOfWork uow;

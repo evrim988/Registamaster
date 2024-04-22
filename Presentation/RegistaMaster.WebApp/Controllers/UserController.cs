@@ -9,9 +9,10 @@ using RegistaMaster.Domain.DTOModels.SecurityModels;
 using RegistaMaster.Domain.Entities;
 using RegistaMaster.Domain.Enums;
 using RegistaMaster.Infasctructure.Services.SecurityServices;
+using RegistaMaster.WebApp.Filter;
 
 namespace RegistaMaster.WebApp.Controllers;
-
+[Auth]
 public class UserController : Controller
 {
   private readonly IUnitOfWork uow;
