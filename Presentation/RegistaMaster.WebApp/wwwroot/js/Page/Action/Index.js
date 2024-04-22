@@ -401,6 +401,7 @@ function GetList() {
 
 function GetActionNoteList(ID) {
   //console.log(ID);
+  clearModalActionNote();
   var grid = $(actionNotesGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: "id",

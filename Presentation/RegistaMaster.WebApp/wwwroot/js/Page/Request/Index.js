@@ -1022,24 +1022,58 @@ function handleItemClick(item, options) {
 
 //bekleme durumundaki talebi tamamla
 function CompleteRequest(ID) {
-  var requestID = new FormData();
+  const swalWithBootstrapButtons = swal.mixin({
+    confirmButtonClass: 'btn btn-success',
+    cancelButtonClass: 'btn btn-danger',
+    buttonsStyling: false,
+  })
 
-  requestID.append('id', ID);
+  swalWithBootstrapButtons({
+    title: "Uyarı",
+    text: "Talep Kapatılacak Onaylıyor Musunuz?",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Evet',
+    cancelButtonText: 'Hayır',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.value) {
+      var data = new FormData();
 
-  $.ajax({
-    url: "/Request/CompleteRequest",
-    type: 'POST',
-    data: requestID,
-    cache: false,
-    processData: false,
-    contentType: false,
-    success: function (data) {
-      gridRefresh();
-    },
-    error: function (e) {
-      console.log(e);
-    },
-  });
+      data.append('id', ID);
+
+      var requestID = new FormData();
+
+      requestID.append('id', ID);
+
+      $.ajax({
+        url: "/Request/CompleteRequest",
+        type: 'POST',
+        data: requestID,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+          swalWithBootstrapButtons(
+            'Bilgi',
+            'İşlem Başarılı',
+            'success'
+          );
+          gridRefresh();
+        },
+        error: function (e) {
+          console.log(e);
+        },
+      });
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      swalWithBootstrapButtons(
+        'Bilgi',
+        'İşlem İptal Edildi',
+        'info'
+      )
+    }
+  })
+ 
 }
 
 
@@ -1580,6 +1614,11 @@ function DeleteDialog(ID) {
               'info'
             )
           } else if (data == "1") {
+            swalWithBootstrapButtons(
+              'Bilgi',
+              'Silme İşlemi Başarılı',
+              'success'
+            );
             gridRefresh();
           }
 
@@ -2230,6 +2269,7 @@ function ChangeActionStatusModal(data) {
 //aksiyon notları grid
 function GetActionNoteList(ID) {
   //console.log(ID);
+  clearModalActionNote();
   var grid = $(actionNotesGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: "id",

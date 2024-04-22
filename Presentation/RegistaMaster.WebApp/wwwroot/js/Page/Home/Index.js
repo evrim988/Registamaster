@@ -404,6 +404,7 @@ function OpenActionDetailModal(data) {
 //aksiyon notları grid
 function GetActionNoteList(ID) {
   //console.log(ID);
+  clearModalActionNote();
   var grid = $(actionNotesGridContainer).dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: "id",
@@ -838,7 +839,7 @@ function ChangeActionStatus() {
       },
       complete: function () {
         location.reload();
-        clearModalActionNote();
+
       }
     });
   }
