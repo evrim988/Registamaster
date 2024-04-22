@@ -36,11 +36,12 @@ public class FoodChartController : Controller
       throw e;
     }
   }
-  public async Task<string> FoodChartEdit(int key, string values)
+  public async Task<IActionResult> FoodChartEdit(int key, string values)
   {
     try
     {
-      return await _uow.FoodChartRepository.UpdateFoodChart(key,values);
+      var result =await _uow.FoodChartRepository.UpdateFoodChart(key,values);
+      return result == "1" ? Ok() : BadRequest(result);
     }
     catch (Exception e)
     {

@@ -84,9 +84,14 @@ public class FoodChartRepository : Repository, IFoodChartRepository
   {
     try
     {
-      var model = await GetById<FoodChart>(key);
-      JsonConvert.PopulateObject(values, model);
-      Update(model);
+      var model = JsonConvert.DeserializeObject<FoodChart>(values);
+      int recordCount = await _uow.FoodChartRepository.CheckRecordForDate(model.Date);
+      if (recordCount > 0)
+        return "GİRİLEN TARİH İÇİN KAYIT BULUNMAKTADIR.";
+
+      var getModel = await GetById<FoodChart>(key);
+      JsonConvert.PopulateObject(values, getModel);
+      Update(getModel);
       await _uow.SaveChanges();
       return "1";
     }
